@@ -1,0 +1,90 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>First name:</strong>
+  <%= @person.first_name %>
+</p>
+
+<p>
+  <strong>Last name:</strong>
+  <%= @person.last_name %>
+</p>
+
+<p>
+  <strong>Email address:</strong>
+  <%= @person.email_address %>
+</p>
+
+<p>
+  <strong>Address 1:</strong>
+  <%= @person.address_1 %>
+</p>
+
+<p>
+  <strong>Address 2:</strong>
+  <%= @person.address_2 %>
+</p>
+
+<p>
+  <strong>City:</strong>
+  <%= @person.city %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @person.state %>
+</p>
+
+<p>
+  <strong>Postal code:</strong>
+  <%= @person.postal_code %>
+</p>
+
+<p>
+  <strong>Geography:</strong>
+  <%= @person.geography_id %>
+</p>
+
+<p>
+  <strong>Primary device:</strong>
+  <%= @person.primary_device_id %>
+</p>
+
+<p>
+  <strong>Primary device description:</strong>
+  <%= @person.primary_device_description %>
+</p>
+
+<p>
+  <strong>Secondary device:</strong>
+  <%= @person.secondary_device_id %>
+</p>
+
+<p>
+  <strong>Secondary device description:</strong>
+  <%= @person.secondary_device_description %>
+</p>
+
+<p>
+  <strong>Primary connection:</strong>
+  <%= @person.primary_connection_id %>
+</p>
+
+<p>
+  <strong>Primary connection description:</strong>
+  <%= @person.primary_connection_description %>
+</p>
+
+<p>
+  <strong>Phone number:</strong>
+  <%= @person.phone_number %>
+</p>
+
+<p>
+  <strong>Participation type:</strong>
+  <%= @person.participation_type %>
+</p>
+
+
+<%= link_to 'Edit', edit_person_path(@person) %> |
+<%= link_to 'Back', people_path %>
