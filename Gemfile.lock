@@ -53,6 +53,7 @@ GEM
     mime-types (1.21)
     minitest (4.7.0)
     multi_json (1.7.2)
+    newrelic_rpm (3.6.0.78)
     polyglot (0.3.3)
     rack (1.5.2)
     rack-test (0.6.2)
@@ -111,6 +112,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0.beta1)
   jbuilder (~> 1.0.1)
   jquery-rails
+  newrelic_rpm
   rails (= 4.0.0.beta1)
   sass-rails (~> 4.0.0.beta1)
   sqlite3
