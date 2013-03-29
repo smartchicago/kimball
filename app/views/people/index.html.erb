@@ -5,50 +5,22 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
-      <th><%= model_class.human_attribute_name(:first_name) %></th>
-      <th><%= model_class.human_attribute_name(:last_name) %></th>
-      <th><%= model_class.human_attribute_name(:email_address) %></th>
-      <th><%= model_class.human_attribute_name(:address_1) %></th>
-      <th><%= model_class.human_attribute_name(:address_2) %></th>
-      <th><%= model_class.human_attribute_name(:city) %></th>
-      <th><%= model_class.human_attribute_name(:state) %></th>
-      <th><%= model_class.human_attribute_name(:postal_code) %></th>
-      <th><%= model_class.human_attribute_name(:geography_id) %></th>
-      <th><%= model_class.human_attribute_name(:primary_device_id) %></th>
-      <th><%= model_class.human_attribute_name(:primary_device_description) %></th>
-      <th><%= model_class.human_attribute_name(:secondary_device_id) %></th>
-      <th><%= model_class.human_attribute_name(:secondary_device_description) %></th>
-      <th><%= model_class.human_attribute_name(:primary_connection_id) %></th>
-      <th><%= model_class.human_attribute_name(:primary_connection_description) %></th>
-      <th><%= model_class.human_attribute_name(:phone_number) %></th>
-      <th><%= model_class.human_attribute_name(:participation_type) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Ward</th>
+      <th>Email address</th>
+      <th>Signup date</th>
+      <th>&nbsp;</th>
     </tr>
   </thead>
   <tbody>
     <% @people.each do |person| %>
       <tr>
-        <td><%= link_to person.id, person_path(person) %></td>
-        <td><%= person.first_name %></td>
-        <td><%= person.last_name %></td>
-        <td><%= person.email_address %></td>
-        <td><%= person.address_1 %></td>
-        <td><%= person.address_2 %></td>
-        <td><%= person.city %></td>
-        <td><%= person.state %></td>
-        <td><%= person.postal_code %></td>
+        <td><%= link_to "#{person.first_name} #{person.last_name}", person_path(person) %></td>
+        <td><%= address_fields_to_sentence(person) %></td>
         <td><%= person.geography_id %></td>
-        <td><%= person.primary_device_id %></td>
-        <td><%= person.primary_device_description %></td>
-        <td><%= person.secondary_device_id %></td>
-        <td><%= person.secondary_device_description %></td>
-        <td><%= person.primary_connection_id %></td>
-        <td><%= person.primary_connection_description %></td>
-        <td><%= person.phone_number %></td>
-        <td><%= person.participation_type %></td>
-        <td><%=l person.created_at %></td>
+        <td><%= person.email_address %></td>
+        <td><%= person.created_at.to_s(:short) %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_person_path(person), :class => 'btn btn-mini' %>
