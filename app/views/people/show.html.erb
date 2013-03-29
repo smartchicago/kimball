@@ -1,53 +1,80 @@
 <%- model_class = Person -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+
+<div class="row">
+  <div class="span12">
+    <h1><%=t '.title', :default => "#{@person.first_name} #{@person.last_name}" %></h1>    
+  </div>
 </div>
 
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:first_name) %>:</strong></dt>
-  <dd><%= @person.first_name %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:last_name) %>:</strong></dt>
-  <dd><%= @person.last_name %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:email_address) %>:</strong></dt>
-  <dd><%= @person.email_address %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:address_1) %>:</strong></dt>
-  <dd><%= @person.address_1 %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:address_2) %>:</strong></dt>
-  <dd><%= @person.address_2 %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:city) %>:</strong></dt>
-  <dd><%= @person.city %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:state) %>:</strong></dt>
-  <dd><%= @person.state %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:postal_code) %>:</strong></dt>
-  <dd><%= @person.postal_code %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:geography_id) %>:</strong></dt>
-  <dd><%= @person.geography_id %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:primary_device_id) %>:</strong></dt>
-  <dd><%= @person.primary_device_id %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:primary_device_description) %>:</strong></dt>
-  <dd><%= @person.primary_device_description %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:secondary_device_id) %>:</strong></dt>
-  <dd><%= @person.secondary_device_id %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:secondary_device_description) %>:</strong></dt>
-  <dd><%= @person.secondary_device_description %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:primary_connection_id) %>:</strong></dt>
-  <dd><%= @person.primary_connection_id %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:primary_connection_description) %>:</strong></dt>
-  <dd><%= @person.primary_connection_description %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:phone_number) %>:</strong></dt>
-  <dd><%= @person.phone_number %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:participation_type) %>:</strong></dt>
-  <dd><%= @person.participation_type %></dd>
-</dl>
+<div class="row">
+  <div class="span4">
+    <h3>About</h3>    
+    <dl>
+      <dt>Address</dt>
+      <dd><%= address_fields_to_sentence(@person) %></dd>
+      
+      <dt>Ward</dt>
+      <dd><%= @person.geography_id %></dd>
+      
+      <dt>Primary device</dt>
+      <dd><%= @person.primary_device_description %> <span class="muted">(<%= @person.primary_device_id %>)</span></dd>
 
-<div class="form-actions">
-  <%= link_to t('.back', :default => t("helpers.links.back")),
-              people_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_person_path(@person), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              person_path(@person),
-              :method => 'delete',
-              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-              :class => 'btn btn-danger' %>
+      <dt>Secondary device</dt>
+      <dd><%= @person.secondary_device_description %> <span class="muted">(<%= @person.secondary_device_id %>)</span></dd>
+
+      <dt>Primary connection method</dt>
+      <dd><%= @person.primary_connection_id %> <% if @person.primary_connection_description.present? %><%= ": " + @person.primary_connection_description %><% end %></dd>
+      
+      <dt>Preferred participation method</dt>
+      <dd><%= @person.participation_type %></dd>            
+    </dl>    
+  </div>
+
+  <div class="span4">    
+    <h3>Contact</h3>
+    
+    <dl>
+      <dt>Phone</dt>
+      <dd><%= @person.phone_number %></dd>
+      
+      <dt>Email</dt>
+      <dd><%= mail_to @person.email_address %></dd>
+      
+      <dt>Facebook</dt>
+      <dd>link to facebook</dd>
+      
+      <dt>Twitter</dt>
+      <dd>link to twitter</dd>
+    </dl>    
+  </div>
+  
+  <div class="span4">
+    <img src="http://placekitten.com/400/300" />    
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12">
+  <h2>Location</h2>  
+  <p>Lives at <%= address_fields_to_sentence(@person) %></p>
+  </div>  
+</div>
+
+<div class="row">  
+  <div class="span6"><img src="http://maps.googleapis.com/maps/api/staticmap?markers=|<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;zoom=14&amp;size=570x200&amp;sensor=false"></div>
+  <div class="span6"><img src="http://maps.googleapis.com/maps/api/streetview?size=570x200&amp;location=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;sensor=false"></div>
+</div>
+
+<div class="row">
+  <div class="form-actions span12">
+    <%= link_to t('.back', :default => t("helpers.links.back")),
+                people_path, :class => 'btn'  %>
+    <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                edit_person_path(@person), :class => 'btn' %>
+    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                person_path(@person),
+                :method => 'delete',
+                :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                :class => 'btn btn-danger' %>
+  </div>
 </div>
