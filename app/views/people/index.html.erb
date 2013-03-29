@@ -1,59 +1,68 @@
-<h1>Listing people</h1>
-
-<table>
+<%- model_class = Person -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+</div>
+<table class="table table-striped">
   <thead>
     <tr>
-      <th>First name</th>
-      <th>Last name</th>
-      <th>Email address</th>
-      <th>Address 1</th>
-      <th>Address 2</th>
-      <th>City</th>
-      <th>State</th>
-      <th>Postal code</th>
-      <th>Geography</th>
-      <th>Primary device</th>
-      <th>Primary device description</th>
-      <th>Secondary device</th>
-      <th>Secondary device description</th>
-      <th>Primary connection</th>
-      <th>Primary connection description</th>
-      <th>Phone number</th>
-      <th>Participation type</th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:first_name) %></th>
+      <th><%= model_class.human_attribute_name(:last_name) %></th>
+      <th><%= model_class.human_attribute_name(:email_address) %></th>
+      <th><%= model_class.human_attribute_name(:address_1) %></th>
+      <th><%= model_class.human_attribute_name(:address_2) %></th>
+      <th><%= model_class.human_attribute_name(:city) %></th>
+      <th><%= model_class.human_attribute_name(:state) %></th>
+      <th><%= model_class.human_attribute_name(:postal_code) %></th>
+      <th><%= model_class.human_attribute_name(:geography_id) %></th>
+      <th><%= model_class.human_attribute_name(:primary_device_id) %></th>
+      <th><%= model_class.human_attribute_name(:primary_device_description) %></th>
+      <th><%= model_class.human_attribute_name(:secondary_device_id) %></th>
+      <th><%= model_class.human_attribute_name(:secondary_device_description) %></th>
+      <th><%= model_class.human_attribute_name(:primary_connection_id) %></th>
+      <th><%= model_class.human_attribute_name(:primary_connection_description) %></th>
+      <th><%= model_class.human_attribute_name(:phone_number) %></th>
+      <th><%= model_class.human_attribute_name(:participation_type) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
-
   <tbody>
     <% @people.each do |person| %>
-    <tr>
-      <td><%= person.first_name %></td>
-      <td><%= person.last_name %></td>
-      <td><%= person.email_address %></td>
-      <td><%= person.address_1 %></td>
-      <td><%= person.address_2 %></td>
-      <td><%= person.city %></td>
-      <td><%= person.state %></td>
-      <td><%= person.postal_code %></td>
-      <td><%= person.geography_id %></td>
-      <td><%= person.primary_device_id %></td>
-      <td><%= person.primary_device_description %></td>
-      <td><%= person.secondary_device_id %></td>
-      <td><%= person.secondary_device_description %></td>
-      <td><%= person.primary_connection_id %></td>
-      <td><%= person.primary_connection_description %></td>
-      <td><%= person.phone_number %></td>
-      <td><%= person.participation_type %></td>
-      <td><%= link_to 'Show', person %></td>
-      <td><%= link_to 'Edit', edit_person_path(person) %></td>
-      <td><%= link_to 'Destroy', person, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-    </tr>
+      <tr>
+        <td><%= link_to person.id, person_path(person) %></td>
+        <td><%= person.first_name %></td>
+        <td><%= person.last_name %></td>
+        <td><%= person.email_address %></td>
+        <td><%= person.address_1 %></td>
+        <td><%= person.address_2 %></td>
+        <td><%= person.city %></td>
+        <td><%= person.state %></td>
+        <td><%= person.postal_code %></td>
+        <td><%= person.geography_id %></td>
+        <td><%= person.primary_device_id %></td>
+        <td><%= person.primary_device_description %></td>
+        <td><%= person.secondary_device_id %></td>
+        <td><%= person.secondary_device_description %></td>
+        <td><%= person.primary_connection_id %></td>
+        <td><%= person.primary_connection_description %></td>
+        <td><%= person.phone_number %></td>
+        <td><%= person.participation_type %></td>
+        <td><%=l person.created_at %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_person_path(person), :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      person_path(person),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
     <% end %>
   </tbody>
 </table>
 
-<br />
-
-<%= link_to 'New Person', new_person_path %>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_person_path,
+            :class => 'btn btn-primary' %>

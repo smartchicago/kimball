@@ -1,85 +1,110 @@
-<%= form_for(@person) do |f| %>
-  <% if @person.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@person.errors.count, "error") %> prohibited this person from being saved:</h2>
-
-      <ul>
-      <% @person.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+<%= form_for @person, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :first_name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :first_name, :class => 'text_field' %>
     </div>
-  <% end %>
+  </div>
+  <div class="control-group">
+    <%= f.label :last_name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :last_name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :email_address, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :email_address, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :address_1, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :address_1, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :address_2, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :address_2, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :city, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :city, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :state, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :state, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :postal_code, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :postal_code, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :geography_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :geography_id, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :primary_device_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :primary_device_id, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :primary_device_description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :primary_device_description, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :secondary_device_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :secondary_device_id, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :secondary_device_description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :secondary_device_description, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :primary_connection_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :primary_connection_id, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :primary_connection_description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :primary_connection_description, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :phone_number, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :phone_number, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :participation_type, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :participation_type, :class => 'text_field' %>
+    </div>
+  </div>
 
-  <div class="field">
-    <%= f.label :first_name %><br />
-    <%= f.text_field :first_name %>
-  </div>
-  <div class="field">
-    <%= f.label :last_name %><br />
-    <%= f.text_field :last_name %>
-  </div>
-  <div class="field">
-    <%= f.label :email_address %><br />
-    <%= f.text_field :email_address %>
-  </div>
-  <div class="field">
-    <%= f.label :address_1 %><br />
-    <%= f.text_field :address_1 %>
-  </div>
-  <div class="field">
-    <%= f.label :address_2 %><br />
-    <%= f.text_field :address_2 %>
-  </div>
-  <div class="field">
-    <%= f.label :city %><br />
-    <%= f.text_field :city %>
-  </div>
-  <div class="field">
-    <%= f.label :state %><br />
-    <%= f.text_field :state %>
-  </div>
-  <div class="field">
-    <%= f.label :postal_code %><br />
-    <%= f.text_field :postal_code %>
-  </div>
-  <div class="field">
-    <%= f.label :geography_id %><br />
-    <%= f.number_field :geography_id %>
-  </div>
-  <div class="field">
-    <%= f.label :primary_device_id %><br />
-    <%= f.number_field :primary_device_id %>
-  </div>
-  <div class="field">
-    <%= f.label :primary_device_description %><br />
-    <%= f.text_field :primary_device_description %>
-  </div>
-  <div class="field">
-    <%= f.label :secondary_device_id %><br />
-    <%= f.number_field :secondary_device_id %>
-  </div>
-  <div class="field">
-    <%= f.label :secondary_device_description %><br />
-    <%= f.text_field :secondary_device_description %>
-  </div>
-  <div class="field">
-    <%= f.label :primary_connection_id %><br />
-    <%= f.number_field :primary_connection_id %>
-  </div>
-  <div class="field">
-    <%= f.label :primary_connection_description %><br />
-    <%= f.text_field :primary_connection_description %>
-  </div>
-  <div class="field">
-    <%= f.label :phone_number %><br />
-    <%= f.text_field :phone_number %>
-  </div>
-  <div class="field">
-    <%= f.label :participation_type %><br />
-    <%= f.text_field :participation_type %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                people_path, :class => 'btn' %>
   </div>
 <% end %>
