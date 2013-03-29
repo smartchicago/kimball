@@ -38,3 +38,4 @@ gem 'jbuilder', '~> 1.0.1'
 # gem 'debugger'
 
 gem 'newrelic_rpm'
+gem 'twitter-bootstrap-rails'
