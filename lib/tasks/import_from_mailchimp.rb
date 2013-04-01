@@ -10,8 +10,8 @@ class MailChimpImporter
     @options = opts
   end
   
-  def load_csv
-    CSV.foreach(@options.infile, :headers => :first_row) do |line|
+  def load_mailchimp_csv
+    CSV.foreach(@options.mailchimp_infile, :headers => :first_row) do |line|
       # puts line.inspect
 
       person = Person.new
@@ -32,6 +32,22 @@ class MailChimpImporter
             line[k]
           end
       end
+      
+      person.save
+    end
+  end
+
+  def load_wufoo_csv
+    CSV.foreach(@options.wufoo_infile, :headers => :first_row) do |line|
+      person = Person.find_by_email_address(line["Email"])
+      
+      next if person.blank?
+      
+      person.address_1 = line["Address"]
+      person.phone_number = line["Phone Number"]
+      person.postal_code = line["Zip code"]
+      person.city = "Chicago"
+      person.state = "Illinois"
       
       person.save
     end
@@ -70,7 +86,8 @@ class MailChimpImporter
   end
   
   def run
-    load_csv
+    load_mailchimp_csv
+    load_wufoo_csv
   end
   
 end
@@ -84,8 +101,12 @@ OptionParser.new do |opts|
   
   opts.banner = "Usage: import_from_mailchimp.rb [options]"  
 
-  opts.on("-i", "--infile FILE", "Input CSV") do |v|
-    options.infile = v
+  opts.on("-i", "--mc-infile FILE", "Input CSV") do |v|
+    options.mailchimp_infile = v
+  end
+
+  opts.on("-w", "--wufoo-infile FILE", "Wufoo Input CSV") do |v|
+    options.wufoo_infile = v
   end
   
   opts.on("-d", "--[no-]dry-run", "Dry run (if present will not commit changes)") do |v|
