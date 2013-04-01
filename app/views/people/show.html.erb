@@ -17,13 +17,13 @@
       <dd><%= @person.geography_id %></dd>
       
       <dt>Primary device</dt>
-      <dd><%= @person.primary_device_description %> <span class="muted">(<%= @person.primary_device_id %>)</span></dd>
+      <dd><%= @person.primary_device_description %> <span class="muted">(<%= human_device_type_name @person.primary_device_id %>)</span></dd>
 
       <dt>Secondary device</dt>
-      <dd><%= @person.secondary_device_description %> <span class="muted">(<%= @person.secondary_device_id %>)</span></dd>
+      <dd><%= @person.secondary_device_description %> <span class="muted">(<%= human_device_type_name @person.secondary_device_id %>)</span></dd>
 
       <dt>Primary connection method</dt>
-      <dd><%= @person.primary_connection_id %> <% if @person.primary_connection_description.present? %><%= ": " + @person.primary_connection_description %><% end %></dd>
+      <dd><%= human_connection_type_name @person.primary_connection_id %> <% if @person.primary_connection_description.present? %><%= ": " + @person.primary_connection_description %><% end %></dd>
       
       <dt>Preferred participation method</dt>
       <dd><%= @person.participation_type %></dd>            
