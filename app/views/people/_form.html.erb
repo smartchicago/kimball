@@ -56,7 +56,7 @@
   <div class="control-group">
     <%= f.label :primary_device_id, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :primary_device_id, :class => 'text_field' %>
+      <%= f.select :primary_device_id, Logan::Application.config.device_mappings.collect{|i| [i.first, i.last] } , :class => 'text_field' %>
     </div>
   </div>
   <div class="control-group">
@@ -68,7 +68,7 @@
   <div class="control-group">
     <%= f.label :secondary_device_id, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :secondary_device_id, :class => 'text_field' %>
+      <%= f.select :secondary_device_id, Logan::Application.config.device_mappings.collect{|i| [i.first, i.last] }, :class => 'text_field' %>
     </div>
   </div>
   <div class="control-group">
@@ -80,7 +80,7 @@
   <div class="control-group">
     <%= f.label :primary_connection_id, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :primary_connection_id, :class => 'text_field' %>
+      <%= f.select :primary_connection_id, Logan::Application.config.connection_mappings.collect{|i| [i.first.to_s.humanize, i.last] }, :class => 'text_field' %>
     </div>
   </div>
   <div class="control-group">
