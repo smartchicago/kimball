@@ -39,3 +39,6 @@ gem 'unicorn'
 
 gem 'newrelic_rpm'
 gem 'twitter-bootstrap-rails'
+
+# use tire for ElasticSearch integration
+gem "tire"
