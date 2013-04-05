@@ -1,44 +1,48 @@
 <div class="page-header">
   <h1><%=t '.title', :default => "Search Results" %></h1>
 </div>
-<% if params[:adv] || params[:q].blank? %>
 
 <div class="row">
-  <div class="span12 well">
+  <div class="span12" style="text-align:right">
+    <span data-toggle="collapse" data-target="#advanced-search">Show advanced search</span>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="span12 collapse <%= "in" if params[:adv] %>" id="advanced-search">
     <h3>Advanced Search</h3>    
   
-    <%= form_tag search_index_path, :method => :get %>
+    <%= form_tag search_index_path, :method => :get, :class => "form-inline" %>
     <%= hidden_field_tag :adv, '1' %>
-    <dl>
-      <dt>First name</dt>
-      <dd><%= text_field_tag :first_name, params[:first_name] %></dd>
+    <label for="first_name">First name</label>
+    <%= text_field_tag :first_name, params[:first_name], :class => "input-small" %>
 
-      <dt>Last name</dt>
-      <dd><%= text_field_tag :last_name, params[:last_name] %></dd>
+    <label for="last_name">Last name</label>
+    <%= text_field_tag :last_name, params[:last_name], :class => "input-small" %>
 
-      <dt>Email addres</dt>
-      <dd><%= text_field_tag :email_address, params[:email_address] %></dd>
-      
-      <dt>Device description</dt>
-      <dd><%= text_field_tag :device_description, params[:device_description] %></dd>
-      
-      <dt>Connection description</dt>
-      <dd><%= text_field_tag :connection_description, params[:connection_description] %></dd>
-
-      <dt>ZIP Code</dt>
-      <dd><%= text_field_tag :postal_code, params[:postal_code] %></dd>      
-    </dl>
+    <label for="email_address">Email address</label>
+    <%= text_field_tag :email_address, params[:email_address], :class => "input-small" %>
     
-    <%= submit_tag "Search", :name => nil, :class => "btn-primary btn-large" %>
+    <label for="device_description">Device description</label>
+    <%= text_field_tag :device_description, params[:device_description], :class => "input-small" %>
+    
+    <label for="connection_description">Connection description</label>
+    <%= text_field_tag :connection_description, params[:connection_description], :class => "input-small" %>
+
+    <label for="postal_code">ZIP Code</label>
+    <%= text_field_tag :postal_code, params[:postal_code], :class => "input-small" %>
+    
+    <%= submit_tag "Search", :name => nil, :class => "btn-primary" %>
     
     </form>
   </div>  
 </div>
 
-<% end %>
-
 <div class="row">
   <div class="span12">
+
+    <% if @results.any? %>
     <table class="table table-striped">
       <% @results.each_with_index do |result, idx| %>
       <tr>
@@ -58,5 +62,8 @@
       </tr>
       <% end %>
     </table>
+    <% else %>
+    <p>There are no people that match your search.</p>
+    <%  end %>
   </div>
 </div>
