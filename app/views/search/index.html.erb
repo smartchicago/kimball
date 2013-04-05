@@ -1,14 +1,44 @@
 <div class="page-header">
   <h1><%=t '.title', :default => "Search Results" %></h1>
 </div>
+<% if params[:adv] || params[:q].blank? %>
 
-<% if @results %>
-  <ol>
-  <% @results.each_with_index do |result, idx| %>
-    <li><%= result.inspect %></li>
-  <% end %>  
-  </ol>
+<div class="row">
+  <div class="span12 well">
+    <h3>Advanced Search</h3>    
+  
+    <%= form_tag search_index_path, :method => :get %>
+    <%= hidden_field_tag :adv, '1' %>
+    <dl>
+      <dt>First name</dt>
+      <dd><%= text_field_tag :first_name, params[:first_name] %></dd>
 
-<% else %>
+      <dt>Last name</dt>
+      <dd><%= text_field_tag :last_name, params[:last_name] %></dd>
+
+      <dt>Email addres</dt>
+      <dd><%= text_field_tag :email_address, params[:email_address] %></dd>
+      
+      <dt>Device description</dt>
+      <dd><%= text_field_tag :device_description, params[:device_description] %></dd>
+      
+      <dt>Connection description</dt>
+      <dd><%= text_field_tag :connection_description, params[:connection_description] %></dd>
+
+      <dt>ZIP Code</dt>
+      <dd><%= text_field_tag :postal_code, params[:postal_code] %></dd>      
+    </dl>
+    
+    <%= submit_tag "Search", :name => nil, :class => "btn-primary btn-large" %>
+    
+    </form>
+  </div>  
+</div>
 
 <% end %>
+
+<ol>
+<% @results.each_with_index do |result, idx| %>
+  <li><%= result.inspect %></li>
+<% end %>  
+</ol>

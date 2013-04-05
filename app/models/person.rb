@@ -63,6 +63,21 @@ class Person < ActiveRecord::Base
     end
   end  
 
+  def self.complex_search(params)
+    tire.search per_page: 100 do
+      query do
+        boolean do
+          must { string "first_name:#{params[:first_name]}"} if params[:first_name].present?
+          must { string "last_name:#{params[:last_name]}"} if params[:last_name].present?
+          must { string "email_address:#{params[:email_address]}"} if params[:email_address].present?
+          must { string "postal_code:#{params[:postal_code]}"} if params[:postal_code].present?
+          must { string "primary_device_description:#{params[:device_description]} OR secondary_device_description:#{params[:device_description]}"} if params[:device_description].present?
+          must { string "primary_connection_description:#{params[:connection_description]}"} if params[:connection_description].present?
+        end
+      end      
+    end
+  end
+
   def primary_device_type_name
     Logan::Application.config.device_mappings.rassoc(primary_device_id)[0].to_s
   end
