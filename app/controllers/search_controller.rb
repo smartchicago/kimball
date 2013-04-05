@@ -1,7 +1,7 @@
 class SearchController < ApplicationController
   def index    
-    if params[:q]
-      @results = Person.search params[:q], :per_page => 100
+    @results = if params[:q]
+      Person.search params[:q], :per_page => 100
     elsif params[:adv]
       # advanced search
       # supported values:
@@ -11,7 +11,10 @@ class SearchController < ApplicationController
       #   device_description
       #   connection_description
       #   postal_code      
-      @results = Person.complex_search(params)
-    end
+      Person.complex_search(params)
+    
+    else
+      []
+    end    
   end
 end
