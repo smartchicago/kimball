@@ -43,7 +43,7 @@
       <% @results.each_with_index do |result, idx| %>
       <tr>
         <td class="span4">
-          <%= link_to "#{result.first_name} #{result.last_name}", people_path(:id => result.id) %>
+          <%= link_to "#{result.first_name} #{result.last_name}", person_path(:id => result.id) %>
         </td>
         <td class="span4">
           ZIP: <%= result.postal_code %><br/>
@@ -56,8 +56,7 @@
           Connection: <%= result.primary_connection_description %>
         </td>    
       </tr>
-      <% end %>  
-
+      <% end %>
     </table>
   </div>
 </div>
