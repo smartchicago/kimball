@@ -33,7 +33,7 @@
     <label for="postal_code">ZIP Code</label>
     <%= text_field_tag :postal_code, params[:postal_code], :class => "input-small" %>
     
-    <%= submit_tag "Search", :name => nil, :class => "btn-primary" %>
+    <%= submit_tag "Search", :name => nil, :class => "btn btn-primary" %>
     
     </form>
   </div>  
@@ -62,6 +62,8 @@
       </tr>
       <% end %>
     </table>
+
+    <%= button_to "Save this list as CSV", search_index_path(params.merge(:format => :csv)), :method => :get, :class => "btn"  %>
     <% else %>
     <p>There are no people that match your search.</p>
     <%  end %>

@@ -6,4 +6,9 @@ class SearchControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test "should export csv" do
+    get :index, :format => :csv
+    assert_response :success
+  end
+
 end

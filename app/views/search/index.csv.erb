@@ -1,0 +1,6 @@
+<%= CSV.generate do |csv| -%>
+  <% csv << ["Email address", "First Name", "Last Name"] -%>
+  <% for result in @results -%>
+    <% csv << [result.email_address, result.first_name, result.last_name] -%>
+  <% end -%>
+<% end -%>

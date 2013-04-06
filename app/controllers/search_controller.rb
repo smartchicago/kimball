@@ -1,3 +1,5 @@
+require 'csv'
+
 class SearchController < ApplicationController
   def index    
     @results = if params[:q]
@@ -16,5 +18,11 @@ class SearchController < ApplicationController
     else
       []
     end    
+
+    respond_to do |format|
+      format.html { }
+      format.csv { } 
+    end
+
   end
 end
