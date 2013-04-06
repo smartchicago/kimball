@@ -14,7 +14,8 @@ set :bundle_flags, "--deployment --quiet --binstubs"
 
 server "logan-staging.smartchicagoapps.org", :web, :app, :db
 
-set :default_environment, { 'PATH' => "$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH" }
+set :default_environment, { 'PATH' => "/home/logan/.rbenv/shims:/home/logan/.rbenv/bin:$PATH" }
+set :ssh_options, { :forward_agent => true }
 
 namespace :deploy do
   task :link_db_config do

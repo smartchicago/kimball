@@ -32,7 +32,9 @@ gem 'jbuilder', '~> 1.0.1'
 gem 'unicorn'
 
 # Deploy with Capistrano
-gem 'capistrano', group: :development
+group :development do
+  gem 'capistrano'
+end
 
 # To use debugger
 # gem 'debugger'
@@ -48,4 +50,6 @@ gem 'will_paginate'
 gem 'will_paginate-bootstrap' # https://github.com/nickpad/will_paginate-bootstrap
 
 # use mysql in production
-gem 'mysql2', group: :production
+group :production do
+  gem 'mysql2'
+end
