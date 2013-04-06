@@ -42,3 +42,7 @@ gem 'twitter-bootstrap-rails'
 
 # use tire for ElasticSearch integration
 gem "tire"
+
+# pagniate with will_paginate: https://github.com/mislav/will_paginate
+gem 'will_paginate'
+gem 'will_paginate-bootstrap' # https://github.com/nickpad/will_paginate-bootstrap

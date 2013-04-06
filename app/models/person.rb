@@ -1,6 +1,8 @@
 class Person < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks 
+
+  self.per_page = 15
   
   # mapping do
   #         indexes :id,           :index    => :not_analyzed
