@@ -3,36 +3,6 @@ class Person < ActiveRecord::Base
   include Tire::Model::Callbacks 
 
   self.per_page = 15
-  
-  # mapping do
-  #         indexes :id,           :index    => :not_analyzed
-  #         indexes :title,        :analyzer => 'snowball', :boost => 100
-  #         indexes :content,      :analyzer => 'snowball'
-  #         indexes :content_size, :as       => 'content.size'
-  #         indexes :author,       :analyzer => 'keyword'
-  #         indexes :published_on, :type => 'date', :include_in_all => false
-  # end
-
-  # t.string   "first_name"
-  # t.string   "last_name"
-  #   t.string   "email_address"
-  #   t.string   "address_1"
-  #   t.string   "address_2"
-  #   t.string   "city"
-  #   t.string   "state"
-  #   t.string   "postal_code"
-  #   t.integer  "geography_id"
-  #   t.integer  "primary_device_id"
-  #   t.string   "primary_device_description"
-  #   t.integer  "secondary_device_id"
-  #   t.string   "secondary_device_description"
-  #   t.integer  "primary_connection_id"
-  #   t.string   "primary_connection_description"
-  #   t.string   "phone_number"
-  #   t.string   "participation_type"
-  #   t.datetime "created_at"
-  #   t.datetime "updated_at"
-  #   
 
   settings analysis: {
     analyzer: {
