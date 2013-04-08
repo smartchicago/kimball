@@ -17,6 +17,8 @@ server "logan-staging.smartchicagoapps.org", :web, :app, :db, :primary => true
 set :default_environment, { 'PATH' => "/home/logan/.rbenv/shims:/home/logan/.rbenv/bin:$PATH" }
 set :ssh_options, { :forward_agent => true }
 
+before 'deploy:finalize_update', 'deploy:link_db_config'
+
 namespace :deploy do
   task :link_db_config do
     # pull in database.yml on server
