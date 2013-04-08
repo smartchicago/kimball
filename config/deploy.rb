@@ -12,7 +12,7 @@ set :user, 'logan'
 set :branch, 'master'
 set :bundle_flags, "--deployment --quiet --binstubs"
 
-server "logan-staging.smartchicagoapps.org", :web, :app, :db
+server "logan-staging.smartchicagoapps.org", :web, :app, :db, :primary => true
 
 set :default_environment, { 'PATH' => "/home/logan/.rbenv/shims:/home/logan/.rbenv/bin:$PATH" }
 set :ssh_options, { :forward_agent => true }
@@ -22,4 +22,15 @@ namespace :deploy do
     # pull in database.yml on server
     run "rm -f #{release_path}/config/database.yml && ln -s #{deploy_to}/shared/database.yml #{release_path}/config/database.yml"
   end
+
+  # https://github.com/capistrano/capistrano/issues/362#issuecomment-14158487
+  namespace :assets do
+    task :precompile, :roles => assets_role, :except => { :no_release => true } do
+      run <<-CMD.compact
+        cd -- #{latest_release.shellescape} &&
+        #{rake} RAILS_ENV=#{rails_env.to_s.shellescape} #{asset_env} assets:precompile
+      CMD
+    end
+  end
+  
 end

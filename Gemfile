@@ -33,7 +33,10 @@ gem 'unicorn'
 
 # Deploy with Capistrano
 group :development do
-  gem 'capistrano'
+  # gem 'capistrano'
+  # mainline cap is busted w/r/t Rails 4. Try this fork instead.
+  # src: https://github.com/capistrano/capistrano/pull/412
+  gem 'capistrano', :git => "git://github.com/jimryan/capistrano.git", :branch => "support-json-manifest"
 end
 
 # To use debugger
