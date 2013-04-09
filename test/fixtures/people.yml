@@ -1,39 +1,37 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
 one:
-  first_name: MyString
-  last_name: MyString
-  email_address: MyString
-  address_1: MyString
-  address_2: MyString
-  city: MyString
-  state: MyString
-  postal_code: MyString
+  first_name: Joe
+  last_name: Tester
+  email_address: joe@example.com
+  address_1: 1060 W Addison
+  address_2: 
+  city: Chicago
+  state: IL
+  postal_code: 60613
   geography_id: 1
   primary_device_id: 1
-  primary_device_description: MyString
-  secondary_device_id: 1
-  secondary_device_description: MyString
+  primary_device_description: iphone
+  secondary_device_id: 2
+  secondary_device_description: samsung
   primary_connection_id: 1
-  primary_connection_description: MyString
-  phone_number: MyString
-  participation_type: MyString
+  primary_connection_description: 
+  phone_number: 999-555-3213
+  participation_type: in-person
 
 two:
-  first_name: MyString
-  last_name: MyString
-  email_address: MyString
-  address_1: MyString
-  address_2: MyString
-  city: MyString
-  state: MyString
-  postal_code: MyString
-  geography_id: 1
-  primary_device_id: 1
-  primary_device_description: MyString
-  secondary_device_id: 1
-  secondary_device_description: MyString
-  primary_connection_id: 1
-  primary_connection_description: MyString
-  phone_number: MyString
-  participation_type: MyString
+  first_name: Jane
+  last_name: Tester
+  email_address: jane@example.com
+  address_1: 225 N Michigan
+  address_2: 22nd Floor
+  city: Chicago
+  state: IL
+  postal_code: 60606
+  geography_id: 42
+  primary_device_id: 3
+  primary_device_description: gadget
+  secondary_device_id: 2
+  secondary_device_description: computer
+  primary_connection_id: 3
+  primary_connection_description: wifi
+  phone_number: 888-999-5555
+  participation_type: remote  

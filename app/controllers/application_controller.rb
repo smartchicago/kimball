@@ -8,8 +8,12 @@ class ApplicationController < ActionController::Base
   protected
 
   def janky_authentication
-    authenticate_or_request_with_http_basic do |username, password|
-      username == "logan" && password == "smartchicago!"
+    unless Rails.env == "test" || Rails.env == "development"
+      authenticate_or_request_with_http_basic do |username, password|
+        username == "logan" && password == "smartchicago!"
+      end
+    else
+      true
     end
   end
 
