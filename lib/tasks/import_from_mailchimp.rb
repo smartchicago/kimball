@@ -3,6 +3,8 @@ require_relative "../../config/environment"
 require 'csv'
 require 'optparse'
 
+$stdout.sync = false
+
 class MailChimpImporter
   @options = {}
   
@@ -11,8 +13,10 @@ class MailChimpImporter
   end
   
   def load_mailchimp_csv
+    $stdout.puts "loading mailchimp data"      
+    count = 0
+    
     CSV.foreach(@options.mailchimp_infile, :headers => :first_row) do |line|
-      # puts line.inspect
 
       person = Person.new
       column_map = {
@@ -33,11 +37,18 @@ class MailChimpImporter
           end
       end
       
+      Rails.logger.info "[load_mailchimp_csv] saving a new person: #{line[:email_address]}"
+            
       person.save
+      $stdout.print "."
+      count += 1      
     end
+    $stdout.puts "\ncompleted mailchimp import, #{count} records"          
   end
 
   def load_wufoo_csv
+    $stdout.puts "starting wufoo import"
+    count = 0
     CSV.foreach(@options.wufoo_infile, :headers => :first_row) do |line|
       person = Person.find_by_email_address(line["Email"])
       
@@ -49,8 +60,15 @@ class MailChimpImporter
       person.city = "Chicago"
       person.state = "Illinois"
       
+      Rails.logger.info "[load_wufoo_csv] saving wufoo data: #{line['Email']}"
+      
       person.save
+      $stdout.print "."      
+      count += 1
     end
+    
+    $stdout.puts "\ncompleted wufoo import, #{count} records"
+    
   end
 
   def map_connection_to_id(val)
