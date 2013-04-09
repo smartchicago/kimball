@@ -54,4 +54,12 @@ class PeopleControllerTest < ActionController::TestCase
     
     assert_response :created
   end
+    
+  test "should validate wufoo handshake key" do
+    assert_no_difference('Person.count') do
+      post :create, wufoo_params.merge("HandshakeKey" => "invalid")
+    end
+    
+    assert_response 403
+  end
 end

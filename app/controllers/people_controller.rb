@@ -1,6 +1,8 @@
 class PeopleController < ApplicationController
   before_action :set_person, only: [:show, :edit, :update, :destroy]
 
+  skip_before_filter :janky_authentication, :if => :should_skip_janky_auth?
+
   # GET /people
   # GET /people.json
   def index
@@ -26,8 +28,11 @@ class PeopleController < ApplicationController
   def create
     from_wufoo = false
     if params['HandshakeKey'].present?
-      # probably a POST from Wufoo, or a malicious user
-
+      if Logan::Application.config.wufoo_handshake_key != params['HandshakeKey']
+        Rails.logger.warn("[wufoo] received request with invalid handshake. Full request: #{request.inspect}")
+        head(403) and return
+      end
+      
       Rails.logger.info("[wufoo] received a submission from wufoo")
       from_wufoo = true
       @person = Person.initialize_from_wufoo(params)      
@@ -82,5 +87,10 @@ class PeopleController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def person_params
       params.require(:person).permit(:first_name, :last_name, :email_address, :address_1, :address_2, :city, :state, :postal_code, :geography_id, :primary_device_id, :primary_device_description, :secondary_device_id, :secondary_device_description, :primary_connection_id, :primary_connection_description, :phone_number, :participation_type)
+    end
+
+    def should_skip_janky_auth?
+      # don't attempt authentication on reqs from wufoo
+      params[:action] == 'create' && params['HandshakeKey'].present?
     end
 end
