@@ -4,6 +4,27 @@ class Person < ActiveRecord::Base
 
   self.per_page = 15
 
+  WUFOO_FIELD_MAPPING = { 
+    'Field1' =>  :first_name,
+    'Field2' =>  :last_name,
+    'Field10' =>  :email_address,
+    # 'Field14' =>  :voted,
+    # 'Field17'=> :311, 
+    'Field20' =>  :primary_device_id, # type of primary
+    'Field21' =>  :primary_device_description, # desc of primary
+    'Field23' => :secondary_device_id,
+    'Field24' => :secondary_device_description, # desc of secondary
+    'Field26' => :primary_connection_id, # connection type
+    'Field27' => :primary_connection_description, # description of connection
+    'Field29' => :participation_type, # participation type
+    'Field31' => :geography_id, # geography_id
+    'Field4' => :address_1, # address_1
+    'Field7' => :postal_code, # postal_code
+    'Field9' => :phone_number, # phone_number
+    # 'IP' => '69.245.247.117', # client IP, ignored for the moment
+    # 'HandshakeKey' => 'b51c04fdaf7f8f333061f09f623d9d5b04f12b19' # secret code, ignored          
+  }
+
   settings analysis: {
     analyzer: {
       email_analyzer: {
@@ -48,6 +69,16 @@ class Person < ActiveRecord::Base
         end
       end      
     end
+  end
+
+  def self.initialize_from_wufoo(params)
+    new_person = Person.new
+    params.each_pair do |k,v|
+      logger.debug "considering: #{k}:#{v}. mapping is: #{WUFOO_FIELD_MAPPING[k]}"
+      new_person[WUFOO_FIELD_MAPPING[k]] = v if WUFOO_FIELD_MAPPING[k].present?
+    end
+    
+    new_person
   end
 
   def primary_device_type_name

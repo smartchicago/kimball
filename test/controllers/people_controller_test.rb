@@ -46,4 +46,12 @@ class PeopleControllerTest < ActionController::TestCase
 
     assert_redirected_to people_path
   end
+
+  test "should create via a wufoo POST" do
+    assert_difference('Person.count') do
+      post :create, wufoo_params
+    end
+    
+    assert_response :created
+  end
 end

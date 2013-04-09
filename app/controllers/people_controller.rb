@@ -24,17 +24,29 @@ class PeopleController < ApplicationController
   # POST /people
   # POST /people.json
   def create
-    @person = Person.new(person_params)
+    from_wufoo = false
+    if params['HandshakeKey'].present?
+      # probably a POST from Wufoo, or a malicious user
 
+      Rails.logger.info("[wufoo] received a submission from wufoo")
+      from_wufoo = true
+      @person = Person.initialize_from_wufoo(params)      
+    else
+      # creating a person by hand
+      @person = Person.new(person_params)
+    end
+    
     respond_to do |format|
       if @person.save
-        format.html { redirect_to @person, notice: 'Person was successfully created.' }
+        
+        from_wufoo ? format.html { head :created } : format.html { redirect_to @person, notice: 'Person was successfully created.' }
         format.json { render action: 'show', status: :created, location: @person }
       else
         format.html { render action: 'new' }
         format.json { render json: @person.errors, status: :unprocessable_entity }
       end
     end
+    
   end
 
   # PATCH/PUT /people/1
