@@ -28,6 +28,7 @@ TODO
   * Attach photograph
   * Attach files
   * Link with their social networks
+  * Show activity streams
   * Track program status (e.g. has received Visa card)
 * Backend
   * User accounts
