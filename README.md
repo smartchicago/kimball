@@ -27,6 +27,8 @@ TODO
   * Add notes
   * Attach photograph
   * Attach files
+  * Link with their social networks
+  * Track program status (e.g. has received Visa card)
 * Backend
   * User accounts
   * Terms of service/privacy policy
