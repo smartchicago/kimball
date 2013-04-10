@@ -8,8 +8,8 @@ class Person < ActiveRecord::Base
     'Field1' =>  :first_name,
     'Field2' =>  :last_name,
     'Field10' =>  :email_address,
-    # 'Field14' =>  :voted,
-    # 'Field17'=> :311, 
+    'Field14' =>  :voted,
+    'Field17'=>   :called_311, 
     'Field20' =>  :primary_device_id, # type of primary
     'Field21' =>  :primary_device_description, # desc of primary
     'Field23' => :secondary_device_id,
@@ -21,7 +21,7 @@ class Person < ActiveRecord::Base
     'Field4' => :address_1, # address_1
     'Field7' => :postal_code, # postal_code
     'Field9' => :phone_number, # phone_number
-    # 'IP' => '69.245.247.117', # client IP, ignored for the moment
+    'IP'    => :signup_ip, # client IP, ignored for the moment
     # 'HandshakeKey' => 'b51c04fdaf7f8f333061f09f623d9d5b04f12b19' # secret code, ignored          
   }
 
