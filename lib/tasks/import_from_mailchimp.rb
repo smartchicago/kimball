@@ -52,7 +52,7 @@ class MailChimpImporter
       person = Person.find_by_email_address(line["Email"])
       
       if person.blank?
-        Rails.logger.info("[load_wufoo_csv] skipping import of ")
+        $stderr.puts("\n[load_wufoo_csv] skipping import of #{line["Email"]}")
         next
       end
       
@@ -75,6 +75,13 @@ class MailChimpImporter
   end
   
   def run
+    if @options[:reset]
+      puts "Destroying all existing records"
+      Person.delete_all
+      Person.tire.index.delete
+      Person.tire.index.create
+    end
+    
     load_mailchimp_csv
     load_wufoo_csv
   end  
@@ -83,6 +90,7 @@ end
 options = OpenStruct.new
 OptionParser.new do |opts|
   options.dryrun = false
+  options.reset  = false
   
   opts.banner = "Usage: import_from_mailchimp.rb [options]"  
 
@@ -96,6 +104,10 @@ OptionParser.new do |opts|
   
   opts.on("-d", "--[no-]dry-run", "Dry run (if present will not commit changes)") do |v|
     options.dryrun = true
+  end
+
+  opts.on("-r", "--reset", "Reset database") do |v|
+    options.reset = true
   end
   
 end.parse!
