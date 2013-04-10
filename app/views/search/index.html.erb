@@ -32,6 +32,10 @@
 
     <label for="postal_code">ZIP Code</label>
     <%= text_field_tag :postal_code, params[:postal_code], :class => "input-small" %>
+
+    <label for="geography_id">Ward</label>
+    <%= text_field_tag :geography_id, params[:geography_id], :class => "input-small" %>
+
     
     <%= submit_tag "Search", :name => nil, :class => "btn btn-primary" %>
     
@@ -51,6 +55,7 @@
         </td>
         <td class="span4">
           ZIP: <%= result.postal_code %><br/>
+          Ward: <%= result.geography_id %><br/>
           Phone: <%= number_to_phone result.phone_number %><br/>
           Email: <%= result.email_address %>      
         </td>

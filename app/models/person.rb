@@ -67,6 +67,7 @@ class Person < ActiveRecord::Base
           must { string "postal_code:#{params[:postal_code]}"} if params[:postal_code].present?
           must { string "primary_device_description:#{params[:device_description]} OR secondary_device_description:#{params[:device_description]}"} if params[:device_description].present?
           must { string "primary_connection_description:#{params[:connection_description]}"} if params[:connection_description].present?
+          must { string "geography_id:#{params[:geography_id]}"} if params[:geography_id].present?
         end
       end      
     end
