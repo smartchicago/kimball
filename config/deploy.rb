@@ -10,14 +10,15 @@ set :use_sudo, false
 set :user, 'logan'
 
 set :branch, 'master'
-set :bundle_flags, "--deployment --quiet --binstubs"
+set :bundle_flags, "--deployment --quiet"
 
 server "logan-staging.smartchicagoapps.org", :web, :app, :db, :primary => true
 
 set :default_environment, { 'PATH' => "/home/logan/.rbenv/shims:/home/logan/.rbenv/bin:$PATH" }
 set :ssh_options, { :forward_agent => true }
 
-before 'deploy:finalize_update', 'deploy:link_db_config'
+before  'deploy:finalize_update', 'deploy:link_db_config'
+after   'deploy:finalize_update', 'deploy:create_binstubs'
 
 namespace :deploy do
   task :link_db_config do
@@ -33,6 +34,11 @@ namespace :deploy do
         #{rake} RAILS_ENV=#{rails_env.to_s.shellescape} #{asset_env} assets:precompile
       CMD
     end
+  end
+  
+  # rewrite binstubs
+  task :create_binstubs do
+    run "cd #{latest_release.shellescape} && bundle binstubs unicorn"
   end
   
 end
