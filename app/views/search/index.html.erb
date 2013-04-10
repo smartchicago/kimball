@@ -68,7 +68,8 @@
       <% end %>
     </table>
 
-    <%= button_to "Save this list as CSV", search_index_path(params.merge(:format => :csv)), :method => :get, :class => "btn"  %>
+    <%= link_to "Save this list as CSV", search_index_path(params.merge(:format => :csv)), :class => "btn"  %>
+    
     <% else %>
     <p>There are no people that match your search.</p>
     <%  end %>
