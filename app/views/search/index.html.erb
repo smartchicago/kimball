@@ -54,15 +54,15 @@
           <%= link_to "#{result.first_name} #{result.last_name}", person_path(:id => result.id) %>
         </td>
         <td class="span4">
-          ZIP: <%= result.postal_code %><br/>
-          Ward: <%= result.geography_id %><br/>
-          Phone: <%= number_to_phone result.phone_number %><br/>
-          Email: <%= result.email_address %>      
+          ZIP: <%= search_result_field result.postal_code, :postal_code %><br/>
+          Ward: <%= search_result_field result.geography_id, :geography_id %><br/>
+          Phone: <%= search_result_field number_to_phone(result.phone_number), :phone_number %><br/>
+          Email: <%= search_result_field result.email_address, :email_address %>      
         </td>
         <td class="span4">
-          Primary: <%= result.primary_device_description %><br>
-          Secondary: <%= result.secondary_device_description %><br>
-          Connection: <%= result.primary_connection_description %>
+          Primary: <%= search_result_field result.primary_device_description, :device_description %><br>
+          Secondary: <%= search_result_field result.secondary_device_description, :device_description %><br>
+          Connection: <%= search_result_field result.primary_connection_description, :connection_description %>
         </td>    
       </tr>
       <% end %>
