@@ -1,7 +1,8 @@
 class Person < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks 
-
+  include ExternalDataMappings
+  
   self.per_page = 15
 
   WUFOO_FIELD_MAPPING = { 
@@ -74,9 +75,13 @@ class Person < ActiveRecord::Base
   def self.initialize_from_wufoo(params)
     new_person = Person.new
     params.each_pair do |k,v|
-      logger.debug "considering: #{k}:#{v}. mapping is: #{WUFOO_FIELD_MAPPING[k]}"
       new_person[WUFOO_FIELD_MAPPING[k]] = v if WUFOO_FIELD_MAPPING[k].present?
     end
+    
+    # rewrite the device and connection identifiers to integers
+    new_person.primary_device_id      = Person.map_device_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:primary_device_id).first])
+    new_person.secondary_device_id    = Person.map_device_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:secondary_device_id).first])
+    new_person.primary_connection_id  = Person.map_connection_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:primary_connection_id).first])
     
     new_person
   end
@@ -88,6 +93,5 @@ class Person < ActiveRecord::Base
   def secondary_device_type_name
     Logan::Application.config.device_mappings.rassoc(secondary_device_id)[0].to_s
   end
-  
 
 end
