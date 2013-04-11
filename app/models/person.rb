@@ -83,6 +83,11 @@ class Person < ActiveRecord::Base
     new_person.primary_device_id      = Person.map_device_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:primary_device_id).first])
     new_person.secondary_device_id    = Person.map_device_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:secondary_device_id).first])
     new_person.primary_connection_id  = Person.map_connection_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:primary_connection_id).first])
+
+    # FIXME: this is a hack, since we need to initialize people 
+    # with a city/state, but don't ask for it in the Wufoo form
+    new_person.city  = "Chicago"
+    new_person.state = "Illinois"
     
     new_person
   end
