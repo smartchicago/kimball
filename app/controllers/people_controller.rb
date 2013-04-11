@@ -7,7 +7,7 @@ class PeopleController < ApplicationController
   # GET /people
   # GET /people.json
   def index
-    @people = Person.paginate :page => params[:page]
+    @people = Person.paginate(:page => params[:page]).order('signup_at DESC')
   end
 
   # GET /people/1
