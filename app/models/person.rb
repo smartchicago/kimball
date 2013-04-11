@@ -89,6 +89,8 @@ class Person < ActiveRecord::Base
     new_person.city  = "Chicago"
     new_person.state = "Illinois"
     
+    new_person.signup_at = DateTime.now
+    
     new_person
   end
 

@@ -8,6 +8,7 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal "Jim", new_person.first_name
     assert_equal "jim@example.com", new_person.email_address
     assert_equal "Chicago", new_person.city
+    assert_not_nil new_person.signup_at
   end
   
   test "should map wufoo device description to correct id" do
