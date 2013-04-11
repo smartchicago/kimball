@@ -23,7 +23,8 @@ class MailChimpImporter
         "Email Address" => :email_address,"First Name" => :first_name,"Last Name" => :last_name,"Ward" => :geography_id, "ZIP Code" => :postal_code,
         "How would you like to participate" => :participation_type, "Primary device" => :primary_device_id,"Primary device description" => :primary_device_description,
         "Secondary device" => :secondary_device_id, "Secondary device description" => :secondary_device_description ,"Primary connection method" => :primary_connection_id,
-        "Connection method description" => :primary_connection_description, "Did you vote in the most recent election" => :voted, "Have you ever called 311" => :called_311
+        "Connection method description" => :primary_connection_description, "Did you vote in the most recent election" => :voted, "Have you ever called 311" => :called_311,
+        "CONFIRM_TIME" => :signup_at
       }   
       
       column_map.each do |k,v|
