@@ -30,6 +30,7 @@ TODO
   * Link with their social networks
   * Show activity streams
   * Track program status (e.g. has received Visa card)
+  * Show output from Tribune boundaries service on individual person pages
 * Backend
   * User accounts
   * Terms of service/privacy policy
