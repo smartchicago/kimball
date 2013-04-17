@@ -37,6 +37,11 @@ TODO
   * Audit trails
   * Comments on all objects
 
+Hacking
+-------
+
+Main development occurs in the development branch. HEAD on master is always the production release. New features are created in topic branches, and then merged to development via pull requests. Candidate releases are tagged from development and deployed to staging, tested, then pushed to master and production.
+
 Contributors
 ------------
 
