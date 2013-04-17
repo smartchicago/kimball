@@ -21,6 +21,11 @@ before  'deploy:finalize_update', 'deploy:link_db_config'
 after   'deploy:finalize_update', 'deploy:create_binstubs'
 
 namespace :deploy do
+  task :restart do
+    # unicorn reloads on USR2
+    run "cd #{release_path} && kill -USR2 `cat tmp/pids/unicorn.pid`"
+  end
+  
   task :link_db_config do
     # pull in database.yml on server
     run "rm -f #{release_path}/config/database.yml && ln -s #{deploy_to}/shared/database.yml #{release_path}/config/database.yml"
