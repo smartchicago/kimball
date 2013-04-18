@@ -1,18 +1,18 @@
 require "bundler/capistrano"
+require "capistrano/ext/multistage"
 
-set :application, "logan"
 set :repository,  "git@github.com:smartchicago/logan.git"
 
-set :scm, :git # You can set :scm explicitly or Capistrano will make an intelligent guess based on known version control directory names
-set :deploy_to, "/var/www/#{application}"
+set :scm, :git
+set(:deploy_to) { "/var/www/#{application}" }
 set :deploy_via, :remote_cache
 set :use_sudo, false
 set :user, 'logan'
 
-set :branch, 'master'
-set :bundle_flags, "--deployment --quiet"
+set :stages, ["production", "staging"]
+set :default_stage, "staging"
 
-server "logan-staging.smartchicagoapps.org", :web, :app, :db, :primary => true
+set :bundle_flags, "--deployment --quiet"
 
 set :default_environment, { 'PATH' => "/home/logan/.rbenv/shims:/home/logan/.rbenv/bin:$PATH" }
 set :ssh_options, { :forward_agent => true }
@@ -21,9 +21,17 @@ before  'deploy:finalize_update', 'deploy:link_db_config'
 after   'deploy:finalize_update', 'deploy:create_binstubs'
 
 namespace :deploy do
+  task :start do
+    run "cd #{current_path} && `./bin/unicorn_rails -c config/unicorn.rb -E #{rails_env.to_s.shellescape} -D`"
+  end
+  
+  task :stop do
+    run "cd #{current_path} && kill -TERM `cat tmp/pids/unicorn.pid`"
+  end
+  
   task :restart do
     # unicorn reloads on USR2
-    run "cd #{release_path} && kill -USR2 `cat tmp/pids/unicorn.pid`"
+    run "cd #{current_path} && kill -USR2 `cat tmp/pids/unicorn.pid`"
   end
   
   task :link_db_config do
