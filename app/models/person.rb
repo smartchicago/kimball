@@ -26,6 +26,9 @@ class Person < ActiveRecord::Base
     # 'HandshakeKey' => 'b51c04fdaf7f8f333061f09f623d9d5b04f12b19' # secret code, ignored          
   }
 
+  # namespace indices
+  index_name "person-#{Rails.env}"
+
   settings analysis: {
     analyzer: {
       email_analyzer: {
