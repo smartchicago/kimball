@@ -15,7 +15,7 @@ preload_app true
 timeout 30
 
 # Listen on a Unix data socket
-listen '/tmp/logan-staging.sock', :backlog => 2048
+listen "/tmp/logan-#{rails_env}.sock", :backlog => 2048
 
 before_fork do |server, worker|
   ##
