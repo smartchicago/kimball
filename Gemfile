@@ -56,3 +56,6 @@ gem 'will_paginate-bootstrap' # https://github.com/nickpad/will_paginate-bootstr
 group :production do
   gem 'mysql2'
 end
+
+# include health_check, for system monitoring
+gem "health_check"
