@@ -21,6 +21,14 @@ before  'deploy:finalize_update', 'deploy:link_db_config'
 after   'deploy:finalize_update', 'deploy:create_binstubs'
 
 namespace :deploy do
+  task :start do
+    run "cd #{release_path} && `./bin/unicorn_rails -c config/unicorn.rb -E #{rails_env.to_s.shellescape} -D`"
+  end
+  
+  task :stop do
+    run "cd #{release_path} && kill -TERM `cat tmp/pids/unicorn.pid`"
+  end
+  
   task :restart do
     # unicorn reloads on USR2
     run "cd #{release_path} && kill -USR2 `cat tmp/pids/unicorn.pid`"
