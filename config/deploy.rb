@@ -1,18 +1,18 @@
 require "bundler/capistrano"
+require "capistrano/ext/multistage"
 
-set :application, "logan"
 set :repository,  "git@github.com:smartchicago/logan.git"
 
-set :scm, :git # You can set :scm explicitly or Capistrano will make an intelligent guess based on known version control directory names
-set :deploy_to, "/var/www/#{application}"
+set :scm, :git
+set(:deploy_to) { "/var/www/#{application}" }
 set :deploy_via, :remote_cache
 set :use_sudo, false
 set :user, 'logan'
 
-set :branch, 'master'
-set :bundle_flags, "--deployment --quiet"
+set :stages, ["production", "staging"]
+set :default_stage, "staging"
 
-server "logan-staging.smartchicagoapps.org", :web, :app, :db, :primary => true
+set :bundle_flags, "--deployment --quiet"
 
 set :default_environment, { 'PATH' => "/home/logan/.rbenv/shims:/home/logan/.rbenv/bin:$PATH" }
 set :ssh_options, { :forward_agent => true }
