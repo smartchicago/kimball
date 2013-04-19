@@ -17,6 +17,10 @@ timeout 30
 # Listen on a Unix data socket
 listen "/tmp/logan-#{rails_env}.sock", :backlog => 2048
 
+before_exec do |server|
+  ENV["BUNDLE_GEMFILE"] = "/var/www/logan-#{rails_env}/current/Gemfile"
+end
+
 before_fork do |server, worker|
   ##
   # When sent a USR2, Unicorn will suffix its pidfile with .oldbin and

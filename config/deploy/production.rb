@@ -1,3 +1,4 @@
+set :application, "logan-production"
 set :application, "logan"
 set :branch, fetch(:branch, "master")
 
