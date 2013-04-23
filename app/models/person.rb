@@ -2,6 +2,8 @@ class Person < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks 
   include ExternalDataMappings
+
+  has_many :comments, as: :commentable
   
   self.per_page = 15
 

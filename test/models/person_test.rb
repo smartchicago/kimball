@@ -16,4 +16,9 @@ class PersonTest < ActiveSupport::TestCase
     assert new_person.save
     assert_equal 2, new_person.primary_device_id
   end
+
+  test "should have a comment associated" do
+    assert_equal 1, people(:one).comments.size
+    assert_equal comments(:one).content, people(:one).comments.first.content
+  end
 end
