@@ -1,0 +1,11 @@
+<div class="comment row" id="comment-<%= comment.id %>">
+  <a id="comment-<%= comment.id %>"></a>
+  <div class="span9">
+    <%= simple_format comment.content %>
+    <span class="comment-byline">
+      Author name &mdash; <%= link_to "#{time_ago_in_words(comment.created_at)} ago", person_path(comment.commentable, anchor: "comment-#{comment.id}"), title: comment.created_at %>
+      <%= link_to 'delete note', comment_path(comment.id), method: :delete, remote: true, confirm: "Delete this note? This cannot be undone.", class: "comment-delete-link" %>
+    </span>
+  </div>
+  <div class="span3"></div>
+</div>

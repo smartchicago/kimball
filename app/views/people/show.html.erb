@@ -1,4 +1,4 @@
-<%- model_class = Person -%>
+0<%- model_class = Person -%>
 
 <div class="row">
   <div class="span12">
@@ -73,6 +73,22 @@
   <div class="span6"><a href="https://maps.google.com?q=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>" target="_blank" title="View in Google Maps"><img src="http://maps.googleapis.com/maps/api/staticmap?markers=|<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;zoom=14&amp;size=570x200&amp;sensor=false"><br/>View in Google Maps</a></div>
   <div class="span6"><img src="http://maps.googleapis.com/maps/api/streetview?size=570x200&amp;location=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;sensor=false"></div>
 </div>
+
+<div class="row">
+  <div class="span12"><h3>Notes</h3>
+
+  <%= form_for([@person, @comment], remote: true) do |form| %>
+    <%= form.hidden_field :commentable_type, :value => 'Person' %>
+    <%= form.hidden_field :commentable_id, :value => @person.id %>
+    <%= form.text_area :content, rows: 3, class: "span6 input-block-level" %>
+    <%= form.submit 'Add note', :class => "btn" %>
+  <% end %>
+  </div>
+</div>
+<div id="comments">
+  <%= render partial: 'comment', collection: @person.comments.order("created_at DESC") %>
+</div>
+
 
 <div class="row">
   <div class="form-actions span12">

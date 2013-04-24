@@ -28,11 +28,13 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
-        format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @comment }
+        # format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
+        format.js   { }
+        # format.json { render action: 'show', status: :created, location: @comment }
       else
-        format.html { render action: 'new' }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
+        # format.html { render action: 'new' }
+        format.js   { escape_javascript("console.log('error saving comment: #{comment.errors.inpsect}');") }
+        # format.json { render json: @comment.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -56,8 +58,9 @@ class CommentsController < ApplicationController
   def destroy
     @comment.destroy
     respond_to do |format|
-      format.html { redirect_to comments_url }
-      format.json { head :no_content }
+      # format.html { redirect_to comments_url }
+      # format.json { head :no_content }
+      format.js {}
     end
   end
 
