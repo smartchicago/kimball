@@ -28,6 +28,9 @@ class Person < ActiveRecord::Base
     # 'HandshakeKey' => 'b51c04fdaf7f8f333061f09f623d9d5b04f12b19' # secret code, ignored          
   }
 
+  # update index if a comment is added
+  after_touch() { tire.update_index }
+
   # namespace indices
   index_name "person-#{Rails.env}"
 
@@ -58,9 +61,22 @@ class Person < ActiveRecord::Base
       indexes :secondary_device_description
       indexes :primary_connection_description
       
+      # comments
+      indexes :comments do
+        indexes :content, analyzer: "snowball"
+      end
+      
       indexes :created_at, type: "date"
     end
   end  
+
+
+  def to_indexed_json
+    # customize what data is sent to ES for indexing
+    json = to_json( include: { comments: { only: [:content] } } )
+    Rails.logger.debug("[to_indexed_json] json: #{json}")
+    json
+  end
 
   def self.complex_search(params)
     tire.search per_page: 100 do
