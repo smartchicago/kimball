@@ -73,9 +73,7 @@ class Person < ActiveRecord::Base
 
   def to_indexed_json
     # customize what data is sent to ES for indexing
-    json = to_json( include: { comments: { only: [:content] } } )
-    Rails.logger.debug("[to_indexed_json] json: #{json}")
-    json
+    to_json( include: { comments: { only: [ :content ] } } )
   end
 
   def self.complex_search(params)
@@ -110,7 +108,7 @@ class Person < ActiveRecord::Base
     new_person.city  = "Chicago"
     new_person.state = "Illinois"
     
-    new_person.signup_at = DateTime.now
+    new_person.signup_at = Time.now
     
     new_person
   end
