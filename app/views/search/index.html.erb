@@ -49,6 +49,7 @@
     <% if @results.any? %>
     <table class="table table-striped">
       <% @results.each_with_index do |result, idx| %>
+      <% result = result.person %>
       <tr>
         <td class="span4">
           <%= link_to "#{result.first_name} #{result.last_name}", person_path(:id => result.id) %>

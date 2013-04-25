@@ -2,6 +2,8 @@ class Person < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks 
   include ExternalDataMappings
+
+  has_many :comments, as: :commentable
   
   self.per_page = 15
 
@@ -25,6 +27,9 @@ class Person < ActiveRecord::Base
     'IP'    => :signup_ip, # client IP, ignored for the moment
     # 'HandshakeKey' => 'b51c04fdaf7f8f333061f09f623d9d5b04f12b19' # secret code, ignored          
   }
+
+  # update index if a comment is added
+  after_touch() { tire.update_index }
 
   # namespace indices
   index_name "person-#{Rails.env}"
@@ -56,9 +61,20 @@ class Person < ActiveRecord::Base
       indexes :secondary_device_description
       indexes :primary_connection_description
       
+      # comments
+      indexes :comments do
+        indexes :content, analyzer: "snowball"
+      end
+      
       indexes :created_at, type: "date"
     end
   end  
+
+
+  def to_indexed_json
+    # customize what data is sent to ES for indexing
+    to_json( include: { comments: { only: [ :content ] } } )
+  end
 
   def self.complex_search(params)
     tire.search per_page: 100 do
@@ -92,7 +108,7 @@ class Person < ActiveRecord::Base
     new_person.city  = "Chicago"
     new_person.state = "Illinois"
     
-    new_person.signup_at = DateTime.now
+    new_person.signup_at = Time.now
     
     new_person
   end

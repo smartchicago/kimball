@@ -75,6 +75,22 @@
 </div>
 
 <div class="row">
+  <div class="span12"><h3>Notes</h3>
+
+  <%= form_for([@person, @comment], remote: true) do |form| %>
+    <%= form.hidden_field :commentable_type, :value => 'Person' %>
+    <%= form.hidden_field :commentable_id, :value => @person.id %>
+    <%= form.text_area :content, rows: 3, class: "span6 input-block-level" %>
+    <%= form.submit 'Add note', :class => "btn" %>
+  <% end %>
+  </div>
+</div>
+<div id="comments">
+  <%= render partial: 'comment', collection: @person.comments.order("created_at DESC") %>
+</div>
+
+
+<div class="row">
   <div class="form-actions span12">
     <%= link_to t('.back', :default => t("helpers.links.back")),
                 people_path, :class => 'btn'  %>
