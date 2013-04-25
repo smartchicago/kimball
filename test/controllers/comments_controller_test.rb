@@ -18,10 +18,10 @@ class CommentsControllerTest < ActionController::TestCase
 
   test "should create comment" do
     assert_difference('Comment.count') do
-      post :create, comment: { commentable_id: @comment.commentable_id, commentable_type: @comment.commentable_type, content: @comment.content, user_id: @comment.user_id }
+      post :create, comment: { commentable_id: @comment.commentable_id, commentable_type: @comment.commentable_type, content: @comment.content, user_id: @comment.user_id }, format: :js
     end
 
-    assert_redirected_to comment_path(assigns(:comment))
+    assert_response :success
   end
 
   test "should show comment" do
@@ -41,9 +41,9 @@ class CommentsControllerTest < ActionController::TestCase
 
   test "should destroy comment" do
     assert_difference('Comment.count', -1) do
-      delete :destroy, id: @comment
+      delete :destroy, id: @comment, format: :js
     end
 
-    assert_redirected_to comments_path
+    assert_response :success
   end
 end
