@@ -72,6 +72,8 @@
       <% end %>
     </table>
 
+    <%= will_paginate @results, :renderer => BootstrapPagination::Rails %>
+
     <%= link_to "Save this list as CSV", search_index_path(params.merge(:format => :csv)), :class => "btn"  %>
     
     <% else %>

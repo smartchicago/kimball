@@ -3,7 +3,7 @@ require 'csv'
 class SearchController < ApplicationController
   def index    
     @results = if params[:q]
-      Person.search params[:q], :per_page => 100
+      Person.search params[:q], per_page: Person.per_page, page: (params[:page] || 1)
     elsif params[:adv]
       # advanced search
       # supported values:
