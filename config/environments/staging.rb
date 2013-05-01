@@ -77,4 +77,7 @@ Logan::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  # Analytics
+  config.google_analytics_enabled = true
 end
