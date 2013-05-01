@@ -11,4 +11,10 @@ class SearchControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test "should search" do
+    get :index, :q => "joe"
+    assert_response :success
+    assert_equal 1, assigns(:results).size
+  end
+
 end
