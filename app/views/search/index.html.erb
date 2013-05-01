@@ -47,6 +47,9 @@
   <div class="span12">
 
     <% if @results.any? %>
+    <p class="pull-right">
+      Showing <%= @results.size %> <%= 'result'.pluralize(@results) %><% if @results.total > @results.size -%> of <%= @results.total %> total<% end -%>
+    </p>
     <table class="table table-striped">
       <% @results.each_with_index do |result, idx| %>
       <% result = result.person %>
