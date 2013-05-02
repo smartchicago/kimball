@@ -59,3 +59,6 @@ end
 
 # include health_check, for system monitoring
 gem "health_check"
+
+# use holder for placeholder images
+gem 'holder_rails'
