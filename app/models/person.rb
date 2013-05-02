@@ -78,7 +78,7 @@ class Person < ActiveRecord::Base
 
   def self.complex_search(params, _per_page)
     options = {}
-    options[:per_page] = _per_page if _per_page    # pass in nil to get all results
+    options[:per_page] = _per_page
     options[:page]     = params[:page] || 1
     
     tire.search options do
