@@ -43,10 +43,10 @@
   </div>  
 </div>
 
+<% if @results.any? %>
 <div class="row">
   <div class="span12">
 
-    <% if @results.any? %>
     <p class="pull-right">
       Showing <%= @results.size %> <%= 'result'.pluralize(@results) %><% if @results.total > @results.size -%> of <%= @results.total %> total<% end -%>
     </p>
@@ -71,13 +71,22 @@
       </tr>
       <% end %>
     </table>
-
-    <%= will_paginate @results, :renderer => BootstrapPagination::Rails %>
-
-    <%= link_to "Save this list as CSV", search_index_path(params.merge(:format => :csv)), :class => "btn"  %>
-    
-    <% else %>
-    <p>There are no people that match your search.</p>
-    <%  end %>
   </div>
 </div>
+
+<div class="row">
+  <div class="offset4 span8"><%= will_paginate @results, :renderer => BootstrapPagination::Rails %></div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <%= link_to "Save this list as CSV", search_index_path(params.merge(:format => :csv)), :class => "btn"  %>
+  </div>  
+</div>
+
+<% else %>    
+
+<div class="row">
+  <div class="span12">There are no CUT Group members that match your search.</div>
+</div>
+<% end %>
