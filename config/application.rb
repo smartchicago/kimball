@@ -21,5 +21,8 @@ module Logan
 
     # Analytics
     Logan::Application.config.google_analytics_enabled = false    
+
+    # compile the placeholder
+    config.assets.precompile += %w( holder.js )
   end
 end

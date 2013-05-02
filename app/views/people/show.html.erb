@@ -58,7 +58,7 @@
   </div>
   
   <div class="span4">
-    <img src="http://placekitten.com/400/300" />    
+    <%= holder_tag '400x300' %>
   </div>
 </div>
 
@@ -70,8 +70,8 @@
 </div>
 
 <div class="row">  
-  <div class="span6"><a href="https://maps.google.com?q=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>" target="_blank" title="View in Google Maps"><img src="http://maps.googleapis.com/maps/api/staticmap?markers=|<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;zoom=14&amp;size=570x200&amp;sensor=false"><br/>View in Google Maps</a></div>
-  <div class="span6"><img src="http://maps.googleapis.com/maps/api/streetview?size=570x200&amp;location=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;sensor=false"></div>
+  <div class="span6"><a href="https://maps.google.com?q=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>" target="_blank" title="View in Google Maps"><img src="https://maps.googleapis.com/maps/api/staticmap?markers=|<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;zoom=14&amp;size=570x200&amp;sensor=false"><br/>View in Google Maps</a></div>
+  <div class="span6"><img src="https://maps.googleapis.com/maps/api/streetview?size=570x200&amp;location=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;sensor=false"></div>
 </div>
 
 <div class="row">
