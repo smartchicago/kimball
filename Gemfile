@@ -62,3 +62,6 @@ gem "health_check"
 
 # use holder for placeholder images
 gem 'holder_rails'
+
+# use devise for auth/identity
+gem 'devise'
