@@ -10,37 +10,45 @@
 
 
 <div class="row">
-  <div class="span12 collapse <%= "in" if params[:adv] %>" id="advanced-search">
-    <h3>Advanced Search</h3>    
+  <%= form_tag search_index_path, :method => :get, :class => "" %>
+  <%= hidden_field_tag :adv, '1' %>
   
-    <%= form_tag search_index_path, :method => :get, :class => "form-inline" %>
-    <%= hidden_field_tag :adv, '1' %>
-    <label for="first_name">First name</label>
-    <%= text_field_tag :first_name, params[:first_name], :class => "input-small" %>
+  <div class="collapse <%= "in" if params[:adv] %>" id="advanced-search">
+    <div class="span4">
+      <fieldset>
+        <label for="first_name">First name</label>
+        <%= text_field_tag :first_name, params[:first_name], :class => "input" %>
 
-    <label for="last_name">Last name</label>
-    <%= text_field_tag :last_name, params[:last_name], :class => "input-small" %>
+        <label for="last_name">Last name</label>
+        <%= text_field_tag :last_name, params[:last_name], :class => "input" %>
 
-    <label for="email_address">Email address</label>
-    <%= text_field_tag :email_address, params[:email_address], :class => "input-small" %>
+        <label for="email_address">Email address</label>
+        <%= text_field_tag :email_address, params[:email_address], :class => "input" %>              
+      </fieldset>
+    </div>
     
-    <label for="device_description">Device description</label>
-    <%= text_field_tag :device_description, params[:device_description], :class => "input-small" %>
-    
-    <label for="connection_description">Connection description</label>
-    <%= text_field_tag :connection_description, params[:connection_description], :class => "input-small" %>
+    <div class="span4">
+      <label for="device_description">Device description</label>
+      <%= text_field_tag :device_description, params[:device_description], :class => "input" %>
 
-    <label for="postal_code">ZIP Code</label>
-    <%= text_field_tag :postal_code, params[:postal_code], :class => "input-small" %>
+      <label for="connection_description">Connection description</label>
+      <%= text_field_tag :connection_description, params[:connection_description], :class => "input" %>      
+    </div>
 
-    <label for="geography_id">Ward</label>
-    <%= text_field_tag :geography_id, params[:geography_id], :class => "input-small" %>
+    <div class="span4">
+      <label for="postal_code">ZIP Code</label>
+      <%= text_field_tag :postal_code, params[:postal_code], :class => "input-small" %>
 
-    
-    <%= submit_tag "Search", :name => nil, :class => "btn btn-primary" %>
-    
-    </form>
+      <label for="geography_id">Ward</label>
+      <%= text_field_tag :geography_id, params[:geography_id], :class => "input-small" %>      
+    </div>
   </div>  
+  
+  <div class="span12">
+    <%= submit_tag "Search", :name => nil, :class => "btn btn-primary" %>
+  </div>
+  
+  </form>
 </div>
 
 <% if @results.any? %>
@@ -87,6 +95,8 @@
 <% else %>    
 
 <div class="row">
-  <div class="span12">There are no CUT Group members that match your search.</div>
+  <div class="span12" style="margin-top: 30px;">
+    <p>There are no CUT Group members that match your search.</p>
+  </div>
 </div>
 <% end %>
