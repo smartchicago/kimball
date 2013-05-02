@@ -1,20 +1,15 @@
 require 'csv'
 
 class SearchController < ApplicationController
-  def index    
-    @results = if params[:q]
-      Person.search params[:q], per_page: Person.per_page, page: (params[:page] || 1)
-    elsif params[:adv]
-      # advanced search
-      # supported values:
-      #   first_name
-      #   last_name
-      #   email_address
-      #   device_description
-      #   connection_description
-      #   postal_code      
-      Person.complex_search(params)
+  def index
+    # no pagination for CSV export
+    per_page = request.format.to_s.eql?('text/csv') ? nil : Person.per_page
     
+    Rails.logger.debug "per_page: #{per_page}"
+    @results = if params[:q]
+      Person.search params[:q], per_page: per_page, page: (params[:page] || 1)
+    elsif params[:adv]
+      Person.complex_search(params, per_page)
     else
       []
     end    
