@@ -10,43 +10,54 @@
 
 
 <div class="row">
-  <div class="span12 collapse <%= "in" if params[:adv] %>" id="advanced-search">
-    <h3>Advanced Search</h3>    
+  <%= form_tag search_index_path, :method => :get, :class => "" %>
+  <%= hidden_field_tag :adv, '1' %>
   
-    <%= form_tag search_index_path, :method => :get, :class => "form-inline" %>
-    <%= hidden_field_tag :adv, '1' %>
-    <label for="first_name">First name</label>
-    <%= text_field_tag :first_name, params[:first_name], :class => "input-small" %>
+  <div class="collapse <%= "in" if params[:adv] %>" id="advanced-search">
+    <div class="span4">
+      <fieldset>
+        <label for="first_name">First name</label>
+        <%= text_field_tag :first_name, params[:first_name], :class => "input" %>
 
-    <label for="last_name">Last name</label>
-    <%= text_field_tag :last_name, params[:last_name], :class => "input-small" %>
+        <label for="last_name">Last name</label>
+        <%= text_field_tag :last_name, params[:last_name], :class => "input" %>
 
-    <label for="email_address">Email address</label>
-    <%= text_field_tag :email_address, params[:email_address], :class => "input-small" %>
+        <label for="email_address">Email address</label>
+        <%= text_field_tag :email_address, params[:email_address], :class => "input" %>              
+      </fieldset>
+    </div>
     
-    <label for="device_description">Device description</label>
-    <%= text_field_tag :device_description, params[:device_description], :class => "input-small" %>
-    
-    <label for="connection_description">Connection description</label>
-    <%= text_field_tag :connection_description, params[:connection_description], :class => "input-small" %>
+    <div class="span4">
+      <label for="device_description">Device description</label>
+      <%= text_field_tag :device_description, params[:device_description], :class => "input" %>
 
-    <label for="postal_code">ZIP Code</label>
-    <%= text_field_tag :postal_code, params[:postal_code], :class => "input-small" %>
+      <label for="connection_description">Connection description</label>
+      <%= text_field_tag :connection_description, params[:connection_description], :class => "input" %>      
+    </div>
 
-    <label for="geography_id">Ward</label>
-    <%= text_field_tag :geography_id, params[:geography_id], :class => "input-small" %>
+    <div class="span4">
+      <label for="postal_code">ZIP Code</label>
+      <%= text_field_tag :postal_code, params[:postal_code], :class => "input-small" %>
 
-    
-    <%= submit_tag "Search", :name => nil, :class => "btn btn-primary" %>
-    
-    </form>
+      <label for="geography_id">Ward</label>
+      <%= text_field_tag :geography_id, params[:geography_id], :class => "input-small" %>      
+    </div>
   </div>  
+  
+  <div class="span12">
+    <%= submit_tag "Search", :name => nil, :class => "btn btn-primary" %>
+  </div>
+  
+  </form>
 </div>
 
+<% if @results.any? %>
 <div class="row">
   <div class="span12">
 
-    <% if @results.any? %>
+    <p class="pull-right">
+      Showing <%= @results.size %> <%= 'result'.pluralize(@results) %><% if @results.total > @results.size -%> of <%= @results.total %> total<% end -%>
+    </p>
     <table class="table table-striped">
       <% @results.each_with_index do |result, idx| %>
       <% result = result.person %>
@@ -68,11 +79,24 @@
       </tr>
       <% end %>
     </table>
-
-    <%= link_to "Save this list as CSV", search_index_path(params.merge(:format => :csv)), :class => "btn"  %>
-    
-    <% else %>
-    <p>There are no people that match your search.</p>
-    <%  end %>
   </div>
 </div>
+
+<div class="row">
+  <div class="offset4 span8"><%= will_paginate @results, :renderer => BootstrapPagination::Rails %></div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <%= link_to "Save this list as CSV", search_index_path(params.merge(:format => :csv)), :class => "btn"  %>
+  </div>  
+</div>
+
+<% else %>    
+
+<div class="row">
+  <div class="span12" style="margin-top: 30px;">
+    <p>There are no CUT Group members that match your search.</p>
+  </div>
+</div>
+<% end %>

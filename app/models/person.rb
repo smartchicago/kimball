@@ -76,8 +76,12 @@ class Person < ActiveRecord::Base
     to_json( include: { comments: { only: [ :content ] } } )
   end
 
-  def self.complex_search(params)
-    tire.search per_page: 100 do
+  def self.complex_search(params, _per_page)
+    options = {}
+    options[:per_page] = _per_page
+    options[:page]     = params[:page] || 1
+    
+    tire.search options do
       query do
         boolean do
           must { string "first_name:#{params[:first_name]}"} if params[:first_name].present?
