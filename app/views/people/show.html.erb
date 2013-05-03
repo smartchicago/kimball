@@ -89,6 +89,23 @@
   <%= render partial: 'comment', collection: @person.comments.order("created_at DESC") %>
 </div>
 
+<div class="row">
+  <div class="span12">
+    <h3>Form Submissions</h3>
+    <table class="table">
+      <tr>
+        <th>Created at</th>
+        <th>Content</th>
+      </tr>
+      <% for submission in @person.submissions %>
+      <tr>
+        <td><%= submission.created_at %></td>
+        <td><pre><%= submission.raw_content %></pre></td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
 
 <div class="row">
   <div class="form-actions span12">
