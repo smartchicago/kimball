@@ -1,0 +1,21 @@
+<div class="row">
+  <h1>Patterns</h1>
+  <div class="span6">
+    Signups in the past week:<br>
+    <ol>
+      <% for person in @people do %>
+        <li><%= link_to person.email_address, person %></li>
+      <% end %>
+    </ol>
+    
+  </div>
+  <div class="span6">
+    Form submissions in the past week:<br>
+    <ol>
+      <% for submission in @submissions do %>
+        <li><%= link_to submission.person.email_address, submission.person %></li>
+      <% end %>
+    </ol>
+  </div>
+
+</div>

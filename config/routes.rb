@@ -1,4 +1,5 @@
 Logan::Application.routes.draw do
+  get "dashboard/index"
   resources :submissions
 
   resources :comments
@@ -7,5 +8,5 @@ Logan::Application.routes.draw do
   resources :people do
     resources :comments
   end
-  root to: 'people#index'
+  root to: 'dashboard#index'
 end
