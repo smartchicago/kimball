@@ -99,8 +99,17 @@
       </tr>
       <% for submission in @person.submissions %>
       <tr>
-        <td><%= submission.created_at %></td>
-        <td><pre><%= submission.raw_content %></pre></td>
+        <td><%= submission.created_at %><br/><span class="" style="font-size:small; color:#ccc; font-style:italic"><%= submission.ip_addr %></span></td>
+        <td>
+          <table class="table table-striped">
+            <% for field_id,field_desc in submission.fields do %>
+              <tr>
+                <td><%= field_desc[:title] %></td>
+                <td><%= submission.field_value(field_id) %></td>
+              </tr>
+            <% end %>
+          </table>
+        </td>
       </tr>
       <% end %>
     </table>

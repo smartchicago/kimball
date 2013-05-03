@@ -12,7 +12,7 @@ class SubmissionsController < ApplicationController
       ip_addr:          params['IP'], 
       entry_id:         params['EntryID'],
       form_structure:   params["FormStructure"],
-      field_structure:  params["FieldStructure"]      
+      field_structure:  params["FieldStructure"]
     )
     
     if @submission.save
