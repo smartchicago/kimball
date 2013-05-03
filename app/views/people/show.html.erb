@@ -94,12 +94,12 @@
     <h3>Form Submissions</h3>
     <table class="table">
       <tr>
-        <th>Created at</th>
+        <th>Form</th>
         <th>Content</th>
       </tr>
       <% for submission in @person.submissions %>
       <tr>
-        <td><%= submission.created_at %><br/><span class="" style="font-size:small; color:#ccc; font-style:italic"><%= submission.ip_addr %></span></td>
+        <td><strong><%= submission.form_name %></strong><br/><span title="<%= submission.created_at %>"><%= time_ago_in_words submission.created_at %> ago</span><br/><span class="" style="font-size:small; color:#ccc; font-style:italic"><%= submission.ip_addr %></span></td>
         <td>
           <table class="table table-striped">
             <% for field_id,field_desc in submission.fields do %>

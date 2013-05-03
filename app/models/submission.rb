@@ -17,5 +17,9 @@ class Submission < ActiveRecord::Base
   def field_value(field_id)
     JSON::parse(raw_content)[field_id]
   end
+
+  def form_name
+    @form_name ||= JSON::parse(form_structure)['Name']
+  end
   
 end
