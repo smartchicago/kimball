@@ -1,4 +1,6 @@
 Logan::Application.routes.draw do
+  resources :submissions
+
   resources :comments
 
   get "search/index"
