@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="span4">
+    <h3>Recent signups</h3>
+    <%= render partial: 'person', collection: @people %>    
+  </div>
+  <div class="span4">
+    <h3>Recent form submissions</h3>
+    <%= render partial: 'person', collection: @submissions.map(&:person) %>
+  </div>
+
+  <div class="span4">
+    <div class="well">
+      <h2><%= Person.count %> signups total.</h2>
+      <h2><%= Person.where("created_at > ?", 1.week.ago).count %> in the last week.</h2>
+    </div>
+  </div>
+</div>
