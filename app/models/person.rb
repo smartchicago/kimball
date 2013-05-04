@@ -4,6 +4,7 @@ class Person < ActiveRecord::Base
   include ExternalDataMappings
 
   has_many :comments, as: :commentable
+  has_many :submissions
   
   self.per_page = 15
 
