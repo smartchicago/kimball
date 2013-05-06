@@ -36,6 +36,8 @@
           </button>
           <a class="brand" href="<%= root_path %>">CUT Group Management <% unless Rails.env.production? %><span class="" style="color:red;"><%= Rails.env.to_s %></span><% end %></a>
           <div class="nav-collapse collapse">
+             <% if current_user %>
+              
             <ul class="nav">
               <li class="active"><%= link_to "Home", root_path %></li>  
               <li class=""><%= link_to "People", people_path %></li>
@@ -56,7 +58,11 @@
                 <%= link_to "advanced search", search_index_path(adv: 1), class: "muted", id: 'adv-search' %>
                 <%= text_field_tag :q, params[:q], class: "span2 search-query", placeholder: "query" %>
             </form>            
-
+            
+            <% else %>
+            <p class="navbar-text pull-right"><%= link_to 'Sign in', new_user_session_path %></p>
+            <% end %>
+            
           </div><!--/.nav-collapse -->
         </div>
       </div>
