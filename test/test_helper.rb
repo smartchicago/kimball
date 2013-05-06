@@ -3,6 +3,8 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
 class ActiveSupport::TestCase
+  include Devise::TestHelpers
+  
   ActiveRecord::Migration.check_pending!
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
@@ -34,6 +36,11 @@ class ActiveSupport::TestCase
       'IP'      =>  '69.245.247.117', # client IP, ignored for the moment
       'HandshakeKey' => 'b51c04fdaf7f8f333061f09f623d9d5b04f12b19' # secret code, ignored      
     }
+  end
+  
+  def setup
+    @user = users(:admin)
+    sign_in @user
   end
   
 end
