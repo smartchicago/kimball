@@ -1,0 +1,4 @@
+<div class="recent-signup">
+  <span class="name"><%= link_to "#{person.first_name} #{person.last_name}", person %></span><span class="geography">Ward <%= person.geography_id  %></span><br/>
+  <span class="address"><%= address_fields_to_sentence(person) %></span>
+</div>

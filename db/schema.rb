@@ -65,4 +65,15 @@ ActiveRecord::Schema.define(version: 20130502205047) do
     t.datetime "updated_at"
   end
 
+  create_table "submissions", force: true do |t|
+    t.text     "raw_content"
+    t.integer  "person_id"
+    t.string   "ip_addr"
+    t.string   "entry_id"
+    t.text     "form_structure"
+    t.text     "field_structure"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
 end

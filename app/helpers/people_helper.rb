@@ -4,7 +4,7 @@ module PeopleHelper
   end
 
   def human_device_type_name(device_id)
-    Logan::Application.config.device_mappings.rassoc(device_id)[0].to_s
+    begin; Logan::Application.config.device_mappings.rassoc(device_id)[0].to_s; rescue; "Unknown/No selection"; end
   end
 
   def human_connection_type_name(connection_id)
