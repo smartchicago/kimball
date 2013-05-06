@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130502205047) do
+ActiveRecord::Schema.define(version: 20130503171215) do
 
   create_table "comments", force: true do |t|
     t.text     "content"
@@ -48,6 +48,17 @@ ActiveRecord::Schema.define(version: 20130502205047) do
     t.string   "called_311"
   end
 
+  create_table "submissions", force: true do |t|
+    t.text     "raw_content"
+    t.integer  "person_id"
+    t.string   "ip_addr"
+    t.string   "entry_id"
+    t.text     "form_structure"
+    t.text     "field_structure"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
@@ -61,17 +72,6 @@ ActiveRecord::Schema.define(version: 20130502205047) do
     t.string   "last_sign_in_ip"
     t.string   "password_salt"
     t.string   "invitation_token"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "submissions", force: true do |t|
-    t.text     "raw_content"
-    t.integer  "person_id"
-    t.string   "ip_addr"
-    t.string   "entry_id"
-    t.text     "form_structure"
-    t.text     "field_structure"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

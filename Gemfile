@@ -64,4 +64,4 @@ gem "health_check"
 gem 'holder_rails'
 
 # use devise for auth/identity
-gem 'devise'
+gem 'devise', branch: "rails4", git: "git://github.com/plataformatec/devise"
