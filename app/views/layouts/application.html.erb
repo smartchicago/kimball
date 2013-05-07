@@ -68,7 +68,17 @@
       </div>
     </div>
 
-    <div id="page-container" class="container">
+    <div id="page-container" class="container">        
+        <div id="notifications">
+            <% if flash[:notice] || flash[:error] %>
+                <div class="alert <%= flash[:notice].present? ? "alert-success" : "alert-error" %>">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <%= flash[:notice] %>
+                    <%= flash[:error] %>
+                </div>
+            <% end %>
+        </div> <!-- notifications -->
+        
         <%= yield %>
     </div> <!-- /container -->        
 
