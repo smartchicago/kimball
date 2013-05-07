@@ -72,4 +72,10 @@ class PeopleControllerTest < ActionController::TestCase
     
     assert_response :created
   end
+
+  test "unapproved user should not access index" do
+    sign_in users(:not_approved)
+    get :index
+    assert_response :redirect
+  end
 end
