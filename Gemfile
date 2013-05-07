@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.0.beta1'
+gem 'rails', '4.0.0.rc1'
 
 gem 'sqlite3'
 
@@ -62,3 +62,6 @@ gem "health_check"
 
 # use holder for placeholder images
 gem 'holder_rails'
+
+# use devise for auth/identity
+gem 'devise', branch: "rails4", git: "git://github.com/plataformatec/devise"
