@@ -1,0 +1,29 @@
+admin:
+  email: cutgroup@example.com
+  encrypted_password: '$2a$10$2SDtI8Wx9GxOgNh2Gl3FBuAgxrPsQeTkxN1u2k0wgXNyrOgTYxG2S' # foo
+  password_salt:
+  reset_password_token:
+  reset_password_sent_at: 
+  remember_created_at:
+  sign_in_count:
+  current_sign_in_at:
+  last_sign_in_at:
+  current_sign_in_ip:
+  last_sign_in_ip:
+  invitation_token:
+  approved: true
+  
+not_approved:
+  email: notapproved@example.com
+  encrypted_password: '$2a$10$2SDtI8Wx9GxOgNh2Gl3FBuAgxrPsQeTkxN1u2k0wgXNyrOgTYxG2S' # foo
+  password_salt:
+  reset_password_token:
+  reset_password_sent_at: 
+  remember_created_at:
+  sign_in_count:
+  current_sign_in_at:
+  last_sign_in_at:
+  current_sign_in_ip:
+  last_sign_in_ip:
+  invitation_token:
+  approved: false

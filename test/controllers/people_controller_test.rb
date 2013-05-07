@@ -62,4 +62,20 @@ class PeopleControllerTest < ActionController::TestCase
     
     assert_response 403
   end
+
+  test "should accept submission without user auth" do
+    sign_out @user
+    
+    assert_difference('Person.count') do
+      post :create, wufoo_params
+    end
+    
+    assert_response :created
+  end
+
+  test "unapproved user should not access index" do
+    sign_in users(:not_approved)
+    get :index
+    assert_response :redirect
+  end
 end
