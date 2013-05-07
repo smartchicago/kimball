@@ -70,7 +70,7 @@
 
     <div id="page-container" class="container">        
         <div id="notifications">
-            <% if flash[:notice] || flash["alert"] || flash[:error] %>
+            <% if flash[:notice] || flash[:alert] || flash[:error] %>
                 <div class="alert <%= flash[:notice].present? ? "alert-success" : "alert-error" %>">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
                     <%= flash[:alert] %>
