@@ -1,7 +1,7 @@
 require "bundler/capistrano"
 require "capistrano/ext/multistage"
 
-set :repository,  "git@github.com:smartchicago/logan.git"
+set :repository,  "git@github.com:smartchicago/kimball.git"
 
 set :scm, :git
 set(:deploy_to) { "/var/www/#{application}" }
