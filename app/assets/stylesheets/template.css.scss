@@ -4,7 +4,12 @@
 
 #account-dropdown {
 	margin-left: 30px; 
-
+	
+	.current-user-name {
+		color: #fff;
+		font-weight: bold;
+		font-size: small;
+	}
 }
 
 .current-user-info {
