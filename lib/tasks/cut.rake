@@ -25,7 +25,7 @@ namespace :cut do
   namespace :wufoo do
     desc "submit a signup as if it were from wufoo"
     task :signup, [:env] => [:environment] do |t,args|
-      hosts = { development: 'http://localhost:8080', staging: 'https://logan-staging.smartchicagoapps.org', production: 'https://patterns.smartchicagoapps.org' }
+      hosts = { development: 'http://localhost:8080', staging: 'https://patterns-staging.smartchicagoapps.org', production: 'https://patterns.smartchicagoapps.org' }
       
       post_body = {}
       for f,v in Person::WUFOO_FIELD_MAPPING do

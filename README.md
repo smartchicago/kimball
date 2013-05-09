@@ -1,12 +1,12 @@
-Logan
+Kimball
 =====
 
-Logan is an application to manage people that are involved with the Smart Chicago CUT Group.
+Kimball is an application to manage people that are involved with the Smart Chicago CUT Group.
 
 Features
 --------
 
-Logan is a customer relationship management application at its heart. Logan tracks people that have signed up to participate with the CUT Group, their involvement in events and CUT Group programs.
+Kimball is a customer relationship management application at its heart. Kimball tracks people that have signed up to participate with the CUT Group, their involvement in events and CUT Group programs.
 
 TODO
 ----
