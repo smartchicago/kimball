@@ -10,8 +10,20 @@
 
   <div class="span4">
     <div class="well">
-      <h2><%= Person.count %> signups total.</h2>
-      <h2><%= Person.where("created_at > ?", 1.week.ago).count %> in the last week.</h2>
+      <h3><%= pluralize @recent_signups, 'signup' %> <% if @recent_submissions > 0 %>and <%= pluralize @recent_submissions, 'form submission' %><% end %> in the last week.</h3>
+      
+      <h4>Top five wards</h4>
+      <table class="table table-striped">
+        <tr><th>Ward</th><th>Signups</th></tr>
+        <% for ward,cnt in @top_five_wards do %><tr><td><%= ward %></td><td><%= link_to cnt, search_index_path(:adv => 1, :geography_id => ward) %></td></tr><% end %>
+      </table>      
+
+      <h4>Bottom five wards</h4>
+      <table class="table table-striped">
+        <tr><th>Ward</th><th>Signups</th></tr>
+        <% for ward,cnt in @bottom_five_wards do %><tr><td><%= ward %></td><td><%= link_to cnt, search_index_path(:adv => 1, :geography_id => ward) %></td></tr><% end %>
+      </table>      
+
     </div>
   </div>
 </div>
