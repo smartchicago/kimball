@@ -24,6 +24,9 @@ class SubmissionsController < ApplicationController
     end
   end
   
+  def index
+    @submissions = Submission.all.order("created_at DESC")
+  end
   
   private
 
