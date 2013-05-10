@@ -91,6 +91,7 @@
 
 <div class="row">
   <div class="span12">
+    <% if @person.submissions.any? %>
     <h3>Form Submissions</h3>
     <table class="table">
       <tr>
@@ -113,6 +114,9 @@
       </tr>
       <% end %>
     </table>
+  <% else %>
+  <!-- no form submissions. FIXME: null state? -->
+  <% end %>
   </div>
 </div>
 
