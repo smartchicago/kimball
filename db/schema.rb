@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130513023218) do
+ActiveRecord::Schema.define(version: 20130513024549) do
+
+  create_table "applications", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "url"
+    t.string   "source_url"
+    t.string   "creator_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "comments", force: true do |t|
     t.text     "content"

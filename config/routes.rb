@@ -1,4 +1,6 @@
 Logan::Application.routes.draw do
+  resources :applications
+
   resources :programs
 
   devise_for :users

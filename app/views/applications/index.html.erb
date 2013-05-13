@@ -1,0 +1,35 @@
+<h1>Listing applications</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Url</th>
+      <th>Source url</th>
+      <th>Creator name</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @applications.each do |application| %>
+      <tr>
+        <td><%= application.name %></td>
+        <td><%= application.description %></td>
+        <td><%= application.url %></td>
+        <td><%= application.source_url %></td>
+        <td><%= application.creator_name %></td>
+        <td><%= link_to 'Show', application %></td>
+        <td><%= link_to 'Edit', edit_application_path(application) %></td>
+        <td><%= link_to 'Destroy', application, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Application', new_application_path %>
