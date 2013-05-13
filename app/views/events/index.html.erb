@@ -1,41 +1,40 @@
-<h1>Listing events</h1>
+<div class="row">
+  <div class="span12">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Starts at</th>
+          <th>Ends at</th>
+          <th>Location</th>
+          <th>Address</th>
+          <th>Capacity</th>
+          <th>Application</th>
+        </tr>
+      </thead>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Starts at</th>
-      <th>Ends at</th>
-      <th>Location</th>
-      <th>Address</th>
-      <th>Capacity</th>
-      <th>Application</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
+      <tbody>
+        <% @events.each do |event| %>
+          <tr>
+            <td><%= link_to event.name, event %></td>
+            <td><%= event.description %></td>
+            <td><%= event.starts_at %></td>
+            <td><%= event.ends_at %></td>
+            <td><%= event.location %></td>
+            <td><%= event.address %></td>
+            <td><%= event.capacity %></td>
+            <td><%= link_to event.application.name, event.application %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
+  </div>
+</div>
 
-  <tbody>
-    <% @events.each do |event| %>
-      <tr>
-        <td><%= event.name %></td>
-        <td><%= event.description %></td>
-        <td><%= event.starts_at %></td>
-        <td><%= event.ends_at %></td>
-        <td><%= event.location %></td>
-        <td><%= event.address %></td>
-        <td><%= event.capacity %></td>
-        <td><%= event.application_id %></td>
-        <td><%= link_to 'Show', event %></td>
-        <td><%= link_to 'Edit', edit_event_path(event) %></td>
-        <td><%= link_to 'Destroy', event, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Event', new_event_path %>
+<div class="row">
+  <div class="span12">
+    <p><%= link_to 'New Event', new_event_path %></p>
+  </div>
+</div>

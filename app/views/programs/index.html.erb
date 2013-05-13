@@ -5,20 +5,16 @@
         <tr>
           <th>Name</th>
           <th>Description</th>
-          <th></th>
-          <th></th>
-          <th></th>
+          <th>Applications</th>
         </tr>
       </thead>
 
       <tbody>
         <% @programs.each do |program| %>
           <tr>
-            <td><%= program.name %></td>
+            <td><%= link_to program.name, program %></td>
             <td><%= program.description %></td>
-            <td><%= link_to 'Show', program %></td>
-            <td><%= link_to 'Edit', edit_program_path(program) %></td>
-            <td><%= link_to 'Destroy', program, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <td><%= program.applications.collect{|a| link_to(a.name, a)}.join(", ").html_safe %></td>
           </tr>
         <% end %>
       </tbody>
