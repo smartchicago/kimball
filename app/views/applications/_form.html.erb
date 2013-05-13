@@ -31,7 +31,12 @@
     <%= f.label :creator_name %><br>
     <%= f.text_field :creator_name %>
   </div>
+  <div class="field">
+    <%= f.label :program_id %><br>
+    <%= f.select :program_id, options_for_select(Program.all.order("name ASC").collect{|p| [p.name, p.id]}), include_blank: true %>
+  </div>
+
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Create program", class: "btn btn-primary" %>
   </div>
 <% end %>

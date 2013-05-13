@@ -10,5 +10,12 @@
   <%= @program.description %>
 </p>
 
+<p>Applications</p>
+<ol>
+  <% for application in @program.applications do %>
+  <li><%= link_to application.name, application %></li>
+  <% end %>
+</ol>
+
 <%= link_to 'Edit', edit_program_path(@program) %> |
 <%= link_to 'Back', programs_path %>
