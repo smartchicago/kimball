@@ -25,5 +25,12 @@
   <%= @application.creator_name %>
 </p>
 
+<p>Events</p>
+<ul>
+  <% for event in @application.events do %>
+  <li><%= link_to event.name, event %>, at <%= event.location %></li>
+  <% end %>
+</ul>
+
 <%= link_to 'Edit', edit_application_path(@application) %> |
 <%= link_to 'Back', applications_path %>

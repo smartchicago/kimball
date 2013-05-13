@@ -3,6 +3,7 @@ class Application < ActiveRecord::Base
   validates_presence_of :program_id  
   
   belongs_to :program
+  has_many   :events
   
   def to_param
     "#{id}-#{name.parameterize}"
