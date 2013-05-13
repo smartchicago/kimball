@@ -1,4 +1,6 @@
 Logan::Application.routes.draw do
+  resources :programs
+
   devise_for :users
   get "dashboard/index"
   resources :submissions
