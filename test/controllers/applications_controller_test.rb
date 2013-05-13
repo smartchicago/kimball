@@ -18,7 +18,7 @@ class ApplicationsControllerTest < ActionController::TestCase
 
   test "should create application" do
     assert_difference('Application.count') do
-      post :create, application: { creator_name: @application.creator_name, description: @application.description, name: @application.name, source_url: @application.source_url, url: @application.url }
+      post :create, application: { creator_name: @application.creator_name, description: @application.description, name: @application.name, source_url: @application.source_url, url: @application.url, program_id: programs(:one).id }
     end
 
     assert_redirected_to application_path(assigns(:application))

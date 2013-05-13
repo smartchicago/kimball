@@ -6,10 +6,12 @@ one:
   url: MyString
   source_url: MyString
   creator_name: MyString
-
+  program: one
+  
 two:
   name: MyString
   description: MyText
   url: MyString
   source_url: MyString
   creator_name: MyString
+  program: one
