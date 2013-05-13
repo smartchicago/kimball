@@ -8,7 +8,7 @@ one:
   location: MyText
   address: MyText
   capacity: 1
-  application_id: 1
+  application: one
 
 two:
   name: MyString
@@ -18,4 +18,4 @@ two:
   location: MyText
   address: MyText
   capacity: 1
-  application_id: 1
+  application: one
