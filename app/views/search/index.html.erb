@@ -33,6 +33,11 @@
 
       <label for="connection_description">Connection description</label>
       <%= text_field_tag :connection_description, params[:connection_description], :class => "input" %>      
+
+      <label for="event_id">Event</label>
+      <%= select_tag :event_id, 
+            options_for_select([[nil, nil]] + Event.all.order(:name).collect{|event| [event.name, event.id]}, selected: params[:event_id]), 
+            :class => "input" %>      
     </div>
 
     <div class="span4">
@@ -60,7 +65,7 @@
     </p>
     <table class="table table-striped">
       <% @results.each_with_index do |result, idx| %>
-      <% result = result.person %>
+      <% #result = result.person %>
       <tr>
         <td class="span4">
           <%= link_to "#{result.first_name} #{result.last_name}", person_path(:id => result.id) %>
