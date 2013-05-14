@@ -14,7 +14,7 @@ class ApplicationsController < ApplicationController
 
   # GET /applications/new
   def new
-    @application = Application.new
+    @application = Application.new(program_id: params[:program_id])
   end
 
   # GET /applications/1/edit

@@ -20,6 +20,10 @@
     <%= f.text_area :description %>
   </div>
   <div class="field">
+    <%= f.label :program_id %><br>
+    <%= f.select :program_id, Program.all.order("name ASC").collect{|p| [p.name, p.id]}, {include_blank: true} %>
+  </div>
+  <div class="field">
     <%= f.label :url %><br>
     <%= f.text_field :url %>
   </div>
@@ -30,10 +34,6 @@
   <div class="field">
     <%= f.label :creator_name %><br>
     <%= f.text_field :creator_name %>
-  </div>
-  <div class="field">
-    <%= f.label :program_id %><br>
-    <%= f.select :program_id, options_for_select(Program.all.order("name ASC").collect{|p| [p.name, p.id]}), include_blank: true %>
   </div>
 
   <div class="actions">

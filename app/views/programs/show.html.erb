@@ -1,21 +1,46 @@
 <% content_for :page_title, @program.name %>
 
-<p>
-  <strong>Name:</strong>
-  <%= @program.name %>
-</p>
+<div class="page-header">
+  <h1><%= @program.name %></h1>  
+</div>
 
-<p>
-  <strong>Description:</strong>
-  <%= @program.description %>
-</p>
+<div class="row">
+  <div class="span12">
+    <%= simple_format @program.description %>
+  </div>  
+</div>
 
-<p>Applications</p>
-<ol>
-  <% for application in @program.applications do %>
-  <li><%= link_to application.name, application %></li>
-  <% end %>
-</ol>
+<div class="row">
+  <div class="span6">
+    <h3>Applications</h3>
+    <% if @program.applications.any? %>
+    <ol>
+      <% for application in @program.applications do %>
+      <li><%= link_to application.name, application %></li>
+      <% end %>
+    </ol>
+    <% else %>
+    <p>No applications created for this program yet. <%= link_to "Create the first one now.", new_application_path(program_id: @program.id) %></p>
+    <% end %>
+  </div>
+  <div class="span6">
+    <h3>Tests</h3>
+    <% if false %>
+    <% # FIXME: add tests code here when ready. %>
+    <ol>
+      <% for application in @program.applications do %>
+      <li><%= link_to application.name, application %></li>
+      <% end %>
+    </ol>
+    <% else %>
+    <p>The CUT Group has not conducted any tests for for this program yet.</p>
+    <% end %>    
+  </div>
+</div>
 
-<%= link_to 'Edit', edit_program_path(@program) %> |
-<%= link_to 'Back', programs_path %>
+<div class="row">
+  <div class="span12">
+    <hr/>
+    <p class="muted pull-left"><%= link_to "&larr; All Programs".html_safe, programs_path %></p><p class="pull-right"><%= link_to 'Edit this program', edit_program_path %>. Last updated <%= time_ago_in_words(@program.updated_at) %> ago.</p>
+  </div>
+</div>
