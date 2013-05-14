@@ -1,49 +1,39 @@
-<%= form_for(@event) do |f| %>
-  <% if @event.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@event.errors.count, "error") %> prohibited this event from being saved:</h2>
+<div class="row">
+  <div class="span12">
+    <%= form_for(@event) do |f| %>
+      <fieldset>
+          <% if @event.errors.any? %>
+            <div id="error_explanation" class="alert alert-error">
+              <ul>
+              <% @event.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+              </ul>
+            </div>
+          <% end %>
 
-      <ul>
-      <% @event.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
+            <%= f.label :name %>
+            <%= f.text_field :name, class: "span6" %>
+            <%= f.label :description %>
+            <%= f.text_area :description, class: "span6" %>
+            <%= f.label :starts_at %>
+            <%= f.datetime_select :starts_at %>
+            <%= f.label :ends_at %>
+            <%= f.datetime_select :ends_at %>
+            <%= f.label :location %>
+            <%= f.text_area :location, class: "span6" %>
+            <%= f.label :address %>
+            <%= f.text_area :address, class: "span6" %>
+            <%= f.label :capacity %>
+            <%= f.number_field :capacity, class: "span1" %>
+            <%= f.label :application_id %>
+            <%= f.select :application_id, Application.all.order("name ASC").collect{|a| [a.name, a.id]}, {include_blank: true}, {class: "span6"} %>
+          
+          <div class="form-actions">
+            <%= f.submit "Save", class: "btn btn-primary" %>
+            <%= link_to 'Back', events_path, class: "btn" %>                        
+          </div>
+        <% end %>
+      </fieldset>    
   </div>
-  <div class="field">
-    <%= f.label :description %><br>
-    <%= f.text_area :description %>
-  </div>
-  <div class="field">
-    <%= f.label :starts_at %><br>
-    <%= f.datetime_select :starts_at %>
-  </div>
-  <div class="field">
-    <%= f.label :ends_at %><br>
-    <%= f.datetime_select :ends_at %>
-  </div>
-  <div class="field">
-    <%= f.label :location %><br>
-    <%= f.text_area :location %>
-  </div>
-  <div class="field">
-    <%= f.label :address %><br>
-    <%= f.text_area :address %>
-  </div>
-  <div class="field">
-    <%= f.label :capacity %><br>
-    <%= f.number_field :capacity %>
-  </div>
-  <div class="field">
-    <%= f.label :application_id %><br>
-    <%= f.select :application_id, Application.all.order("name ASC").collect{|a| [a.name, a.id]}, include_blank: true %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+</div>
