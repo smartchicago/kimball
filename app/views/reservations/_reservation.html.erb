@@ -1,0 +1,5 @@
+<section class="reservation" id="reservation-<%= reservation.id %>">
+  <p><%= link_to reservation.event.name, reservation.event %> on <%= reservation.event.starts_at %> at <%= reservation.event.location %></p>
+  <p>Confirmed? <span class="confirmed"><%= reservation.confirmed_at ? "yes" : "no" %></span></p>
+  <p><%= link_to "cancel this reservation", reservation_path(reservation), method: :delete, remote: true %></p>
+</section>

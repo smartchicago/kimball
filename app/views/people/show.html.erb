@@ -1,13 +1,11 @@
-<%- model_class = Person -%>
+<% content_for :page_title, @person.full_name %>
 
-<div class="row">
-  <div class="span12">
-    <h1><%=t '.title', :default => "#{@person.first_name} #{@person.last_name}" %></h1>    
-  </div>
+<div class="page-header">
+<h1><%= @person.full_name %></h1>      
 </div>
 
 <div class="row">
-  <div class="span4">
+  <div class="span3">
     <h3>About</h3>    
     <dl>
       <dt>Address</dt>
@@ -30,7 +28,7 @@
     </dl>    
   </div>
 
-  <div class="span4">    
+  <div class="span3">    
     <h3>Contact</h3>
     
     <dl>
@@ -57,37 +55,42 @@
     </dl>    
   </div>
   
-  <div class="span4">
-    <%= holder_tag '400x300' %>
-  </div>
-</div>
-
-<div class="row">
-  <div class="span12">
-  <h2>Location</h2>  
-  <p>Lives at <%= address_fields_to_sentence(@person) %></p>
+  <div class="span6">
+    <h3>Location</h3>
+    <a href="https://maps.google.com?q=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>" target="_blank" title="View in Google Maps"><img src="https://maps.googleapis.com/maps/api/staticmap?markers=|<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;zoom=14&amp;size=570x200&amp;sensor=false"></a>
+    <img src="https://maps.googleapis.com/maps/api/streetview?size=570x200&amp;location=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;sensor=false">
   </div>  
 </div>
 
-<div class="row">  
-  <div class="span6"><a href="https://maps.google.com?q=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>" target="_blank" title="View in Google Maps"><img src="https://maps.googleapis.com/maps/api/staticmap?markers=|<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;zoom=14&amp;size=570x200&amp;sensor=false"><br/>View in Google Maps</a></div>
-  <div class="span6"><img src="https://maps.googleapis.com/maps/api/streetview?size=570x200&amp;location=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;sensor=false"></div>
-</div>
-
 <div class="row">
-  <div class="span12"><h3>Notes</h3>
+  <div class="span6">
+    <h3>Notes</h3>
+    <%= form_for([@person, @comment], remote: true) do |form| %>
+      <%= form.hidden_field :commentable_type, :value => 'Person' %>
+      <%= form.hidden_field :commentable_id, :value => @person.id %>
+      <%= form.text_area :content, rows: 3, class: "span6 input-block-level" %>
+      <%= form.submit 'Add note', :class => "btn" %>
+    <% end %>
 
-  <%= form_for([@person, @comment], remote: true) do |form| %>
-    <%= form.hidden_field :commentable_type, :value => 'Person' %>
-    <%= form.hidden_field :commentable_id, :value => @person.id %>
-    <%= form.text_area :content, rows: 3, class: "span6 input-block-level" %>
-    <%= form.submit 'Add note', :class => "btn" %>
-  <% end %>
+    <div id="comments">
+      <%= render partial: 'comment', collection: @person.comments.order("created_at DESC") %>
+    </div>  
+  </div>
+  
+  <div class="span6" id="person-events">
+    <h3>Events</h3>
+    <%= form_for(@reservation, remote: true, html: {class: "form-inline"}) do |form| %>
+      <%= form.select :event_id, Event.all.order("starts_at DESC").collect{|event| ["#{event.name} - #{event.application.name} - #{event.starts_at}", event.id]}, {include_blank: true}, {class: "span4"} %>
+      <%= form.hidden_field :person_id %>
+      <%= form.submit "Add to event", class: "btn span2" %>
+    <% end %>
+    
+    <div id="reservations">
+      <%= render partial: 'reservations/reservation', collection: @person.reservations.order(:created_at) %>
+    </div>
   </div>
 </div>
-<div id="comments">
-  <%= render partial: 'comment', collection: @person.comments.order("created_at DESC") %>
-</div>
+
 
 <div class="row">
   <div class="span12">

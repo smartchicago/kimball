@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: first test
+  description: MyText
+  starts_at: 2013-05-12 22:39:23
+  ends_at: 2013-05-12 22:39:23
+  location: MyText
+  address: MyText
+  capacity: 100
+  application: one
+
+two:
+  name: second test
+  description: MyText
+  starts_at: 2013-05-12 22:39:23
+  ends_at: 2013-05-12 22:39:23
+  location: MyText
+  address: MyText
+  capacity: 200
+  application: one

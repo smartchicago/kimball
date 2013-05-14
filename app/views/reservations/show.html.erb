@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Person:</strong>
+  <%= @reservation.person_id %>
+</p>
+
+<p>
+  <strong>Event:</strong>
+  <%= @reservation.event_id %>
+</p>
+
+<p>
+  <strong>Confirmed at:</strong>
+  <%= @reservation.confirmed_at %>
+</p>
+
+<p>
+  <strong>Created by:</strong>
+  <%= @reservation.created_by %>
+</p>
+
+<p>
+  <strong>Attended at:</strong>
+  <%= @reservation.attended_at %>
+</p>
+
+<%= link_to 'Edit', edit_reservation_path(@reservation) %> |
+<%= link_to 'Back', reservations_path %>

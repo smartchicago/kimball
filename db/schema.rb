@@ -11,13 +11,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130507162922) do
+ActiveRecord::Schema.define(version: 20130514181705) do
+
+  create_table "applications", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "url"
+    t.string   "source_url"
+    t.string   "creator_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "program_id"
+  end
 
   create_table "comments", force: true do |t|
     t.text     "content"
     t.integer  "user_id"
     t.string   "commentable_type"
     t.integer  "commentable_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "events", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.text     "location"
+    t.text     "address"
+    t.integer  "capacity"
+    t.integer  "application_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -46,6 +70,23 @@ ActiveRecord::Schema.define(version: 20130507162922) do
     t.datetime "signup_at"
     t.string   "voted"
     t.string   "called_311"
+  end
+
+  create_table "programs", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "reservations", force: true do |t|
+    t.integer  "person_id"
+    t.integer  "event_id"
+    t.datetime "confirmed_at"
+    t.integer  "created_by"
+    t.datetime "attended_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "submissions", force: true do |t|

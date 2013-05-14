@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="span12">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Applications</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @programs.each do |program| %>
+          <tr>
+            <td><%= link_to program.name, program %></td>
+            <td><%= program.description %></td>
+            <td><%= program.applications.collect{|a| link_to(a.name, a)}.join(", ").html_safe %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <p><%= link_to 'New Program', new_program_path %></p>
+  </div>
+</div>
