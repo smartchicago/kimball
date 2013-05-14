@@ -10,7 +10,15 @@
   </div>
   <div class="span6">
     <h3>Attendees</h3>
-    <p>FIXME: list attendees</p>
+    <% if @event.people.count > 0 %>
+    <ol>
+      <% for person in @event.people do %>
+      <li><%= link_to person.full_name, person %></li>
+      <% end %>
+    </ol>
+    <% else %>
+    <p>No attendees yet</p>
+    <% end %>
   </div>
   <div class="span3">
     <div class="well">
