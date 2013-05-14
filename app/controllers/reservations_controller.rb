@@ -28,6 +28,7 @@ class ReservationsController < ApplicationController
 
     respond_to do |format|
       if @reservation.save
+        format.js   { } 
         format.html { redirect_to @reservation, notice: 'Reservation was successfully created.' }
         format.json { render action: 'show', status: :created, location: @reservation }
       else
@@ -56,6 +57,7 @@ class ReservationsController < ApplicationController
   def destroy
     @reservation.destroy
     respond_to do |format|
+      format.js   { }
       format.html { redirect_to reservations_url }
       format.json { head :no_content }
     end
