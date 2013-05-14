@@ -21,4 +21,9 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal 1, people(:one).comments.size
     assert_equal comments(:one).content, people(:one).comments.first.content
   end
+
+  test "should know about events" do
+    assert_equal 2, people(:one).events.count
+    assert_equal 1, people(:two).events.count
+  end
 end

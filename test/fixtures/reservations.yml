@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  person: one
+  event: one
+  confirmed_at: 2013-05-14 13:17:05
+  created_by: 1
+  attended_at: 2013-05-14 13:17:05
+
+two:
+  person: one
+  event: two
+  confirmed_at: 2013-05-14 13:17:05
+  created_by: 1
+  attended_at: 2013-05-14 13:17:05
+
+three:
+  person: two
+  event: one
+  confirmed_at: 2013-05-14 13:17:05
+  created_by: 1
+  attended_at: 2013-05-14 13:17:05
+  

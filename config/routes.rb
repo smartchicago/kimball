@@ -1,4 +1,6 @@
 Logan::Application.routes.draw do
+  resources :reservations
+
   resources :events
 
   resources :applications

@@ -5,6 +5,9 @@ class Person < ActiveRecord::Base
 
   has_many :comments, as: :commentable
   has_many :submissions
+
+  has_many :reservations
+  has_many :events, through: :reservations
   
   self.per_page = 15
 
