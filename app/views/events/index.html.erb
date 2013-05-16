@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="span12">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Starts at</th>
+          <th>Ends at</th>
+          <th>Location</th>
+          <th>Address</th>
+          <th>Capacity</th>
+          <th>Application</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @events.each do |event| %>
+          <tr>
+            <td><%= link_to event.name, event %></td>
+            <td><%= event.description %></td>
+            <td><%= event.starts_at %></td>
+            <td><%= event.ends_at %></td>
+            <td><%= event.location %></td>
+            <td><%= event.address %></td>
+            <td><%= event.capacity %></td>
+            <td><%= link_to event.application.name, event.application %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <p><%= link_to 'New Event', new_event_path %></p>
+  </div>
+</div>

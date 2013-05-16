@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="span12">
+    <%= form_for(@event) do |f| %>
+      <fieldset>
+          <% if @event.errors.any? %>
+            <div id="error_explanation" class="alert alert-error">
+              <ul>
+              <% @event.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+            <%= f.label :name %>
+            <%= f.text_field :name, class: "span6" %>
+            <%= f.label :description %>
+            <%= f.text_area :description, class: "span6" %>
+            <%= f.label :starts_at %>
+            <%= f.datetime_select :starts_at %>
+            <%= f.label :ends_at %>
+            <%= f.datetime_select :ends_at %>
+            <%= f.label :location %>
+            <%= f.text_area :location, class: "span6" %>
+            <%= f.label :address %>
+            <%= f.text_area :address, class: "span6" %>
+            <%= f.label :capacity %>
+            <%= f.number_field :capacity, class: "span1" %>
+            <%= f.label :application_id %>
+            <%= f.select :application_id, Application.all.order("name ASC").collect{|a| [a.name, a.id]}, {include_blank: true}, {class: "span6"} %>
+          
+          <div class="form-actions">
+            <%= f.submit "Save", class: "btn btn-primary" %>
+            <%= link_to 'Back', events_path, class: "btn" %>                        
+          </div>
+        <% end %>
+      </fieldset>    
+  </div>
+</div>

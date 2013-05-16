@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Patterns</title>
+  <title>Patterns | <%= title = yield(:page_title); title.present? ? title : controller_name.humanize.titlecase %></title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
@@ -39,9 +39,11 @@
              <% if current_user %>
               
             <ul class="nav">
-              <li class="active"><%= link_to "Home", root_path %></li>  
               <li class=""><%= link_to "People <span class='badge'>#{Person.count}</span>".html_safe, people_path %></li>
               <li class=""><%= link_to "Submissions <span class='badge'>#{Submission.count}</span>".html_safe, submissions_path %></li>
+              <li><%= link_to "Programs", programs_path %></li>
+              <li><%= link_to "Applications", applications_path %></li>
+              <li><%= link_to "Events", events_path %></li>
             </ul>
                         
             <!-- account dropdown -->

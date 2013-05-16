@@ -14,6 +14,7 @@ class PeopleController < ApplicationController
   # GET /people/1.json
   def show
     @comment = Comment.new commentable: @person
+    @reservation = Reservation.new person: @person
   end
 
   # GET /people/new

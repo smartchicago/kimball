@@ -1,0 +1,54 @@
+<% content_for :page_title, @application.name %>
+
+<div class="page-header">
+  <h1><%= @application.name %></h1>
+</div>
+
+<div class="row">
+  <div class="span9">
+    <%= simple_format @application.description %>
+  </div>
+  
+  <div class="span3">
+    <div class="well">
+      <dl>
+        <dt>URL</dt>
+        <dd><%= link_to @application.url %></dd>
+        <dt>Source Code</dt>
+        <dd><%= link_to @application.source_url %></dd>
+        <dt>Creator</dt>
+        <dd><%= @application.creator_name %></dd>
+        <dt>Program</dt>
+        <dd><%= link_to @application.program.name, @application.program %></dd>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span6">
+    <h3>Events</h3>
+    <% if @application.events.any? %>
+    <ul>
+      <% for event in @application.events do %>
+      <li><%= link_to event.name, event %>, at <%= event.location %></li>
+      <% end %>
+    </ul>    
+    <% else %>
+    <p>No events are scheduled for this application. <%= link_to 'Create the first event now', new_event_path(application_id: @application.id) %>.</p>
+    <% end %>
+  </div>
+  
+  <div class='span6'>
+    <h3>Tests</h3>
+    <p>No tests for this application yet.</p>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="span12">
+    <hr/>
+    <p class="muted pull-left"><%= link_to "&larr; All Applications".html_safe, applications_path %></p><p class="pull-right"><%= link_to 'Edit this application', edit_application_path %>. Last updated <%= time_ago_in_words(@application.updated_at) %> ago.</p>
+  </div>
+</div>

@@ -5,6 +5,9 @@ class Person < ActiveRecord::Base
 
   has_many :comments, as: :commentable
   has_many :submissions
+
+  has_many :reservations
+  has_many :events, through: :reservations
   
   self.per_page = 15
 
@@ -67,6 +70,11 @@ class Person < ActiveRecord::Base
         indexes :content, analyzer: "snowball"
       end
       
+      # events
+      indexes :reservations do
+        indexes :event_id, index: :not_analyzed
+      end
+      
       indexes :created_at, type: "date"
     end
   end  
@@ -74,7 +82,7 @@ class Person < ActiveRecord::Base
 
   def to_indexed_json
     # customize what data is sent to ES for indexing
-    to_json( include: { comments: { only: [ :content ] } } )
+    to_json( include: { comments: { only: [ :content ] }, reservations: { only: [ :event_id ] } } )
   end
 
   def self.complex_search(params, _per_page)
@@ -92,6 +100,7 @@ class Person < ActiveRecord::Base
           must { string "primary_device_description:#{params[:device_description]} OR secondary_device_description:#{params[:device_description]}"} if params[:device_description].present?
           must { string "primary_connection_description:#{params[:connection_description]}"} if params[:connection_description].present?
           must { string "geography_id:#{params[:geography_id]}"} if params[:geography_id].present?
+          must { string "event_id:#{params[:event_id]}"} if params[:event_id].present?          
         end
       end      
     end

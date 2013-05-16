@@ -1,0 +1,36 @@
+<div class="row">
+  <div class="span12">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Url</th>
+          <th>Source url</th>
+          <th>Creator name</th>
+          <th>Program</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @applications.each do |application| %>
+          <tr>
+            <td><%= link_to application.name, application %></td>
+            <td><%= application.description %></td>
+            <td><%= application.url %></td>
+            <td><%= application.source_url %></td>
+            <td><%= application.creator_name %></td>
+            <td><%= link_to application.program.name, application.program %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <p><%= link_to 'New Application', new_application_path %></p>
+  </div>
+</div>
+
