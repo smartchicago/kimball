@@ -94,6 +94,11 @@
 <div class="row">
   <div class="span12">
     <%= link_to "Save this list as CSV", search_index_path(params.merge(:format => :csv)), :class => "btn"  %>
+    <%= form_for @mailchimp_export do |form| %>
+        <%= form.submit "Export this list to Mailchimp", class: "btn" %>
+        <%= form.text_field :name, data: { placeholder: "Give this list a name" }  %>
+    <% end %>
+    
   </div>  
 </div>
 
