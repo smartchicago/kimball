@@ -48,6 +48,8 @@ class EventsControllerTest < ActionController::TestCase
   end
 
   test "should export event" do
+    MailchimpExport.any_instance.expects(:send_to_mailchimp).returns(true)
+
     assert_difference "MailchimpExport.count" do
       post :export, id: @event, format: :js
     end

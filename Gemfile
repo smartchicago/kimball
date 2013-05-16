@@ -68,3 +68,6 @@ gem 'devise', branch: "rails4", git: "git://github.com/plataformatec/devise"
 
 # use gibbon for easy Mailchimp API access
 gem "gibbon"
+
+# mock tests w/mocha
+gem "mocha", require: false

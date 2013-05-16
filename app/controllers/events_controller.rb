@@ -62,7 +62,7 @@ class EventsController < ApplicationController
   end
 
   def export
-    @mce = MailchimpExport.new(name: "#{@event.name} Participants", recipients: @event.people.collect{|person| person.email_address} )
+    @mce = MailchimpExport.new(name: "#{@event.name} Participants", recipients: @event.people.collect{|person| person.email_address}, created_by: current_user.id)
     
     if @mce.save
       Rails.logger.info("[export] Sent #{@mce.recipients.size} email addresses to a static segment named #{@mce.name}")

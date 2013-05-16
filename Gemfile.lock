@@ -87,8 +87,11 @@ GEM
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    metaclass (0.0.1)
     mime-types (1.23)
     minitest (4.7.4)
+    mocha (0.14.0)
+      metaclass (~> 0.0.1)
     multi_json (1.7.3)
     multi_xml (0.5.3)
     mysql2 (0.3.11)
@@ -185,6 +188,7 @@ DEPENDENCIES
   holder_rails
   jbuilder (~> 1.0.1)
   jquery-rails
+  mocha
   mysql2
   newrelic_rpm
   rails (= 4.0.0.rc1)

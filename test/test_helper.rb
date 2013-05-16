@@ -46,3 +46,6 @@ class ActionController::TestCase
     sign_in @user
   end
 end
+
+# keep this at the bottom, pls
+require "mocha/setup"
