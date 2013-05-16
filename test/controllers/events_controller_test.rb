@@ -46,4 +46,12 @@ class EventsControllerTest < ActionController::TestCase
 
     assert_redirected_to events_path
   end
+
+  test "should export event" do
+    assert_difference "MailchimpExport.count" do
+      post :export, id: @event, format: :js
+    end
+    
+    assert_response :success
+  end
 end

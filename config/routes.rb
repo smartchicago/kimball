@@ -3,7 +3,11 @@ Logan::Application.routes.draw do
   get "mailchimp_export/create"
   resources :reservations
 
-  resources :events
+  resources :events do
+    member do
+      post :export
+    end    
+  end
 
   resources :applications
 
@@ -15,9 +19,10 @@ Logan::Application.routes.draw do
 
   resources :comments
 
-  get "search/index"
+  get  "search/index"
+  post "search/export"  # send search results elsewhere, i.e. Mailchimp
 
-  resources :mailchimp_exports
+  get "mailchimp_exports/index"
   
   resources :people do
     resources :comments
