@@ -2,7 +2,7 @@
   <a id="comment-<%= comment.id %>"></a>
   <%= simple_format comment.content %>
   <span class="comment-byline">
-    Author name &mdash; <%= link_to "#{time_ago_in_words(comment.created_at)} ago", person_path(comment.commentable, anchor: "comment-#{comment.id}"), title: comment.created_at %>
+    <% if comment.created_by %><%= User.find(comment.created_by).email %> &mdash;<% end %> <%= link_to "#{time_ago_in_words(comment.created_at)} ago", person_path(comment.commentable, anchor: "comment-#{comment.id}"), title: comment.created_at %>
     <%= link_to 'delete note', comment_path(comment.id), method: :delete, remote: true, data: { confirm: "Delete this note? This cannot be undone." }, class: "comment-delete-link" %>
   </span>
 </section>
