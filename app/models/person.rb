@@ -52,8 +52,8 @@ class Person < ActiveRecord::Base
       indexes :first_name
       indexes :last_name
       indexes :email_address, analyzer: "email_analyzer"
-      indexes :phone_number, analyzer: "keyword"
-      indexes :postal_code, analyzer: "keyword"
+      indexes :phone_number, index: :not_analyzed
+      indexes :postal_code, index: :not_analyzed
       indexes :geography_id, index: :not_analyzed
 
       # device types
@@ -95,11 +95,11 @@ class Person < ActiveRecord::Base
         boolean do
           must { string "first_name:#{params[:first_name]}"} if params[:first_name].present?
           must { string "last_name:#{params[:last_name]}"} if params[:last_name].present?
-          must { string "email_address:#{params[:email_address]}"} if params[:email_address].present?
-          must { string "postal_code:#{params[:postal_code]}"} if params[:postal_code].present?
+          must { string "email_address:(#{params[:email_address]})"} if params[:email_address].present?
+          must { string "postal_code:(#{params[:postal_code]})"} if params[:postal_code].present?
           must { string "primary_device_description:#{params[:device_description]} OR secondary_device_description:#{params[:device_description]}"} if params[:device_description].present?
           must { string "primary_connection_description:#{params[:connection_description]}"} if params[:connection_description].present?
-          must { string "geography_id:#{params[:geography_id]}"} if params[:geography_id].present?
+          must { string "geography_id:(#{params[:geography_id]})"} if params[:geography_id].present?
           must { string "event_id:#{params[:event_id]}"} if params[:event_id].present?          
         end
       end      

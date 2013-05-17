@@ -27,7 +27,7 @@ class ApplicationsController < ApplicationController
     @application = Application.new(application_params)
 
     respond_to do |format|
-      if @application.save
+      if @application.with_user(current_user).save
         format.html { redirect_to @application, notice: 'Application was successfully created.' }
         format.json { render action: 'show', status: :created, location: @application }
       else
@@ -41,7 +41,7 @@ class ApplicationsController < ApplicationController
   # PATCH/PUT /applications/1.json
   def update
     respond_to do |format|
-      if @application.update(application_params)
+      if @application.with_user(current_user).update(application_params)
         format.html { redirect_to @application, notice: 'Application was successfully updated.' }
         format.json { head :no_content }
       else

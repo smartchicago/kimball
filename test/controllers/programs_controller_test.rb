@@ -21,6 +21,7 @@ class ProgramsControllerTest < ActionController::TestCase
       post :create, program: { description: @program.description, name: @program.name }
     end
 
+    assert_equal users(:admin).id, assigns(:program).created_by
     assert_redirected_to program_path(assigns(:program))
   end
 

@@ -45,7 +45,12 @@
       <%= text_field_tag :postal_code, params[:postal_code], :class => "input-small" %>
 
       <label for="geography_id">Ward</label>
-      <%= text_field_tag :geography_id, params[:geography_id], :class => "input-small" %>      
+      <%= text_field_tag :geography_id, params[:geography_id], :class => "input-small" %>
+      
+      <p class="alert alert-info">
+        <span class="label label-info">Search tip</span> To search for more than one ward or zip code, separate values with a space.      
+      </p>
+      
     </div>
   </div>  
   
