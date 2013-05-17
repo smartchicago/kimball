@@ -65,3 +65,9 @@ gem 'holder_rails'
 
 # use devise for auth/identity
 gem 'devise', branch: "rails4", git: "git://github.com/plataformatec/devise"
+
+# use gibbon for easy Mailchimp API access
+gem "gibbon"
+
+# mock tests w/mocha
+gem "mocha", require: false

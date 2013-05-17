@@ -16,6 +16,7 @@
       <li><%= link_to person.full_name, person %></li>
       <% end %>
     </ol>
+    <p><%= button_to "Send this list to Mailchimp", export_event_path, remote: true, class: "btn" %></p>
     <% else %>
     <p>No attendees yet</p>
     <% end %>
