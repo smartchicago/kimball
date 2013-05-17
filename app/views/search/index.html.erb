@@ -94,8 +94,23 @@
 <div class="row">
   <div class="span12">
     <%= link_to "Save this list as CSV", search_index_path(params.merge(:format => :csv)), :class => "btn"  %>
+    <span><a href="#" id="export-to-mailchimp-form-toggle">Export this list to MailChimp</a></span>
   </div>  
 </div>
+
+<div class="row">
+  <div class="span12">
+    <div id="export-to-mailchimp-form">
+      <%= form_tag search_export_path, remote: true, class: "form-inline" %>
+        <%= text_field_tag :name, '', class: "", placeholder: "enter a name for this list", length: 50 %>
+        <%= hidden_field_tag :adv, '1' %>
+        <%- [:first_name, :last_name, :email_address, :geography_id, :postal_code, :event_id, :device_description, :connection_description].each do |field| %> <%= hidden_field_tag field, params[field] %> <% end -%>
+        <%= submit_tag "Export", class: "btn btn-primary", data: {disable_with: "Exporting ..."} %>
+      </form>      
+    </div>    
+  </div>
+</div>
+
 
 <% else %>    
 
