@@ -5,6 +5,8 @@ require 'rails/all'
 # Assets should be precompiled for production (so we don't need the gems loaded then)
 Bundler.require(*Rails.groups(assets: %w(development test)))
 
+require "./lib/with_user"
+
 module Logan
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
