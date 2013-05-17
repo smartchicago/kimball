@@ -19,8 +19,8 @@
           <tr>
             <td><%= link_to event.name, event %></td>
             <td><%= event.description %></td>
-            <td><%= event.starts_at %></td>
-            <td><%= event.ends_at %></td>
+            <td><%= event.starts_at.to_s :long %></td>
+            <td><%= event.ends_at.to_s :long %></td>
             <td><%= event.location %></td>
             <td><%= event.address %></td>
             <td><%= event.capacity %></td>
