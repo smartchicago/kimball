@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: [:show, :edit, :update, :destroy]
+  before_action :set_event, only: [:show, :edit, :update, :destroy, :export]
 
   # GET /events
   # GET /events.json
@@ -58,6 +58,20 @@ class EventsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to events_url }
       format.json { head :no_content }
+    end
+  end
+
+  def export
+    @mce = MailchimpExport.new(name: "#{@event.name[0,37]} Participants", recipients: @event.people.collect{|person| person.email_address}, created_by: current_user.id)
+    
+    if @mce.save
+      Rails.logger.info("[export] Sent #{@mce.recipients.size} email addresses to a static segment named #{@mce.name}")
+      respond_to do |format|
+        format.js { }
+      end
+    else
+      Rails.logger.error("failed to send event to mailchimp: #{@mce.errors.inspect}")
+      format.all { render text: "failed to send event to mailchimp: #{@mce.errors.inspect}", status: 400} 
     end
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130514181705) do
+ActiveRecord::Schema.define(version: 20130516190707) do
 
   create_table "applications", force: true do |t|
     t.string   "name"
@@ -42,6 +42,14 @@ ActiveRecord::Schema.define(version: 20130514181705) do
     t.text     "address"
     t.integer  "capacity"
     t.integer  "application_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mailchimp_exports", force: true do |t|
+    t.string   "name"
+    t.text     "body"
+    t.integer  "created_by"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
