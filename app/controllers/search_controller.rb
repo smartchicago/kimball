@@ -26,7 +26,7 @@ class SearchController < ApplicationController
     @people = Person.complex_search(params, 10000)
     @mce = MailchimpExport.new(name: list_name, recipients: @people.collect{ |person| person.email_address }, created_by: current_user.id)
     
-    if @mce.save
+    if @mce.with_user(current_user).save
       Rails.logger.info("[SearchController#export] Sent #{@mce.recipients.size} email addresses to a static segment named #{@mce.name}")
       respond_to do |format|
         format.js { }

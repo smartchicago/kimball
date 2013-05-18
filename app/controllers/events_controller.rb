@@ -27,7 +27,7 @@ class EventsController < ApplicationController
     @event = Event.new(event_params)
 
     respond_to do |format|
-      if @event.save
+      if @event.with_user(current_user).save
         format.html { redirect_to @event, notice: 'Event was successfully created.' }
         format.json { render action: 'show', status: :created, location: @event }
       else
@@ -41,7 +41,7 @@ class EventsController < ApplicationController
   # PATCH/PUT /events/1.json
   def update
     respond_to do |format|
-      if @event.update(event_params)
+      if @event.with_user(current_user).update(event_params)
         format.html { redirect_to @event, notice: 'Event was successfully updated.' }
         format.json { head :no_content }
       else
@@ -64,7 +64,7 @@ class EventsController < ApplicationController
   def export
     @mce = MailchimpExport.new(name: "#{@event.name[0,37]} Participants", recipients: @event.people.collect{|person| person.email_address}, created_by: current_user.id)
     
-    if @mce.save
+    if @mce.with_user(current_user).save
       Rails.logger.info("[export] Sent #{@mce.recipients.size} email addresses to a static segment named #{@mce.name}")
       respond_to do |format|
         format.js { }

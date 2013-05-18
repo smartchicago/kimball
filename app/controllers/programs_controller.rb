@@ -27,7 +27,7 @@ class ProgramsController < ApplicationController
     @program = Program.new(program_params)
 
     respond_to do |format|
-      if @program.save
+      if @program.with_user(current_user).save
         format.html { redirect_to @program, notice: 'Program was successfully created.' }
         format.json { render action: 'show', status: :created, location: @program }
       else
@@ -41,7 +41,7 @@ class ProgramsController < ApplicationController
   # PATCH/PUT /programs/1.json
   def update
     respond_to do |format|
-      if @program.update(program_params)
+      if @program.with_user(current_user).update(program_params)
         format.html { redirect_to @program, notice: 'Program was successfully updated.' }
         format.json { head :no_content }
       else

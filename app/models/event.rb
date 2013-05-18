@@ -1,5 +1,5 @@
 class Event < ActiveRecord::Base
-  validates_presence_of :name
+  validates_presence_of :name, :application_id, :location, :address, :starts_at, :ends_at, :description
   
   belongs_to :application
 

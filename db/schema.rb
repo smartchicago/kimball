@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130516190707) do
+ActiveRecord::Schema.define(version: 20130517222020) do
 
   create_table "applications", force: true do |t|
     t.string   "name"
@@ -22,6 +22,8 @@ ActiveRecord::Schema.define(version: 20130516190707) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "program_id"
+    t.integer  "created_by"
+    t.integer  "updated_by"
   end
 
   create_table "comments", force: true do |t|
@@ -31,6 +33,7 @@ ActiveRecord::Schema.define(version: 20130516190707) do
     t.integer  "commentable_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "created_by"
   end
 
   create_table "events", force: true do |t|
@@ -44,6 +47,8 @@ ActiveRecord::Schema.define(version: 20130516190707) do
     t.integer  "application_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "created_by"
+    t.integer  "updated_by"
   end
 
   create_table "mailchimp_exports", force: true do |t|
@@ -85,6 +90,8 @@ ActiveRecord::Schema.define(version: 20130516190707) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "created_by"
+    t.integer  "updated_by"
   end
 
   create_table "reservations", force: true do |t|
@@ -95,6 +102,7 @@ ActiveRecord::Schema.define(version: 20130516190707) do
     t.datetime "attended_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "updated_by"
   end
 
   create_table "submissions", force: true do |t|
