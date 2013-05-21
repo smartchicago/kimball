@@ -55,7 +55,8 @@ class Person < ActiveRecord::Base
       indexes :phone_number, index: :not_analyzed
       indexes :postal_code, index: :not_analyzed
       indexes :geography_id, index: :not_analyzed
-
+      indexes :address_1  # FIXME: if we ever use address_2, this will not work
+      
       # device types
       indexes :primary_device_type_name, analyzer: :snowball
       indexes :secondary_device_type_name, analyzer: :snowball
@@ -101,6 +102,7 @@ class Person < ActiveRecord::Base
           must { string "primary_connection_description:#{params[:connection_description]}"} if params[:connection_description].present?
           must { string "geography_id:(#{params[:geography_id]})"} if params[:geography_id].present?
           must { string "event_id:#{params[:event_id]}"} if params[:event_id].present?          
+          must { string "address_1:#{params[:address]}"} if params[:address].present?
         end
       end      
     end
