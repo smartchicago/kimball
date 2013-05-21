@@ -19,7 +19,7 @@
       </table>      
 
       <h4>Bottom five wards</h4>
-      <&#x21E5;le class="table table-striped">
+      <table class="table table-striped">
         <tr><th>Ward</th><th>Signups</th></tr>
         <% for ward,cnt in @bottom_five_wards do %><tr><td><%= ward %></td><td><%= link_to cnt, search_index_path(:adv => 1, :geography_id => ward) %></td></tr><% end %>
       </table>      
