@@ -3,10 +3,10 @@ class Person < ActiveRecord::Base
   include Tire::Model::Callbacks 
   include ExternalDataMappings
 
-  has_many :comments, as: :commentable
-  has_many :submissions
+  has_many :comments, as: :commentable, dependent: :destroy
+  has_many :submissions, dependent: :destroy
 
-  has_many :reservations
+  has_many :reservations, dependent: :destroy
   has_many :events, through: :reservations
   
   self.per_page = 15
