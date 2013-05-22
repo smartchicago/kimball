@@ -32,6 +32,11 @@ class Submission < ActiveRecord::Base
     @form_name ||= JSON::parse(form_structure)['Name']
   end
 
+  def submission_values
+    # return the field values in a nice format for search indexing
+    fields.collect{|field_id,desc| field_value(field_id) }.join(" ")
+  end
+
   private
   
   def extract_field_data(data, field)
@@ -39,10 +44,8 @@ class Submission < ActiveRecord::Base
       title: field['Title'], 
       type: field['Type'], 
       subfields: (field['SubFields'] || []).collect{|sf| sf['ID']}     
-    }
-    
-    Rails.logger.debug("field: #{field['ID']} --> #{data[field['ID']]}")
-    
+    }    
+    # Rails.logger.debug("field: #{field['ID']} --> #{data[field['ID']]}")    
     data
   end
 end
