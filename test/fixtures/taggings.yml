@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  taggable_type: MyString
-  taggable_id: 1
+  taggable: one (Person)
+  tag: one
   created_by: 1
 
 two:
-  taggable_type: MyString
-  taggable_id: 1
+  taggable: one (Person)
+  tag: two
   created_by: 1

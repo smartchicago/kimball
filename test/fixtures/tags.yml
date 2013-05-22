@@ -1,9 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  name: MyString
+  name: "foo"
   created_by: 1
 
 two:
-  name: MyString
+  name: "sna"
   created_by: 1
