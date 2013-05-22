@@ -1,6 +1,6 @@
 class TaggingsController < ApplicationController
   def create
-    @tag = Tag.find_or_initialize_by_name(params[:tagging].delete(:name))
+    @tag = Tag.find_or_initialize_by(name: params[:tagging].delete(:name))
     @tag.created_by ||= current_user.id
     @tagging = Tagging.new(taggable_type: params[:tagging][:taggable_type], taggable_id: params[:tagging][:taggable_id], tag: @tag)
 

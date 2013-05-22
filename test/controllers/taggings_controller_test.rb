@@ -2,12 +2,12 @@ require 'test_helper'
 
 class TaggingsControllerTest < ActionController::TestCase
   test "should get create" do
-    get :create
+    post :create, format: :js, tagging: { name: "foo", taggable_type: "Person", taggable_id: people(:one).id }
     assert_response :success
   end
 
   test "should get destroy" do
-    get :destroy
+    delete :destroy, format: :js, id: taggings(:one)
     assert_response :success
   end
 
