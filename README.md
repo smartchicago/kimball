@@ -10,21 +10,15 @@ Kimball is a customer relationship management application at its heart. Kimball 
 
 TODO
 ----
-
-* External integrations
-  * Export list segment to mailchimp
 * Events
-  * CRUD
   * Invite
   * RSVP
   * Attendance tracking
   * Reminder emails
 * Programs
-  * CRUD
   * Associate results
 * People
   * Add arbitrary fields
-  * Add notes
   * Attach photograph
   * Attach files
   * Link with their social networks
@@ -32,7 +26,6 @@ TODO
   * Track program status (e.g. has received Visa card)
   * Show output from Tribune boundaries service on individual person pages
 * Backend
-  * User accounts
   * Terms of service/privacy policy
   * Managed access to anonymized data for research
   * Audit trails
