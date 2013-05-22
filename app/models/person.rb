@@ -8,6 +8,9 @@ class Person < ActiveRecord::Base
 
   has_many :reservations, dependent: :destroy
   has_many :events, through: :reservations
+
+  has_many :tags, through: :taggings
+  has_many :taggings, as: :taggable
   
   self.per_page = 15
 
