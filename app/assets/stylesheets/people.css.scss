@@ -27,3 +27,33 @@ div.comment {
 a.comment-delete-link {
 	display: none;
 }
+
+#person-tag-list {
+	margin: 0;
+	padding: 0;
+	
+	li {
+		list-style: none;
+		border: 1px solid red;
+		padding: 10px;
+		display:inline-block;
+		margin: 5px;
+
+		.delete-link {
+			display: none;			
+		}
+
+		&:hover {
+			.delete-link {
+				display: inline;
+				color: #999;
+
+			}
+		}
+	}
+	
+	.count { 
+		color: #999;
+	}
+	
+}

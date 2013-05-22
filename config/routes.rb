@@ -20,7 +20,8 @@ Logan::Application.routes.draw do
   resources :submissions
 
   resources :comments
-
+  resources :taggings, only: [:create, :destroy]
+  
   get  "search/index"
   post "search/export"  # send search results elsewhere, i.e. Mailchimp
 
