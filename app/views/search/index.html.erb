@@ -29,10 +29,13 @@
     
     <div class="span4">
       <label for="device_description">Device description</label>
-      <%= text_field_tag :device_description, params[:device_description], :class => "input" %>
+      <%= text_field_tag :device_description, params[:device_description], :class => "input span4" %>
 
       <label for="connection_description">Connection description</label>
-      <%= text_field_tag :connection_description, params[:connection_description], :class => "input" %>      
+      <%= text_field_tag :connection_description, params[:connection_description], :class => "input span4" %>      
+
+      <label for="submissions">Form submission content</label>
+      <%= text_field_tag :submissions, params[:submissions], :class => "input span4" %>      
 
       <label for="event_id">Event</label>
       <%= select_tag :event_id, 
@@ -114,7 +117,7 @@
       <%= form_tag search_export_path, remote: true, class: "form-inline" %>
         <%= text_field_tag :name, '', class: "", placeholder: "enter a name for this list", length: 50 %>
         <%= hidden_field_tag :adv, '1' %>
-        <%- [:address, :first_name, :last_name, :email_address, :geography_id, :postal_code, :event_id, :device_description, :connection_description].each do |field| %> <%= hidden_field_tag field, params[field] %> <% end -%>
+        <%- [:submissions, :address, :first_name, :last_name, :email_address, :geography_id, :postal_code, :event_id, :device_description, :connection_description].each do |field| %> <%= hidden_field_tag field, params[field] %> <% end -%>
         <%= submit_tag "Export", class: "btn btn-primary", data: {disable_with: "Exporting ..."} %>
       </form>      
     </div>    

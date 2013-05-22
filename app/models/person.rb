@@ -76,6 +76,10 @@ class Person < ActiveRecord::Base
         indexes :event_id, index: :not_analyzed
       end
       
+      # submissions
+      # indexes the output of the Submission#indexable_values method      
+      indexes :submissions, analyzer: :snowball
+      
       indexes :created_at, type: "date"
     end
   end  
@@ -83,7 +87,20 @@ class Person < ActiveRecord::Base
 
   def to_indexed_json
     # customize what data is sent to ES for indexing
-    to_json( include: { comments: { only: [ :content ] }, reservations: { only: [ :event_id ] } } )
+    to_json( 
+      include: { 
+        submissions: {
+          only:  [ :submission_values ],
+          methods: [ :submission_values ]
+        },
+        comments: { 
+          only: [ :content ] 
+        }, 
+        reservations: { 
+          only: [ :event_id ] 
+        } 
+      } 
+    )
   end
 
   def self.complex_search(params, _per_page)
@@ -103,6 +120,7 @@ class Person < ActiveRecord::Base
           must { string "geography_id:(#{params[:geography_id]})"} if params[:geography_id].present?
           must { string "event_id:#{params[:event_id]}"} if params[:event_id].present?          
           must { string "address_1:#{params[:address]}"} if params[:address].present?
+          must { string "submission_values:#{params[:submissions]}"} if params[:submissions].present?
         end
       end      
     end
