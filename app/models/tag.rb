@@ -9,8 +9,8 @@ class Tag < ActiveRecord::Base
     return @most_popular if @most_popular
     
     res = ActiveRecord::Base.connection.execute("SELECT tag_id, COUNT(tag_id) AS cnt FROM taggings GROUP BY tag_id ORDER BY cnt DESC LIMIT #{limit}")
-    tags = Tag.find(res.collect{|r| r['tag_id']})
-    tags.each{ |tag| tag.tag_count = res.find{|t| t['tag_id'] == tag.id }['cnt'] }
+    tags = Tag.find(res.collect{ |r| r[0] })
+    tags.each{ |tag| tag.tag_count = res.find{ |t| t[0] == tag.id }[1] }
     @most_popular = tags.sort{|a,b| b.tag_count <=> a.tag_count }
   end
 end
