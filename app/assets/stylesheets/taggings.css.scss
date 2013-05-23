@@ -1,0 +1,43 @@
+#tag-list {
+	margin: 0;
+	padding: 0;
+	
+	li {
+		list-style: none;
+		border: 1px solid #c9e0ed;
+		padding: 5px 15px;
+		display:inline-block;
+		margin: 5px;
+		margin-left: 0;
+		background-color: #e4ecf5;
+
+        box-shadow: 0px 0px 3px black;
+
+		.delete-link {
+			display: none;
+		}
+
+		a { 
+			color: #666;			
+		}
+
+		&.tagging:hover {
+			padding-right: 0px;
+			.delete-link {
+				display: inline;
+				color: #999;
+				text-decoration: none;
+				
+				&:hover {
+					color: #D74B46;
+				}
+				
+			}
+		}
+	}
+	
+	.count { 
+		color: #999;
+	}
+	
+}

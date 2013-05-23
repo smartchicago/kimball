@@ -26,4 +26,12 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal 2, people(:one).events.count
     assert_equal 1, people(:two).events.count
   end
+
+  test "can add a tag to a person" do
+    assert !people(:one).tags.detect{ |tag| tag.name == "foo bar baz" } 
+    
+    people(:one).tags << Tag.new(name: "foo bar baz", created_by: users(:admin).id)
+    people(:one).tags.reload
+    assert people(:one).tags.detect{ |tag| tag.name == "foo bar baz" } 
+  end
 end

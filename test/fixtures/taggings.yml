@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  taggable: one (Person)
+  tag: one
+  created_by: 1
+
+two:
+  taggable: one (Person)
+  tag: two
+  created_by: 1
