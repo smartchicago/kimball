@@ -8,6 +8,9 @@ class Person < ActiveRecord::Base
 
   has_many :reservations, dependent: :destroy
   has_many :events, through: :reservations
+
+  has_many :tags, through: :taggings
+  has_many :taggings, as: :taggable
   
   self.per_page = 15
 
@@ -80,6 +83,9 @@ class Person < ActiveRecord::Base
       # indexes the output of the Submission#indexable_values method      
       indexes :submissions, analyzer: :snowball
       
+      # tags
+      indexes :tag_values, analyzer: :keyword
+      
       indexes :created_at, type: "date"
     end
   end  
@@ -88,7 +94,8 @@ class Person < ActiveRecord::Base
   def to_indexed_json
     # customize what data is sent to ES for indexing
     to_json( 
-      include: { 
+      methods: [ :tag_values ],
+      include: {        
         submissions: {
           only:  [ :submission_values ],
           methods: [ :submission_values ]
@@ -101,6 +108,10 @@ class Person < ActiveRecord::Base
         } 
       } 
     )
+  end
+
+  def tag_values
+    tags.collect(&:name)
   end
 
   def self.complex_search(params, _per_page)
@@ -121,6 +132,7 @@ class Person < ActiveRecord::Base
           must { string "event_id:#{params[:event_id]}"} if params[:event_id].present?          
           must { string "address_1:#{params[:address]}"} if params[:address].present?
           must { string "submission_values:#{params[:submissions]}"} if params[:submissions].present?
+          must { string "tag_values:#{params[:tags]}"} if params[:tags].present?
         end
       end      
     end

@@ -1,4 +1,6 @@
 Logan::Application.routes.draw do
+  get "taggings/create"
+  get "taggings/destroy"
   get "mailchimp_export/index"
   get "mailchimp_export/create"
   resources :reservations
@@ -18,7 +20,8 @@ Logan::Application.routes.draw do
   resources :submissions
 
   resources :comments
-
+  resources :taggings, only: [:create, :destroy]
+  
   get  "search/index"
   post "search/export"  # send search results elsewhere, i.e. Mailchimp
 

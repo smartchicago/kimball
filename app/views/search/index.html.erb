@@ -24,6 +24,9 @@
 
         <label for="email_address">Email address</label>
         <%= text_field_tag :email_address, params[:email_address], :class => "input" %>              
+
+        <label for="tags">Tags</label>
+        <%= text_field_tag :tags, params[:tags], :class => "input" %>              
       </fieldset>
     </div>
     
@@ -117,7 +120,7 @@
       <%= form_tag search_export_path, remote: true, class: "form-inline" %>
         <%= text_field_tag :name, '', class: "", placeholder: "enter a name for this list", length: 50 %>
         <%= hidden_field_tag :adv, '1' %>
-        <%- [:submissions, :address, :first_name, :last_name, :email_address, :geography_id, :postal_code, :event_id, :device_description, :connection_description].each do |field| %> <%= hidden_field_tag field, params[field] %> <% end -%>
+        <%- [:tags, :submissions, :address, :first_name, :last_name, :email_address, :geography_id, :postal_code, :event_id, :device_description, :connection_description].each do |field| %> <%= hidden_field_tag field, params[field] %> <% end -%>
         <%= submit_tag "Export", class: "btn btn-primary", data: {disable_with: "Exporting ..."} %>
       </form>      
     </div>    

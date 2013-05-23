@@ -5,56 +5,74 @@
 </div>
 
 <div class="row">
-  <div class="span3">
-    <h3>About</h3>    
-    <dl>
-      <dt>Address</dt>
-      <dd><%= address_fields_to_sentence(@person) %></dd>
-      
-      <dt>Ward</dt>
-      <dd><%= link_to @person.geography_id, search_index_path(adv: 1, geography_id: @person.geography_id ) %></dd>
-      
-      <dt>Primary device</dt>
-      <dd><%= link_to @person.primary_device_description, search_index_path(adv: 1, device_description: @person.primary_device_description ) %> <span class="muted">(<%= human_device_type_name @person.primary_device_id %>)</span></dd>
+  <div class="span6">
+    <div class="row">
+      <div class="span3">
+        <h3>About</h3>    
+        <dl>
+          <dt>Address</dt>
+          <dd><%= address_fields_to_sentence(@person) %></dd>
 
-      <dt>Secondary device</dt>
-      <dd><%= link_to @person.secondary_device_description, search_index_path(adv: 1, device_description: @person.secondary_device_description ) %> <span class="muted">(<%= human_device_type_name @person.secondary_device_id %>)</span></dd>
+          <dt>Ward</dt>
+          <dd><%= link_to @person.geography_id, search_index_path(adv: 1, geography_id: @person.geography_id ) %></dd>
 
-      <dt>Primary connection method</dt>
-      <dd><%= human_connection_type_name @person.primary_connection_id %> <% if @person.primary_connection_description.present? %><%= ": " + @person.primary_connection_description %><% end %></dd>
-      
-      <dt>Preferred participation method</dt>
-      <dd><%= @person.participation_type %></dd>            
-    </dl>    
+          <dt>Primary device</dt>
+          <dd><%= link_to @person.primary_device_description, search_index_path(adv: 1, device_description: @person.primary_device_description ) %> <span class="muted">(<%= human_device_type_name @person.primary_device_id %>)</span></dd>
+
+          <dt>Secondary device</dt>
+          <dd><%= link_to @person.secondary_device_description, search_index_path(adv: 1, device_description: @person.secondary_device_description ) %> <span class="muted">(<%= human_device_type_name @person.secondary_device_id %>)</span></dd>
+
+          <dt>Primary connection method</dt>
+          <dd><%= human_connection_type_name @person.primary_connection_id %> <% if @person.primary_connection_description.present? %><%= ": " + @person.primary_connection_description %><% end %></dd>
+
+          <dt>Preferred participation method</dt>
+          <dd><%= @person.participation_type %></dd>            
+        </dl>    
+      </div>
+
+      <div class="span3">    
+        <h3>Contact</h3>
+
+        <dl>
+          <dt>Phone</dt>
+          <dd><%= number_to_phone @person.phone_number %></dd>
+
+          <dt>Email</dt>
+          <dd><%= mail_to @person.email_address %></dd>
+
+          <dt>Voted in last election?</dt>
+          <dd><%= @person.voted %></dd>
+
+          <dt>Ever called 311?</dt>
+          <dd><%= @person.called_311 %></dd>
+
+          <dt>Facebook</dt>
+          <dd>link to facebook</dd>
+
+          <dt>Twitter</dt>
+          <dd>link to twitter</dd>
+
+          <dt>Signup at</dt>
+          <dd><%= @person.signup_at ? @person.signup_at.to_s(:long) : 'unknown' %></dd>
+        </dl>    
+      </div>      
+    </div>
+    <div class="row">
+      <div class="span6">
+        <h3>Tags</h3>
+        <ul id="tag-list">
+          <%= render partial: 'taggings/tagging', collection: @person.taggings %>
+        </ul>
+        <%= form_for(@tagging, remote: true, html: { class: "form-inline" }) do |form| %>
+          <%= form.hidden_field :taggable_type, value: "Person" %>
+          <%= form.hidden_field :taggable_id, value: @person.id %>
+          <%= form.text_field :name, class: "input span2", placeholder: "new tag", data: { provide: 'typeahead', source: Tag.most_popular(25).collect{|tag| tag.name } }, autocomplete: 'off' %>
+          <%= form.submit "Add", class: "btn span1" %>
+        <% end %>
+      </div>
+    </div>  
   </div>
-
-  <div class="span3">    
-    <h3>Contact</h3>
     
-    <dl>
-      <dt>Phone</dt>
-      <dd><%= number_to_phone @person.phone_number %></dd>
-      
-      <dt>Email</dt>
-      <dd><%= mail_to @person.email_address %></dd>
-      
-      <dt>Voted in last election?</dt>
-      <dd><%= @person.voted %></dd>
-      
-      <dt>Ever called 311?</dt>
-      <dd><%= @person.called_311 %></dd>
-      
-      <dt>Facebook</dt>
-      <dd>link to facebook</dd>
-      
-      <dt>Twitter</dt>
-      <dd>link to twitter</dd>
-      
-      <dt>Signup at</dt>
-      <dd><%= @person.signup_at ? @person.signup_at.to_s(:long) : 'unknown' %></dd>
-    </dl>    
-  </div>
-  
   <div class="span6">
     <h3>Location</h3>
     <a href="https://maps.google.com?q=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>" target="_blank" title="View in Google Maps"><img src="https://maps.googleapis.com/maps/api/staticmap?markers=|<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;zoom=14&amp;size=570x200&amp;sensor=false"></a>

@@ -15,6 +15,7 @@ class PeopleController < ApplicationController
   def show
     @comment = Comment.new commentable: @person
     @reservation = Reservation.new person: @person
+    @tagging = Tagging.new taggable: @person
   end
 
   # GET /people/new

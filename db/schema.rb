@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130517222020) do
+ActiveRecord::Schema.define(version: 20130522191509) do
 
   create_table "applications", force: true do |t|
     t.string   "name"
@@ -112,6 +112,22 @@ ActiveRecord::Schema.define(version: 20130517222020) do
     t.string   "entry_id"
     t.text     "form_structure"
     t.text     "field_structure"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "taggings", force: true do |t|
+    t.string   "taggable_type"
+    t.integer  "taggable_id"
+    t.integer  "created_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "tag_id"
+  end
+
+  create_table "tags", force: true do |t|
+    t.string   "name"
+    t.integer  "created_by"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

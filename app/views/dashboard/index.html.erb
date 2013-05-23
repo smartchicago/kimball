@@ -23,7 +23,12 @@
         <tr><th>Ward</th><th>Signups</th></tr>
         <% for ward,cnt in @bottom_five_wards do %><tr><td><%= ward %></td><td><%= link_to cnt, search_index_path(:adv => 1, :geography_id => ward) %></td></tr><% end %>
       </table>      
-
+      
+      <h4>Most popular tags</h4>
+      <ul id="tag-list">
+        <%= render partial: 'taggings/tag', collection: Tag.most_popular(10) %>
+        
+      </ul>
     </div>
   </div>
 </div>
