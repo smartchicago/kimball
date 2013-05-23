@@ -43,4 +43,17 @@ namespace :cut do
       puts "done."
     end    
   end
+  
+  desc "shuffle names to kinda-anonymize data. useful for demos, etc"
+  task :shuffle => :environment do
+    puts "cowardly refusing to shuffle production data!" and return if Rails.env.production?
+    
+    Person.all.each do |person|
+      person.first_name = Faker::Name.first_name
+      person.last_name = Faker::Name.last_name
+      person.email_address = Faker::Internet.email
+      person.phone_number = Faker::PhoneNumber.cell_phone      
+      begin; person.save!; rescue; puts "failed to save person #{person.id}"; end
+    end
+  end
 end

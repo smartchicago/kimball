@@ -71,3 +71,6 @@ gem "gibbon"
 
 # mock tests w/mocha
 gem "mocha", require: false
+
+# generate fake data w/faker: http://rubydoc.info/github/stympy/faker/master/frames
+gem "faker"
