@@ -60,7 +60,7 @@
     <div class="row">
       <div class="span6">
         <h3>Tags</h3>
-        <ul id="person-tag-list">
+        <ul id="tag-list">
           <%= render partial: 'taggings/tagging', collection: @person.taggings %>
         </ul>
         <%= form_for(@tagging, remote: true, html: { class: "form-inline" }) do |form| %>
