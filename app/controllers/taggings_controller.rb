@@ -10,7 +10,7 @@ class TaggingsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.js { render text: "console.log(#{escape_javascript @tagging.errors.inspect}); alert('failed to save tag.')"}
+        format.js { render text: "alert('Oh no! You can only tag an item with a given tag once.')"}
       end      
     end
   end
