@@ -10,12 +10,22 @@
   </div>
   <div class="span6">
     <h3>Attendees</h3>
-    <% if @event.people.count > 0 %>
-    <ol>
-      <% for person in @event.people do %>
-      <li><%= link_to person.full_name, person %></li>
-      <% end %>
-    </ol>
+    <% if @event.reservations.any? %>
+    <table class="table table-hover">
+      <tbody>
+        <tr><th>Name</th><th>Confirmed</th><th>Attended</th></tr>        
+        <% for reservation in @event.reservations.includes(:person) do %>
+          <tr>        
+          <%= form_for(reservation, remote: true) do |form| %>
+            <td><%= link_to reservation.person.full_name, reservation.person %></td>
+            <td><%= form.check_box :confirmed_at, checked: reservation.confirmed_at.present?, class: "remote-checkbox" %></td>
+            <td><%= form.check_box :attended_at, checked: reservation.attended_at.present?, class: "remote-checkbox"  %></td>          
+          <% end %>      
+          </tr>          
+        <% end %>              
+      </tbody>
+    </table>
+
     <p><%= button_to "Send this list to Mailchimp", export_event_path, remote: true, class: "btn" %></p>
     <% else %>
     <p>No attendees yet</p>
