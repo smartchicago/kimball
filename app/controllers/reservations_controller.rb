@@ -42,7 +42,11 @@ class ReservationsController < ApplicationController
   # PATCH/PUT /reservations/1.json
   def update
     respond_to do |format|
-      if @reservation.with_user(current_user).update(reservation_params)
+      @reservation.confirmed_at = (params[:reservation].delete(:confirmed_at).to_i == 1) ? DateTime.now : nil
+      @reservation.attended_at  = (params[:reservation].delete(:attended_at).to_i == 1) ? DateTime.now : nil
+
+      if @reservation.with_user(current_user).save
+        format.js   { head :ok }
         format.html { redirect_to @reservation, notice: 'Reservation was successfully updated.' }
         format.json { head :no_content }
       else
