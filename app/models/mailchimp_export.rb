@@ -1,6 +1,6 @@
 class MailchimpExport < ActiveRecord::Base
   validates_presence_of :name, :body
-  validates_length_of   :name, :in => 1..40
+  validates_length_of   :name, :in => 1..50
   
   attr_accessor :recipients  # array of email addresses to be added to the segment
   

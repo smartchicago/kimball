@@ -56,4 +56,15 @@ class EventsControllerTest < ActionController::TestCase
     
     assert_response :success
   end
+
+  test "should export event with long name" do
+    MailchimpExport.any_instance.expects(:send_to_mailchimp).returns(true)
+    @event.name = "Lorem ipsum dolor sit amet, consectetur adipisicing elit"
+
+    assert_difference "MailchimpExport.count" do
+      post :export, id: @event, format: :js
+    end
+    
+    assert_response :success    
+  end
 end
