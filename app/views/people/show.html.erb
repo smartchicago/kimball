@@ -25,6 +25,11 @@
           <dt>Primary connection method</dt>
           <dd><%= human_connection_type_name @person.primary_connection_id %> <% if @person.primary_connection_description.present? %><%= ": " + @person.primary_connection_description %><% end %></dd>
 
+          <% if @person.secondary_connection_id %>
+          <dt>Secondary connection method</dt>
+          <dd><%= human_connection_type_name @person.secondary_connection_id %> <% if @person.secondary_connection_description.present? %><%= ": " + @person.secondary_connection_description %><% end %></dd>
+          <% end %>
+
           <dt>Preferred participation method</dt>
           <dd><%= @person.participation_type %></dd>            
         </dl>    

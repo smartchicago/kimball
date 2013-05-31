@@ -95,7 +95,8 @@
         <td class="span4">
           Primary: <%= search_result_field result.primary_device_description, :device_description %><br>
           Secondary: <%= search_result_field result.secondary_device_description, :device_description %><br>
-          Connection: <%= search_result_field result.primary_connection_description, :connection_description %>
+          Primary Connection: <%= search_result_field result.primary_connection_description, :connection_description %><br>
+          <% if result.secondary_connection_description.present? %>Secondary Connection: <%= search_result_field result.secondary_connection_description, :connection_description %><% end %>
         </td>    
       </tr>
       <% end %>

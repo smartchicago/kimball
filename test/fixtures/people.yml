@@ -14,6 +14,8 @@ one:
   secondary_device_description: samsung
   primary_connection_id: 1
   primary_connection_description: 
+  secondary_connection_id: 1
+  secondary_connection_description: 
   phone_number: 999-555-3213
   participation_type: in-person
 
@@ -33,5 +35,7 @@ two:
   secondary_device_description: computer
   primary_connection_id: 3
   primary_connection_description: wifi
+  secondary_connection_id: 
+  secondary_connection_description:   
   phone_number: 888-999-5555
   participation_type: remote  
