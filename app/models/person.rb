@@ -26,6 +26,8 @@ class Person < ActiveRecord::Base
     'Field24' => :secondary_device_description, # desc of secondary
     'Field26' => :primary_connection_id, # connection type
     'Field27' => :primary_connection_description, # description of connection
+    'Field26' => :secondary_connection_id, # connection type
+    'Field27' => :secondary_connection_description, # description of connection
     'Field29' => :participation_type, # participation type
     'Field31' => :geography_id, # geography_id
     'Field4' => :address_1, # address_1

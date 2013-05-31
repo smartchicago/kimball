@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130522191509) do
+ActiveRecord::Schema.define(version: 20130530234651) do
 
   create_table "applications", force: true do |t|
     t.string   "name"
@@ -83,6 +83,8 @@ ActiveRecord::Schema.define(version: 20130522191509) do
     t.datetime "signup_at"
     t.string   "voted"
     t.string   "called_311"
+    t.integer  "secondary_connection_id"
+    t.string   "secondary_connection_description"
   end
 
   create_table "programs", force: true do |t|
