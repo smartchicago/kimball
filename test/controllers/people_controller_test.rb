@@ -29,6 +29,11 @@ class PeopleControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test "should show person with no secondary connection info" do
+    get :show, id: people(:two).id
+    assert_response :success
+  end
+
   test "should get edit" do
     get :edit, id: @person
     assert_response :success

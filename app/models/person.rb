@@ -15,25 +15,25 @@ class Person < ActiveRecord::Base
   self.per_page = 15
 
   WUFOO_FIELD_MAPPING = { 
-    'Field1' =>  :first_name,
-    'Field2' =>  :last_name,
+    'Field1'  =>  :first_name,
+    'Field2'  =>  :last_name,
     'Field10' =>  :email_address,
     'Field14' =>  :voted,
-    'Field17'=>   :called_311, 
+    'Field17' =>  :called_311, 
     'Field20' =>  :primary_device_id, # type of primary
     'Field21' =>  :primary_device_description, # desc of primary
-    'Field23' => :secondary_device_id,
-    'Field24' => :secondary_device_description, # desc of secondary
-    'Field26' => :primary_connection_id, # connection type
-    'Field27' => :primary_connection_description, # description of connection
-    'Field26' => :secondary_connection_id, # connection type
-    'Field27' => :secondary_connection_description, # description of connection
-    'Field29' => :participation_type, # participation type
-    'Field31' => :geography_id, # geography_id
-    'Field4' => :address_1, # address_1
-    'Field7' => :postal_code, # postal_code
-    'Field9' => :phone_number, # phone_number
-    'IP'    => :signup_ip, # client IP, ignored for the moment
+    'Field23' =>  :secondary_device_id,
+    'Field24' =>  :secondary_device_description, # desc of secondary
+    'Field26' =>  :primary_connection_id, # connection type
+    'Field27' =>  :primary_connection_description, # description of connection
+    'Field33' =>  :secondary_connection_id, # connection type
+    'Field34' =>  :secondary_connection_description, # description of connection
+    'Field29' =>  :participation_type, # participation type
+    'Field31' =>  :geography_id, # geography_id
+    'Field4'  =>  :address_1, # address_1
+    'Field7'  =>  :postal_code, # postal_code
+    'Field9'  =>  :phone_number, # phone_number
+    'IP'      =>  :signup_ip, # client IP, ignored for the moment
     # 'HandshakeKey' => 'b51c04fdaf7f8f333061f09f623d9d5b04f12b19' # secret code, ignored          
   }
 
@@ -70,6 +70,7 @@ class Person < ActiveRecord::Base
       indexes :primary_device_description
       indexes :secondary_device_description
       indexes :primary_connection_description
+      indexes :secondary_connection_description
       
       # comments
       indexes :comments do
@@ -129,7 +130,7 @@ class Person < ActiveRecord::Base
           must { string "email_address:(#{params[:email_address]})"} if params[:email_address].present?
           must { string "postal_code:(#{params[:postal_code]})"} if params[:postal_code].present?
           must { string "primary_device_description:#{params[:device_description]} OR secondary_device_description:#{params[:device_description]}"} if params[:device_description].present?
-          must { string "primary_connection_description:#{params[:connection_description]}"} if params[:connection_description].present?
+          must { string "primary_connection_description:#{params[:connection_description]} OR secondary_connection_description:#{params[:connection_description]}"} if params[:connection_description].present?
           must { string "geography_id:(#{params[:geography_id]})"} if params[:geography_id].present?
           must { string "event_id:#{params[:event_id]}"} if params[:event_id].present?          
           must { string "address_1:#{params[:address]}"} if params[:address].present?
@@ -147,9 +148,10 @@ class Person < ActiveRecord::Base
     end
     
     # rewrite the device and connection identifiers to integers
-    new_person.primary_device_id      = Person.map_device_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:primary_device_id).first])
-    new_person.secondary_device_id    = Person.map_device_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:secondary_device_id).first])
-    new_person.primary_connection_id  = Person.map_connection_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:primary_connection_id).first])
+    new_person.primary_device_id        = Person.map_device_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:primary_device_id).first])
+    new_person.secondary_device_id      = Person.map_device_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:secondary_device_id).first])
+    new_person.primary_connection_id    = Person.map_connection_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:primary_connection_id).first])
+    new_person.secondary_connection_id  = Person.map_connection_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:secondary_connection_id).first])
 
     # FIXME: this is a hack, since we need to initialize people 
     # with a city/state, but don't ask for it in the Wufoo form
