@@ -13,7 +13,7 @@ class SubmissionsController < ApplicationController
 
     # Parse the email, and add the associated person
     email_address = @submission.form_email || nil
-    person = Person.find_by_email_address(email_address) 
+    @submission.person = Person.find_by_email_address(email_address) 
     
     if @submission.save
       Rails.logger.info("SubmissionsController#create: recorded a new submission for #{email_address}")
