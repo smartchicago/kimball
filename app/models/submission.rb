@@ -32,6 +32,12 @@ class Submission < ActiveRecord::Base
     @form_name ||= JSON::parse(form_structure)['Name']
   end
 
+  def form_email
+    JSON::parse(field_structure)['Fields'].each do |field|
+      return field_value(field['ID']) if field['Title'] == 'Email'
+    end
+  end
+
   def submission_values
     # return the field values in a nice format for search indexing
     fields.collect{|field_id,desc| field_value(field_id) }.join(" ")
