@@ -15,6 +15,6 @@ module PeopleHelper
       :public_wifi => "Public wifi"
     }
     
-    mappings[Logan::Application.config.connection_mappings.rassoc(connection_id)[0]]
+    begin; mappings[Logan::Application.config.connection_mappings.rassoc(connection_id)[0]]; rescue; "Unknown/No selection"; end
   end
 end

@@ -1,6 +1,8 @@
 require 'csv'
 
 class SearchController < ApplicationController
+  include PeopleHelper
+
   def index
     # no pagination for CSV export
     per_page = request.format.to_s.eql?('text/csv') ? 10000 : Person.per_page
@@ -15,7 +17,32 @@ class SearchController < ApplicationController
 
     respond_to do |format|
       format.html { }
-      format.csv { } 
+      format.csv {
+        fields = Person.column_names 
+        output = CSV.generate do |csv|
+          # Generate the headers
+          csv << fields.map {|f| f.titleize }
+
+          # Some fields need a helper method
+          human_devices = %w{ primary_device_id secondary_device_id }
+          human_connections = %w{ primary_connection_id secondary_connection_id }
+
+          # Write the results
+          @results.each do |person|
+            csv << fields.map do |f|
+              field_value = person[f]
+              cell_value = if human_devices.include? f
+                human_device_type_name(field_value)
+              elsif human_connections.include? f
+                human_connection_type_name(field_value)
+              else
+                field_value
+              end
+            end
+          end
+        end 
+        send_data output
+      } 
     end
 
   end
