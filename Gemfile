@@ -64,7 +64,7 @@ gem "health_check"
 gem 'holder_rails'
 
 # use devise for auth/identity
-gem 'devise', branch: "rails4", git: "git://github.com/plataformatec/devise"
+gem 'devise', :git => "git://github.com/plataformatec/devise", :branch => "rails4",
 
 # use gibbon for easy Mailchimp API access
 gem "gibbon"
