@@ -25,9 +25,9 @@ class Person < ActiveRecord::Base
     'Field40' =>  :secondary_device_id,
     'Field24' =>  :secondary_device_description, # desc of secondary
     'Field41' =>  :primary_connection_id, # connection type
-    #'Field27' =>  :primary_connection_description, # description of connection
+    #'Field41' =>  :primary_connection_description, # description of connection
     'Field42' =>  :secondary_connection_id, # connection type
-    #'Field34' =>  :secondary_connection_description, # description of connection
+    #'Field42' =>  :secondary_connection_description, # description of connection
     'Field44' =>  :address_1, # address_1
     'Field46' =>  :city, # city
     'Field48'  =>  :postal_code, # postal_code
@@ -156,6 +156,10 @@ class Person < ActiveRecord::Base
       new_person.participation_type = params['Field54']
     end
         
+    # Copy connection descriptions to description fields
+    new_person.primary_connection_description = new_person.primary_connection_id
+    new_person.secondary_connection_description = new_person.secondary_connection_id
+
     # rewrite the device and connection identifiers to integers
     new_person.primary_device_id        = Person.map_device_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:primary_device_id).first])
     new_person.secondary_device_id      = Person.map_device_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:secondary_device_id).first])
