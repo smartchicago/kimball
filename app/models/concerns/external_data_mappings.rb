@@ -14,7 +14,7 @@ module ExternalDataMappings
         :phone
       when "Public wi-fi", "Public Wi-Fi"
         :public_wifi
-      when "Other"
+      else
         :other
       end
 
