@@ -12,7 +12,7 @@ class PersonTest < ActiveSupport::TestCase
   end
   
   test "should map wufoo device description to correct id" do
-    new_person = Person.initialize_from_wufoo(wufoo_params.update('Field40' => "Smart phone"))
+    new_person = Person.initialize_from_wufoo(wufoo_params.update('Field39' => "Smart phone"))
     assert new_person.save
     assert_equal 2, new_person.primary_device_id
   end
