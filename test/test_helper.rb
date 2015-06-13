@@ -24,7 +24,7 @@ class ActiveSupport::TestCase
       'Field21' =>  'make model of primary', # desc of primary
       'Field40' =>  'Laptop',
       'Field24' =>  'make model of seconadry', # desc of secondary
-      'Field41' =>  'Phone plan with data', # connection type
+      'Field41' =>  'magic connection', # connection type
       #'Field27' =>  "other connection desc", # description of connection
       'Field53' =>  'In-person group', # participation type: In-person group
       'Field54' =>  'Remote observation', # participation type: Remote observation
