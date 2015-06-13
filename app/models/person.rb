@@ -14,26 +14,39 @@ class Person < ActiveRecord::Base
   
   self.per_page = 15
 
+  participation_var = ''
   WUFOO_FIELD_MAPPING = { 
     'Field1'  =>  :first_name,
     'Field2'  =>  :last_name,
     'Field10' =>  :email_address,
-    'Field14' =>  :voted,
-    'Field17' =>  :called_311, 
-    'Field20' =>  :primary_device_id, # type of primary
+    'Field153' =>  :voted,
+    'Field154' =>  :called_311, 
+    'Field39' =>  :primary_device_id, # type of primary
     'Field21' =>  :primary_device_description, # desc of primary
-    'Field23' =>  :secondary_device_id,
+    'Field40' =>  :secondary_device_id,
     'Field24' =>  :secondary_device_description, # desc of secondary
-    'Field26' =>  :primary_connection_id, # connection type
-    'Field27' =>  :primary_connection_description, # description of connection
-    'Field33' =>  :secondary_connection_id, # connection type
-    'Field34' =>  :secondary_connection_description, # description of connection
-    'Field29' =>  :participation_type, # participation type
-    'Field31' =>  :geography_id, # geography_id
-    'Field4'  =>  :address_1, # address_1
-    'Field7'  =>  :postal_code, # postal_code
+    'Field41' =>  :primary_connection_id, # connection type
+    #'Field27' =>  :primary_connection_description, # description of connection
+    'Field42' =>  :secondary_connection_id, # connection type
+    #'Field34' =>  :secondary_connection_description, # description of connection
+    'Field44' =>  :address_1, # address_1
+    'Field46' =>  :city, # city
+    'Field48'  =>  :postal_code, # postal_code
     'Field9'  =>  :phone_number, # phone_number
     'IP'      =>  :signup_ip, # client IP, ignored for the moment
+    # Need to check fields 53 and 54 to build participation_type#################################################
+    # Field53 = In-person group
+    # Field54 = Remote observation
+    #if 'Field53' != '' and 'Field54' != ''
+    #  participation_var = "Either one"
+    #elsif 'Field53' != ''
+    #  participation_var = "In-person group"
+    #else
+    #  participation_var = "Remote observation"
+    #end
+    participation_var => :participation_type
+    #'Field29' =>  :participation_type, # participation type
+    # 'Field31' =>  :geography_id, # geography_id Old ward question
     # 'HandshakeKey' => 'b51c04fdaf7f8f333061f09f623d9d5b04f12b19' # secret code, ignored          
   }
 
@@ -61,6 +74,7 @@ class Person < ActiveRecord::Base
       indexes :postal_code, index: :not_analyzed
       indexes :geography_id, index: :not_analyzed
       indexes :address_1  # FIXME: if we ever use address_2, this will not work
+      indexes :city
       
       # device types
       indexes :primary_device_type_name, analyzer: :snowball
@@ -134,6 +148,7 @@ class Person < ActiveRecord::Base
           must { string "geography_id:(#{params[:geography_id]})"} if params[:geography_id].present?
           must { string "event_id:#{params[:event_id]}"} if params[:event_id].present?          
           must { string "address_1:#{params[:address]}"} if params[:address].present?
+          must { string "city:#{params[:city]}"} if params[:city].present?
           must { string "submission_values:#{params[:submissions]}"} if params[:submissions].present?
           must { string "tag_values:#{params[:tags]}"} if params[:tags].present?
         end
@@ -155,7 +170,7 @@ class Person < ActiveRecord::Base
 
     # FIXME: this is a hack, since we need to initialize people 
     # with a city/state, but don't ask for it in the Wufoo form
-    new_person.city  = "Chicago"
+    #new_person.city  = "Chicago" With update we ask for city
     new_person.state = "Illinois"
     
     new_person.signup_at = Time.now
