@@ -8,6 +8,7 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal "Jim", new_person.first_name
     assert_equal "jim@example.com", new_person.email_address
     assert_equal "Chicago", new_person.city
+    assert_equal "Either one", new_person.participation_type
     assert_not_nil new_person.signup_at
   end
   

@@ -14,7 +14,6 @@ class Person < ActiveRecord::Base
   
   self.per_page = 15
 
-  participation_var = ''
   WUFOO_FIELD_MAPPING = { 
     'Field1'  =>  :first_name,
     'Field2'  =>  :last_name,
@@ -34,20 +33,6 @@ class Person < ActiveRecord::Base
     'Field48'  =>  :postal_code, # postal_code
     'Field9'  =>  :phone_number, # phone_number
     'IP'      =>  :signup_ip, # client IP, ignored for the moment
-    # Need to check fields 53 and 54 to build participation_type#################################################
-    # Field53 = In-person group
-    # Field54 = Remote observation
-    #if 'Field53' != '' and 'Field54' != ''
-    #  participation_var = "Either one"
-    #elsif 'Field53' != ''
-    #  participation_var = "In-person group"
-    #else
-    #  participation_var = "Remote observation"
-    #end
-    participation_var => :participation_type
-    #'Field29' =>  :participation_type, # participation type
-    # 'Field31' =>  :geography_id, # geography_id Old ward question
-    # 'HandshakeKey' => 'b51c04fdaf7f8f333061f09f623d9d5b04f12b19' # secret code, ignored          
   }
 
   # update index if a comment is added
@@ -162,6 +147,15 @@ class Person < ActiveRecord::Base
       new_person[WUFOO_FIELD_MAPPING[k]] = v if WUFOO_FIELD_MAPPING[k].present?
     end
     
+    # Special handling of participation type. New form uses 2 fields where old form used 1. Need to combine into one. Manually set to "Either one" if both field53 & field54 are populated.
+    if params['Field53'] != '' and params['Field54'] != ''
+      new_person.participation_type = "Either one"
+    elsif params['Field53'] != ''
+      new_person.participation_type = params['Field53']
+    else
+      new_person.participation_type = params['Field54']
+    end
+        
     # rewrite the device and connection identifiers to integers
     new_person.primary_device_id        = Person.map_device_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:primary_device_id).first])
     new_person.secondary_device_id      = Person.map_device_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:secondary_device_id).first])
