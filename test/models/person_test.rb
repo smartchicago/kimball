@@ -18,6 +18,11 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal 2, new_person.primary_device_id
   end
 
+  test "should map wufoo connection description to correct id" do
+    new_person = Person.initialize_from_wufoo(wufoo_params.update('Field41' => "Magical Connection"))
+    assert new_person.save
+    assert_equal 2, new_person.primary_connection_id
+  end
   test "should have a comment associated" do
     assert_equal 1, people(:one).comments.size
     assert_equal comments(:one).content, people(:one).comments.first.content
