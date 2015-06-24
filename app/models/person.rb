@@ -18,8 +18,8 @@ class Person < ActiveRecord::Base
     'Field1'  =>  :first_name,
     'Field2'  =>  :last_name,
     'Field10' =>  :email_address,
-    'Field153' =>  :voted,
-    'Field154' =>  :called_311, 
+    'Field261' =>  :voted,
+    'Field262' =>  :called_311, 
     'Field39' =>  :primary_device_id, # type of primary
     'Field21' =>  :primary_device_description, # desc of primary
     'Field40' =>  :secondary_device_id,
@@ -30,6 +30,7 @@ class Person < ActiveRecord::Base
     #'Field42' =>  :secondary_connection_description, # description of connection
     'Field44' =>  :address_1, # address_1
     'Field46' =>  :city, # city
+    'Field47' =>  :state, # state
     'Field48'  =>  :postal_code, # postal_code
     'Field9'  =>  :phone_number, # phone_number
     'IP'      =>  :signup_ip, # client IP, ignored for the moment
@@ -169,7 +170,7 @@ class Person < ActiveRecord::Base
     # FIXME: this is a hack, since we need to initialize people 
     # with a city/state, but don't ask for it in the Wufoo form
     #new_person.city  = "Chicago" With update we ask for city
-    new_person.state = "Illinois"
+    #new_person.state = "Illinois"
     
     new_person.signup_at = Time.now
     
