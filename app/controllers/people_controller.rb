@@ -31,7 +31,9 @@ class PeopleController < ApplicationController
   # POST /people.json
   def create
     from_wufoo = false
-    if params['HandshakeKey'].present?
+    uatest = request.headers["User-Agent"]
+    if uatest = "Wufoo.com"
+    #if params['HandshakeKey'].present?
       if Logan::Application.config.wufoo_handshake_key != params['HandshakeKey']
         Rails.logger.warn("[wufoo] received request with invalid handshake. Full request: #{request.inspect}")
         head(403) and return
