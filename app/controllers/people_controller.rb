@@ -32,16 +32,29 @@ class PeopleController < ApplicationController
   def create
     from_wufoo = false
     uatest = request.headers["User-Agent"]
-    if uatest = "Wufoo.com"
-    #if params['HandshakeKey'].present?
-      if Logan::Application.config.wufoo_handshake_key != params['HandshakeKey']
-        Rails.logger.warn("[wufoo] received request with invalid handshake. Full request: #{request.inspect}")
-        head(403) and return
-      end
-      
-      Rails.logger.info("[wufoo] received a submission from wufoo")
-      from_wufoo = true
-      @person = Person.initialize_from_wufoo(params)      
+    if uatest == "Wufoo.com"
+      if params['HandshakeKey'].present?
+        if Logan::Application.config.wufoo_handshake_key != params['HandshakeKey']
+          Rails.logger.warn("[wufoo] received request with invalid handshake. Full request: #{request.inspect}")
+          head(403) and return
+        end
+        
+        Rails.logger.info("[wufoo] received a submission from wufoo")
+        from_wufoo = true
+        @person = Person.initialize_from_wufoo(params)
+        @client = Twilio::REST::Client.new
+          @twilio_message = TwilioMessage.new
+          @twilio_message.to = @person.phone_number
+          @twilio_message.body = "Please respond with HELLO to verify your signup for CUTGroup."
+          @message = @client.messages.create(
+            from: Logan::Application.config.twilio_number,
+            to: @person.phone_number,
+            body: @twilio_message.body
+          )
+          @twilio_message.message_sid = @message.sid
+          @twilio_message.save
+
+      end      
     else
       # creating a person by hand
       @person = Person.new(person_params)

@@ -1,0 +1,21 @@
+<%= form_for(@twilio_message) do |f| %>
+  <% if @twilio_message.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@twilio_message.errors.count, "error") %> prohibited this twilio_message from being saved:</h2>
+
+      <ul>
+      <% @twilio_message.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :message_sid %><br>
+    <%= f.text_field :message_sid %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

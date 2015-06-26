@@ -69,6 +69,9 @@ gem 'devise', :git => "git://github.com/plataformatec/devise", :branch => "rails
 # use gibbon for easy Mailchimp API access
 gem "gibbon"
 
+# use twilio-ruby for twilio
+gem "twilio-ruby"
+
 # mock tests w/mocha
 gem "mocha", :require => false
 

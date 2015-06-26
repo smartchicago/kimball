@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130530234651) do
+ActiveRecord::Schema.define(version: 20150626020221) do
 
   create_table "applications", force: true do |t|
     t.string   "name"
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 20130530234651) do
     t.string   "called_311"
     t.integer  "secondary_connection_id"
     t.string   "secondary_connection_description"
+    t.boolean  "verified",                         default: false, null: false
   end
 
   create_table "programs", force: true do |t|
@@ -130,6 +131,29 @@ ActiveRecord::Schema.define(version: 20130530234651) do
   create_table "tags", force: true do |t|
     t.string   "name"
     t.integer  "created_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "twilio_messages", force: true do |t|
+    t.string   "message_sid"
+    t.datetime "date_created"
+    t.datetime "date_updated"
+    t.datetime "date_sent"
+    t.string   "account_sid"
+    t.string   "from"
+    t.string   "to"
+    t.string   "body"
+    t.string   "status"
+    t.string   "error_code"
+    t.string   "error_message"
+    t.string   "direction"
+    t.string   "from_city"
+    t.string   "from_state"
+    t.string   "from_zip"
+    t.string   "wufoo_formid"
+    t.integer  "conversation_count"
+    t.string   "signup_verify"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

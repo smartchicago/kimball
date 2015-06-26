@@ -15,3 +15,6 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# Ignore variables
+/config/initializers/env.rb
