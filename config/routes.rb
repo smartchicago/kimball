@@ -1,4 +1,6 @@
 Logan::Application.routes.draw do
+  resources :twilio_messages
+
   get "taggings/create"
   get "taggings/destroy"
   get "mailchimp_export/index"

@@ -152,6 +152,7 @@ ActiveRecord::Schema.define(version: 20150626015118) do
     t.string   "from_state"
     t.string   "from_zip"
     t.string   "wufoo_formid"
+    t.string   "signup_verify"
     t.integer  "conversation_count"
     t.datetime "created_at"
     t.datetime "updated_at"

@@ -1,0 +1,27 @@
+<h1>Listing twilio_messages</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Message sid</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @twilio_messages.each do |twilio_message| %>
+      <tr>
+        <td><%= twilio_message.message_sid %></td>
+        <td><%= link_to 'Show', twilio_message %></td>
+        <td><%= link_to 'Edit', edit_twilio_message_path(twilio_message) %></td>
+        <td><%= link_to 'Destroy', twilio_message, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Twilio message', new_twilio_message_path %>

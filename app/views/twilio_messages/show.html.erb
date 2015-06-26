@@ -1,0 +1,9 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Message sid:</strong>
+  <%= @twilio_message.message_sid %>
+</p>
+
+<%= link_to 'Edit', edit_twilio_message_path(@twilio_message) %> |
+<%= link_to 'Back', twilio_messages_path %>
