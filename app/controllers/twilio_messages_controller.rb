@@ -14,7 +14,14 @@ class TwilioMessagesController < ApplicationController
 
   # GET /twilio_messages/new
   def new
+    @client = Twilio::REST::Client.new
     @twilio_message = TwilioMessage.new
+    @client.messages.create(
+      from: '+15005550006',
+      to: Logan::Application.config.twilio_number,
+      body: 'Hey there!'
+    )
+
   end
 
   # GET /twilio_messages/1/edit
