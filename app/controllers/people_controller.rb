@@ -42,7 +42,7 @@ class PeopleController < ApplicationController
         Rails.logger.info("[wufoo] received a submission from wufoo")
         from_wufoo = true
         @person = Person.initialize_from_wufoo(params)
-        @client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_ACCOUNT_AUTH'] ) 
+        @client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'] ) 
           @twilio_message = TwilioMessage.new
           @twilio_message.to = @person.phone_number
           @twilio_message.body = "Please respond with HELLO to verify your signup for CUTGroup."
