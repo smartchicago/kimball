@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150626015118) do
+ActiveRecord::Schema.define(version: 20150626020221) do
 
   create_table "applications", force: true do |t|
     t.string   "name"
@@ -152,8 +152,8 @@ ActiveRecord::Schema.define(version: 20150626015118) do
     t.string   "from_state"
     t.string   "from_zip"
     t.string   "wufoo_formid"
-    t.string   "signup_verify"
     t.integer  "conversation_count"
+    t.string   "signup_verify"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
