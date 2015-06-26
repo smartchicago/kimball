@@ -20,6 +20,9 @@ class TwilioMessagesController < ApplicationController
 
   # GET /twilio_messages/1/edit
   def edit
+    @twilio_message.status = params['MessageStatus']
+    @twilio_message.error_code = params['ErrorCode']
+    @twilio_message.save
   end
 
   # POST /twilio_messages
@@ -32,6 +35,7 @@ class TwilioMessagesController < ApplicationController
       from: '+15005550006',
       to: Logan::Application.config.twilio_number,
       body: 'Hey there!'
+
     )
 
     respond_to do |format|

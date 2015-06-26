@@ -46,12 +46,16 @@ class PeopleController < ApplicationController
           @twilio_message = TwilioMessage.new
           @twilio_message.to = @person.phone_number
           @twilio_message.body = "Please respond with HELLO to verify your signup for CUTGroup."
+          @twilio_message.message_sid = @message.sid
+          @twilio_message.signup_verify = "Yes"
+          @twilio_message.save
           @message = @client.messages.create(
             from: ENV['TWILIO_NUMBER'],
             to: @person.phone_number,
-            body: @twilio_message.body
+            body: @twilio_message.body,
+            status_callback: request.base_url + 'twilio_messages/edit/' + @twilio_message.id
           )
-          @twilio_message.message_sid = @message.sid
+          @twilio_message.error_nessage
           @twilio_message.save
 
       end      
