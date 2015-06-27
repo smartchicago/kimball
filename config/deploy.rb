@@ -16,7 +16,7 @@ set :bundle_flags, "--deployment --quiet"
 
 set :default_environment, { 'PATH' => "/home/logan/.rbenv/shims:/home/logan/.rbenv/bin:$PATH" }
 set :ssh_options, { :forward_agent => true }
-set :shared_children, fetch(:shared_children) + ["sharedconfig"]
+#set :shared_children, fetch(:shared_children) + ["sharedconfig"]
 
 before  'deploy:finalize_update', 'deploy:link_db_config'
 after   'deploy:finalize_update', 'deploy:create_binstubs'
