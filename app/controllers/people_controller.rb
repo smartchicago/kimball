@@ -54,7 +54,7 @@ class PeopleController < ApplicationController
             from: ENV['TWILIO_NUMBER'],
             to: @person.phone_number,
             body: @twilio_message.body,
-            status_callback: request.base_url + "/twilio_messages/#{@twilio_message.id}/edit"
+            status_callback: request.base_url + "/twilio_messages/#{@twilio_message.id}/updatestatus"
           )
           @twilio_message.message_sid = @message.sid
           #@twilio_message.error_nessage

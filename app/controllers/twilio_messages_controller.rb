@@ -18,6 +18,12 @@ class TwilioMessagesController < ApplicationController
 
   end
 
+  def updatestatus
+    @twilio_message.status = params['MessageStatus']
+    @twilio_message.error_code = params['ErrorCode']
+    @twilio_message.save
+  end
+
   # GET /twilio_messages/1/edit
   def edit
     @twilio_message.status = params['MessageStatus']
