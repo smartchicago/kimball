@@ -53,7 +53,7 @@ class PeopleController < ApplicationController
             from: ENV['TWILIO_NUMBER'],
             to: @person.phone_number,
             body: @twilio_message.body,
-            status_callback: request.base_url + 'twilio_messages/edit/' + @twilio_message.id
+            status_callback: request.base_url + 'twilio_messages/' + @twilio_message.id + 'edit'
           )
           @twilio_message.error_nessage
           @twilio_message.save

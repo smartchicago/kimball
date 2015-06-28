@@ -43,7 +43,7 @@ namespace :deploy do
 
   #task :link_env_var do
     # pull in database.yml on server
-    run "rm -f #{release_path}/config/local_env.yml && ln -s #{deploy_to}/shared/local_env.yml #{release_path}/config/local_env.yml"
+  #  run "rm -f #{release_path}/config/local_env.yml && ln -s #{deploy_to}/shared/local_env.yml #{release_path}/config/local_env.yml"
   #end
 
   # https://github.com/capistrano/capistrano/issues/362#issuecomment-14158487
