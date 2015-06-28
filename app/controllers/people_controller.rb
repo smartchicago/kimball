@@ -32,7 +32,7 @@ class PeopleController < ApplicationController
   def create
     from_wufoo = false
     uatest = request.headers["User-Agent"]
-    if uatest == "Wufoo.com"
+    #if uatest == "Wufoo.com"
       if params['HandshakeKey'].present?
         if Logan::Application.config.wufoo_handshake_key != params['HandshakeKey']
           Rails.logger.warn("[wufoo] received request with invalid handshake. Full request: #{request.inspect}")
@@ -58,7 +58,7 @@ class PeopleController < ApplicationController
           @twilio_message.error_nessage
           @twilio_message.save
 
-      end      
+      #end      
     else
       # creating a person by hand
       @person = Person.new(person_params)
