@@ -30,9 +30,9 @@ class ActiveSupport::TestCase
       'Field54' =>  'Remote observation', # participation type: Remote observation
       #'Field31' =>  '3', # geography_id
       'Field44' =>  '123123 Some St', # address_1
-      'Field46' =>  'Chicago', # city
+      'Field269' =>  'Chicago', # city
       'Field48'  =>  '54654', # postal_code
-      'Field9'  =>  '5646546543', # phone_number
+      'Field9'  =>  '8474776939', # phone_number
       'IP'      =>  '69.245.247.117', # client IP, ignored for the moment
       'HandshakeKey' => 'b51c04fdaf7f8f333061f09f623d9d5b04f12b19' # secret code, ignored      
     }

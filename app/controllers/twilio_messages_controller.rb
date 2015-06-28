@@ -32,7 +32,7 @@ class TwilioMessagesController < ApplicationController
     @client = Twilio::REST::Client.new
     @twilio_message = TwilioMessage.new
     @client.messages.create(
-      from: '+15005550006',
+      from: ENV['TWILIO_NUMBER'],
       to: Logan::Application.config.twilio_number,
       body: 'Hey there!'
 
