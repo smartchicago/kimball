@@ -27,17 +27,18 @@ class ReceiveTextController < ApplicationController
     @twilio_message.error_message = params[:ErrorMessage]
     @twilio_message.direction = params[:Direction]
     @twilio_message.save
-    
+
+    from_number = params[:From].sub("+1","").to_i # Removing +1 and converting to integer
     message = "Hello"
     if params[:Body] == "12345"
       @twilio_message.signup_verify = "Verified"
       message = "Thank you for verifying your account."
-      this_person = Person.find_by(phone_number: params[:From].sub("+1",""))
+      this_person = Person.find_by(phone_number: from_number)
       this_person.verified = true
       this_person.save
     elsif params["Body"] == "REMOVE"
       @twilio_message.signup_verify = "Cancelled"
-      this_person = Person.find_by(phone_number: params[:From].sub("+1",""))
+      this_person = Person.find_by(phone_number: from_number)
       this_person.verified = false
       this_person.save
       message = "Okay, we will remove you."
