@@ -20,6 +20,8 @@
           <th>Address</th>
           <th>Ward</th>
           <th>Email address</th>
+          <th>Phone number</th>
+          <th>Verified?</th>
           <th>Signup date</th>
           <th>&nbsp;</th>
         </tr>
@@ -31,6 +33,8 @@
             <td><%= address_fields_to_sentence(person) %></td>
             <td><%= person.geography_id %></td>
             <td><%= person.email_address %></td>
+            <td><%= person.phone_number %></td>
+            <td><%= person.verified %></td>
             <td><%= person.signup_at ? person.signup_at.to_s(:long) : '' %></td>
             <td>
               <%= link_to t('.edit', :default => t("helpers.links.edit")),

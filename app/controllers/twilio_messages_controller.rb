@@ -36,8 +36,72 @@ class TwilioMessagesController < ApplicationController
 
   # POST /twilio_messages
   # POST /twilio_messages.json
+  def newtwil  
+    #@twilio_message = TwilioMessage.new(twilio_message_params)
+    @twilio_message = TwilioMessage.new
+    @twilio_message.message_sid = params[:Sid]
+    @twilio_message.date_created = params[:DateCreated]
+    @twilio_message.date_updated = params[:DateUpdated]
+    @twilio_message.date_sent = params[:DateSent]
+    @twilio_message.account_sid = params[:AccountSid]
+    @twilio_message.from = params[:From]
+    @twilio_message.to = params[:To]
+    @twilio_message.body = params[:Body]
+    @twilio_message.status = params[:Status]
+    @twilio_message.error_code = params[:ErrorCode]
+    @twilio_message.error_message = params[:ErrorMessage]
+    @twilio_message.direction = params[:Direction]
+    @twilio_message.save
+    
+    message = "Hello"
+    if params[:Body] == "12345"
+      @twilio_message.signup_verify = "Verified"
+      message = "That you for verifying your account."
+      this_person = Person.find_by phone_number: params[:From]
+      this_person.verified = "True"
+      this_person.save
+    elsif params[:Body] = "STOP"
+      @twilio_message.signup_verify = "Cancelled"
+      message = "Okay, we will remove you."
+      this_person = Person.find_by phone_number: params[:From]
+      this_person.verified = "False"
+      this_person.save
+    end
+    @twilio_message.save
+        
+    twiml = Twilio::TwiML::Response.new do |r|
+       r.Message message
+    end
+    #puts twiml.text
+     respond_to do |format|
+      format.xml {render xml: twiml.text}
+     end
+    #twiml.text
+    #session["counter"] += 1
 
-  # def create
+    #respond_to do |format|
+    #   format.xml {render xml: twiml.text}
+    #end
+
+    # @client = Twilio::REST::Client.new
+    # @twilio_message = TwilioMessage.new
+    # @client.messages.create(
+    #   from: ENV['TWILIO_NUMBER'],
+    #   to: Logan::Application.config.twilio_number,
+    #   body: 'Hey there!'
+
+    # )
+
+    respond_to do |format|
+      if @twilio_message.save
+        format.html { redirect_to @twilio_message, notice: 'Twilio message was successfully created.' }
+        format.json { render action: 'show', status: :created, location: @twilio_message }
+      else
+        format.html { render action: 'new' }
+        format.json { render json: @twilio_message.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
   # end
   # POST /twilio_messages/twil

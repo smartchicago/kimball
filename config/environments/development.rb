@@ -35,4 +35,5 @@ Logan::Application.configure do
       ENV[key.to_s] = value
     end if File.exists?(env_file)
   end
+  config.middleware.use Rack::TwilioWebhookAuthentication, ENV['TWILIO_AUTH_TOKEN'], '/receive_text/index'
 end
