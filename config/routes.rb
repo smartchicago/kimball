@@ -1,7 +1,9 @@
 Logan::Application.routes.draw do
   resources :twilio_messages
   
-  post "twilio_messages/:id/updatestatus", to: 'twilio_messages/#updatestatus/'
+  post "twilio_messages/updatestatus", to: 'twilio_messages/#updatestatus'
+  
+  #post "twil", to: 'twilio_messages/#newtwil'
 
   get "taggings/create"
   get "taggings/destroy"
