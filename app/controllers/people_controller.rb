@@ -58,7 +58,9 @@ class PeopleController < ApplicationController
             #status_callback: request.base_url + "/twilio_messages/#{@twilio_message.id}/updatestatus"
           )
         rescue Twilio::REST::RequestError => e
-          @twilio_message.error_nessage = e
+          @twilio_message.error_message = e
+          @person.verified = e
+          @person.save
         end
 
           @twilio_message.message_sid = @message.sid

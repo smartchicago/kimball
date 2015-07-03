@@ -28,12 +28,12 @@ class ReceiveTextController < ApplicationController
       @twilio_message.signup_verify = "Verified"
       message = "Thank you for verifying your account."
       this_person = Person.find_by(phone_number: from_number)
-      this_person.verified = true
+      this_person.verified = "Verifed by Text Message"
       this_person.save
     elsif params["Body"] == "Remove me"
       @twilio_message.signup_verify = "Cancelled"
       this_person = Person.find_by(phone_number: from_number)
-      this_person.verified = false
+      this_person.verified = "Removal Request by Text Message"
       this_person.save
       message = "Okay, we will remove you."
     end
