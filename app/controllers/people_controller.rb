@@ -59,6 +59,7 @@ class PeopleController < ApplicationController
           )
         rescue Twilio::REST::RequestError => e
           @twilio_message.error_message = e
+          Rails.logger.warn("[Twilio] had a problem. Full error: #{e}")
           @person.verified = e
           @person.save
         end
