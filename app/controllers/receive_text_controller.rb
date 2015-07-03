@@ -45,10 +45,3 @@ class ReceiveTextController < ApplicationController
       format.xml {render xml: twiml.text}
     end
   end
-end
-private
-  def should_skip_janky_auth?
-      # don't attempt authentication on reqs from wufoo
-      params[:action] == 'create' && params['HandshakeKey'].present?
-   end
-end
