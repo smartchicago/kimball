@@ -57,14 +57,15 @@ class PeopleController < ApplicationController
             body: @twilio_message.body
             #status_callback: request.base_url + "/twilio_messages/#{@twilio_message.id}/updatestatus"
           )
+          @twilio_message.message_sid = @message.sid
         rescue Twilio::REST::RequestError => e
-          @twilio_message.error_message = e
-          Rails.logger.warn("[Twilio] had a problem. Full error: #{e}")
-          @person.verified = e
+          error_message = e.message
+          @twilio_message.error_message = error_message
+          Rails.logger.warn("[Twilio] had a problem. Full error: #{error_message}")
+          @person.verified = error_message
           @person.save
         end
-
-          @twilio_message.message_sid = @message.sid
+    
           @twilio_message.account_sid = ENV['TWILIO_ACCOUNT_SID']
           #@twilio_message.error_nessage
           @twilio_message.save
