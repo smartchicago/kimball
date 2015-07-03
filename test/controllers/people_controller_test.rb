@@ -83,4 +83,9 @@ class PeopleControllerTest < ActionController::TestCase
     get :index
     assert_response :redirect
   end
+
+  # test "twilio error message should save" do
+  #   post :create, person: { address_1: @person.address_1, address_2: @person.address_2, city: @person.city, email_address: @person.email_address, first_name: @person.first_name, geography_id: @person.geography_id, last_name: @person.last_name, participation_type: @person.participation_type, phone_number: @person.phone_number, postal_code: @person.postal_code, primary_connection_description: @person.primary_connection_description, primary_connection_id: @person.primary_connection_id, primary_device_description: @person.primary_device_description, primary_device_id: @person.primary_device_id, secondary_device_description: @person.secondary_device_description, secondary_device_id: @person.secondary_device_id, state: @person.state }
+    
+  #   end
 end
