@@ -43,7 +43,8 @@ class PeopleController < ApplicationController
         from_wufoo = true
         @person = Person.initialize_from_wufoo(params)
         @person.save
-        @client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'] ) 
+        begin
+          @client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'] ) 
           @twilio_message = TwilioMessage.new
           @twilio_message.to = @person.phone_number
           @twilio_message.body = "Please respond with 12345 to verify your signup for CUTGroup or 'Remove Me' to be removed."
@@ -56,7 +57,12 @@ class PeopleController < ApplicationController
             body: @twilio_message.body
             #status_callback: request.base_url + "/twilio_messages/#{@twilio_message.id}/updatestatus"
           )
+        rescue Twilio::REST::RequestError => e
+          @twilio_message.error_nessage = e
+        end
+
           @twilio_message.message_sid = @message.sid
+          @twilio_message.account_sid = ENV['TWILIO_ACCOUNT_SID']
           #@twilio_message.error_nessage
           @twilio_message.save
 
