@@ -1,17 +1,11 @@
 class ReceiveTextController < ApplicationController
 	skip_before_filter :verify_authenticity_token 
-	skip_before_action :authenticate_user!
+    skip_before_filter :authenticate_user!
   def index 
-    # let's pretend that we've mapped this action to 
-    # http://localhost:3000/sms in the routes.rb file
         
 
     message_body = params["Body"]
     from_number = params["From"]
- 
-    #SMSLogger.log_text_message from_number, message_body
-
-    #twiml.text
     
     @twilio_message = TwilioMessage.new
     @twilio_message.message_sid = params[:MessageSid]
@@ -36,7 +30,7 @@ class ReceiveTextController < ApplicationController
       this_person = Person.find_by(phone_number: from_number)
       this_person.verified = true
       this_person.save
-    elsif params["Body"] == "REMOVE"
+    elsif params["Body"] == "Remove me"
       @twilio_message.signup_verify = "Cancelled"
       this_person = Person.find_by(phone_number: from_number)
       this_person.verified = false
@@ -50,7 +44,11 @@ class ReceiveTextController < ApplicationController
     respond_to do |format|
       format.xml {render xml: twiml.text}
     end
-
-
   end
+end
+private
+  def should_skip_janky_auth?
+      # don't attempt authentication on reqs from wufoo
+      params[:action] == 'create' && params['HandshakeKey'].present?
+   end
 end

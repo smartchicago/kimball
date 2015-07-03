@@ -2,7 +2,7 @@ require 'twilio-ruby'
 
 class TwilioMessagesController < ApplicationController
   before_action :set_twilio_message, only: [:show, :edit, :update, :destroy]
-  skip_before_action :verify_authenticity_token , only: [:create, :newtwil]
+  #skip_before_action :verify_authenticity_token , only: [:newtwil]
 
   # GET /twilio_messages
   # GET /twilio_messages.json
@@ -37,8 +37,8 @@ class TwilioMessagesController < ApplicationController
   # POST /twilio_messages
   # POST /twilio_messages.json
   def newtwil  
-    #@twilio_message = TwilioMessage.new(twilio_message_params)
-    @twilio_message = TwilioMessage.new
+    @twilio_message = TwilioMessage.new(twilio_message_params)
+    #@twilio_message = TwilioMessage.new
     @twilio_message.message_sid = params[:Sid]
     @twilio_message.date_created = params[:DateCreated]
     @twilio_message.date_updated = params[:DateUpdated]
@@ -60,7 +60,7 @@ class TwilioMessagesController < ApplicationController
       this_person = Person.find_by phone_number: params[:From]
       this_person.verified = "True"
       this_person.save
-    elsif params[:Body] = "STOP"
+    elsif params[:Body] = "Remove me"
       @twilio_message.signup_verify = "Cancelled"
       message = "Okay, we will remove you."
       this_person = Person.find_by phone_number: params[:From]
@@ -128,7 +128,7 @@ class TwilioMessagesController < ApplicationController
       # this_person = Person.find_by phone_number: params[:From]
       # this_person.verified = "True"
       # this_person.save
-    elsif params[:Body] = "STOP"
+    elsif params[:Body] == "STOP"
       @twilio_message.signup_verify = "Cancelled"
       message = "Okay, we will remove you."
       # this_person = Person.find_by phone_number: params[:From]
