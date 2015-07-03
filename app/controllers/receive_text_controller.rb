@@ -45,3 +45,4 @@ class ReceiveTextController < ApplicationController
       format.xml {render xml: twiml.text}
     end
   end
+end
