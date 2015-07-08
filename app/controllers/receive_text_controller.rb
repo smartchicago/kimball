@@ -23,10 +23,10 @@ class ReceiveTextController < ApplicationController
     @twilio_message.save
 
     from_number = params[:From].sub("+1","").to_i # Removing +1 and converting to integer
-    message = "Hello"
-    if params[:Body] == "12345"
+    message = "Sorry, please try again. Text 'Hello' or 12345 to complete your signup!"
+    if params[:Body].include? "12345" or params[:Body].downcase.include? 'hello'
       @twilio_message.signup_verify = "Verified"
-      message = "Thank you for verifying your account."
+      message = "Thank you for verifying your account. We will mail you your $5 VISA gift card right away."
       this_person = Person.find_by(phone_number: from_number)
       this_person.verified = "Verified by Text Message"
       this_person.save
@@ -37,7 +37,7 @@ class ReceiveTextController < ApplicationController
       this_person = Person.find_by(phone_number: from_number)
       this_person.verified = "Removal Request by Text Message"
       this_person.save
-      message = "Okay, we will remove you."
+      message = "We are sorry for bothering you. You have been removed from the CUTGroup."
     end
     @twilio_message.save
     twiml = Twilio::TwiML::Response.new do |r|
