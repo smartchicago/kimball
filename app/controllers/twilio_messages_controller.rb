@@ -121,26 +121,7 @@ class TwilioMessagesController < ApplicationController
     @twilio_message.direction = params[:Direction]
     @twilio_message.save
     
-    message = "Hello"
-    if params[:Body] == "12345"
-      @twilio_message.signup_verify = "Verified"
-      message = "That you for verifying your account."
-      # this_person = Person.find_by phone_number: params[:From]
-      # this_person.verified = "True"
-      # this_person.save
-    elsif params[:Body] == "STOP"
-      @twilio_message.signup_verify = "Cancelled"
-      message = "Okay, we will remove you."
-      # this_person = Person.find_by phone_number: params[:From]
-      # this_person.verified = "False"
-      # this_person.save
-    end
-    @twilio_message.save
-        
-    twiml = Twilio::TwiML::Response.new do |r|
-       r.Message message
-    end
-    twiml.text
+    
     #session["counter"] += 1
 
     #respond_to do |format|
