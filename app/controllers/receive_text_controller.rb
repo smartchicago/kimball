@@ -28,7 +28,7 @@ class ReceiveTextController < ApplicationController
       @twilio_message.signup_verify = "Verified"
       message = "Thank you for verifying your account."
       this_person = Person.find_by(phone_number: from_number)
-      this_person.verified = "Verifed by Text Message"
+      this_person.verified = "Verified by Text Message"
       this_person.save
       # Trigger add to Mailchimp list
       mailchimpSend = Gibbon.list_subscribe({:id => Logan::Application.config.cut_group_mailchimp_list_id, :email_address => this_person.email_address, :double_optin => 'false', :merge_vars => {:FNAME => this_person.first_name, :LNAME => this_person.last_name, :MMERGE3 => this_person.geography_id, :MMERGE4 => this_person.postal_code, :MMERGE5 => this_person.participation_type, :MMERGE6 => this_person.voted, :MMERGE7 => this_person.called_311, :MMERGE8 => this_person.primary_device_description, :MMERGE9 => this_person.secondary_device_id, :MMERGE10 => this_person.secondary_device_description, :MMERGE11 => this_person.primary_connection_id, :MMERGE12 => this_person.primary_connection_description, :MMERGE13 => this_person.primary_device_id}})
