@@ -61,6 +61,7 @@ class Person < ActiveRecord::Base
       indexes :geography_id, index: :not_analyzed
       indexes :address_1  # FIXME: if we ever use address_2, this will not work
       indexes :city
+      indexes :verified, analyzer: :snowball
       
       # device types
       indexes :primary_device_type_name, analyzer: :snowball
@@ -129,6 +130,7 @@ class Person < ActiveRecord::Base
           must { string "last_name:#{params[:last_name]}"} if params[:last_name].present?
           must { string "email_address:(#{params[:email_address]})"} if params[:email_address].present?
           must { string "postal_code:(#{params[:postal_code]})"} if params[:postal_code].present?
+          must { string "verified:(#{params[:verified]})"} if params[:verified].present?
           must { string "primary_device_description:#{params[:device_description]} OR secondary_device_description:#{params[:device_description]}"} if params[:device_description].present?
           must { string "primary_connection_description:#{params[:connection_description]} OR secondary_connection_description:#{params[:connection_description]}"} if params[:connection_description].present?
           must { string "geography_id:(#{params[:geography_id]})"} if params[:geography_id].present?
