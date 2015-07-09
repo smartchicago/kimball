@@ -46,6 +46,5 @@ class ReceiveTextController < ApplicationController
     respond_to do |format|
       format.xml {render xml: twiml.text}
     end
-    tire.update_index
   end
 end
