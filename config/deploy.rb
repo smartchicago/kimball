@@ -16,8 +16,10 @@ set :bundle_flags, "--deployment --quiet"
 
 set :default_environment, { 'PATH' => "/home/logan/.rbenv/shims:/home/logan/.rbenv/bin:$PATH" }
 set :ssh_options, { :forward_agent => true }
+#set :shared_children, fetch(:shared_children) + ["sharedconfig"]
 
-before  'deploy:finalize_update', 'deploy:link_db_config'
+before  'deploy:finalize_update', 'deploy:link_db_config', 'deploy:link_env_var'
+#before  'deploy:finalize_update', 'deploy:link_db_config', 'deploy:link_env_var'
 after   'deploy:finalize_update', 'deploy:create_binstubs'
 
 namespace :deploy do
@@ -37,6 +39,11 @@ namespace :deploy do
   task :link_db_config do
     # pull in database.yml on server
     run "rm -f #{release_path}/config/database.yml && ln -s #{deploy_to}/shared/database.yml #{release_path}/config/database.yml"
+  end
+
+  task :link_env_var do
+    # pull in database.yml on server
+    run "rm -f #{release_path}/config/local_env.yml && ln -s #{deploy_to}/shared/local_env.yml #{release_path}/config/local_env.yml"
   end
 
   # https://github.com/capistrano/capistrano/issues/362#issuecomment-14158487

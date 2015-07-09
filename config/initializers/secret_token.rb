@@ -9,4 +9,4 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-Logan::Application.config.secret_key_base = '610b1ed68608ed007db8af1cb317d93b735c906f5e036873d8ec30092f782e290d727b9072c40568dbc52c4397059e3e03fb9166be7cd3d01f03cc3c022e61fa'
+Logan::Application.config.secret_key_base = ENV['SECRET_KEY_BASE']

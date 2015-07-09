@@ -1,0 +1,38 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Message sid:</strong>
+  <%= @twilio_message.message_sid %>
+</p>
+  <%= @twilio_message.from %>
+  <%= @twilio_message.to %>
+  <%= @twilio_message.date_sent %>
+  <%= @twilio_message.date_updated %>
+  <%= @twilio_message.body %>
+    <%= @twilio_message.error_code %>
+  <%= @twilio_message.error_message %>
+  <%= @twilio_message.status %>
+  <%= @twilio_message.signup_verify %>
+<!-- 
+t.datetime "date_created"
+    t.datetime "date_updated"
+    t.datetime "date_sent"
+    t.string   "account_sid"
+    t.string   "from"
+    t.string   "to"
+    t.string   "body"
+    t.string   "status"
+    t.string   "error_code"
+    t.string   "error_message"
+    t.string   "direction"
+    t.string   "from_city"
+    t.string   "from_state"
+    t.string   "from_zip"
+    t.string   "wufoo_formid"
+    t.integer  "conversation_count"
+    t.string   "signup_verify"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+ -->
+<%= link_to 'Edit', edit_twilio_message_path(@twilio_message) %> |
+<%= link_to 'Back', twilio_messages_path %>
