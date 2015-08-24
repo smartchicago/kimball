@@ -7,7 +7,8 @@ class TwilioMessagesController < ApplicationController
   # GET /twilio_messages
   # GET /twilio_messages.json
   def index
-    @twilio_messages = TwilioMessage.all
+    @twilio_messages = TwilioMessage.paginate(:page => params[:page]).order('updated_at DESC')
+    #@twilio_messages = TwilioMessage.all
   end
 
   # GET /twilio_messages/1
