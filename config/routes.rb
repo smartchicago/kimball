@@ -7,6 +7,8 @@ Logan::Application.routes.draw do
   end
 
   post "receive_text/index",  defaults: { format: 'xml' }
+  post "receive_text/smssignup",  defaults: { format: 'xml' }
+
   #post "twilio_messages/updatestatus", to: 'twilio_messages/#updatestatus'
   
   #post "twil", to: 'twilio_messages/#newtwil'

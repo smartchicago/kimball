@@ -2,8 +2,6 @@ class ReceiveTextController < ApplicationController
 	skip_before_filter :verify_authenticity_token 
     skip_before_filter :authenticate_user!
   def index 
-        
-
     message_body = params["Body"]
     from_number = params["From"]
     
@@ -47,4 +45,61 @@ class ReceiveTextController < ApplicationController
       format.xml {render xml: twiml.text}
     end
   end
+
+  def smssignup 
+    wufoo = WuParty.new(ENV['WUFOO_ACCOUNT'],ENV['WUFOO_API'])
+    wufoo.forms
+    form = wufoo.form(ENV['WUFOO_SIGNUP_FORM'])
+    fields = form.flattened_fields
+    #fieldids = Array.new
+
+    enable :sessions
+
+    session["counter"] ||= 0
+    session["fieldanswers"] ||= Hash.new
+    sms_count = session["counter"]
+    message_body = params["Body"]
+    from_number = params["From"]
+    @twilio_message = TwilioMessage.new
+    @twilio_message.message_sid = params[:MessageSid]
+    @twilio_message.date_created = params[:DateCreated]
+    @twilio_message.date_updated = params[:DateUpdated]
+    @twilio_message.date_sent = params[:DateSent]
+    @twilio_message.account_sid = params[:AccountSid]
+    @twilio_message.from = params[:From]
+    @twilio_message.to = params[:To]
+    @twilio_message.body = params[:Body]
+    @twilio_message.status = params[:SmsStatus]
+    @twilio_message.error_code = params[:ErrorCode]
+    @twilio_message.error_message = params[:ErrorMessage]
+    @twilio_message.direction = params[:Direction]
+    @twilio_message.save
+    from_number = params[:From].sub("+1","").to_i # Removing +1 and converting to integer
+    if sms_count == 0
+      message = "#{fields[sms_count]['Title']}"
+      #ession["fieldanswers"][fields[sms_count]['ID']] = params["From"]
+    elsif sms_count < fields.length
+      #message = "Hello, thanks for the new message."
+      session["fieldanswers"][fields[sms_count-1]['ID']] = params["Body"]
+      message = "#{fields[sms_count]['Title']}"
+    elsif sms_count == fields.length
+      session["fieldanswers"][fields[sms_count-1]['ID']] = params["Body"]
+      message = "Hello, thanks for message number #{session["fieldanswers"]}"
+      result = form.submit(session["fieldanswers"])
+      message = result['Success']
+    else
+      message = "You are now signed up for CUTGroup."
+    end
+    
+    @twilio_message.save
+    twiml = Twilio::TwiML::Response.new do |r|
+       r.Message message
+    end
+    respond_to do |format|
+      format.xml {render xml: twiml.text}
+    end
+    session["counter"] += 1
+  end
+
+
 end
