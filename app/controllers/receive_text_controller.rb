@@ -55,9 +55,13 @@ class ReceiveTextController < ApplicationController
 
     session["counter"] ||= 0
     session["fieldanswers"] ||= Hash.new
-    sms_count = session["counter"]
     message_body = params["Body"]
     from_number = params["From"]
+    if message_body == "reset" or "Reset"
+      session["counter"] = 0
+    end
+    sms_count = session["counter"]
+
     @twilio_message = TwilioMessage.new
     @twilio_message.message_sid = params[:MessageSid]
     @twilio_message.date_created = params[:DateCreated]
