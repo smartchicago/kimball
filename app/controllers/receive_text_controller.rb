@@ -57,7 +57,7 @@ class ReceiveTextController < ApplicationController
     session["fieldanswers"] ||= Hash.new
     message_body = params["Body"]
     from_number = params["From"]
-    if message_body == "reset" or "Reset"
+    if message_body.downcase.include? 'reset'
       session["counter"] = 0
     end
     sms_count = session["counter"]
