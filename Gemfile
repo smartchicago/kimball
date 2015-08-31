@@ -72,6 +72,9 @@ gem "gibbon"
 # use twilio-ruby for twilio
 gem "twilio-ruby"
 
+# use Wuparty for wufoo
+gem "wuparty"
+
 # mock tests w/mocha
 gem "mocha", :require => false
 
