@@ -53,8 +53,6 @@ class ReceiveTextController < ApplicationController
     fields = form.flattened_fields
     #fieldids = Array.new
 
-    enable :sessions
-
     session["counter"] ||= 0
     session["fieldanswers"] ||= Hash.new
     sms_count = session["counter"]
