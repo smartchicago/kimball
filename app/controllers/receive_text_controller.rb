@@ -53,13 +53,11 @@ class ReceiveTextController < ApplicationController
     fields = form.flattened_fields
     #fieldids = Array.new
 
-    session["counter"] ||= 0
-    session["fieldanswers"] ||= Hash.new
+    
     message_body = params["Body"]
     from_number = params["From"]
-    if message_body.downcase.include? 'reset'
-      session["counter"] = 0
-    end
+    session["counter"] ||= 0
+    session["fieldanswers"] ||= Hash.new
     sms_count = session["counter"]
 
     @twilio_message = TwilioMessage.new
@@ -77,20 +75,29 @@ class ReceiveTextController < ApplicationController
     @twilio_message.direction = params[:Direction]
     @twilio_message.save
     from_number = params[:From].sub("+1","").to_i # Removing +1 and converting to integer
-    if sms_count == 0
-      message = "#{fields[sms_count]['Title']}"
-      #ession["fieldanswers"][fields[sms_count]['ID']] = params["From"]
-    elsif sms_count < fields.length
-      #message = "Hello, thanks for the new message."
-      session["fieldanswers"][fields[sms_count-1]['ID']] = params["Body"]
-      message = "#{fields[sms_count]['Title']}"
-    elsif sms_count == fields.length
-      session["fieldanswers"][fields[sms_count-1]['ID']] = params["Body"]
-      message = "Hello, thanks for message number #{session["fieldanswers"]}"
-      result = form.submit(session["fieldanswers"])
-      message = result['Success']
+    if message_body == "99999"
+      message = "You said 99999"
+      session["counter"] = -1
+      session["fieldanswers"] = Hash.new
     else
-      message = "You are now signed up for CUTGroup."
+      if sms_count == 0
+        message = "#{fields[sms_count]['Title']}"
+        #ession["fieldanswers"][fields[sms_count]['ID']] = params["From"]
+      elsif sms_count < fields.length
+        #message = "Hello, thanks for the new message."
+        session["fieldanswers"][fields[sms_count-1]['ID']] = params["Body"]
+        message = "#{fields[sms_count]['Title']}"
+      elsif sms_count == fields.length
+        session["fieldanswers"][fields[sms_count-1]['ID']] = params["Body"]
+        message = "Hello, thanks for message number #{session["fieldanswers"]}"
+        result = form.submit(session["fieldanswers"])
+        message = result['Success']
+        if result['Success'] == 0
+          message = result['ErrorText']
+        end
+      else
+        message = "You are now signed up for CUTGroup."
+      end  
     end
     
     @twilio_message.save
