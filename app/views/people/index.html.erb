@@ -23,6 +23,7 @@
           <th>Phone number</th>
           <th>Verified?</th>
           <th>Signup date</th>
+          <th>Preferred Contact Method</th>
           <th>&nbsp;</th>
         </tr>
       </thead>
@@ -36,6 +37,7 @@
             <td><%= person.phone_number %></td>
             <td><%= person.verified %></td>
             <td><%= person.signup_at ? person.signup_at.to_s(:long) : '' %></td>
+            <td><%= person.preferred_contact_method %></td>
             <td>
               <%= link_to t('.edit', :default => t("helpers.links.edit")),
                           edit_person_path(person), :class => 'btn btn-mini' %>
