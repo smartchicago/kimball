@@ -93,7 +93,7 @@ class ReceiveTextController < ApplicationController
         result = form.submit(session["fieldanswers"])
         message = result['Success']
         if result['Success'] == 0
-          message = result['ErrorText']
+          message = result['FieldErrors']
         end
       else
         message = "You are now signed up for CUTGroup."
