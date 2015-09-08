@@ -80,8 +80,10 @@ class ReceiveTextController < ApplicationController
       session["counter"] = -1
       session["fieldanswers"] = Hash.new
     else
+      #if sms_count == -1
       if sms_count == 0
-        message = "#{fields[sms_count]['Title']}"
+        message = "Thanks for joining the CUTGroup! We will ask you 11 quick questions to complete your signup. Once completed, we will send you a $5 VISA gift card right away! #{fields[sms_count]['Title']}"
+        #message = "#{fields[sms_count]['Title']}"
         #ession["fieldanswers"][fields[sms_count]['ID']] = params["From"]
       elsif sms_count < fields.length
         #message = "Hello, thanks for the new message."
