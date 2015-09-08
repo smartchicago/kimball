@@ -75,6 +75,7 @@ class ReceiveTextController < ApplicationController
     @twilio_message.direction = params[:Direction]
     @twilio_message.save
     from_number = params[:From].sub("+1","").to_i # Removing +1 and converting to integer
+    message2 = ""
     if message_body == "99999"
       message = "You said 99999"
       session["counter"] = -1
@@ -82,8 +83,8 @@ class ReceiveTextController < ApplicationController
     else
       #if sms_count == -1
       if sms_count == 0
-        message = "Thanks for joining the CUTGroup! We will ask you 11 quick questions to complete your signup. Once completed, we will send you a $5 VISA gift card right away! #{fields[sms_count]['Title']}"
-        #message = "#{fields[sms_count]['Title']}"
+        message = "Thanks for joining the CUTGroup! We will ask you 11 quick questions to complete your signup. Once completed, we will send you a $5 VISA gift card right away!"      
+        message2 = "#{fields[sms_count]['Title']}"
         #ession["fieldanswers"][fields[sms_count]['ID']] = params["From"]
       elsif sms_count < fields.length
         #message = "Hello, thanks for the new message."
@@ -103,8 +104,16 @@ class ReceiveTextController < ApplicationController
     end
     
     @twilio_message.save
-    twiml = Twilio::TwiML::Response.new do |r|
-       r.Message message
+    if message2 == ""
+      twiml = Twilio::TwiML::Response.new do |r|
+         r.Message message
+      end
+    else
+      twiml = Twilio::TwiML::Response.new do |r|
+         r.Message message
+         r.Pause length: "3"
+         r.Message message2
+      end
     end
     respond_to do |format|
       format.xml {render xml: twiml.text}
