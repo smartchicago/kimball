@@ -111,7 +111,7 @@ class ReceiveTextController < ApplicationController
     else
       twiml = Twilio::TwiML::Response.new do |r|
          r.Message message
-         r.Pause length: "3"
+         r.Pause length: 10
          r.Message message2
       end
     end
