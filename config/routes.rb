@@ -44,5 +44,7 @@ Logan::Application.routes.draw do
   resources :people do
     resources :comments
   end
+  post "people/create_sms"
+
   root to: 'dashboard#index'
 end

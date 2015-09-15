@@ -2,7 +2,7 @@ class PeopleController < ApplicationController
   before_action :set_person, only: [:show, :edit, :update, :destroy]
 
   skip_before_filter :authenticate_user!, if: :should_skip_janky_auth?
-  skip_before_action :verify_authenticity_token, only: [:create]
+  skip_before_action :verify_authenticity_token, only: [:create, :create_sms]
   
   # GET /people
   # GET /people.json
@@ -26,6 +26,24 @@ class PeopleController < ApplicationController
   # GET /people/1/edit
   def edit
   end
+
+  # POST /people/create_sms
+  def create_sms
+    if params['HandshakeKey'].present?
+        if Logan::Application.config.wufoo_handshake_key != params['HandshakeKey']
+          Rails.logger.warn("[wufoo] received request with invalid handshake. Full request: #{request.inspect}")
+          head(403) and return
+        end
+        
+        Rails.logger.info("[wufoo] received a submission from wufoo")
+        from_wufoo = true
+        @person = Person.initialize_from_wufoo_sms(params)
+        @person.save
+    end
+
+
+  end
+
 
   # POST /people
   # POST /people.json
