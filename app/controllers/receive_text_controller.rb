@@ -84,7 +84,8 @@ class ReceiveTextController < ApplicationController
       #if sms_count == -1
       if sms_count == 0
         message = "Thanks for joining the CUTGroup! We will ask you 11 quick questions to complete your signup. Once completed, we will send you a $5 VISA gift card right away!"      
-        message2 = "#{fields[sms_count]['Title']}"
+        
+        message = "#{message}  #{fields[sms_count]['Title']}"
         #ession["fieldanswers"][fields[sms_count]['ID']] = params["From"]
       elsif sms_count < fields.length
         #message = "Hello, thanks for the new message."

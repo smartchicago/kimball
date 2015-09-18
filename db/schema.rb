@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150703063323) do
+ActiveRecord::Schema.define(version: 20150909175536) do
 
   create_table "applications", force: true do |t|
     t.string   "name"
@@ -86,6 +86,9 @@ ActiveRecord::Schema.define(version: 20150703063323) do
     t.integer  "secondary_connection_id"
     t.string   "secondary_connection_description"
     t.text     "verified",                         default: "", null: false
+    t.string   "preferred_contact_method"
+    t.float    "latitude"
+    t.float    "longitude"
   end
 
   create_table "programs", force: true do |t|

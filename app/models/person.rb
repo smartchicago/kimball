@@ -154,7 +154,7 @@ class Person < ActiveRecord::Base
     new_person.address_1 = params["Field268"]
     new_person.postal_code = params["Field271"]
     new_person.email_address = params["Field279"]
-    case params["Field39"].uppercase
+    case params["Field39"].upcase
     when "A"
       new_person.primary_device_id = Person.map_device_to_id("Desktop computer")
     when "B"
@@ -170,7 +170,7 @@ class Person < ActiveRecord::Base
     new_person.primary_device_description = params["Field21"]
 
 
-    case params["Field41"].uppercase
+    case params["Field41"].upcase
     when "A"
       new_person.primary_connection_id = Person.primary_connection_id("Broadband at home")
     when "B"

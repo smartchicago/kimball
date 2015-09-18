@@ -42,9 +42,15 @@ Logan::Application.routes.draw do
   get "mailchimp_exports/index"
   
   resources :people do
+    collection do
+      post 'create_sms'
+    end
     resources :comments
+    
   end
-  post "people/create_sms"
+  #post "people/create_sms"
+  
+
 
   root to: 'dashboard#index'
 end
