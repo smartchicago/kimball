@@ -34,7 +34,7 @@ class PeopleController < ApplicationController
           Rails.logger.warn("[wufoo] received request with invalid handshake. Full request: #{request.inspect}")
           head(403) and return
         end
-        
+        render nothing: true
         Rails.logger.info("[wufoo] received a submission from wufoo")
         from_wufoo = true
         #@person = Person.initialize_from_wufoo_sms(params)
