@@ -59,6 +59,7 @@ class ReceiveTextController < ApplicationController
     session["counter"] ||= 0
     session["fieldanswers"] ||= Hash.new
     session["fieldquestions"] ||= Hash.new
+    session["contact"] ||= "EMAIL"
     sms_count = session["counter"]
 
     @twilio_message = TwilioMessage.new
@@ -81,6 +82,7 @@ class ReceiveTextController < ApplicationController
       message = "You said 99999"
       session["counter"] = -1
       session["fieldanswers"] = Hash.new
+      session["contact"] = "EMAIL"
       #session["fieldquestions"] = Hash.new
     else
       #if sms_count == -1
@@ -106,6 +108,8 @@ class ReceiveTextController < ApplicationController
             message = "Please type only the letter of your answer. Thank you!"
             session["counter"] -= 1
           end
+        elsif fields[sms_count - 1]['Title'].upcase.strip == "TEXT"
+          session["contact"] = "TEXT"
         end
         
       #elsif sms_count == (fields.length - 1)
@@ -113,7 +117,12 @@ class ReceiveTextController < ApplicationController
         session["fieldanswers"][fields[sms_count-1]['ID']] = params["Body"]
         session["fieldanswers"][fields[sms_count]['ID']] = from_number
         result = form.submit(session["fieldanswers"])
-        message = "You are now signed up for CUTGroup."
+        
+        if session["contact"] == "EMAIL"
+          message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you’ll receive an email from smarziano@cct.org with details."
+        else
+          message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you’ll receive a text from 773-747-6239 with more details."
+        end
         #message = result['Success']
         #if result['Success'] == 0
         #  message = result['FieldErrors']
