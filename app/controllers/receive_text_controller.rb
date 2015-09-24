@@ -108,8 +108,10 @@ class ReceiveTextController < ApplicationController
             message = "Please type only the letter of your answer. Thank you!"
             session["counter"] -= 1
           end
-        elsif fields[sms_count - 1]['Title'].upcase.strip == "TEXT"
-          session["contact"] = "TEXT"
+        elsif fields[sms_count - 1]['Title'].include? "receive notifications via"
+          if params["Body"].upcase.strip == "TEXT"
+            session["contact"] = "TEXT"
+          end
         end
         
       #elsif sms_count == (fields.length - 1)
