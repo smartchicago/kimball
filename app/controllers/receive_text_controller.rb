@@ -83,15 +83,9 @@ class ReceiveTextController < ApplicationController
       session["counter"] = -1
       session["fieldanswers"] = Hash.new
       session["contact"] = "EMAIL"
-      #session["fieldquestions"] = Hash.new
     else
-      #if sms_count == -1
-      if sms_count == 0
-        #message = "Thanks for joining the CUTGroup! We will ask you 10 quick questions to complete your signup. Once completed, we will send you a $5 VISA gift card right away!"      
-        
+      if sms_count == 0        
         message = "#{fields[sms_count]['Title']}"
-        #session["fieldquestions"][sms_count] = fields[sms_count]['Title']
-        #ession["fieldanswers"][fields[sms_count]['ID']] = params["From"]
       elsif sms_count < (fields.length - 1)
         #message = "Hello, thanks for the new message."
         session["fieldanswers"][fields[sms_count-1]['ID']] = params["Body"]
@@ -104,32 +98,31 @@ class ReceiveTextController < ApplicationController
           end
         # If the question is a multiple choice using single letter response, check for single letter  
         elsif fields[sms_count - 1]['Title'].include? "A)"
+          #if !( params["Body"].strip.upcase == "A")
           if !( params["Body"].strip.upcase =~ /A|B|C|D/)
             message = "Please type only the letter of your answer. Thank you!"
             session["counter"] -= 1
           end
-        elsif fields[sms_count - 1]['Title'].include? "receive notifications via"
+        elsif fields[sms_count - 1]['Title'].include? "receive notifications"
           if params["Body"].upcase.strip == "TEXT"
             session["contact"] = "TEXT"
           end
         end
         
-      #elsif sms_count == (fields.length - 1)
-      else  
+      elsif sms_count == (fields.length - 1) 
         session["fieldanswers"][fields[sms_count-1]['ID']] = params["Body"]
         session["fieldanswers"][fields[sms_count]['ID']] = from_number
         result = form.submit(session["fieldanswers"])
-        
+        message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you’ll receive a text from 773-747-6239 with more details."
         if session["contact"] == "EMAIL"
           message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you’ll receive an email from smarziano@cct.org with details."
-        else
-          message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you’ll receive a text from 773-747-6239 with more details."
         end
         #message = result['Success']
         #if result['Success'] == 0
         #  message = result['FieldErrors']
         #end
-      
+      else
+        message = "You have already completed the sign up process."
       end  
     end
     
