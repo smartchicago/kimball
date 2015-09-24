@@ -100,6 +100,12 @@ class ReceiveTextController < ApplicationController
             message = "Oops, it looks like that isn't a valid email address. Please try again or text 'SKIP' to skip adding an email."
             session["counter"] -= 1
           end
+        # If the question is a multiple choice using single letter response, check for single letter  
+        elsif fields[sms_count - 1]['Title'].include? "A)"
+          if params["Body"].strip.length != 1
+            message = "Please type only the letter of your answer. Thank you!"
+            session["counter"] -= 1
+          end
         end
         
       elsif sms_count == fields.length
