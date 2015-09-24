@@ -90,7 +90,7 @@ class ReceiveTextController < ApplicationController
         message = "#{message}  #{fields[sms_count]['Title']}"
         #session["fieldquestions"][sms_count] = fields[sms_count]['Title']
         #ession["fieldanswers"][fields[sms_count]['ID']] = params["From"]
-      elsif sms_count < fields.length
+      elsif sms_count < (fields.length - 1)
         #message = "Hello, thanks for the new message."
         session["fieldanswers"][fields[sms_count-1]['ID']] = params["Body"]
         message = "#{fields[sms_count]['Title']}"
@@ -108,16 +108,17 @@ class ReceiveTextController < ApplicationController
           end
         end
         
-      elsif sms_count == fields.length
+      #elsif sms_count == (fields.length - 1)
+      else  
         session["fieldanswers"][fields[sms_count-1]['ID']] = params["Body"]
-        message = "Hello, thanks for message number #{session["fieldanswers"]}"
+        session["fieldanswers"][fields[sms_count]['ID']] = from_number
         result = form.submit(session["fieldanswers"])
-        message = result['Success']
-        if result['Success'] == 0
-          message = result['FieldErrors']
-        end
-      else
         message = "You are now signed up for CUTGroup."
+        #message = result['Success']
+        #if result['Success'] == 0
+        #  message = result['FieldErrors']
+        #end
+      
       end  
     end
     

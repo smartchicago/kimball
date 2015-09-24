@@ -41,14 +41,17 @@ class PeopleController < ApplicationController
         new_person = Person.new
     
       # Save to Person
-      new_person.first_name = params['Field275']
-      new_person.last_name = params['Field276']
-      new_person.address_1 = params["Field268"]
-      new_person.postal_code = params["Field271"]
-
-      new_person.email_address = params["Field279"]
+      new_person.first_name = params['Field275'].strip
+      new_person.last_name = params['Field276'].strip
+      new_person.address_1 = params["Field268"].strip
+      new_person.postal_code = params["Field271"].strip
+      new_person.phone_number = params["Field281"].strip
+      
+      if params["Field279"].strip.upcase != "SKIP"
+        new_person.email_address = params["Field279"].strip
+      end
       #new_person.save
-      case params["Field39"].upcase
+      case params["Field39"].upcase.strip
       when "A"
         new_person.primary_device_id = Person.map_device_to_id("Desktop computer")
       when "B"
@@ -61,10 +64,10 @@ class PeopleController < ApplicationController
         new_person.primary_device_id = params["Field39"]
       end
       
-      new_person.primary_device_description = params["Field21"]
+      new_person.primary_device_description = params["Field21"].strip
 
 
-      case params["Field41"].upcase
+      case params["Field41"].upcase.strip
       when "A"
         new_person.primary_connection_id = Person.map_connection_to_id("Broadband at home")
       when "B"
@@ -77,7 +80,7 @@ class PeopleController < ApplicationController
         new_person.primary_connection_id = params["Field41"]
       end
       
-      if params['Field278'].upcase == "TEXT"
+      if params['Field278'].upcase.strip == "TEXT"
         new_person.preferred_contact_method = "SMS"
       else
         new_person.preferred_contact_method = "EMAIL"

@@ -154,6 +154,7 @@ class Person < ActiveRecord::Base
     new_person.address_1 = params["Field268"]
     new_person.postal_code = params["Field271"]
     new_person.email_address = params["Field279"]
+    new_person.phone_number = params["field281"]
     case params["Field39"].upcase
     when "A"
       new_person.primary_device_id = Person.map_device_to_id("Desktop computer")
