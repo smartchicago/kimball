@@ -183,7 +183,7 @@ class Person < ActiveRecord::Base
       new_person.primary_connection_id = params["Field41"]
     end
     
-    if params['Field278'].uppercase == "TEXT"
+    if params['Field278'].upcase == "TEXT"
       new_person.preferred_contact_method = "SMS"
     else
       new_person.preferred_contact_method = "EMAIL"

@@ -46,7 +46,7 @@ class ReceiveTextController < ApplicationController
     end
   end
 
-  def smssignup 
+ def smssignup 
     wufoo = WuParty.new(ENV['WUFOO_ACCOUNT'],ENV['WUFOO_API'])
     wufoo.forms
     form = wufoo.form(ENV['WUFOO_SIGNUP_FORM'])
@@ -58,6 +58,7 @@ class ReceiveTextController < ApplicationController
     from_number = params["From"]
     session["counter"] ||= 0
     session["fieldanswers"] ||= Hash.new
+    session["fieldquestions"] ||= Hash.new
     sms_count = session["counter"]
 
     @twilio_message = TwilioMessage.new
@@ -80,17 +81,27 @@ class ReceiveTextController < ApplicationController
       message = "You said 99999"
       session["counter"] = -1
       session["fieldanswers"] = Hash.new
+      #session["fieldquestions"] = Hash.new
     else
       #if sms_count == -1
       if sms_count == 0
-        message = "Thanks for joining the CUTGroup! We will ask you 11 quick questions to complete your signup. Once completed, we will send you a $5 VISA gift card right away!"      
+        message = "Thanks for joining the CUTGroup! We will ask you 10 quick questions to complete your signup. Once completed, we will send you a $5 VISA gift card right away!"      
         
         message = "#{message}  #{fields[sms_count]['Title']}"
+        #session["fieldquestions"][sms_count] = fields[sms_count]['Title']
         #ession["fieldanswers"][fields[sms_count]['ID']] = params["From"]
       elsif sms_count < fields.length
         #message = "Hello, thanks for the new message."
         session["fieldanswers"][fields[sms_count-1]['ID']] = params["Body"]
         message = "#{fields[sms_count]['Title']}"
+        # If the question asked for an email check if response contains a @ and . or a skip
+        if fields[sms_count - 1]['Title'].include? "email address"
+          if !( params["Body"] =~ /.+@.+\..+/) and !(params["Body"].upcase.include? "SKIP")
+            message = "Oops, it looks like that isn't a valid email address. Please try again or text 'SKIP' to skip adding an email."
+            session["counter"] -= 1
+          end
+        end
+        
       elsif sms_count == fields.length
         session["fieldanswers"][fields[sms_count-1]['ID']] = params["Body"]
         message = "Hello, thanks for message number #{session["fieldanswers"]}"

@@ -45,6 +45,7 @@ class PeopleController < ApplicationController
       new_person.last_name = params['Field276']
       new_person.address_1 = params["Field268"]
       new_person.postal_code = params["Field271"]
+
       new_person.email_address = params["Field279"]
       #new_person.save
       case params["Field39"].upcase
