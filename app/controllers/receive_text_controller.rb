@@ -85,9 +85,9 @@ class ReceiveTextController < ApplicationController
     else
       #if sms_count == -1
       if sms_count == 0
-        message = "Thanks for joining the CUTGroup! We will ask you 10 quick questions to complete your signup. Once completed, we will send you a $5 VISA gift card right away!"      
+        #message = "Thanks for joining the CUTGroup! We will ask you 10 quick questions to complete your signup. Once completed, we will send you a $5 VISA gift card right away!"      
         
-        message = "#{message}  #{fields[sms_count]['Title']}"
+        message = "#{fields[sms_count]['Title']}"
         #session["fieldquestions"][sms_count] = fields[sms_count]['Title']
         #ession["fieldanswers"][fields[sms_count]['ID']] = params["From"]
       elsif sms_count < (fields.length - 1)
@@ -102,7 +102,7 @@ class ReceiveTextController < ApplicationController
           end
         # If the question is a multiple choice using single letter response, check for single letter  
         elsif fields[sms_count - 1]['Title'].include? "A)"
-          if params["Body"].strip.length != 1
+          if !( params["Body"].strip.upcase =~ /A|B|C|D/)
             message = "Please type only the letter of your answer. Thank you!"
             session["counter"] -= 1
           end
