@@ -112,6 +112,7 @@ class ReceiveTextController < ApplicationController
               session["errorcount"] += 1
             else
               session["errorcount"] = 0
+            end
           else
             session["errorcount"] = 0
           end
