@@ -144,6 +144,63 @@ class Person < ActiveRecord::Base
     end
   end
 
+
+  def self.initialize_from_wufoo_sms(params)
+    new_person = Person.new
+    
+    # Save to Person
+    new_person.first_name = params['Field275']
+    new_person.last_name = params['Field276']
+    new_person.address_1 = params["Field268"]
+    new_person.postal_code = params["Field271"]
+    new_person.email_address = params["Field279"]
+    new_person.phone_number = params["field281"]
+    case params["Field39"].upcase
+    when "A"
+      new_person.primary_device_id = Person.map_device_to_id("Desktop computer")
+    when "B"
+      new_person.primary_device_id = Person.map_device_to_id("Laptop")
+    when "C"
+      new_person.primary_device_id = Person.map_device_to_id("Tablet")
+    when "D"
+      new_person.primary_device_id = Person.map_device_to_id("Smart phone")
+    else
+      new_person.primary_device_id = params["Field39"]
+    end
+    
+    new_person.primary_device_description = params["Field21"]
+
+
+    case params["Field41"].upcase
+    when "A"
+      new_person.primary_connection_id = Person.primary_connection_id("Broadband at home")
+    when "B"
+      new_person.primary_connection_id = Person.primary_connection_id("Phone plan with data")
+    when "C"
+      new_person.primary_connection_id = Person.primary_connection_id("Public wi-fi")
+    when "D"
+      new_person.primary_connection_id = Person.primary_connection_id("Public computer center")
+    else
+      new_person.primary_connection_id = params["Field41"]
+    end
+    
+    if params['Field278'].upcase == "TEXT"
+      new_person.preferred_contact_method = "SMS"
+    else
+      new_person.preferred_contact_method = "EMAIL"
+    end
+    
+    new_person.verified = "Verified by Text Message Signup"
+    new_person.signup_at = Time.now
+
+
+    new_person
+
+  end
+
+
+
+
   def self.initialize_from_wufoo(params)
     new_person = Person.new
     params.each_pair do |k,v|

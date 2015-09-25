@@ -97,6 +97,7 @@ GEM
       metaclass (~> 0.0.1)
     multi_json (1.7.3)
     multi_xml (0.5.3)
+    multipart-post (2.0.0)
     mysql2 (0.3.11)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
@@ -182,6 +183,10 @@ GEM
     will_paginate (3.0.4)
     will_paginate-bootstrap (0.2.2)
       will_paginate (>= 3.0.3)
+    wuparty (1.2.6)
+      httparty (>= 0.6.1)
+      mime-types (~> 1.16)
+      multipart-post (>= 1.0.1)
 
 PLATFORMS
   ruby
@@ -210,3 +215,4 @@ DEPENDENCIES
   unicorn
   will_paginate
   will_paginate-bootstrap
+  wuparty

@@ -2,7 +2,7 @@ class PeopleController < ApplicationController
   before_action :set_person, only: [:show, :edit, :update, :destroy]
 
   skip_before_filter :authenticate_user!, if: :should_skip_janky_auth?
-  skip_before_action :verify_authenticity_token, only: [:create]
+  skip_before_action :verify_authenticity_token, only: [:create, :create_sms]
   
   # GET /people
   # GET /people.json
@@ -26,6 +26,78 @@ class PeopleController < ApplicationController
   # GET /people/1/edit
   def edit
   end
+
+  # POST /people/create_sms
+  def create_sms
+    if params['HandshakeKey'].present?
+        if Logan::Application.config.wufoo_handshake_key != params['HandshakeKey']
+          Rails.logger.warn("[wufoo] received request with invalid handshake. Full request: #{request.inspect}")
+          head(403) and return
+        end
+        render nothing: true
+        Rails.logger.info("[wufoo] received a submission from wufoo")
+        from_wufoo = true
+        #@person = Person.initialize_from_wufoo_sms(params)
+        new_person = Person.new
+    
+      # Save to Person
+      new_person.first_name = params['Field275'].strip
+      new_person.last_name = params['Field276'].strip
+      new_person.address_1 = params["Field268"].strip
+      new_person.postal_code = params["Field271"].strip
+      new_person.phone_number = params["Field281"].strip
+      
+      if params["Field279"].strip.upcase != "SKIP"
+        new_person.email_address = params["Field279"].strip
+      end
+      #new_person.save
+      case params["Field39"].upcase.strip
+      when "A"
+        new_person.primary_device_id = Person.map_device_to_id("Desktop computer")
+      when "B"
+        new_person.primary_device_id = Person.map_device_to_id("Laptop")
+      when "C"
+        new_person.primary_device_id = Person.map_device_to_id("Tablet")
+      when "D"
+        new_person.primary_device_id = Person.map_device_to_id("Smart phone")
+      else
+        new_person.primary_device_id = params["Field39"]
+      end
+      
+      new_person.primary_device_description = params["Field21"].strip
+
+
+      case params["Field41"].upcase.strip
+      when "A"
+        new_person.primary_connection_id = Person.map_connection_to_id("Broadband at home")
+      when "B"
+        new_person.primary_connection_id = Person.map_connection_to_id("Phone plan with data")
+      when "C"
+        new_person.primary_connection_id = Person.map_connection_to_id("Public wi-fi")
+      when "D"
+        new_person.primary_connection_id = Person.map_connection_to_id("Public computer center")
+      else
+        new_person.primary_connection_id = params["Field41"]
+      end
+      
+      if params['Field278'].upcase.strip == "TEXT"
+        new_person.preferred_contact_method = "SMS"
+      else
+        new_person.preferred_contact_method = "EMAIL"
+      end
+      
+      new_person.verified = "Verified by Text Message Signup"
+      new_person.signup_at = Time.now
+
+      new_person.save
+      if new_person.email_address != ''
+        mailchimpSend = Gibbon.list_subscribe({:id => Logan::Application.config.cut_group_mailchimp_list_id, :email_address => new_person.email_address, :double_optin => 'false', :merge_vars => {:FNAME => new_person.first_name, :LNAME => new_person.last_name, :MMERGE3 => new_person.geography_id, :MMERGE4 => new_person.postal_code, :MMERGE5 => new_person.participation_type, :MMERGE6 => new_person.voted, :MMERGE7 => new_person.called_311, :MMERGE8 => new_person.primary_device_description, :MMERGE9 => new_person.secondary_device_id, :MMERGE10 => new_person.secondary_device_description, :MMERGE11 => new_person.primary_connection_id, :MMERGE12 => new_person.primary_connection_description, :MMERGE13 => new_person.primary_device_id, :MMERGE14 => new_person.preferred_contact_method}})
+      end
+    end
+
+
+  end
+
 
   # POST /people
   # POST /people.json
@@ -126,6 +198,7 @@ class PeopleController < ApplicationController
 
     def should_skip_janky_auth?
       # don't attempt authentication on reqs from wufoo
-      params[:action] == 'create' && params['HandshakeKey'].present?
+      (params[:action] == 'create' or params[:action] == 'create_sms') && params['HandshakeKey'].present?
+      #params[:action] == 'create_sms' && params['HandshakeKey'].present?
     end
 end
