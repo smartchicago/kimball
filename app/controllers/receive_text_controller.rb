@@ -127,9 +127,9 @@ class ReceiveTextController < ApplicationController
         session["fieldanswers"][fields[sms_count-1]['ID']] = params["Body"]
         session["fieldanswers"][fields[sms_count]['ID']] = from_number
         result = form.submit(session["fieldanswers"])
-        message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you’ll receive a text from 773-747-6239 with more details."
+        message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive a text from 773-747-6239 with more details."
         if session["contact"] == "EMAIL"
-          message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you’ll receive an email from smarziano@cct.org with details."
+          message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive an email from smarziano@cct.org with details."
         end
         #message = result['Success']
         #if result['Success'] == 0
