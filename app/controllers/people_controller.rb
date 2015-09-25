@@ -90,6 +90,9 @@ class PeopleController < ApplicationController
       new_person.signup_at = Time.now
 
       new_person.save
+      if new_person.email_address != ''
+        mailchimpSend = Gibbon.list_subscribe({:id => Logan::Application.config.cut_group_mailchimp_list_id, :email_address => new_person.email_address, :double_optin => 'false', :merge_vars => {:FNAME => new_person.first_name, :LNAME => new_person.last_name, :MMERGE3 => new_person.geography_id, :MMERGE4 => new_person.postal_code, :MMERGE5 => new_person.participation_type, :MMERGE6 => new_person.voted, :MMERGE7 => new_person.called_311, :MMERGE8 => new_person.primary_device_description, :MMERGE9 => new_person.secondary_device_id, :MMERGE10 => new_person.secondary_device_description, :MMERGE11 => new_person.primary_connection_id, :MMERGE12 => new_person.primary_connection_description, :MMERGE13 => new_person.primary_device_id, :MMERGE14 => new_person.preferred_contact_method}})
+      end
     end
 
 
