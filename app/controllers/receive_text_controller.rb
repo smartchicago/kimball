@@ -61,6 +61,7 @@ class ReceiveTextController < ApplicationController
     session["fieldquestions"] ||= Hash.new
     session["contact"] ||= "EMAIL"
     sms_count = session["counter"]
+    session["errorcount"] ||= 0
 
     @twilio_message = TwilioMessage.new
     @twilio_message.message_sid = params[:MessageSid]
@@ -83,6 +84,7 @@ class ReceiveTextController < ApplicationController
       session["counter"] = -1
       session["fieldanswers"] = Hash.new
       session["contact"] = "EMAIL"
+      session["errorcount"] = 0
     else
       if sms_count == 0        
         message = "#{fields[sms_count]['Title']}"
@@ -99,10 +101,21 @@ class ReceiveTextController < ApplicationController
         # If the question is a multiple choice using single letter response, check for single letter  
         elsif fields[sms_count - 1]['Title'].include? "A)"
           #if !( params["Body"].strip.upcase == "A")
-          if !( params["Body"].strip.upcase =~ /A|B|C|D/)
-            message = "Please type only the letter of your answer. Thank you!"
-            session["counter"] -= 1
+          if !( params["Body"].strip.upcase =~ /A|B|C|D/) 
+            if session["errorcount"] == 0
+              message = "Please type only the letter of your answer. Thank you!"
+              session["counter"] -= 1
+              session["errorcount"] += 1
+            elsif session["errorcount"] == 1
+              message = "Please type only the letter of your answer or type SKIP. Thank you!"
+              session["counter"] -= 1
+              session["errorcount"] += 1
+            else
+              session["errorcount"] = 0
+          else
+            session["errorcount"] = 0
           end
+
         elsif fields[sms_count - 1]['Title'].include? "receive notifications"
           if params["Body"].upcase.strip == "TEXT"
             session["contact"] = "TEXT"
@@ -127,16 +140,8 @@ class ReceiveTextController < ApplicationController
     end
     
     @twilio_message.save
-    if message2 == ""
-      twiml = Twilio::TwiML::Response.new do |r|
-         r.Message message
-      end
-    else
-      twiml = Twilio::TwiML::Response.new do |r|
-         r.Message message
-         r.Pause length: 10
-         r.Message message2
-      end
+    twiml = Twilio::TwiML::Response.new do |r|
+      r.Message message
     end
     respond_to do |format|
       format.xml {render xml: twiml.text}
