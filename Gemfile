@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0.rc1'
 
-gem 'sqlite3'
+gem 'pg'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -55,7 +55,7 @@ gem 'will_paginate-bootstrap' # https://github.com/nickpad/will_paginate-bootstr
 # use mysql in production
 group :production do
   gem 'mysql2'
-  
+
 end
 
 gem "health_check" # include health_check, for system monitoring
