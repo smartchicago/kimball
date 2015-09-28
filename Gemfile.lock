@@ -127,6 +127,7 @@ GEM
       net-ssh (>= 2.6.5)
     newrelic_rpm (3.6.0.78)
     orm_adapter (0.4.0)
+    pg (0.18.3)
     polyglot (0.3.3)
     rack (1.5.2)
     rack-mini-profiler (0.9.7)
@@ -238,7 +239,6 @@ DEPENDENCIES
   rails (= 4.0.0.rc1)
   ruby-prof
   sass-rails (~> 4.0.0.beta1)
-  sqlite3
   tire
   turbolinks
   twilio-ruby
