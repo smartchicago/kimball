@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.0.rc1'
 
 gem 'pg'
-
+gem 'dotenv'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

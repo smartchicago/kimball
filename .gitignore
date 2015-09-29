@@ -20,4 +20,9 @@
 /config/initializers/env.rb
 /config/local_env.yml
 
+# otto config folder
 .otto/
+
+# personal environment variables.
+.env
+
