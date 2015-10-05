@@ -89,6 +89,8 @@ class Person < ActiveRecord::Base
       
       # tags
       indexes :tag_values, analyzer: :keyword
+
+      indexes :preferred_contact_method
       
       indexes :created_at, type: "date"
     end
@@ -139,6 +141,7 @@ class Person < ActiveRecord::Base
           must { string "city:#{params[:city]}"} if params[:city].present?
           must { string "submission_values:#{params[:submissions]}"} if params[:submissions].present?
           must { string "tag_values:#{params[:tags]}"} if params[:tags].present?
+          must { string "preferred_contact_method:#{params[:preferred_contact_method]}"} if params[:preferred_contact_method].present?
         end
       end      
     end

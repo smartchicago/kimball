@@ -197,7 +197,7 @@ class PeopleController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def person_params
-      params.require(:person).permit(:first_name, :last_name, :email_address, :address_1, :address_2, :city, :state, :postal_code, :geography_id, :primary_device_id, :primary_device_description, :secondary_device_id, :secondary_device_description, :primary_connection_id, :primary_connection_description, :secondary_connection_id, :secondary_connection_description, :phone_number, :participation_type)
+      params.require(:person).permit(:first_name, :last_name, :email_address, :address_1, :address_2, :city, :state, :postal_code, :geography_id, :primary_device_id, :primary_device_description, :secondary_device_id, :secondary_device_description, :primary_connection_id, :primary_connection_description, :secondary_connection_id, :secondary_connection_description, :phone_number, :participation_type, :preferred_contact_method)
     end
 
     def should_skip_janky_auth?

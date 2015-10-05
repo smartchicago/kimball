@@ -34,6 +34,12 @@
     </div>
     
     <div class="span4">
+      <label for="preferred contact method">Preferred Contact Method</label>
+<!--       <%= text_field_tag :preferred_contact_method, params[:preferred_contact_method], :class => "input span4" %>
+ -->      <%= select_tag :preferred_contact_method, 
+        options_for_select([["All", nil],["Email", 'EMAIL'], ["SMS", 'SMS']], :include_blank => true),  :class => "input span4" %>
+
+
       <label for="device_description">Device description</label>
       <%= text_field_tag :device_description, params[:device_description], :class => "input span4" %>
 
@@ -101,7 +107,8 @@
           Primary: <%= search_result_field result.primary_device_description, :device_description %><br>
           Secondary: <%= search_result_field result.secondary_device_description, :device_description %><br>
           Primary Connection: <%= search_result_field result.primary_connection_description, :connection_description %><br>
-          <% if result.secondary_connection_description.present? %>Secondary Connection: <%= search_result_field result.secondary_connection_description, :connection_description %><% end %>
+          <% if result.secondary_connection_description.present? %>Secondary Connection: <%= search_result_field result.secondary_connection_description, :connection_description %><% end %><br>
+          Preferred Contact Method: <%= search_result_field result.preferred_contact_method, :preferred_contact_method %>
         </td>    
       </tr>
       <% end %>
