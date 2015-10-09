@@ -223,11 +223,7 @@ DEPENDENCIES
   daemons
   delayed_job_active_record
   devise!
-<<<<<<< 77d9bcd5b9f782eeff38ca28d8cc20dea164c66a
   dotenv-rails
-=======
-  dotenv
->>>>>>> adding dotenv
   faker
   gibbon
   gsm_encoder
