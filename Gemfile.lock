@@ -66,7 +66,9 @@ GEM
     delayed_job_active_record (4.1.0)
       activerecord (>= 3.0, < 5)
       delayed_job (>= 3.0, < 5)
-    dotenv (2.0.2)
+    dotenv (2.0.1)
+    dotenv-rails (2.0.1)
+      dotenv (= 2.0.1)
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
@@ -204,7 +206,7 @@ DEPENDENCIES
   daemons
   delayed_job_active_record
   devise!
-  dotenv
+  dotenv-rails
   faker
   gibbon
   gsm_encoder

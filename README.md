@@ -44,9 +44,11 @@ otto dev
 otto dev ssh
 bundle install
 bundle exec rake db:setup
-unicorn_rails -D
-exit
-open http://`otto dev address`:8080
+bundle exec rails s
+```
+and in your development folder:
+```
+open http://`otto dev address`:3000
 ```
 
 Contributors
