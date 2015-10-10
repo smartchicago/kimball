@@ -128,11 +128,11 @@ class Person < ActiveRecord::Base
     options[:per_page] = _per_page
     options[:page]     = params[:page] || 1
     
-    if params[:device_id_type].present? 
+    if !(params[:device_id_type].blank?) 
       device_id_string = params[:device_id_type].join(' ')
     end
 
-    if params[:connection_id_type].present? 
+    if !(params[:connection_id_type].blank?) 
       connection_id_string = params[:connection_id_type].join(' ')
     end
 
@@ -154,7 +154,7 @@ class Person < ActiveRecord::Base
           must { string "city:#{params[:city]}"} if params[:city].present?
           must { string "submission_values:#{params[:submissions]}"} if params[:submissions].present?
           # must { string "tag_values:#{tags_string}"} if params[:tags].present?
-          must { string "preferred_contact_method:#{params[:preferred_contact_method]}"} if params[:preferred_contact_method].present?
+          must { string "preferred_contact_method:#{params[:preferred_contact_method]}"} if !params[:preferred_contact_method].blank?
         end
       end 
       filter :terms, :tag_values => params[:tags] if params[:tags].present?     

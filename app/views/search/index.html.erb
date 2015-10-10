@@ -19,7 +19,7 @@
         <label for="preferred contact method">Preferred Contact Method</label>
 <!--       <%= text_field_tag :preferred_contact_method, params[:preferred_contact_method], :class => "input" %>
  -->      <%= select_tag :preferred_contact_method, 
-        options_for_select([["Email", 'EMAIL'], ["SMS", 'SMS']],  selected: params[:preferred_contact_method]) , :prompt => "All", :class => "input" %>
+        options_for_select([["All", '*'],["Email", 'EMAIL'], ["SMS", 'SMS']], include_blank: true, selected: params[:preferred_contact_method]) , :class => "input" %>
 
       <label for="device_id_type">Device Type</label>
       <%= select_tag :device_id_type, 
@@ -102,7 +102,7 @@
       <tr>
         <td class="span4">
           <strong><%= link_to "#{result.first_name} #{result.last_name}", person_path(:id => result.id) %></strong><br/><br/>
-          Tags: <%= search_result_field result.tag_values.join(','), :tags %>
+           Tags: <% if !(result.tag_values.blank?) %><%= search_result_field result.tag_values, :tags %><% end %>
         </td>
         <td class="span4">
           Address: <%= search_result_field result.address_1, :address  %><br/>
