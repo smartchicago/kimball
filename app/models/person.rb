@@ -67,6 +67,9 @@ class Person < ActiveRecord::Base
       indexes :primary_device_type_name, analyzer: :snowball
       indexes :secondary_device_type_name, analyzer: :snowball
 
+      indexes :primary_device_id
+      indexes :secondary_device_id
+
       # device descriptions
       indexes :primary_device_description
       indexes :secondary_device_description
@@ -125,6 +128,14 @@ class Person < ActiveRecord::Base
     options[:per_page] = _per_page
     options[:page]     = params[:page] || 1
     
+    if params[:device_id_type].present? 
+      device_id_string = params[:device_id_type].join(' ')
+    end
+
+    if params[:connection_id_type].present? 
+      connection_id_string = params[:connection_id_type].join(' ')
+    end
+
     tire.search options do
       query do
         boolean do
@@ -135,15 +146,18 @@ class Person < ActiveRecord::Base
           must { string "verified:(#{params[:verified]})"} if params[:verified].present?
           must { string "primary_device_description:#{params[:device_description]} OR secondary_device_description:#{params[:device_description]}"} if params[:device_description].present?
           must { string "primary_connection_description:#{params[:connection_description]} OR secondary_connection_description:#{params[:connection_description]}"} if params[:connection_description].present?
+          must { string "primary_device_id:#{device_id_string} OR secondary_device_id:#{device_id_string}"} if params[:device_id_type].present?
+          must { string "primary_connection_id:#{connection_id_string} OR secondary_connection_id:#{connection_id_string}"} if params[:connection_id_type].present?
           must { string "geography_id:(#{params[:geography_id]})"} if params[:geography_id].present?
           must { string "event_id:#{params[:event_id]}"} if params[:event_id].present?          
           must { string "address_1:#{params[:address]}"} if params[:address].present?
           must { string "city:#{params[:city]}"} if params[:city].present?
           must { string "submission_values:#{params[:submissions]}"} if params[:submissions].present?
-          must { string "tag_values:#{params[:tags]}"} if params[:tags].present?
+          # must { string "tag_values:#{tags_string}"} if params[:tags].present?
           must { string "preferred_contact_method:#{params[:preferred_contact_method]}"} if params[:preferred_contact_method].present?
         end
-      end      
+      end 
+      filter :terms, :tag_values => params[:tags] if params[:tags].present?     
     end
   end
 
