@@ -115,35 +115,35 @@ class ReceiveTextController < ApplicationController
       session["fieldanswers"][id_to_store] = message_body
       message = "#{fields[sms_count]['Title']}"
       # If the question asked for an email check if response contains a @ and . or a skip
-      # if session["fields"][session["counter"] - 1]['Title'].include? "email address"
-      #   if !( params["Body"] =~ /.+@.+\..+/) and !(params["Body"].upcase.include? "SKIP")
-      #     message = "Oops, it looks like that isn't a valid email address. Please try again or text 'SKIP' to skip adding an email."
-      #     session["counter"] -= 1
-      #   end
-      #   # If the question is a multiple choice using single letter response, check for single letter  
-      #   elsif session["fields"][session["counter"] - 1]['Title'].include? "A)"
-      #     #if !( params["Body"].strip.upcase == "A")
-      #     if !( params["Body"].strip.upcase =~ /A|B|C|D/) 
-      #       if session["errorcount"] == 0
-      #         message = "Please type only the letter of your answer. Thank you!"
-      #         session["counter"] -= 1
-      #         session["errorcount"] += 1
-      #       elsif session["errorcount"] == 1
-      #         message = "Please type only the letter of your answer or type SKIP. Thank you!"
-      #         session["counter"] -= 1
-      #         session["errorcount"] += 1
-      #       else
-      #         session["errorcount"] = 0
-      #       end
-      #     else
-      #       session["errorcount"] = 0
-      #     end
+      if fields[session["counter"] - 1]['Title'].include? "email address"
+        if !( params["Body"] =~ /.+@.+\..+/) and !(params["Body"].upcase.include? "SKIP")
+          message = "Oops, it looks like that isn't a valid email address. Please try again or text 'SKIP' to skip adding an email."
+          session["counter"] -= 1
+        end
+      # If the question is a multiple choice using single letter response, check for single letter  
+      elsif fields[session["counter"] - 1]['Title'].include? "A)"
+            #if !( params["Body"].strip.upcase == "A")
+        if !( params["Body"].strip.upcase =~ /A|B|C|D/) 
+          if session["errorcount"] == 0
+            message = "Please type only the letter of your answer. Thank you!"
+            session["counter"] -= 1
+            session["errorcount"] += 1
+          elsif session["errorcount"] == 1
+            message = "Please type only the letter of your answer or type SKIP. Thank you!"
+            session["counter"] -= 1
+            session["errorcount"] += 1
+          else
+            session["errorcount"] = 0
+          end
+        else
+          session["errorcount"] = 0
+        end
 
-      #   elsif session["fields"][session["counter"] - 1]['Title'].include? "receive notifications"
-      #     if params["Body"].upcase.strip == "TEXT"
-      #       session["contact"] = "TEXT"
-      #     end
-      #   end
+      elsif fields[session["counter"] - 1]['Title'].include? "receive notifications"
+        if params["Body"].upcase.strip == "TEXT"
+          session["contact"] = "TEXT"
+        end
+      end
         
     elsif sms_count == (session["form_length"] - 1) 
       @form = wufoo.form(session["formid"])
@@ -155,9 +155,9 @@ class ReceiveTextController < ApplicationController
       if session["contact"] == "EMAIL"
         message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive an email from smarziano@cct.org with details."
       end
-      # else
-      #   message = "You have already completed the sign up process."
-      # end  
+    
+    else
+      message = "You have completed the form."
     # else
       
     #   #message = session["counter"]
