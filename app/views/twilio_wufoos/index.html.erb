@@ -1,0 +1,31 @@
+<h1>Listing twilio_wufoos</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Wufoo formid</th>
+      <th>Twilio keyword</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @twilio_wufoos.each do |twilio_wufoo| %>
+      <tr>
+        <td><%= twilio_wufoo.name %></td>
+        <td><%= twilio_wufoo.wufoo_formid %></td>
+        <td><%= twilio_wufoo.twilio_keyword %></td>
+        <td><%= link_to 'Show', twilio_wufoo %></td>
+        <td><%= link_to 'Edit', edit_twilio_wufoo_path(twilio_wufoo) %></td>
+        <td><%= link_to 'Destroy', twilio_wufoo, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Twilio wufoo', new_twilio_wufoo_path %>

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  wufoo_formid: MyString
+  twilio_keyword: MyString
+
+two:
+  name: MyString
+  wufoo_formid: MyString
+  twilio_keyword: MyString

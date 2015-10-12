@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @twilio_wufoo.name %>
+</p>
+
+<p>
+  <strong>Wufoo formid:</strong>
+  <%= @twilio_wufoo.wufoo_formid %>
+</p>
+
+<p>
+  <strong>Twilio keyword:</strong>
+  <%= @twilio_wufoo.twilio_keyword %>
+</p>
+
+<%= link_to 'Edit', edit_twilio_wufoo_path(@twilio_wufoo) %> |
+<%= link_to 'Back', twilio_wufoos_path %>

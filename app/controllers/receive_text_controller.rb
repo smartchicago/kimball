@@ -53,57 +53,63 @@ class ReceiveTextController < ApplicationController
  def smssignup 
     wufoo = WuParty.new(ENV['WUFOO_ACCOUNT'],ENV['WUFOO_API'])
     wufoo.forms
-    form = wufoo.form(ENV['WUFOO_SIGNUP_FORM'])
-    fields = form.flattened_fields
-    #fieldids = Array.new
-
     
-    message_body = params["Body"]
-    from_number = params["From"]
     session["counter"] ||= 0
     session["fieldanswers"] ||= Hash.new
     session["fieldquestions"] ||= Hash.new
+    session["phone_number"] ||= params[:From].sub("+1","").to_i # Removing +1 and converting to integer
     session["contact"] ||= "EMAIL"
-    sms_count = session["counter"]
     session["errorcount"] ||= 0
 
-    @twilio_message = TwilioMessage.new
-    @twilio_message.message_sid = params[:MessageSid]
-    @twilio_message.date_created = params[:DateCreated]
-    @twilio_message.date_updated = params[:DateUpdated]
-    @twilio_message.date_sent = params[:DateSent]
-    @twilio_message.account_sid = params[:AccountSid]
-    @twilio_message.from = params[:From]
-    @twilio_message.to = params[:To]
-    @twilio_message.body = params[:Body]
-    @twilio_message.status = params[:SmsStatus]
-    @twilio_message.error_code = params[:ErrorCode]
-    @twilio_message.error_message = params[:ErrorMessage]
-    @twilio_message.direction = params[:Direction]
-    @twilio_message.save
-    from_number = params[:From].sub("+1","").to_i # Removing +1 and converting to integer
-    message2 = ""
+    message_body = params["Body"]
+
+    @incoming = TwilioMessage.new
+    @incoming.message_sid = params[:MessageSid]
+    @incoming.date_created = params[:DateCreated]
+    @incoming.date_updated = params[:DateUpdated]
+    @incoming.date_sent = params[:DateSent]
+    @incoming.account_sid = params[:AccountSid]
+    @incoming.from = params[:From]
+    @incoming.to = params[:To]
+    @incoming.body = params[:Body]
+    @incoming.status = params[:SmsStatus]
+    @incoming.error_code = params[:ErrorCode]
+    @incoming.error_message = params[:ErrorMessage]
+    @incoming.direction = params[:Direction]
+    @incoming.save
+
+    form = wufoo.form(ENV['WUFOO_SIGNUP_FORM'])
+    fields = form.flattened_fields
+    #fieldids = Array.new
+    
+    @twiliowufoo = TwilioWufoo.where("twilio_keyword = ? AND status = ?", params[:Body], true).first
+
+
     if message_body == "99999"
       message = "You said 99999"
       session["counter"] = -1
       session["fieldanswers"] = Hash.new
+      session["fieldquestions"] = Hash.new
       session["contact"] = "EMAIL"
       session["errorcount"] = 0
-    else
-      if sms_count == 0        
-        message = "#{fields[sms_count]['Title']}"
-      elsif sms_count < (fields.length - 1)
-        #message = "Hello, thanks for the new message."
-        session["fieldanswers"][fields[sms_count-1]['ID']] = params["Body"]
-        message = "#{fields[sms_count]['Title']}"
+
+    elsif @twiliowufoo
+      form = wufoo.form(@twiliowufoo.wufoo_formid)
+      fields = form.flattened_fields    
+      
+      if session["counter"] == 0    
+        message = "#{fields[session["counter"]]['Title']}"
+      elsif session["counter"] < (fields.length - 1)
+        session["fieldanswers"][fields[session["counter"]-1]['ID']] = params["Body"]
+        message = "#{fields[session["counter"]]['Title']}"
         # If the question asked for an email check if response contains a @ and . or a skip
-        if fields[sms_count - 1]['Title'].include? "email address"
+        if fields[session["counter"] - 1]['Title'].include? "email address"
           if !( params["Body"] =~ /.+@.+\..+/) and !(params["Body"].upcase.include? "SKIP")
             message = "Oops, it looks like that isn't a valid email address. Please try again or text 'SKIP' to skip adding an email."
             session["counter"] -= 1
           end
         # If the question is a multiple choice using single letter response, check for single letter  
-        elsif fields[sms_count - 1]['Title'].include? "A)"
+        elsif fields[session["counter"] - 1]['Title'].include? "A)"
           #if !( params["Body"].strip.upcase == "A")
           if !( params["Body"].strip.upcase =~ /A|B|C|D/) 
             if session["errorcount"] == 0
@@ -121,30 +127,26 @@ class ReceiveTextController < ApplicationController
             session["errorcount"] = 0
           end
 
-        elsif fields[sms_count - 1]['Title'].include? "receive notifications"
+        elsif fields[session["counter"] - 1]['Title'].include? "receive notifications"
           if params["Body"].upcase.strip == "TEXT"
             session["contact"] = "TEXT"
           end
         end
         
-      elsif sms_count == (fields.length - 1) 
-        session["fieldanswers"][fields[sms_count-1]['ID']] = params["Body"]
-        session["fieldanswers"][fields[sms_count]['ID']] = from_number
+      elsif session["counter"] == (fields.length - 1) 
+        session["fieldanswers"][fields[session["counter"]-1]['ID']] = params["Body"]
+        session["fieldanswers"][fields[session["counter"]]['ID']] = from_number
         result = form.submit(session["fieldanswers"])
         message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive a text from 773-747-6239 with more details."
         if session["contact"] == "EMAIL"
           message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive an email from smarziano@cct.org with details."
         end
-        #message = result['Success']
-        #if result['Success'] == 0
-        #  message = result['FieldErrors']
-        #end
       else
         message = "You have already completed the sign up process."
       end  
     end
     
-    @twilio_message.save
+    @incoming.save
     twiml = Twilio::TwiML::Response.new do |r|
       r.Message message
     end
