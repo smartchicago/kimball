@@ -15,5 +15,10 @@
   <%= @twilio_wufoo.twilio_keyword %>
 </p>
 
+<p>
+  <strong>Active:</strong>
+  <%= @twilio_wufoo.status %>
+</p>
+
 <%= link_to 'Edit', edit_twilio_wufoo_path(@twilio_wufoo) %> |
 <%= link_to 'Back', twilio_wufoos_path %>

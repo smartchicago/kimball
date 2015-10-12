@@ -6,6 +6,7 @@
       <th>Name</th>
       <th>Wufoo formid</th>
       <th>Twilio keyword</th>
+      <th>Active?</th>
       <th></th>
       <th></th>
       <th></th>
@@ -18,6 +19,7 @@
         <td><%= twilio_wufoo.name %></td>
         <td><%= twilio_wufoo.wufoo_formid %></td>
         <td><%= twilio_wufoo.twilio_keyword %></td>
+        <td><%= twilio_wufoo.status %></td>
         <td><%= link_to 'Show', twilio_wufoo %></td>
         <td><%= link_to 'Edit', edit_twilio_wufoo_path(twilio_wufoo) %></td>
         <td><%= link_to 'Destroy', twilio_wufoo, method: :delete, data: { confirm: 'Are you sure?' } %></td>
