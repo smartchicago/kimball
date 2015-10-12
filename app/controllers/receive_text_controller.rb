@@ -60,10 +60,17 @@ class ReceiveTextController < ApplicationController
     session["phone_number"] ||= params[:From].sub("+1","").to_i # Removing +1 and converting to integer
     session["contact"] ||= "EMAIL"
     session["errorcount"] ||= 0
-    session["form"] ||= ''
+    session["formid"] ||= ''
     session["fields"] ||= ''
+    session["form_length"] ||= ''
 
     message_body = params["Body"].strip
+    sms_count = session["counter"]
+    fields = ''
+    # if (session["formid"].is_a?(String) )
+    #   @form = wufoo.form(session["formid"])
+    #   fields = @form.flattened_fields
+    # end
 
     @incoming = TwilioMessage.new
     @incoming.message_sid = params[:MessageSid]
@@ -73,7 +80,7 @@ class ReceiveTextController < ApplicationController
     @incoming.account_sid = params[:AccountSid]
     @incoming.from = params[:From]
     @incoming.to = params[:To]
-    @incoming.body = params[:Body]
+    @incoming.body = params[:Body].strip
     @incoming.status = params[:SmsStatus]
     @incoming.error_code = params[:ErrorCode]
     @incoming.error_message = params[:ErrorMessage]
@@ -91,16 +98,22 @@ class ReceiveTextController < ApplicationController
       session["fieldquestions"] = Hash.new
       session["contact"] = "EMAIL"
       session["errorcount"] = 0
-      session["form"] = ''
+      session["formid"] = ''
       session["fields"] = ''
+      session["form_length"] = ''
     elsif @twiliowufoo and session["counter"] == 0
-      session["form"] = wufoo.form(@twiliowufoo.wufoo_formid)
-      session["fields"] = fields = session["form"].flattened_fields     
-      message = "#{session["fields"][session["counter"]]['Title']}"
-    # elsif session["counter"] < (session["fields"].length - 1)
-    #   session["fieldanswers"][session["fields"][session["counter"]-1]['ID']] = params["Body"].strip
-    #   #message = "#{session["fields"][session["counter"]]['Title']}"
-    #   message = "one"
+      session["formid"] = @twiliowufoo.wufoo_formid
+      @form = wufoo.form(@twiliowufoo.wufoo_formid)
+      fields = @form.flattened_fields 
+      session["form_length"] = fields.length
+      message = "#{fields[session["counter"]]['Title']}"
+      #message = session["formid"]
+    elsif sms_count < (session["form_length"] - 1)
+      @form = wufoo.form(session["formid"])
+      fields = @form.flattened_fields 
+      id_to_store = fields[sms_count - 1]['ID']
+      session["fieldanswers"][id_to_store] = message_body
+      message = "#{fields[sms_count]['Title']}"
       # If the question asked for an email check if response contains a @ and . or a skip
       # if session["fields"][session["counter"] - 1]['Title'].include? "email address"
       #   if !( params["Body"] =~ /.+@.+\..+/) and !(params["Body"].upcase.include? "SKIP")
@@ -132,30 +145,32 @@ class ReceiveTextController < ApplicationController
       #     end
       #   end
         
-      # elsif session["counter"] == (session["fields"].length - 1) 
-      #   session["fieldanswers"][session["fields"][session["counter"]-1]['ID']] = params["Body"]
-      #   session["fieldanswers"][session["fields"][session["counter"]]['ID']] = session["phone_number"]
-      #   result = session["form"].submit(session["fieldanswers"])
-      #   message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive a text from 773-747-6239 with more details."
-      #   if session["contact"] == "EMAIL"
-      #     message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive an email from smarziano@cct.org with details."
-      #   end
+    elsif sms_count == (session["form_length"] - 1) 
+      @form = wufoo.form(session["formid"])
+      fields = @form.flattened_fields 
+      session["fieldanswers"][fields[sms_count-1]['ID']] = message_body
+      session["fieldanswers"][fields[sms_count]['ID']] = session["phone_number"]
+      result = @form.submit(session["fieldanswers"])
+      message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive a text from 773-747-6239 with more details."
+      if session["contact"] == "EMAIL"
+        message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive an email from smarziano@cct.org with details."
+      end
       # else
       #   message = "You have already completed the sign up process."
       # end  
-    else
+    # else
       
-      #message = session["counter"]
-      message = "2"
-      #message = session["fields"]
-      session["counter"] = -1
-      session["fieldanswers"] = Hash.new
-      session["fieldquestions"] = Hash.new
-      session["contact"] = "EMAIL"
-      session["errorcount"] = 0
+    #   #message = session["counter"]
+    #   message = "2"
+    #   #message = session["fields"]
+    #   session["counter"] = -1
+    #   session["fieldanswers"] = Hash.new
+    #   session["fieldquestions"] = Hash.new
+    #   session["contact"] = "EMAIL"
+    #   session["errorcount"] = 0
     end
     
-    @incoming.save
+    #@incoming.save
     twiml = Twilio::TwiML::Response.new do |r|
       r.Message message
     end
