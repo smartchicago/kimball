@@ -17,7 +17,7 @@ class ReceiveTextController < ApplicationController
     @twilio_message.status = params[:SmsStatus]
     @twilio_message.error_code = params[:ErrorCode]
     @twilio_message.error_message = params[:ErrorMessage]
-    @twilio_message.direction = params[:Direction]
+    @twilio_message.direction = "incoming-twiml"
     @twilio_message.save
 
     from_number = params[:From].sub("+1","").to_i # Removing +1 and converting to integer
@@ -76,8 +76,6 @@ class ReceiveTextController < ApplicationController
 
     @incoming = TwilioMessage.new
     @incoming.message_sid = params[:MessageSid]
-    @incoming.date_created = params[:DateCreated]
-    @incoming.date_updated = params[:DateUpdated]
     @incoming.date_sent = params[:DateSent]
     @incoming.account_sid = params[:AccountSid]
     @incoming.from = params[:From]
@@ -86,7 +84,7 @@ class ReceiveTextController < ApplicationController
     @incoming.status = params[:SmsStatus]
     @incoming.error_code = params[:ErrorCode]
     @incoming.error_message = params[:ErrorMessage]
-    @incoming.direction = params[:Direction]
+    @incoming.direction = "incoming-twiml"
     @incoming.save
     
     @twiliowufoo = TwilioWufoo.where("twilio_keyword = ? AND status = ?", params[:Body].strip.upcase, true).first
