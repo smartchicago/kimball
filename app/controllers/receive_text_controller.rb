@@ -160,11 +160,15 @@ class ReceiveTextController < ApplicationController
           message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive an email from smarziano@cct.org with details."
         end
       else
-        message = session["end_message"]
+        if session["end_message"].length > 0
+          message = session["end_message"]
+        else
+          message = "Thank you. You have completed the form."
+        end
       end
     
     else
-      message = "You have completed the form."
+      message = "Thank you. You have completed the form."
     # else
       
     #   #message = session["counter"]
