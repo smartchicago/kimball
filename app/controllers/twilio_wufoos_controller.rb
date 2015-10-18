@@ -69,6 +69,6 @@ class TwilioWufoosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def twilio_wufoo_params
-      params.require(:twilio_wufoo).permit(:name, :wufoo_formid, :twilio_keyword, :status)
+      params.require(:twilio_wufoo).permit(:name, :wufoo_formid, :twilio_keyword, :status, :end_message, :form_type)
     end
 end

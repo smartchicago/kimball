@@ -3,10 +3,12 @@
 <table class="table table-striped">
   <thead>
     <tr>
+      <th>Active?</th>
+      <th>Form Type</th>
       <th>Name</th>
       <th>Wufoo formid</th>
       <th>Twilio keyword</th>
-      <th>Active?</th>
+      <th>End Message</th>
       <th></th>
       <th></th>
       <th></th>
@@ -16,10 +18,12 @@
   <tbody>
     <% @twilio_wufoos.each do |twilio_wufoo| %>
       <tr>
+        <td><%= twilio_wufoo.status %></td>
+        <td><%= twilio_wufoo.form_type %></td>
         <td><%= twilio_wufoo.name %></td>
         <td><%= twilio_wufoo.wufoo_formid %></td>
         <td><%= twilio_wufoo.twilio_keyword %></td>
-        <td><%= twilio_wufoo.status %></td>
+        <td><%= twilio_wufoo.end_message %></td>
         <td><%= link_to 'Show', twilio_wufoo %></td>
         <td><%= link_to 'Edit', edit_twilio_wufoo_path(twilio_wufoo) %></td>
         <td><%= link_to 'Destroy', twilio_wufoo, method: :delete, data: { confirm: 'Are you sure?' } %></td>
