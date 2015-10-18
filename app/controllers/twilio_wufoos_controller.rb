@@ -15,6 +15,7 @@ class TwilioWufoosController < ApplicationController
   # GET /twilio_wufoos/new
   def new
     @twilio_wufoo = TwilioWufoo.new
+    @maximum_length = TwilioWufoo.validators_on( :end_message ).first.options[:maximum]
   end
 
   # GET /twilio_wufoos/1/edit

@@ -28,8 +28,9 @@
     <%= f.text_field :twilio_keyword %>
   </div>
   <div class="field">
-    <%= f.label :end_message %><br>
-    <%= f.text_field :end_message %>
+    <%= f.label :end_message %> (This is ignored if Form Type is "signup")<br>
+    <%= f.text_area :end_message, id: "counted", rows: 3, class: 'span5', maxLength: 160%>
+    Characters left: <span id="char-count">160</span>
   </div>
   <div class="field">
     <%= f.label :status %><br>
@@ -38,4 +39,15 @@
   <div class="actions">
     <%= f.submit %>
   </div>
+
 <% end %>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#char-count').html($('#counted').val().length);
+  });
+ 
+  $('#counted').keyup(function() {
+    $('#char-count').html(160 - $(this).val().length);
+  });
+</script>

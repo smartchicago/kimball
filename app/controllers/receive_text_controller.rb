@@ -63,6 +63,8 @@ class ReceiveTextController < ApplicationController
     session["formid"] ||= ''
     session["fields"] ||= ''
     session["form_length"] ||= ''
+    session["form_type"] ||= ''
+    session["end_message"] ||= ''
 
     message_body = params["Body"].strip
     sms_count = session["counter"]
@@ -101,13 +103,16 @@ class ReceiveTextController < ApplicationController
       session["formid"] = ''
       session["fields"] = ''
       session["form_length"] = ''
+      session["form_type"] ||= ''
+      session["end_message"] ||= ''
     elsif @twiliowufoo and session["counter"] == 0
       session["formid"] = @twiliowufoo.wufoo_formid
       @form = wufoo.form(@twiliowufoo.wufoo_formid)
       fields = @form.flattened_fields 
       session["form_length"] = fields.length
       message = "#{fields[session["counter"]]['Title']}"
-      #message = session["formid"]
+      session["form_type"] = @twiliowufoo.form_type
+      session["end_message"] = @twiliowufoo.end_message
     elsif sms_count < (session["form_length"] - 1)
       @form = wufoo.form(session["formid"])
       fields = @form.flattened_fields 
@@ -151,9 +156,13 @@ class ReceiveTextController < ApplicationController
       session["fieldanswers"][fields[sms_count-1]['ID']] = message_body
       session["fieldanswers"][fields[sms_count]['ID']] = session["phone_number"]
       result = @form.submit(session["fieldanswers"])
-      message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive a text from 773-747-6239 with more details."
-      if session["contact"] == "EMAIL"
-        message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive an email from smarziano@cct.org with details."
+      if session["form_type"] == "signup"
+        message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive a text from 773-747-6239 with more details."
+        if session["contact"] == "EMAIL"
+          message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive an email from smarziano@cct.org with details."
+        end
+      else
+        message = session["end_message"]
       end
     
     else
