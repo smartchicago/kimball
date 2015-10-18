@@ -14,20 +14,22 @@
   <%= hidden_field_tag :adv, '1' %>
   
   <div class="collapse <%= "in" if params[:adv] %>" id="advanced-search">
-    <div class="span3">
+    <div class="span4">
       <fieldset>
-        <label for="preferred contact method">Preferred Contact Method</label>
-<!--       <%= text_field_tag :preferred_contact_method, params[:preferred_contact_method], :class => "input" %>
- -->      <%= select_tag :preferred_contact_method, 
-        options_for_select([["All", '*'],["Email", 'EMAIL'], ["SMS", 'SMS']], include_blank: true, selected: params[:preferred_contact_method]) , :class => "input" %>
+        <label for="first_name">First name</label>
+        <%= text_field_tag :first_name, params[:first_name], :class => "input" %>
 
-      <label for="device_id_type">Device Type</label>
-      <%= select_tag :device_id_type, 
-        options_for_select([[human_device_type_name(0), 0],[human_device_type_name(1), 1], [human_device_type_name(2), 2], [human_device_type_name(3), 3]] , include_blank: true, selected: params[:device_id_type]) , :multiple => true,  :class => "multiple", :size => '4'%>
+        <label for="last_name">Last name</label>
+        <%= text_field_tag :last_name, params[:last_name], :class => "input" %>
 
-      <label for="connection_id_type">Connection Type</label>
-      <%= select_tag :connection_id_type, 
-        options_for_select([[human_connection_type_name(0), 0],[human_connection_type_name(1), 1], [human_connection_type_name(4), 4], [human_connection_type_name(3), 3], [human_connection_type_name(2), 2]] , include_blank: true, selected: params[:connection_id_type]) , :multiple => true,  :class => "multiple", :size => '5' %>       
+        <label for="email_address">Email address</label>
+        <%= text_field_tag :email_address, params[:email_address], :class => "input" %> 
+
+        <label for="postal_code">ZIP Code</label>
+        <%= text_field_tag :postal_code, params[:postal_code], :class => "input" %> 
+
+        <label for="address">Address</label>
+        <%= text_field_tag :address, params[:address], :class => "input-large span4" %>    
 
         <label for="tags">Tags</label>
 <!--         <%= text_field_tag :tags, params[:tags], :class => "input" %>    
@@ -36,49 +38,50 @@
       </fieldset>
     </div>
     
-    <div class="span4">
-      
-     <label for="postal_code">ZIP Code</label>
-      <%= text_field_tag :postal_code, params[:postal_code], :class => "input-small" %>
+    <div class="span3">
 
-    <label for="verified">Verified?</label>
-    <%= text_field_tag :verified, params[:verified], :class => "input" %>     
-      
-      <label for="device_description">Device description</label>
-      <%= text_field_tag :device_description, params[:device_description], :class => "input span4" %>
+      <label for="device_id_type">Device Type</label>
+      <%= select_tag :device_id_type, 
+        options_for_select([[human_device_type_name(0), 0],[human_device_type_name(1), 1], [human_device_type_name(2), 2], [human_device_type_name(3), 3]] , include_blank: true, selected: params[:device_id_type]) , :multiple => true,  :class => "multiple", :size => '4'%>
 
-      <label for="connection_description">Connection description</label>
-      <%= text_field_tag :connection_description, params[:connection_description], :class => "input span4" %>      
+      <label for="connection_id_type">Connection Type</label>
+      <%= select_tag :connection_id_type, 
+        options_for_select([[human_connection_type_name(0), 0],[human_connection_type_name(1), 1], [human_connection_type_name(4), 4], [human_connection_type_name(3), 3], [human_connection_type_name(2), 2]] , include_blank: true, selected: params[:connection_id_type]) , :multiple => true,  :class => "multiple", :size => '5' %> 
 
-      <label for="submissions">Form submission content</label>
-      <%= text_field_tag :submissions, params[:submissions], :class => "input span4" %>      
-
-      <label for="event_id">Event</label>
-      <%= select_tag :event_id, 
-            options_for_select([[nil, nil]] + Event.all.order(:name).collect{|event| [event.name, event.id]}, selected: params[:event_id]), 
-            :class => "input" %>      
+      <label for="preferred contact method">Preferred Contact Method</label>
+      <%= select_tag :preferred_contact_method, 
+        options_for_select([["All", '*'],["Email", 'EMAIL'], ["SMS", 'SMS']], include_blank: true, selected: params[:preferred_contact_method]) , :class => "input" %>
+            
     </div>
 
-    <div class="span4">
-    <label for="first_name">First name</label>
-        <%= text_field_tag :first_name, params[:first_name], :class => "input" %>
+    <div class="span5">
+    
+      <label for="device_description">Device description</label>
+      <%= text_field_tag :device_description, params[:device_description], :class => "input span5" %>
 
-        <label for="last_name">Last name</label>
-        <%= text_field_tag :last_name, params[:last_name], :class => "input" %>
-
-        <label for="email_address">Email address</label>
-        <%= text_field_tag :email_address, params[:email_address], :class => "input" %>
-      <label for="address">Address</label>
-      <%= text_field_tag :address, params[:address], :class => "input-large span4" %>
-      
-      
-      <label for="geography_id">Ward</label>
-      <%= text_field_tag :geography_id, params[:geography_id], :class => "input-small" %>
-      
+      <label for="connection_description">Connection description</label>
+      <%= text_field_tag :connection_description, params[:connection_description], :class => "input span5" %>
+ 
       <p class="alert alert-info">
-        <span class="label label-info">Search tips</span><br/>To search for more than one ward or zip code, separate values with a space.<br/>To search Tags or Device Type use Control+Click or Command+Click to select/unselect options.      
+        <span class="label label-info">Search tips</span><br/>To search for more than one ward or zip code, separate values with a space.<br/>To search Tags, Device Type, or Device Connection use Control+Click or Command+Click to select/deselect options.      
       </p>
-      
+      <span data-toggle="collapse" data-target="#additional-options">Click to Show Additional Options</span>
+      <div class="collapse" id="additional-options">
+        <label for="verified">Verified?</label>
+        <%= select_tag :verified,
+             options_for_select([[nil,nil]] + Person.uniq.pluck(:verified), selected: params[:verified]), :class => "input" %>
+
+        <label for="geography_id">Ward</label>
+        <%= text_field_tag :geography_id, params[:geography_id], :class => "input-small" %>
+
+        <label for="submissions">Form submission content</label>
+        <%= text_field_tag :submissions, params[:submissions], :class => "input span4" %>      
+
+        <label for="event_id">Event</label>
+        <%= select_tag :event_id, 
+              options_for_select([[nil, nil]] + Event.all.order(:name).collect{|event| [event.name, event.id]}, selected: params[:event_id]), 
+              :class => "input" %>
+        </div>
     </div>
   </div>  
   
