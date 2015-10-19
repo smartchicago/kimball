@@ -1,4 +1,6 @@
 Logan::Application.routes.draw do
+  resources :twilio_wufoos
+
   resources :twilio_messages do
     collection do
       post 'newtwil'

@@ -1,0 +1,53 @@
+<%= form_for(@twilio_wufoo) do |f| %>
+  <% if @twilio_wufoo.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@twilio_wufoo.errors.count, "error") %> prohibited this twilio_wufoo from being saved:</h2>
+
+      <ul>
+      <% @twilio_wufoo.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :form_type %><br>
+    <%= f.text_field :form_type %>
+  </div>
+  <div class="field">
+    <%= f.label :wufoo_formid %><br>
+    <%= f.text_field :wufoo_formid %>
+  </div>
+  <div class="field">
+    <%= f.label :twilio_keyword %><br>
+    <%= f.text_field :twilio_keyword %>
+  </div>
+  <div class="field">
+    <%= f.label :end_message %> (This is ignored if Form Type is "signup")<br>
+    <%= f.text_area :end_message, id: "counted", rows: 3, class: 'span5', maxLength: 160%>
+    Characters left: <span id="char-count">160</span>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br>
+    <%= f.text_field :status %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#char-count').html($('#counted').val().length);
+  });
+ 
+  $('#counted').keyup(function() {
+    $('#char-count').html(160 - $(this).val().length);
+  });
+</script>

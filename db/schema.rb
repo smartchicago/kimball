@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150909175536) do
+ActiveRecord::Schema.define(version: 20151018185706) do
 
   create_table "applications", force: true do |t|
     t.string   "name"
@@ -159,6 +159,17 @@ ActiveRecord::Schema.define(version: 20150909175536) do
     t.string   "signup_verify"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "twilio_wufoos", force: true do |t|
+    t.string   "name"
+    t.string   "wufoo_formid"
+    t.string   "twilio_keyword"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "status",         default: false, null: false
+    t.string   "end_message"
+    t.string   "form_type"
   end
 
   create_table "users", force: true do |t|
