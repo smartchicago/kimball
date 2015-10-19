@@ -40,6 +40,7 @@ Logan::Application.routes.draw do
   
   get  "search/index"
   post "search/export"  # send search results elsewhere, i.e. Mailchimp
+  post "search/exportTwilio"
 
   get "mailchimp_exports/index"
   

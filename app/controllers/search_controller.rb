@@ -64,4 +64,26 @@ class SearchController < ApplicationController
     end
     
   end
+
+  def exportTwilio
+    # send messages to all people
+    message1 = params.delete(:message1)
+    message2 = params.delete(:message2)
+    messages = Array[message1, message2]
+
+    @people = Person.complex_search(params, 10000)
+    phone_numbers = @people.collect{ |person| person.phone_number }
+    phone_numbers = phone_numbers.reject { |e| e.to_s.blank? }
+    @job_enqueue = Delayed::Job.enqueue SendTwilioMessagesJob.new(messages, phone_numbers)
+    if @job_enqueue.save
+      Rails.logger.info("[SearchController#exportTwilio] Sent phone_numbers to Twilio")
+      respond_to do |format|
+        format.js { }
+      end
+    else
+      Rails.logger.error("[SearchController#exportTwilio] failed to send text messages")
+      format.all { render text: "failed to send text messages", status: 400} 
+    end
+  end
+
 end
