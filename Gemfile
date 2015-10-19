@@ -55,10 +55,10 @@ gem 'will_paginate-bootstrap' # https://github.com/nickpad/will_paginate-bootstr
 # use mysql in production
 group :production do
   gem 'mysql2'
+  
 end
 
-# include health_check, for system monitoring
-gem "health_check"
+gem "health_check" # include health_check, for system monitoring
 
 # use holder for placeholder images
 gem 'holder_rails'
@@ -74,6 +74,9 @@ gem "twilio-ruby"
 
 # use Wuparty for wufoo
 gem "wuparty"
+
+# use Delayed Job to queue messages
+gem 'delayed_job_active_record'
 
 # mock tests w/mocha
 gem "mocha", :require => false

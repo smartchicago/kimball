@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151018185706) do
+ActiveRecord::Schema.define(version: 20151019004127) do
 
   create_table "applications", force: true do |t|
     t.string   "name"
@@ -35,6 +35,26 @@ ActiveRecord::Schema.define(version: 20151018185706) do
     t.datetime "updated_at"
     t.integer  "created_by"
   end
+
+  create_table "delayed_jobs", force: true do |t|
+    t.integer  "priority",               default: 0, null: false
+    t.integer  "attempts",               default: 0, null: false
+    t.text     "handler",                            null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "delayed_reference_id"
+    t.string   "delayed_reference_type"
+  end
+
+  add_index "delayed_jobs", ["delayed_reference_type"], name: "delayed_jobs_delayed_reference_type"
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+  add_index "delayed_jobs", ["queue"], name: "delayed_jobs_queue"
 
   create_table "events", force: true do |t|
     t.string   "name"

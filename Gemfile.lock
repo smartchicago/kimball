@@ -60,6 +60,11 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.2)
+    delayed_job (4.1.1)
+      activesupport (>= 3.0, < 5.0)
+    delayed_job_active_record (4.1.0)
+      activerecord (>= 3.0, < 5)
+      delayed_job (>= 3.0, < 5)
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
@@ -194,6 +199,7 @@ PLATFORMS
 DEPENDENCIES
   capistrano!
   coffee-rails (~> 4.0.0.beta1)
+  delayed_job_active_record
   devise!
   faker
   gibbon
