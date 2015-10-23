@@ -35,3 +35,10 @@ Person.create(
   phone_number: "312-555-8888",
   participation_type: "remote"
 )
+
+User.create(
+  email: 'cutgroup@example.com',
+  password:'foobar123',
+  password_confirmation:'foobar123',
+  approved: true
+)

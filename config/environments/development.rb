@@ -1,6 +1,9 @@
 Logan::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  Bullet.enable = true
+  Bullet.alert = true
+  Bullet.bullet_logger = true
   # base url for emails
   config.action_mailer.default_url_options = { :host => 'localhost:8080' }
 

@@ -53,6 +53,9 @@ GEM
     atomic (1.1.9)
     bcrypt-ruby (3.0.1)
     builder (3.1.4)
+    bullet (4.14.10)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.9.0)
     coffee-rails (4.0.0.beta1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0.beta, < 5.0)
@@ -120,6 +123,8 @@ GEM
     pg (0.18.3)
     polyglot (0.3.3)
     rack (1.5.2)
+    rack-mini-profiler (0.9.7)
+      rack (>= 1.1.3)
     rack-test (0.6.2)
       rack (>= 1.0)
     rails (4.0.0.rc1)
@@ -139,6 +144,7 @@ GEM
     rake (10.0.4)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    ruby-prof (0.15.8)
     sass (3.2.7)
     sass-rails (4.0.0.beta1)
       railties (>= 4.0.0.beta, < 5.0)
@@ -188,6 +194,7 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    uniform_notifier (1.9.0)
     warden (1.2.1)
       rack (>= 1.0)
     will_paginate (3.0.4)
@@ -202,6 +209,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bullet
   capistrano!
   coffee-rails (~> 4.0.0.beta1)
   daemons
@@ -218,7 +226,9 @@ DEPENDENCIES
   mocha
   newrelic_rpm
   pg
+  rack-mini-profiler
   rails (= 4.0.0.rc1)
+  ruby-prof
   sass-rails (~> 4.0.0.beta1)
   sqlite3
   tire
