@@ -22,3 +22,11 @@ infrastructure "kimball" {
 customization "ruby" {
   ruby_version = "2.1"
 }
+
+customization "dev" {
+    vagrantfile = "Vagrantfile"
+}
+
+customization "dev-dep" {
+    vagrantfile = "Vagrantfile"
+}

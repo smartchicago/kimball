@@ -12,7 +12,11 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
+<<<<<<< e4bc64ef0f4f2718fbe49a930204592869cc8940
   config.vm.box = "ubuntu/trusty64"
+=======
+  #  config.vm.box = "base"
+>>>>>>> adding a User to the seeds
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -22,6 +26,7 @@ Vagrant.configure(2) do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
+<<<<<<< e4bc64ef0f4f2718fbe49a930204592869cc8940
   # config.vm.network "forwarded_port", guest: 80, host: 3000
 
   # Create a private network, which allows host-only access to the machine
@@ -64,6 +69,13 @@ Vagrant.configure(2) do |config|
     puts "run 'vagrant plugin install vagrant-hostmanager'"
     puts "It will help you find your dev environment!"
   end
+=======
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  # config.vm.network "private_network", ip: "192.168.33.10"
+>>>>>>> adding a User to the seeds
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -74,12 +86,17 @@ Vagrant.configure(2) do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
+<<<<<<< e4bc64ef0f4f2718fbe49a930204592869cc8940
   # config.vm.synced_folder "../relay", "/relay"
+=======
+  # config.vm.synced_folder "../data", "/vagrant_data"
+>>>>>>> adding a User to the seeds
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
+<<<<<<< e4bc64ef0f4f2718fbe49a930204592869cc8940
 
   config.vm.provider "virtualbox" do |vb, override|
   # Don't display the VirtualBox GUI when booting the machine
@@ -98,6 +115,32 @@ Vagrant.configure(2) do |config|
     override.vm.network "private_network", ip: "192.168.33.124"
   end
 
+=======
+  if Vagrant.has_plugin?('vagrant-cachier')
+    config.cache.scope = :box
+    config.cache.synced_folder_opts = {
+      type: :nfs,
+      mount_options: ['rw', 'vers=3', 'tcp', 'nolock']
+    }
+  end
+
+  if Vagrant.has_plugin?('vagrant-hostmanager')
+    config.hostmanager.enabled = true
+    config.vm.hostname = 'dig.local'
+    config.hostmanager.include_offline = true
+    config.hostmanager.manage_host = true
+  else
+    puts "run 'vagrant plugin install vagrant-hostmanager'"
+    exit
+  end
+  config.vm.provider "virtualbox" do |vb|
+    # Display the VirtualBox GUI when booting the machine
+    # vb.gui = true
+
+    # Customize the amount of memory on the VM:
+    vb.memory = "1024"
+  end
+>>>>>>> adding a User to the seeds
   #
   # View the documentation for the provider you are using for more
   # information on available options.
@@ -112,6 +155,7 @@ Vagrant.configure(2) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
+<<<<<<< e4bc64ef0f4f2718fbe49a930204592869cc8940
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password password'
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password password'
@@ -182,4 +226,10 @@ Vagrant.configure(2) do |config|
     sudo chown -R www-data:www-data /var/run/nginx/
     sudo service nginx restart
   SHELL
+=======
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   sudo apt-get update
+  #   sudo apt-get install -y apache2
+  # SHELL
+>>>>>>> adding a User to the seeds
 end
