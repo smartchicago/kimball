@@ -33,6 +33,7 @@ gem 'unicorn'
 
 # Deploy with Capistrano
 group :development do
+
   # gem 'capistrano'
   # mainline cap is busted w/r/t Rails 4. Try this fork instead.
   # src: https://github.com/capistrano/capistrano/pull/412
@@ -85,5 +86,12 @@ gem 'daemons'
 # mock tests w/mocha
 gem "mocha", :require => false
 
-# generate fake data w/faker: http://rubydoc.info/github/stympy/faker/master/frames
-gem "faker"
+group :testing do
+  # mock tests w/mocha
+  gem "mocha", :require => false
+
+  gem "sqlite3"
+
+  # generate fake data w/faker: http://rubydoc.info/github/stympy/faker/master/frames
+  gem "faker"
+end
