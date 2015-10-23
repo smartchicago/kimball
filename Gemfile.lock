@@ -239,6 +239,7 @@ DEPENDENCIES
   rails (= 4.0.0.rc1)
   ruby-prof
   sass-rails (~> 4.0.0.beta1)
+  sqlite3
   tire
   turbolinks
   twilio-ruby
