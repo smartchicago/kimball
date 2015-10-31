@@ -72,6 +72,7 @@ class SearchController < ApplicationController
     messages = Array[message1, message2]
 
     @people = Person.complex_search(params, 10000)
+    #people_count = @people.length
     Rails.logger.info("[SearchController#exportTwilio] people #{@people}")
     phone_numbers = @people.collect{ |person| person.phone_number }
     Rails.logger.info("[SearchController#exportTwilio] people #{phone_numbers}")

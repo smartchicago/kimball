@@ -148,7 +148,7 @@
       <%= form_tag search_export_path, remote: true, class: "form-inline" %>
         <%= text_field_tag :name, '', class: "input-xlarge", placeholder: "enter a name for this list (segment)" %>
         <%= hidden_field_tag :adv, '1' %>
-        <%- [:tags, :submissions, :address, :first_name, :last_name, :email_address, :geography_id, :postal_code, :event_id, :device_description, :connection_description].each do |field| %> <%= hidden_field_tag field, params[field] %> <% end -%>
+        <%- [:first_name, :last_name, :email_address, :postal_code, :address, :tags, :device_id_type, :connection_id_type, :preferred_contact_method, :device_description, :connection_description, :verified, :geography_id, :submissions, :event_id ].each do |field| %> <%= hidden_field_tag field, params[field] %> <% end -%>
         <%= submit_tag "Export", class: "btn btn-primary", data: {disable_with: "Exporting ..."} %>
       </form>      
     </div>
@@ -158,7 +158,7 @@
         <%= text_area_tag :message1, '', class: "input-xlarge", placeholder: "Enter a message to send (required)" %>
         <%= text_area_tag :message2, '', class: "input-xlarge", placeholder: "Enter a 2nd message to send. (Optional)" %>
         <%= hidden_field_tag :adv, '1' %>
-        <%- [:phone_number].each do |field| %> <%= hidden_field_tag field, params[field] %> <% end -%>
+        <%- [:first_name, :last_name, :email_address, :postal_code, :address, :tags, :device_id_type, :connection_id_type, :preferred_contact_method, :device_description, :connection_description, :verified, :geography_id, :submissions, :event_id ].each do |field| %> <%= hidden_field_tag field, params[field] %> <% end -%>
         <%= submit_tag "Send messages through Twilio", class: "btn btn-primary", data: {disable_with: "Exporting ..."} %>
       </form>      
     </div>    
