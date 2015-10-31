@@ -40,6 +40,7 @@
 	          )
               @outgoing.message_sid = @message.sid
               @outgoing.save
+          Rails.logger.info("[Twilio][SendTwilioMessagesJob] #{phone_number}")
 	        rescue Twilio::REST::RequestError => e
 			  @outgoing.error_message = e.message
 	          @outgoing.save
