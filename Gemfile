@@ -77,6 +77,7 @@ gem "wuparty"
 
 # use Delayed Job to queue messages
 gem 'delayed_job_active_record'
+gem 'daemons'
 
 # mock tests w/mocha
 gem "mocha", :require => false
