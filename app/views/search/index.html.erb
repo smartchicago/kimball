@@ -157,6 +157,8 @@
       <%= form_tag search_exportTwilio_path, remote: true, class: "form-inline" %>
         <%= text_area_tag :message1, '', class: "input-xlarge", placeholder: "Enter a message to send (required)" %>
         <%= text_area_tag :message2, '', class: "input-xlarge", placeholder: "Enter a 2nd message to send. (Optional)" %>
+        <%= hidden_field_tag :adv, '1' %>
+        <%- [:phone_number].each do |field| %> <%= hidden_field_tag field, params[field] %> <% end -%>
         <%= submit_tag "Send messages through Twilio", class: "btn btn-primary", data: {disable_with: "Exporting ..."} %>
       </form>      
     </div>    

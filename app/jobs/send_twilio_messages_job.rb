@@ -10,6 +10,10 @@
       job.save!
     end
 
+    def max_attempts
+      1
+    end
+
     def perform
       # Instantiate a Twilio client
       client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
@@ -26,11 +30,11 @@
 
 	          @outgoing = TwilioMessage.new
 	          @outgoing.to = phone_number
-			  @outgoing.body = message
-			  @outgoing.from = ENV['TWILIO_NUMBER']
+    			  @outgoing.body = message
+    			  @outgoing.from = ENV['TWILIO_NUMBER']
 			  
-			  #@incoming.direction = "incoming-twiml"
-			  @outgoing.save
+    			  #@incoming.direction = "incoming-twiml"
+    			  @outgoing.save
 
 	          # Create and send an SMS message
 	          @message = client.account.messages.create(
@@ -38,11 +42,11 @@
 	            to: phone_number,
 	            body: message
 	          )
-              @outgoing.message_sid = @message.sid
-              @outgoing.save
-          Rails.logger.info("[Twilio][SendTwilioMessagesJob] #{phone_number}")
+            @outgoing.message_sid = @message.sid
+            @outgoing.save
+            Rails.logger.info("[Twilio][SendTwilioMessagesJob] #{phone_number}")
 	        rescue Twilio::REST::RequestError => e
-			  @outgoing.error_message = e.message
+			      @outgoing.error_message = e.message
 	          @outgoing.save
 	          Rails.logger.warn("[Twilio][SendTwilioMessagesJob] had a problem. Full error: #{error_message}")
 	        end

@@ -72,11 +72,13 @@ class SearchController < ApplicationController
     messages = Array[message1, message2]
 
     @people = Person.complex_search(params, 10000)
+    Rails.logger.info("[SearchController#exportTwilio] people #{@people}")
     phone_numbers = @people.collect{ |person| person.phone_number }
+    Rails.logger.info("[SearchController#exportTwilio] people #{phone_numbers}")
     phone_numbers = phone_numbers.reject { |e| e.to_s.blank? }
     @job_enqueue = Delayed::Job.enqueue SendTwilioMessagesJob.new(messages, phone_numbers)
     if @job_enqueue.save
-      Rails.logger.info("[SearchController#exportTwilio] Sent phone_numbers to Twilio")
+      Rails.logger.info("[SearchController#exportTwilio] Sent #{phone_numbers} to Twilio")
       respond_to do |format|
         format.js { }
       end
