@@ -11,6 +11,9 @@ class Person < ActiveRecord::Base
 
   has_many :tags, through: :taggings
   has_many :taggings, as: :taggable
+
+  after_update  :sendToMailChimp
+  after_create  :sendToMailChimp
   
   self.per_page = 15
 
@@ -215,7 +218,37 @@ class Person < ActiveRecord::Base
 
   end
 
-
+  def sendToMailChimp
+    if self.email_address.present? 
+      if self.verified.start_with?("Verified")
+          begin
+            mailchimpSend = Gibbon.list_subscribe({
+              :id => Logan::Application.config.cut_group_mailchimp_list_id, 
+              :email_address => self.email_address, 
+              :double_optin => 'false', 
+              :update_existing => 'true',
+              :merge_vars => {:FNAME => self.first_name, 
+                :LNAME => self.last_name, 
+                :MMERGE3 => self.geography_id, 
+                :MMERGE4 => self.postal_code, 
+                :MMERGE5 => self.participation_type, 
+                :MMERGE6 => self.voted, 
+                :MMERGE7 => self.called_311, 
+                :MMERGE8 => self.primary_device_description, 
+                :MMERGE9 => secondary_device_type_name, 
+                :MMERGE10 => self.secondary_device_description, 
+                :MMERGE11 =>  primary_connection_type_name , 
+                :MMERGE12 => self.primary_connection_description, 
+                :MMERGE13 => primary_device_type_name, 
+                :MMERGE14 => self.preferred_contact_method}
+                })
+            Rails.logger.info("[People->sendToMailChimp] Sent #{self.id} to Mailchimp: #{mailchimpSend}")
+          rescue Gibbon::MailChimpError => e
+            Rails.logger.fatal("[People->sendToMailChimp] fatal error sending #{self.id} to Mailchimp: #{e.message}")
+          end
+      end
+    end
+  end
 
 
   def self.initialize_from_wufoo(params)
@@ -259,6 +292,14 @@ class Person < ActiveRecord::Base
 
   def secondary_device_type_name
     Logan::Application.config.device_mappings.rassoc(secondary_device_id)[0].to_s
+  end
+
+  def primary_connection_type_name
+    Logan::Application.config.connection_mappings.rassoc(primary_connection_id)[0].to_s
+  end
+
+  def secondary_connection_type_name
+    Logan::Application.config.connection_mappings.rassoc(secondary_connection_id)[0].to_s
   end
 
   def full_name
