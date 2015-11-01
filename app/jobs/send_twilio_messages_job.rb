@@ -57,8 +57,9 @@
   	          @outgoing.save
   	          Rails.logger.warn("[Twilio][SendTwilioMessagesJob] had a problem. Full error: #{@outgoing.error_message}")
   	        end
+	        end
+          sleep(1)
 	      end
-	    end
       end
     end
     
