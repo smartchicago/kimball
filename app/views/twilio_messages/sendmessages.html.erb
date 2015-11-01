@@ -3,7 +3,7 @@
 </div>
 
 <%= form_tag( '/twilio_messages/uploadnumbers' , multipart: true) do %>
-  <%= text_area_tag :message1, '', class: "input-xlarge", placeholder: "Enter a message to send (required)" %><br />
+  <%= text_area_tag :message1, '', class: "input-xlarge", placeholder: "Enter a message to send (required)", required: true %><br />
   <%= text_area_tag :message2, '', class: "input-xlarge", placeholder: "Enter a 2nd message to send. (Optional)" %><br />
   Upload a comma seperated csv. The phone numbers must be in a field called 'phone_number': <%= file_field_tag "file" %><br>
   <%= submit_tag "Upload Numbers", id: "submitData" , class: "btn btn-primary", data: { confirm: 'These messages will be added to the queue and sent as soon as possible. Are you sure you want to send these?' } %>
