@@ -18,13 +18,13 @@
           <dd><%= address_fields_to_sentence(@person) %></dd>
 
           <dt>Ward</dt>
-          <dd><%= link_to @person.geography_id, search_index_path(adv: 1, geography_id: @person.geography_id ) %></dd>
+          <dd><% if @person.geography_id.present? %> <%= link_to @person.geography_id, search_index_path(adv: 1, geography_id: @person.geography_id ) %><% end %></dd>
 
           <dt>Primary device</dt>
           <dd><%= link_to @person.primary_device_description, search_index_path(adv: 1, device_description: @person.primary_device_description ) %> <span class="muted">(<%= human_device_type_name @person.primary_device_id %>)</span></dd>
 
           <dt>Secondary device</dt>
-          <dd><%= link_to @person.secondary_device_description, search_index_path(adv: 1, device_description: @person.secondary_device_description ) %> <span class="muted">(<%= human_device_type_name @person.secondary_device_id %>)</span></dd>
+          <dd><% if @person.secondary_device_description.present? %> <%= link_to @person.secondary_device_description, search_index_path(adv: 1, device_description: @person.secondary_device_description ) %> <% end %><span class="muted">(<%= human_device_type_name @person.secondary_device_id %>)</span></dd>
 
           <dt>Primary connection method</dt>
           <dd><%= human_connection_type_name @person.primary_connection_id %> <% if @person.primary_connection_description.present? %><%= ": " + @person.primary_connection_description %><% end %></dd>

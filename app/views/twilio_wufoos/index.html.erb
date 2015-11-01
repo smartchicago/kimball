@@ -1,5 +1,7 @@
 <h1>Twilio-Wufoo Connections</h1>
 
+<br />
+<h3>Others - Active </h3>
 <table class="table table-striped table-responsive">
   <thead>
     <tr>
@@ -16,7 +18,74 @@
   </thead>
 
   <tbody>
-    <% @twilio_wufoos.each do |twilio_wufoo| %>
+    <% @twilio_wufoos_others.each do |twilio_wufoo| %>
+      <tr>
+        <td><%= twilio_wufoo.status %></td>
+        <td><%= twilio_wufoo.form_type %></td>
+        <td><%= twilio_wufoo.name %></td>
+        <td><%= twilio_wufoo.wufoo_formid %></td>
+        <td><%= twilio_wufoo.twilio_keyword %></td>
+        <td><%= twilio_wufoo.end_message %></td>
+        <td><%= link_to 'Show', twilio_wufoo %></td>
+        <td><%= link_to 'Edit', edit_twilio_wufoo_path(twilio_wufoo) %></td>
+        <td><%= link_to 'Destroy', twilio_wufoo, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+<h3>Signups - Active</h3>
+<table class="table table-striped table-responsive">
+  <thead>
+    <tr>
+      <th>Active?</th>
+      <th>Form Type</th>
+      <th>Name</th>
+      <th>Wufoo formid</th>
+      <th>Twilio keyword</th>
+      <th>End Message</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @twilio_wufoos_signups.each do |twilio_wufoo| %>
+      <tr>
+        <td><%= twilio_wufoo.status %></td>
+        <td><%= twilio_wufoo.form_type %></td>
+        <td><%= twilio_wufoo.name %></td>
+        <td><%= twilio_wufoo.wufoo_formid %></td>
+        <td><%= twilio_wufoo.twilio_keyword %></td>
+        <td><%= twilio_wufoo.end_message %></td>
+        <td><%= link_to 'Show', twilio_wufoo %></td>
+        <td><%= link_to 'Edit', edit_twilio_wufoo_path(twilio_wufoo) %></td>
+        <td><%= link_to 'Destroy', twilio_wufoo, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h3>Inactive</h3>
+<table class="table table-striped table-responsive">
+  <thead>
+    <tr>
+      <th>Active?</th>
+      <th>Form Type</th>
+      <th>Name</th>
+      <th>Wufoo formid</th>
+      <th>Twilio keyword</th>
+      <th>End Message</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @twilio_wufoos_inactive.each do |twilio_wufoo| %>
       <tr>
         <td><%= twilio_wufoo.status %></td>
         <td><%= twilio_wufoo.form_type %></td>
