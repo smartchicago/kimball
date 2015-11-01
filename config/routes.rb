@@ -5,6 +5,8 @@ Logan::Application.routes.draw do
     collection do
       post 'newtwil'
       get 'newtwil'
+      post 'uploadnumbers'
+      get 'sendmessages'
     end
   end
 
