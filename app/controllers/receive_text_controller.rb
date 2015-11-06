@@ -110,6 +110,7 @@ class ReceiveTextController < ApplicationController
     elsif !@twiliowufoo and session["counter"] == 0
       message = "I did not understand that. Please re-type your message."
       session["counter"] -= 1
+
     elsif sms_count < (session["form_length"] - 1)
       @form = wufoo.form(session["formid"])
       fields = @form.flattened_fields 
@@ -168,7 +169,7 @@ class ReceiveTextController < ApplicationController
       end
     
     else
-      message = "Thank you. You have completed the form."
+      message = "If you are having trouble email smarziano@cct.org or text HELP and you will be contacted later."
     # else
       
     #   #message = session["counter"]
