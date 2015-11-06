@@ -107,8 +107,9 @@ class ReceiveTextController < ApplicationController
       message = "#{fields[session["counter"]]['Title']}"
       session["form_type"] = @twiliowufoo.form_type
       session["end_message"] = @twiliowufoo.end_message
-    # elsif !@twiliowufoo and session["counter"] == 0
-    #   message = "I did not understand that. Please re-type the keyword."
+    elsif !@twiliowufoo and session["counter"] == 0
+      message = "I did not understand that. Please re-type your message."
+      session["counter"] -= 1
     elsif sms_count < (session["form_length"] - 1)
       @form = wufoo.form(session["formid"])
       fields = @form.flattened_fields 
