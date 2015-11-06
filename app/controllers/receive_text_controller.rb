@@ -58,7 +58,7 @@ class ReceiveTextController < ApplicationController
     session["errorcount"] ||= 0
     session["formid"] ||= ''
     session["fields"] ||= ''
-    session["form_length"] ||= ''
+    session["form_length"] ||= 0
     session["form_type"] ||= ''
     session["end_message"] ||= ''
 
@@ -96,7 +96,7 @@ class ReceiveTextController < ApplicationController
       session["errorcount"] = 0
       session["formid"] = ''
       session["fields"] = ''
-      session["form_length"] = ''
+      session["form_length"] = 0
       session["form_type"] ||= ''
       session["end_message"] ||= ''
     elsif @twiliowufoo and session["counter"] == 0
@@ -107,6 +107,8 @@ class ReceiveTextController < ApplicationController
       message = "#{fields[session["counter"]]['Title']}"
       session["form_type"] = @twiliowufoo.form_type
       session["end_message"] = @twiliowufoo.end_message
+    # elsif !@twiliowufoo and session["counter"] == 0
+    #   message = "I did not understand that. Please re-type the keyword."
     elsif sms_count < (session["form_length"] - 1)
       @form = wufoo.form(session["formid"])
       fields = @form.flattened_fields 
@@ -122,7 +124,7 @@ class ReceiveTextController < ApplicationController
       # If the question is a multiple choice using single letter response, check for single letter  
       elsif fields[session["counter"] - 1]['Title'].include? "A)"
             #if !( params["Body"].strip.upcase == "A")
-        if !( params["Body"].strip.upcase =~ /A|B|C|D/) 
+        if !( params["Body"].strip.upcase =~ /A|B|C|D|E/) 
           if session["errorcount"] == 0
             message = "Please type only the letter of your answer. Thank you!"
             session["counter"] -= 1
@@ -161,6 +163,7 @@ class ReceiveTextController < ApplicationController
         else
           message = "Thank you. You have completed the form."
         end
+        ######## RESET COUNT AND SESSION #######
       end
     
     else
