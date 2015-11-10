@@ -165,9 +165,18 @@ class ReceiveTextController < ApplicationController
         else
           message = "Thank you. You have completed the form."
         end
-        ######## RESET COUNT AND SESSION #######
       end
-    
+      # Reset session so that the texter can respond to future forms
+      session["counter"] = -1
+      session["fieldanswers"] = Hash.new
+      session["fieldquestions"] = Hash.new
+      session["contact"] = "EMAIL"
+      session["errorcount"] = 0
+      session["formid"] = ''
+      session["fields"] = ''
+      session["form_length"] = 0
+      session["form_type"] ||= ''
+      session["end_message"] ||= ''
     else
       message = "If you are having trouble email smarziano@cct.org or text HELP and you will be contacted later."
     # else
