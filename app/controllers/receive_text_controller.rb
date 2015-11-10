@@ -108,7 +108,7 @@ class ReceiveTextController < ApplicationController
       session["form_type"] = @twiliowufoo.form_type
       session["end_message"] = @twiliowufoo.end_message
     elsif !@twiliowufoo and session["counter"] == 0
-      message = "I did not understand that. Please re-type your message."
+      message = "I did not understand that. Please re-type your keyword."
       session["counter"] -= 1
 
     elsif sms_count < (session["form_length"] - 1)
@@ -178,7 +178,7 @@ class ReceiveTextController < ApplicationController
       session["form_type"] ||= ''
       session["end_message"] ||= ''
     else
-      message = "If you are having trouble email smarziano@cct.org or text HELP and you will be contacted later."
+      message = "If you are having trouble email smarziano@cct.org or text '98765' and you will be contacted later."
     # else
       
     #   #message = session["counter"]
