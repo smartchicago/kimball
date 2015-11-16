@@ -155,8 +155,12 @@
 
     <div id="export-to-twilio-form">
       <%= form_tag search_exportTwilio_path, remote: true, class: "form-inline" %>
-        <%= text_area_tag :message1, '', class: "input-xlarge", placeholder: "Enter a message to send (required)", required: true %>
+        <%= text_area_tag :message1, '', class: "input-xlarge", placeholder: "Enter a message to send (required)", required: true %><br />
         <%= text_area_tag :message2, '', class: "input-xlarge", placeholder: "Enter a 2nd message to send. (Optional)" %>
+        <br />
+        Twilio-Wufoo Connection? <%= select_tag :twiliowufoo_campaign, 
+              options_for_select([[nil, nil]] + TwilioWufoo.all.order(:name).collect{|twiliowufoo| [twiliowufoo.name, twiliowufoo.id]}, selected: params[:twiliowufoo_campaign]), 
+              :class => "input" %>
         <%= hidden_field_tag :adv, '1' %>
         <%- [:first_name, :last_name, :email_address, :postal_code, :address, :tags, :device_id_type, :connection_id_type, :preferred_contact_method, :device_description, :connection_description, :verified, :geography_id, :submissions, :event_id ].each do |field| %> <%= hidden_field_tag field, params[field] %> <% end -%>
         <%= submit_tag "Send messages through Twilio", class: "btn btn-primary", data: { confirm: 'These messages will be added to the queue and sent as soon as possible. Are you sure you want to send these?' } %>

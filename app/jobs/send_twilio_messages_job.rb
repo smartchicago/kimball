@@ -29,7 +29,7 @@
         Rails.logger.warn ("[TwilioSender#perform] phone_numbers is nil - #{phone_numbers}")
       end
       phone_numbers.each do |phone_number|
-        phone_number = "+1" + phone_number.strip.sub("+1","").sub("-","")
+        phone_number = phone_number.strip.sub("+1","").sub("-","")
 	      messages.each do |message|
 	        if message.present?
 	          begin
@@ -37,11 +37,13 @@
 
   	          @outgoing = TwilioMessage.new
   	          @outgoing.to = phone_number
-      			  @outgoing.body = message
+              @outgoing.body = message
       			  @outgoing.from = ENV['TWILIO_NUMBER']
-  			  
+  			      @outgoing.wufoo_formid = ENV['twiliowufoo_campaign']
       			  #@incoming.direction = "incoming-twiml"
       			  @outgoing.save
+              
+              phone_number = "+1" + phone_number.strip.sub("+1","").sub("-","")
 
   	          # Create and send an SMS message
   	          @message = client.account.messages.create(
