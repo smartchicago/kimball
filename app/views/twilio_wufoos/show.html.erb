@@ -26,8 +26,12 @@
 </p>
 
 <p>
-  <strong>Active:</strong>
-  <%= @twilio_wufoo.status %>
+  <strong>Active?:</strong>
+  <% if @twilio_wufoo.status %>
+    On
+  <% else %>
+    Off
+  <% end %>
 </p>
 
 <%= link_to 'Edit', edit_twilio_wufoo_path(@twilio_wufoo) %> |

@@ -20,7 +20,7 @@
   <tbody>
     <% @twilio_wufoos_others.each do |twilio_wufoo| %>
       <tr>
-        <td><%= twilio_wufoo.status %></td>
+        <td><% if twilio_wufoo.status %>On<% else %>Off<% end %></td>
         <td><%= twilio_wufoo.form_type %></td>
         <td><%= twilio_wufoo.name %></td>
         <td><%= twilio_wufoo.wufoo_formid %></td>
@@ -54,7 +54,7 @@
   <tbody>
     <% @twilio_wufoos_signups.each do |twilio_wufoo| %>
       <tr>
-        <td><%= twilio_wufoo.status %></td>
+        <td><% if twilio_wufoo.status %>On<% else %>Off<% end %></td>
         <td><%= twilio_wufoo.form_type %></td>
         <td><%= twilio_wufoo.name %></td>
         <td><%= twilio_wufoo.wufoo_formid %></td>
@@ -87,7 +87,7 @@
   <tbody>
     <% @twilio_wufoos_inactive.each do |twilio_wufoo| %>
       <tr>
-        <td><%= twilio_wufoo.status %></td>
+        <td><% if twilio_wufoo.status %>On<% else %>Off<% end %></td>
         <td><%= twilio_wufoo.form_type %></td>
         <td><%= twilio_wufoo.name %></td>
         <td><%= twilio_wufoo.wufoo_formid %></td>
