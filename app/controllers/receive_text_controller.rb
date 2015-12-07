@@ -3,7 +3,7 @@ class ReceiveTextController < ApplicationController
     skip_before_filter :authenticate_user!
   def index 
     message_body = params["Body"]
-    from_number = params["From"].sub("+1","").sub("-","")
+    from_number = params["From"].gsub("+1","").gsub("-","")
     
     @twilio_message = TwilioMessage.new
     @twilio_message.message_sid = params[:MessageSid]
@@ -11,8 +11,8 @@ class ReceiveTextController < ApplicationController
     @twilio_message.date_updated = params[:DateUpdated]
     @twilio_message.date_sent = params[:DateSent]
     @twilio_message.account_sid = params[:AccountSid]
-    @twilio_message.from = params[:From].sub("+1","").sub("-","")
-    @twilio_message.to = params[:To].sub("+1","").sub("-","")
+    @twilio_message.from = params[:From].gsub("+1","").gsub("-","")
+    @twilio_message.to = params[:To].gsub("+1","").gsub("-","")
     @twilio_message.body = params[:Body]
     @twilio_message.status = params[:SmsStatus]
     @twilio_message.error_code = params[:ErrorCode]
@@ -20,7 +20,7 @@ class ReceiveTextController < ApplicationController
     @twilio_message.direction = "incoming-twiml"
     @twilio_message.save
 
-    from_number = params[:From].sub("+1","").sub("-","").to_i # Removing +1 and converting to integer
+    from_number = params[:From].gsub("+1","").gsub("-","").to_i # Removing +1 and converting to integer
     message = "Sorry, please try again. Text 'Hello' or 12345 to complete your signup!"
     if params[:Body].include? "12345" or params[:Body].downcase.include? 'hello'
       @twilio_message.signup_verify = "Verified"
@@ -53,7 +53,7 @@ class ReceiveTextController < ApplicationController
     session["counter"] ||= 0
     session["fieldanswers"] ||= Hash.new
     session["fieldquestions"] ||= Hash.new
-    session["phone_number"] ||= params[:From].sub("+1","").sub("-","").to_i # Removing +1 and converting to integer
+    session["phone_number"] ||= params[:From].gsub("+1","").gsub("-","").to_i # Removing +1 and converting to integer
     session["contact"] ||= "EMAIL"
     session["errorcount"] ||= 0
     session["formid"] ||= ''
@@ -74,8 +74,8 @@ class ReceiveTextController < ApplicationController
     @incoming.message_sid = params[:MessageSid]
     @incoming.date_sent = params[:DateSent]
     @incoming.account_sid = params[:AccountSid]
-    @incoming.from = params[:From].sub("+1","").sub("-","")
-    @incoming.to = params[:To].sub("+1","").sub("-","")
+    @incoming.from = params[:From].gsub("+1","").gsub("-","")
+    @incoming.to = params[:To].gsub("+1","").gsub("-","")
     @incoming.body = params[:Body].strip
     @incoming.status = params[:SmsStatus]
     @incoming.error_code = params[:ErrorCode]
@@ -153,7 +153,7 @@ class ReceiveTextController < ApplicationController
       fields = @form.flattened_fields 
       session["fieldanswers"][fields[sms_count-1]['ID']] = message_body
       session["fieldanswers"][fields[sms_count]['ID']] = session["phone_number"]
-      result = @form.submit(session["fieldanswers"])
+      result = @form.gsubmit(session["fieldanswers"])
       if session["form_type"] == "signup"
         message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive a text from 773-747-6239 with more details."
         if session["contact"] == "EMAIL"

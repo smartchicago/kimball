@@ -3,6 +3,8 @@ class Person < ActiveRecord::Base
   include Tire::Model::Callbacks 
   include ExternalDataMappings
 
+  validates   :phone_number, length: { is: 10 }
+
   has_many :comments, as: :commentable, dependent: :destroy
   has_many :submissions, dependent: :destroy
 

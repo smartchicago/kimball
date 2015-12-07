@@ -16,7 +16,7 @@ class PeopleController < ApplicationController
     @comment = Comment.new commentable: @person
     @reservation = Reservation.new person: @person
     @tagging = Tagging.new taggable: @person
-    @outgoingmessages = TwilioMessage.where('"to" = ?', @person.phone_number.sub("+1","").sub("-",""))
+    @outgoingmessages = TwilioMessage.where('"to" = ?', @person.phone_number.gsub("+1","").gsub("-",""))
   end
 
   # GET /people/new
