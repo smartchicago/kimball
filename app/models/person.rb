@@ -37,6 +37,7 @@ class Person < ActiveRecord::Base
     'Field271'  =>  :postal_code, # postal_code
     'Field9'  =>  :phone_number, # phone_number
     'IP'      =>  :signup_ip, # client IP, ignored for the moment
+
   }
 
   # update index if a comment is added
@@ -266,6 +267,12 @@ class Person < ActiveRecord::Base
       new_person.participation_type = params['Field54']
     end
         
+    if params['Field273'] == "Email"
+      new_peson.preferred_contact_method = "EMAIL"
+    else
+      new_person.preferred_contact_method = "SMS"
+    end
+
     # Copy connection descriptions to description fields
     new_person.primary_connection_description = new_person.primary_connection_id
     new_person.secondary_connection_description = new_person.secondary_connection_id
