@@ -21,6 +21,7 @@ class TwilioMessagesController < ApplicationController
     message1 = params.delete(:message1)
     message2 = params.delete(:message2)
     messages = Array[message1, message2]
+    smsCampaign = params.delete(:twiliowufoo_campaign)
     infile = params[:file].read
    
     CSV.parse(infile, headers: true, header_converters: :downcase) do |row|
@@ -32,7 +33,7 @@ class TwilioMessagesController < ApplicationController
     Rails.logger.info("[TwilioMessagesController#sendmessages] messages #{messages}")
     Rails.logger.info("[TwilioMessagesController#sendmessages] phone numbers #{phone_numbers}")
      phone_numbers = phone_numbers.reject { |e| e.to_s.blank? }
-     @job_enqueue = Delayed::Job.enqueue SendTwilioMessagesJob.new(messages, phone_numbers)
+     @job_enqueue = Delayed::Job.enqueue SendTwilioMessagesJob.new(messages, phone_numbers, smsCampaign)
      if @job_enqueue.save
        Rails.logger.info("[TwilioMessagesController#sendmessages] Sent #{phone_numbers} to Twilio")
        flash[:success] = "Sent Messages: #{messages} to Phone Numbers: #{phone_numbers}"

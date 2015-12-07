@@ -2,7 +2,7 @@
 #
 # module TwilioSender
   # Send twilio messages to a list of phone numbers
-  class SendTwilioMessagesJob < Struct.new(:messages, :phone_numbers)
+  class SendTwilioMessagesJob < Struct.new(:messages, :phone_numbers, :smsCampaign)
   	def enqueue(job)
       # job.delayed_reference_id   = 
       # job.delayed_reference_type = ''
@@ -39,7 +39,7 @@
   	          @outgoing.to = phone_number.sub("+1","").sub("-","")
               @outgoing.body = message
       			  @outgoing.from = ENV['TWILIO_NUMBER'].sub("+1","").sub("-","")
-  			      @outgoing.wufoo_formid = ENV['twiliowufoo_campaign']
+  			      @outgoing.wufoo_formid = smsCampaign
       			  #@incoming.direction = "incoming-twiml"
       			  @outgoing.save
               
