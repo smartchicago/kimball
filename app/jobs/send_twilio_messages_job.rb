@@ -36,9 +36,9 @@
   	          message = message.strip
 
   	          @outgoing = TwilioMessage.new
-  	          @outgoing.to = phone_number
+  	          @outgoing.to = phone_number.sub("+1","").sub("-","")
               @outgoing.body = message
-      			  @outgoing.from = ENV['TWILIO_NUMBER']
+      			  @outgoing.from = ENV['TWILIO_NUMBER'].sub("+1","").sub("-","")
   			      @outgoing.wufoo_formid = ENV['twiliowufoo_campaign']
       			  #@incoming.direction = "incoming-twiml"
       			  @outgoing.save

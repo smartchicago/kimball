@@ -81,8 +81,8 @@ class TwilioMessagesController < ApplicationController
     @twilio_message.date_updated = params[:DateUpdated]
     @twilio_message.date_sent = params[:DateSent]
     @twilio_message.account_sid = params[:AccountSid]
-    @twilio_message.from = params[:From]
-    @twilio_message.to = params[:To]
+    @twilio_message.from = params[:From].sub("+1","").sub("-","")
+    @twilio_message.to = params[:To].sub("+1","").sub("-","")
     @twilio_message.body = params[:Body]
     @twilio_message.status = params[:Status]
     @twilio_message.error_code = params[:ErrorCode]

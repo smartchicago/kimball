@@ -3,7 +3,7 @@ class ReceiveTextController < ApplicationController
     skip_before_filter :authenticate_user!
   def index 
     message_body = params["Body"]
-    from_number = params["From"]
+    from_number = params["From"].sub("+1","").sub("-","")
     
     @twilio_message = TwilioMessage.new
     @twilio_message.message_sid = params[:MessageSid]
@@ -11,8 +11,8 @@ class ReceiveTextController < ApplicationController
     @twilio_message.date_updated = params[:DateUpdated]
     @twilio_message.date_sent = params[:DateSent]
     @twilio_message.account_sid = params[:AccountSid]
-    @twilio_message.from = params[:From]
-    @twilio_message.to = params[:To]
+    @twilio_message.from = params[:From].sub("+1","").sub("-","")
+    @twilio_message.to = params[:To].sub("+1","").sub("-","")
     @twilio_message.body = params[:Body]
     @twilio_message.status = params[:SmsStatus]
     @twilio_message.error_code = params[:ErrorCode]
@@ -20,7 +20,7 @@ class ReceiveTextController < ApplicationController
     @twilio_message.direction = "incoming-twiml"
     @twilio_message.save
 
-    from_number = params[:From].sub("+1","").to_i # Removing +1 and converting to integer
+    from_number = params[:From].sub("+1","").sub("-","").to_i # Removing +1 and converting to integer
     message = "Sorry, please try again. Text 'Hello' or 12345 to complete your signup!"
     if params[:Body].include? "12345" or params[:Body].downcase.include? 'hello'
       @twilio_message.signup_verify = "Verified"
@@ -53,7 +53,7 @@ class ReceiveTextController < ApplicationController
     session["counter"] ||= 0
     session["fieldanswers"] ||= Hash.new
     session["fieldquestions"] ||= Hash.new
-    session["phone_number"] ||= params[:From].sub("+1","").to_i # Removing +1 and converting to integer
+    session["phone_number"] ||= params[:From].sub("+1","").sub("-","").to_i # Removing +1 and converting to integer
     session["contact"] ||= "EMAIL"
     session["errorcount"] ||= 0
     session["formid"] ||= ''
@@ -74,8 +74,8 @@ class ReceiveTextController < ApplicationController
     @incoming.message_sid = params[:MessageSid]
     @incoming.date_sent = params[:DateSent]
     @incoming.account_sid = params[:AccountSid]
-    @incoming.from = params[:From]
-    @incoming.to = params[:To]
+    @incoming.from = params[:From].sub("+1","").sub("-","")
+    @incoming.to = params[:To].sub("+1","").sub("-","")
     @incoming.body = params[:Body].strip
     @incoming.status = params[:SmsStatus]
     @incoming.error_code = params[:ErrorCode]
