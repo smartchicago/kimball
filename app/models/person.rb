@@ -221,32 +221,34 @@ class Person < ActiveRecord::Base
 
   def sendToMailChimp
     if self.email_address.present? 
-      if self.verified.start_with?("Verified")
-          begin
-            mailchimpSend = Gibbon.list_subscribe({
-              :id => Logan::Application.config.cut_group_mailchimp_list_id, 
-              :email_address => self.email_address, 
-              :double_optin => 'false', 
-              :update_existing => 'true',
-              :merge_vars => {:FNAME => self.first_name, 
-                :LNAME => self.last_name, 
-                :MMERGE3 => self.geography_id, 
-                :MMERGE4 => self.postal_code, 
-                :MMERGE5 => self.participation_type, 
-                :MMERGE6 => self.voted, 
-                :MMERGE7 => self.called_311, 
-                :MMERGE8 => self.primary_device_description, 
-                :MMERGE9 => secondary_device_type_name, 
-                :MMERGE10 => self.secondary_device_description, 
-                :MMERGE11 =>  primary_connection_type_name , 
-                :MMERGE12 => self.primary_connection_description, 
-                :MMERGE13 => primary_device_type_name, 
-                :MMERGE14 => self.preferred_contact_method}
-                })
-            Rails.logger.info("[People->sendToMailChimp] Sent #{self.id} to Mailchimp: #{mailchimpSend}")
-          rescue Gibbon::MailChimpError => e
-            Rails.logger.fatal("[People->sendToMailChimp] fatal error sending #{self.id} to Mailchimp: #{e.message}")
-          end
+      if self.verified.present?
+        if self.verified.start_with?("Verified")
+            begin
+              mailchimpSend = Gibbon.list_subscribe({
+                :id => Logan::Application.config.cut_group_mailchimp_list_id, 
+                :email_address => self.email_address, 
+                :double_optin => 'false', 
+                :update_existing => 'true',
+                :merge_vars => {:FNAME => self.first_name, 
+                  :LNAME => self.last_name, 
+                  :MMERGE3 => self.geography_id, 
+                  :MMERGE4 => self.postal_code, 
+                  :MMERGE5 => self.participation_type, 
+                  :MMERGE6 => self.voted, 
+                  :MMERGE7 => self.called_311, 
+                  :MMERGE8 => self.primary_device_description, 
+                  :MMERGE9 => secondary_device_type_name, 
+                  :MMERGE10 => self.secondary_device_description, 
+                  :MMERGE11 =>  primary_connection_type_name , 
+                  :MMERGE12 => self.primary_connection_description, 
+                  :MMERGE13 => primary_device_type_name, 
+                  :MMERGE14 => self.preferred_contact_method}
+                  })
+              Rails.logger.info("[People->sendToMailChimp] Sent #{self.id} to Mailchimp: #{mailchimpSend}")
+            rescue Gibbon::MailChimpError => e
+              Rails.logger.fatal("[People->sendToMailChimp] fatal error sending #{self.id} to Mailchimp: #{e.message}")
+            end
+        end
       end
     end
   end
