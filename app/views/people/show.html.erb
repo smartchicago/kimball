@@ -110,16 +110,15 @@
   
   
   <div class="span6" id="person-events">
+  <h3>Communications</h3>
   <table class="table">
     <tr>
-        <th>From</th>
-        <th>To</th>
-        <th>Twilio-Wufoo Connection</th>
+        <th>Message</th>
+        <th>SMS Connection</th>
     </tr>
     <% for message in @outgoingmessages %>
       <tr>
-      <td><%= message.from %></td>
-      <td><%= message.to %></td>
+      <td><%= message.body %></td>
       <td><%= message.wufoo_formid %></td>
       </tr>
     <% end %>
