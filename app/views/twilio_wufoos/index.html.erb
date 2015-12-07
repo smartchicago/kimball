@@ -6,6 +6,7 @@
   <thead>
     <tr>
       <th>Active?</th>
+      <th>Campaign #</th>
       <th>Form Type</th>
       <th>Name</th>
       <th>Wufoo formid</th>
@@ -21,6 +22,7 @@
     <% @twilio_wufoos_others.each do |twilio_wufoo| %>
       <tr>
         <td><% if twilio_wufoo.status %>On<% else %>Off<% end %></td>
+        <td><%= twilio_wufoo.id %></td>
         <td><%= twilio_wufoo.form_type %></td>
         <td><%= twilio_wufoo.name %></td>
         <td><%= twilio_wufoo.wufoo_formid %></td>
