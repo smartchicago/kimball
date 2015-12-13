@@ -75,6 +75,9 @@ gem "twilio-ruby"
 # use Wuparty for wufoo
 gem "wuparty"
 
+# smsTools to help text messages send correctly
+gem "smstools"
+
 # use Delayed Job to queue messages
 gem 'delayed_job_active_record'
 gem 'daemons'

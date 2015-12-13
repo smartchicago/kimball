@@ -105,6 +105,7 @@ class ReceiveTextController < ApplicationController
       fields = @form.flattened_fields 
       session["form_length"] = fields.length
       message = "#{fields[session["counter"]]['Title']}"
+      message = SmsTools::GsmEncoding.from_utf8 message
       session["form_type"] = @twiliowufoo.form_type
       session["end_message"] = @twiliowufoo.end_message
     elsif !@twiliowufoo and session["counter"] == 0
@@ -117,6 +118,7 @@ class ReceiveTextController < ApplicationController
       id_to_store = fields[sms_count - 1]['ID']
       session["fieldanswers"][id_to_store] = message_body
       message = "#{fields[sms_count]['Title']}"
+      message = SmsTools::GsmEncoding.from_utf8 message
       # If the question asked for an email check if response contains a @ and . or a skip
       if fields[session["counter"] - 1]['Title'].include? "email address"
         if !( params["Body"] =~ /.+@.+\..+/) and !(params["Body"].upcase.include? "SKIP")
