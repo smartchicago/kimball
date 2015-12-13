@@ -1,5 +1,5 @@
 set :application, "logan-staging"
-set :branch, fetch(:branch, "delayedtext")
+set :branch, fetch(:branch, "smstools")
 set :rails_env, :staging
 
 server 'patterns-staging.smartchicagoapps.org', :app, :web, :db, :primary => true
