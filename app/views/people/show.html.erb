@@ -113,13 +113,11 @@
   <h3>Communications</h3>
   <table class="table">
     <tr>
-        <th>Message</th>
-        <th>SMS Campaign</th>
+        <th>Campaign Name</th>
     </tr>
     <% for message in @outgoingmessages %>
       <tr>
-      <td><%= message.body %></td>
-      <td><%= message.wufoo_formid %></td>
+\      <td><%= TwilioWufoo.where(id: message.wufoo_formid).name %></td>
       </tr>
     <% end %>
     </table>
