@@ -2,6 +2,7 @@ require 'twilio-ruby'
 require 'csv'
 
 class TwilioMessagesController < ApplicationController
+  include GsmHelper
   before_action :set_twilio_message, only: [:show, :edit, :update, :destroy]
   #skip_before_action :verify_authenticity_token , only: [:newtwil]
 
@@ -20,6 +21,8 @@ class TwilioMessagesController < ApplicationController
     phone_numbers = []
     message1 = params.delete(:message1)
     message2 = params.delete(:message2)
+    message1 = to_gsm0338(message1)
+    message2 = to_gsm0338(message2)
     messages = Array[message1, message2]
     smsCampaign = params.delete(:twiliowufoo_campaign)
     infile = params[:file].read

@@ -2,6 +2,7 @@ require 'csv'
 
 class SearchController < ApplicationController
   include PeopleHelper
+  include GsmHelper
 
   def index
     # no pagination for CSV export
@@ -69,6 +70,8 @@ class SearchController < ApplicationController
     # send messages to all people
     message1 = params.delete(:message1)
     message2 = params.delete(:message2)
+    message1 = to_gsm0338(message1)
+    message2 = to_gsm0338(message2)
     messages = Array[message1, message2]
     smsCampaign = params.delete(:twiliowufoo_campaign)
     @people = Person.complex_search(params, 10000)
