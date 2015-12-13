@@ -6,7 +6,8 @@ module GsmHelper
     { 
       "“" => "\"",
       "”" => "\"", 
-      "—" => "-" 
+      "—" => "-",
+      "’" => "'"
     }
     re = Regexp.new(map.keys.map { |x| Regexp.escape(x) }.join('|'))
     message_clean = message.gsub(re, map)
