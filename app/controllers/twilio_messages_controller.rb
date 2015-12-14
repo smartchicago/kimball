@@ -22,7 +22,9 @@ class TwilioMessagesController < ApplicationController
     message1 = params.delete(:message1)
     message2 = params.delete(:message2)
     message1 = to_gsm0338(message1)
-    message2 = to_gsm0338(message2)
+    if message2.present?
+      message2 = to_gsm0338(message2)
+    end
     messages = Array[message1, message2]
     smsCampaign = params.delete(:twiliowufoo_campaign)
     infile = params[:file].read
