@@ -2,6 +2,7 @@ require 'csv'
 
 class SearchController < ApplicationController
   include PeopleHelper
+  include GsmHelper
 
   def index
     # no pagination for CSV export
@@ -64,4 +65,33 @@ class SearchController < ApplicationController
     end
     
   end
+
+  def exportTwilio
+    # send messages to all people
+    message1 = params.delete(:message1)
+    message2 = params.delete(:message2)
+    message1 = to_gsm0338(message1)
+    if message2.present?
+      message2 = to_gsm0338(message2)
+    end
+    messages = Array[message1, message2]
+    smsCampaign = params.delete(:twiliowufoo_campaign)
+    @people = Person.complex_search(params, 10000)
+    #people_count = @people.length
+    Rails.logger.info("[SearchController#exportTwilio] people #{@people}")
+    phone_numbers = @people.collect{ |person| person.phone_number }
+    Rails.logger.info("[SearchController#exportTwilio] people #{phone_numbers}")
+    phone_numbers = phone_numbers.reject { |e| e.to_s.blank? }
+    @job_enqueue = Delayed::Job.enqueue SendTwilioMessagesJob.new(messages, phone_numbers, smsCampaign)
+    if @job_enqueue.save
+      Rails.logger.info("[SearchController#exportTwilio] Sent #{phone_numbers} to Twilio")
+      respond_to do |format|
+        format.js { }
+      end
+    else
+      Rails.logger.error("[SearchController#exportTwilio] failed to send text messages")
+      format.all { render text: "failed to send text messages", status: 400} 
+    end
+  end
+
 end

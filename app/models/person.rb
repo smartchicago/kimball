@@ -3,6 +3,8 @@ class Person < ActiveRecord::Base
   include Tire::Model::Callbacks 
   include ExternalDataMappings
 
+  validates   :phone_number, length: { is: 10 }
+
   has_many :comments, as: :commentable, dependent: :destroy
   has_many :submissions, dependent: :destroy
 
@@ -11,6 +13,9 @@ class Person < ActiveRecord::Base
 
   has_many :tags, through: :taggings
   has_many :taggings, as: :taggable
+
+  after_update  :sendToMailChimp
+  after_create  :sendToMailChimp
   
   self.per_page = 15
 
@@ -34,6 +39,7 @@ class Person < ActiveRecord::Base
     'Field271'  =>  :postal_code, # postal_code
     'Field9'  =>  :phone_number, # phone_number
     'IP'      =>  :signup_ip, # client IP, ignored for the moment
+
   }
 
   # update index if a comment is added
@@ -215,7 +221,39 @@ class Person < ActiveRecord::Base
 
   end
 
-
+  def sendToMailChimp
+    if self.email_address.present? 
+      if self.verified.present?
+        if self.verified.start_with?("Verified")
+            begin
+              mailchimpSend = Gibbon.list_subscribe({
+                :id => Logan::Application.config.cut_group_mailchimp_list_id, 
+                :email_address => self.email_address, 
+                :double_optin => 'false', 
+                :update_existing => 'true',
+                :merge_vars => {:FNAME => self.first_name, 
+                  :LNAME => self.last_name, 
+                  :MMERGE3 => self.geography_id, 
+                  :MMERGE4 => self.postal_code, 
+                  :MMERGE5 => self.participation_type, 
+                  :MMERGE6 => self.voted, 
+                  :MMERGE7 => self.called_311, 
+                  :MMERGE8 => self.primary_device_description, 
+                  :MMERGE9 => secondary_device_type_name, 
+                  :MMERGE10 => self.secondary_device_description, 
+                  :MMERGE11 =>  primary_connection_type_name , 
+                  :MMERGE12 => self.primary_connection_description, 
+                  :MMERGE13 => primary_device_type_name, 
+                  :MMERGE14 => self.preferred_contact_method}
+                  })
+              Rails.logger.info("[People->sendToMailChimp] Sent #{self.id} to Mailchimp: #{mailchimpSend}")
+            rescue Gibbon::MailChimpError => e
+              Rails.logger.fatal("[People->sendToMailChimp] fatal error sending #{self.id} to Mailchimp: #{e.message}")
+            end
+        end
+      end
+    end
+  end
 
 
   def self.initialize_from_wufoo(params)
@@ -233,6 +271,12 @@ class Person < ActiveRecord::Base
       new_person.participation_type = params['Field54']
     end
         
+    if params['Field273'] == "Email"
+      new_peson.preferred_contact_method = "EMAIL"
+    else
+      new_person.preferred_contact_method = "SMS"
+    end
+
     # Copy connection descriptions to description fields
     new_person.primary_connection_description = new_person.primary_connection_id
     new_person.secondary_connection_description = new_person.secondary_connection_id
@@ -259,6 +303,14 @@ class Person < ActiveRecord::Base
 
   def secondary_device_type_name
     Logan::Application.config.device_mappings.rassoc(secondary_device_id)[0].to_s
+  end
+
+  def primary_connection_type_name
+    Logan::Application.config.connection_mappings.rassoc(primary_connection_id)[0].to_s
+  end
+
+  def secondary_connection_type_name
+    Logan::Application.config.connection_mappings.rassoc(secondary_connection_id)[0].to_s
   end
 
   def full_name

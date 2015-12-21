@@ -1,6 +1,8 @@
 require 'twilio-ruby'
+require 'csv'
 
 class TwilioMessagesController < ApplicationController
+  include GsmHelper
   before_action :set_twilio_message, only: [:show, :edit, :update, :destroy]
   #skip_before_action :verify_authenticity_token , only: [:newtwil]
 
@@ -8,8 +10,48 @@ class TwilioMessagesController < ApplicationController
   # GET /twilio_messages.json
   def index
     @twilio_messages = TwilioMessage.paginate(:page => params[:page]).order('updated_at DESC')
+    @twilio_messages_help = TwilioMessage.where("'body' LIKE ?", 'HELP').paginate(:page => params[:page]).order('updated_at DESC')
     #@twilio_messages = TwilioMessage.all
   end
+
+  def sendmessages
+  end
+
+  def uploadnumbers
+    phone_numbers = []
+    message1 = params.delete(:message1)
+    message2 = params.delete(:message2)
+    message1 = to_gsm0338(message1)
+    if message2.present?
+      message2 = to_gsm0338(message2)
+    end
+    messages = Array[message1, message2]
+    smsCampaign = params.delete(:twiliowufoo_campaign)
+    infile = params[:file].read
+   
+    CSV.parse(infile, headers: true, header_converters: :downcase) do |row|
+      #@person << row
+      Rails.logger.info("[TwilioMessagesController#sendmessages] #{row}")
+      phone_numbers.push(row["phone_number"])
+    end
+
+    Rails.logger.info("[TwilioMessagesController#sendmessages] messages #{messages}")
+    Rails.logger.info("[TwilioMessagesController#sendmessages] phone numbers #{phone_numbers}")
+     phone_numbers = phone_numbers.reject { |e| e.to_s.blank? }
+     @job_enqueue = Delayed::Job.enqueue SendTwilioMessagesJob.new(messages, phone_numbers, smsCampaign)
+     if @job_enqueue.save
+       Rails.logger.info("[TwilioMessagesController#sendmessages] Sent #{phone_numbers} to Twilio")
+       flash[:success] = "Sent Messages: #{messages} to Phone Numbers: #{phone_numbers}"
+       respond_to do |format|
+         format.html { redirect_to '/twilio_messages/sendmessages', notice: flash[:success] }
+       end
+     else
+       Rails.logger.error("[TwilioMessagesController#sendmessages] failed to send text messages")
+       format.all { render text: "failed to send text messages", status: 400} 
+     end
+  end
+
+
 
   # GET /twilio_messages/1
   # GET /twilio_messages/1.json
@@ -45,8 +87,8 @@ class TwilioMessagesController < ApplicationController
     @twilio_message.date_updated = params[:DateUpdated]
     @twilio_message.date_sent = params[:DateSent]
     @twilio_message.account_sid = params[:AccountSid]
-    @twilio_message.from = params[:From]
-    @twilio_message.to = params[:To]
+    @twilio_message.from = params[:From].gsub("+1","").gsub("-","")
+    @twilio_message.to = params[:To].gsub("+1","").gsub("-","")
     @twilio_message.body = params[:Body]
     @twilio_message.status = params[:Status]
     @twilio_message.error_code = params[:ErrorCode]

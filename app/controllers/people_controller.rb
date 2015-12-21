@@ -16,6 +16,7 @@ class PeopleController < ApplicationController
     @comment = Comment.new commentable: @person
     @reservation = Reservation.new person: @person
     @tagging = Tagging.new taggable: @person
+    @outgoingmessages = TwilioMessage.where(to: @person.phone_number)
   end
 
   # GET /people/new
@@ -90,13 +91,6 @@ class PeopleController < ApplicationController
       new_person.signup_at = Time.now
 
       new_person.save
-      if new_person.email_address.present?
-        begin
-          mailchimpSend = Gibbon.list_subscribe({:id => Logan::Application.config.cut_group_mailchimp_list_id, :email_address => new_person.email_address, :double_optin => 'false', :update_existing => 'true',:merge_vars => {:FNAME => new_person.first_name, :LNAME => new_person.last_name, :MMERGE3 => new_person.geography_id, :MMERGE4 => new_person.postal_code, :MMERGE5 => new_person.participation_type, :MMERGE6 => new_person.voted, :MMERGE7 => new_person.called_311, :MMERGE8 => new_person.primary_device_description, :MMERGE9 => new_person.secondary_device_id, :MMERGE10 => new_person.secondary_device_description, :MMERGE11 => new_person.primary_connection_id, :MMERGE12 => new_person.primary_connection_description, :MMERGE13 => new_person.primary_device_id, :MMERGE14 => new_person.preferred_contact_method}})
-        rescue Gibbon::MailChimpError => e
-          Rails.logger.fatal("[PeopleController#create_sms] fatal error sending #{new_person.id} to Mailchimp: #{e.message}")
-        end
-      end
     end
 
 
@@ -197,7 +191,7 @@ class PeopleController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def person_params
-      params.require(:person).permit(:first_name, :last_name, :email_address, :address_1, :address_2, :city, :state, :postal_code, :geography_id, :primary_device_id, :primary_device_description, :secondary_device_id, :secondary_device_description, :primary_connection_id, :primary_connection_description, :secondary_connection_id, :secondary_connection_description, :phone_number, :participation_type, :preferred_contact_method)
+      params.require(:person).permit(:first_name, :last_name, :verified, :email_address, :address_1, :address_2, :city, :state, :postal_code, :geography_id, :primary_device_id, :primary_device_description, :secondary_device_id, :secondary_device_description, :primary_connection_id, :primary_connection_description, :secondary_connection_id, :secondary_connection_description, :phone_number, :participation_type, :preferred_contact_method)
     end
 
     def should_skip_janky_auth?

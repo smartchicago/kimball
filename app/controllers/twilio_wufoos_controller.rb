@@ -4,7 +4,11 @@ class TwilioWufoosController < ApplicationController
   # GET /twilio_wufoos
   # GET /twilio_wufoos.json
   def index
-    @twilio_wufoos = TwilioWufoo.all
+    #@twilio_wufoos = TwilioWufoo.all
+    @twilio_wufoos_active = TwilioWufoo.where(status: true)
+    @twilio_wufoos_inactive = TwilioWufoo.where(status: false)
+    @twilio_wufoos_signups = @twilio_wufoos_active.where(form_type: "signup")
+    @twilio_wufoos_others = @twilio_wufoos_active.where.not(form_type: "signup")
   end
 
   # GET /twilio_wufoos/1
