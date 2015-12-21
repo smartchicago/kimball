@@ -239,11 +239,11 @@ class Person < ActiveRecord::Base
                   :MMERGE6 => self.voted, 
                   :MMERGE7 => self.called_311, 
                   :MMERGE8 => self.primary_device_description, 
-                  :MMERGE9 => secondary_device_type_name, 
+                  :MMERGE9 => self.secondary_device_type_name, 
                   :MMERGE10 => self.secondary_device_description, 
-                  :MMERGE11 =>  primary_connection_type_name , 
+                  :MMERGE11 =>  self.primary_connection_type_name , 
                   :MMERGE12 => self.primary_connection_description, 
-                  :MMERGE13 => primary_device_type_name, 
+                  :MMERGE13 => self.primary_device_type_name, 
                   :MMERGE14 => self.preferred_contact_method}
                   })
               Rails.logger.info("[People->sendToMailChimp] Sent #{self.id} to Mailchimp: #{mailchimpSend}")
