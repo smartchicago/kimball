@@ -239,11 +239,11 @@ class Person < ActiveRecord::Base
                   :MMERGE6 => self.voted, 
                   :MMERGE7 => self.called_311, 
                   :MMERGE8 => self.primary_device_description, 
-                  :MMERGE9 => self.secondary_device_type_name, 
+                  :MMERGE9 => secondary_device_type_name, 
                   :MMERGE10 => self.secondary_device_description, 
-                  :MMERGE11 =>  self.primary_connection_type_name , 
+                  :MMERGE11 =>  primary_connection_type_name , 
                   :MMERGE12 => self.primary_connection_description, 
-                  :MMERGE13 => self.primary_device_type_name, 
+                  :MMERGE13 => primary_device_type_name, 
                   :MMERGE14 => self.preferred_contact_method}
                   })
               Rails.logger.info("[People->sendToMailChimp] Sent #{self.id} to Mailchimp: #{mailchimpSend}")
@@ -298,19 +298,27 @@ class Person < ActiveRecord::Base
   end
 
   def primary_device_type_name
-    Logan::Application.config.device_mappings.rassoc(primary_device_id)[0].to_s
+    if primary_device_id.present?
+      Logan::Application.config.device_mappings.rassoc(primary_device_id)[0].to_s
+    end
   end
 
   def secondary_device_type_name
-    Logan::Application.config.device_mappings.rassoc(secondary_device_id)[0].to_s
+    if secondary_device_id.present?
+      Logan::Application.config.device_mappings.rassoc(secondary_device_id)[0].to_s
+    end
   end
 
   def primary_connection_type_name
-    Logan::Application.config.connection_mappings.rassoc(primary_connection_id)[0].to_s
+    if primary_connection_id.present?
+      Logan::Application.config.connection_mappings.rassoc(primary_connection_id)[0].to_s
+    end
   end
 
   def secondary_connection_type_name
-    Logan::Application.config.connection_mappings.rassoc(secondary_connection_id)[0].to_s
+    if secondary_connection_id.present?
+      Logan::Application.config.connection_mappings.rassoc(secondary_connection_id)[0].to_s
+    end
   end
 
   def full_name
