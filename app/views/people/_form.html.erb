@@ -18,9 +18,9 @@
     </div>
   </div>
   <div class="control-group">
-    <%= f.label :verified, :class => 'control-label' %>
+    <%= f.label :verified, :class => 'control-label' %>  
     <div class="controls">
-      <%= f.text_field :verified, :class => 'text_field' %>
+      <%= f.text_field :verified, :class => 'text_field' %> (Start with 'Verified' to save as verified)
     </div>
   </div>
   <div class="control-group">
@@ -116,7 +116,7 @@
   <div class="control-group">
     <%= f.label :preferred_contact_method, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :preferred_contact_method, :class => 'text_field' %>
+      <%= f.select :preferred_contact_method, [["Email", "EMAIL"],["Text Message", "SMS"]], :class => 'text_field' %>
     </div>
   </div>
   <div class="control-group">

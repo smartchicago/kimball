@@ -23,47 +23,65 @@
         <%= text_field_tag :last_name, params[:last_name], :class => "input" %>
 
         <label for="email_address">Email address</label>
-        <%= text_field_tag :email_address, params[:email_address], :class => "input" %>  
+        <%= text_field_tag :email_address, params[:email_address], :class => "input" %> 
 
-        <label for="verified">Verified?</label>
-        <%= text_field_tag :verified, params[:verified], :class => "input" %>            
+        <label for="postal_code">ZIP Code</label>
+        <%= text_field_tag :postal_code, params[:postal_code], :class => "input" %> 
+
+        <label for="address">Address</label>
+        <%= text_field_tag :address, params[:address], :class => "input-large span4" %>    
 
         <label for="tags">Tags</label>
-        <%= text_field_tag :tags, params[:tags], :class => "input" %>              
+<!--         <%= text_field_tag :tags, params[:tags], :class => "input" %>    
+ -->        <%= select_tag :tags,
+         options_for_select(Tag.all.order(:name).collect{|tag| [tag.name, tag.name]}, selected: params[:tags]), :multiple => true, :class => "multiple", :size => '6' %>           
       </fieldset>
     </div>
     
-    <div class="span4">
-      <label for="device_description">Device description</label>
-      <%= text_field_tag :device_description, params[:device_description], :class => "input span4" %>
+    <div class="span3">
 
-      <label for="connection_description">Connection description</label>
-      <%= text_field_tag :connection_description, params[:connection_description], :class => "input span4" %>      
+      <label for="device_id_type">Device Type</label>
+      <%= select_tag :device_id_type, 
+        options_for_select([[human_device_type_name(0), 0],[human_device_type_name(1), 1], [human_device_type_name(2), 2], [human_device_type_name(3), 3]] , include_blank: true, selected: params[:device_id_type]) , :multiple => true,  :class => "multiple", :size => '4'%>
 
-      <label for="submissions">Form submission content</label>
-      <%= text_field_tag :submissions, params[:submissions], :class => "input span4" %>      
+      <label for="connection_id_type">Connection Type</label>
+      <%= select_tag :connection_id_type, 
+        options_for_select([[human_connection_type_name(0), 0],[human_connection_type_name(1), 1], [human_connection_type_name(4), 4], [human_connection_type_name(3), 3], [human_connection_type_name(2), 2]] , include_blank: true, selected: params[:connection_id_type]) , :multiple => true,  :class => "multiple", :size => '5' %> 
 
-      <label for="event_id">Event</label>
-      <%= select_tag :event_id, 
-            options_for_select([[nil, nil]] + Event.all.order(:name).collect{|event| [event.name, event.id]}, selected: params[:event_id]), 
-            :class => "input" %>      
+      <label for="preferred contact method">Preferred Contact Method</label>
+      <%= select_tag :preferred_contact_method, 
+        options_for_select([["All", '*'],["Email", 'EMAIL'], ["SMS", 'SMS']], include_blank: true, selected: params[:preferred_contact_method]) , :class => "input" %>
+            
     </div>
 
-    <div class="span4">
-      <label for="address">Address</label>
-      <%= text_field_tag :address, params[:address], :class => "input-large span4" %>
-      
-      
-      <label for="postal_code">ZIP Code</label>
-      <%= text_field_tag :postal_code, params[:postal_code], :class => "input-small" %>
+    <div class="span5">
+    
+      <label for="device_description">Device description</label>
+      <%= text_field_tag :device_description, params[:device_description], :class => "input span5" %>
 
-      <label for="geography_id">Ward</label>
-      <%= text_field_tag :geography_id, params[:geography_id], :class => "input-small" %>
-      
+      <label for="connection_description">Connection description</label>
+      <%= text_field_tag :connection_description, params[:connection_description], :class => "input span5" %>
+ 
       <p class="alert alert-info">
-        <span class="label label-info">Search tip</span> To search for more than one ward or zip code, separate values with a space.      
+        <span class="label label-info">Search tips</span><br/>To search for more than one ward or zip code, separate values with a space.<br/>To search Tags, Device Type, or Device Connection use Control+Click or Command+Click to select/deselect options.      
       </p>
-      
+      <span data-toggle="collapse" data-target="#additional-options"  class="btn btn-default">Click to Show Additional Options</span>
+      <div class="collapse" id="additional-options">
+        <label for="verified">Verified?</label>
+        <%= select_tag :verified,
+             options_for_select([[nil,nil]] + Person.uniq.pluck(:verified), selected: params[:verified]), :class => "input" %>
+
+        <label for="geography_id">Ward</label>
+        <%= text_field_tag :geography_id, params[:geography_id], :class => "input-small" %>
+
+        <label for="submissions">Form submission content</label>
+        <%= text_field_tag :submissions, params[:submissions], :class => "input span4" %>      
+
+        <label for="event_id">Event</label>
+        <%= select_tag :event_id, 
+              options_for_select([[nil, nil]] + Event.all.order(:name).collect{|event| [event.name, event.id]}, selected: params[:event_id]), 
+              :class => "input" %>
+        </div>
     </div>
   </div>  
   
@@ -86,11 +104,12 @@
       <% #result = result.person %>
       <tr>
         <td class="span4">
-          <%= link_to "#{result.first_name} #{result.last_name}", person_path(:id => result.id) %>
+          <strong><%= link_to "#{result.first_name} #{result.last_name}", person_path(:id => result.id) %></strong><br/><br/>
+           Tags: <% if !(result.tag_values.blank?) %><%= search_result_field result.tag_values, :tags %><% end %>
         </td>
         <td class="span4">
           Address: <%= search_result_field result.address_1, :address  %><br/>
-          ZIP: <%= search_result_field result.postal_code, :postal_code %><br/>
+          City: <%= search_result_field result.city, :city %>  ZIP: <%= search_result_field result.postal_code, :postal_code %><br/>
           Ward: <%= search_result_field result.geography_id, :geography_id %><br/>
           Phone: <%= search_result_field number_to_phone(result.phone_number), :phone_number %><br/>
           Email: <%= search_result_field result.email_address, :email_address %><br/>
@@ -98,10 +117,11 @@
 
         </td>
         <td class="span4">
-          Primary: <%= search_result_field result.primary_device_description, :device_description %><br>
-          Secondary: <%= search_result_field result.secondary_device_description, :device_description %><br>
-          Primary Connection: <%= search_result_field result.primary_connection_description, :connection_description %><br>
-          <% if result.secondary_connection_description.present? %>Secondary Connection: <%= search_result_field result.secondary_connection_description, :connection_description %><% end %>
+          Primary Device: <%= search_result_field result.primary_device_description, :device_description %> (<%= search_result_field human_device_type_name(result.primary_device_id), :device_id_type %>)<br>
+          Secondary Device: <%= search_result_field result.secondary_device_description, :device_description %> (<%= search_result_field human_device_type_name(result.secondary_device_id), :device_id_type %>)<br>
+          Primary Connection: <%= search_result_field human_connection_type_name(result.primary_connection_id), :connection_id %> <%= search_result_field result.primary_connection_description, :connection_description %><br>
+          <% if result.secondary_connection_description.present? %>Secondary Connection: <%= search_result_field result.secondary_connection_description, :connection_description %><% end %><br>
+          Preferred Contact Method: <%= search_result_field result.preferred_contact_method, :preferred_contact_method %>
         </td>    
       </tr>
       <% end %>
@@ -116,20 +136,37 @@
 <div class="row">
   <div class="span12">
     <%= link_to "Save this list as CSV", search_index_path(params.merge(:format => :csv)), :class => "btn"  %>
-    <span><a href="#" id="export-to-mailchimp-form-toggle">Export this list to MailChimp</a></span>
-  </div>  
+    <span><%= link_to "Export this list to MailChimp", "#", :class => "btn", :id => "export-to-mailchimp-form-toggle" %></span>
+    <span><%= link_to "Send text messages to this list", "#", :class => "btn", :id => "export-to-twilio-form-toggle" %></span>
+<!--     <span><a href="#" id="export-to-mailchimp-form-toggle">Export this list to MailChimp</a></span>
+ -->  </div>  
 </div>
 
 <div class="row">
   <div class="span12">
     <div id="export-to-mailchimp-form">
       <%= form_tag search_export_path, remote: true, class: "form-inline" %>
-        <%= text_field_tag :name, '', class: "", placeholder: "enter a name for this list", length: 50 %>
+        <%= text_field_tag :name, '', class: "input-xlarge", placeholder: "enter a name for this list (segment)" %>
         <%= hidden_field_tag :adv, '1' %>
-        <%- [:tags, :submissions, :address, :first_name, :last_name, :email_address, :geography_id, :postal_code, :event_id, :device_description, :connection_description].each do |field| %> <%= hidden_field_tag field, params[field] %> <% end -%>
+        <%- [:first_name, :last_name, :email_address, :postal_code, :address, :tags, :device_id_type, :connection_id_type, :preferred_contact_method, :device_description, :connection_description, :verified, :geography_id, :submissions, :event_id ].each do |field| %> <%= hidden_field_tag field, params[field] %> <% end -%>
         <%= submit_tag "Export", class: "btn btn-primary", data: {disable_with: "Exporting ..."} %>
       </form>      
+    </div>
+
+    <div id="export-to-twilio-form">
+      <%= form_tag search_exportTwilio_path, remote: true, class: "form-inline" %>
+        <%= text_area_tag :message1, '', class: "input-xlarge", placeholder: "Enter a message to send (required)", required: true %><br />
+        <%= text_area_tag :message2, '', class: "input-xlarge", placeholder: "Enter a 2nd message to send. (Optional)" %>
+        <br />
+        Twilio-Wufoo Connection? <%= select_tag :twiliowufoo_campaign, 
+              options_for_select([[nil, nil]] + TwilioWufoo.all.order(:name).collect{|twiliowufoo| [twiliowufoo.name, twiliowufoo.id]}, selected: params[:twiliowufoo_campaign]), 
+              :class => "input" %>
+        <%= hidden_field_tag :adv, '1' %>
+        <%- [:first_name, :last_name, :email_address, :postal_code, :address, :tags, :device_id_type, :connection_id_type, :preferred_contact_method, :device_description, :connection_description, :verified, :geography_id, :submissions, :event_id ].each do |field| %> <%= hidden_field_tag field, params[field] %> <% end -%>
+        <%= submit_tag "Send messages through Twilio", class: "btn btn-primary", data: { confirm: 'These messages will be added to the queue and sent as soon as possible. Are you sure you want to send these?' } %>
+      </form>      
     </div>    
+
   </div>
 </div>
 

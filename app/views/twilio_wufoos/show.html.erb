@@ -1,0 +1,38 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @twilio_wufoo.name %>
+</p>
+
+<p>
+  <strong>Form Type:</strong>
+  <%= @twilio_wufoo.form_type %>
+</p>
+
+<p>
+  <strong>Wufoo formid:</strong>
+  <%= @twilio_wufoo.wufoo_formid %>
+</p>
+
+<p>
+  <strong>Twilio keyword:</strong>
+  <%= @twilio_wufoo.twilio_keyword %>
+</p>
+
+<p>
+  <strong>End Message (This is ignored if Form Type is "signup"):</strong>
+  <%= @twilio_wufoo.end_message %>
+</p>
+
+<p>
+  <strong>Active?:</strong>
+  <% if @twilio_wufoo.status %>
+    On
+  <% else %>
+    Off
+  <% end %>
+</p>
+
+<%= link_to 'Edit', edit_twilio_wufoo_path(@twilio_wufoo) %> |
+<%= link_to 'Back', twilio_wufoos_path %>

@@ -3,6 +3,8 @@ class Person < ActiveRecord::Base
   include Tire::Model::Callbacks 
   include ExternalDataMappings
 
+  validates   :phone_number, length: { is: 10 }
+
   has_many :comments, as: :commentable, dependent: :destroy
   has_many :submissions, dependent: :destroy
 
@@ -11,6 +13,9 @@ class Person < ActiveRecord::Base
 
   has_many :tags, through: :taggings
   has_many :taggings, as: :taggable
+
+  after_update  :sendToMailChimp
+  after_create  :sendToMailChimp
   
   self.per_page = 15
 
@@ -34,6 +39,7 @@ class Person < ActiveRecord::Base
     'Field271'  =>  :postal_code, # postal_code
     'Field9'  =>  :phone_number, # phone_number
     'IP'      =>  :signup_ip, # client IP, ignored for the moment
+
   }
 
   # update index if a comment is added
@@ -67,6 +73,9 @@ class Person < ActiveRecord::Base
       indexes :primary_device_type_name, analyzer: :snowball
       indexes :secondary_device_type_name, analyzer: :snowball
 
+      indexes :primary_device_id
+      indexes :secondary_device_id
+
       # device descriptions
       indexes :primary_device_description
       indexes :secondary_device_description
@@ -89,6 +98,8 @@ class Person < ActiveRecord::Base
       
       # tags
       indexes :tag_values, analyzer: :keyword
+
+      indexes :preferred_contact_method
       
       indexes :created_at, type: "date"
     end
@@ -123,6 +134,14 @@ class Person < ActiveRecord::Base
     options[:per_page] = _per_page
     options[:page]     = params[:page] || 1
     
+    if !(params[:device_id_type].blank?) 
+      device_id_string = params[:device_id_type].join(' ')
+    end
+
+    if !(params[:connection_id_type].blank?) 
+      connection_id_string = params[:connection_id_type].join(' ')
+    end
+
     tire.search options do
       query do
         boolean do
@@ -133,14 +152,18 @@ class Person < ActiveRecord::Base
           must { string "verified:(#{params[:verified]})"} if params[:verified].present?
           must { string "primary_device_description:#{params[:device_description]} OR secondary_device_description:#{params[:device_description]}"} if params[:device_description].present?
           must { string "primary_connection_description:#{params[:connection_description]} OR secondary_connection_description:#{params[:connection_description]}"} if params[:connection_description].present?
+          must { string "primary_device_id:#{device_id_string} OR secondary_device_id:#{device_id_string}"} if params[:device_id_type].present?
+          must { string "primary_connection_id:#{connection_id_string} OR secondary_connection_id:#{connection_id_string}"} if params[:connection_id_type].present?
           must { string "geography_id:(#{params[:geography_id]})"} if params[:geography_id].present?
           must { string "event_id:#{params[:event_id]}"} if params[:event_id].present?          
           must { string "address_1:#{params[:address]}"} if params[:address].present?
           must { string "city:#{params[:city]}"} if params[:city].present?
           must { string "submission_values:#{params[:submissions]}"} if params[:submissions].present?
-          must { string "tag_values:#{params[:tags]}"} if params[:tags].present?
+          # must { string "tag_values:#{tags_string}"} if params[:tags].present?
+          must { string "preferred_contact_method:#{params[:preferred_contact_method]}"} if !params[:preferred_contact_method].blank?
         end
-      end      
+      end 
+      filter :terms, :tag_values => params[:tags] if params[:tags].present?     
     end
   end
 
@@ -198,7 +221,39 @@ class Person < ActiveRecord::Base
 
   end
 
-
+  def sendToMailChimp
+    if self.email_address.present? 
+      if self.verified.present?
+        if self.verified.start_with?("Verified")
+            begin
+              mailchimpSend = Gibbon.list_subscribe({
+                :id => Logan::Application.config.cut_group_mailchimp_list_id, 
+                :email_address => self.email_address, 
+                :double_optin => 'false', 
+                :update_existing => 'true',
+                :merge_vars => {:FNAME => self.first_name, 
+                  :LNAME => self.last_name, 
+                  :MMERGE3 => self.geography_id, 
+                  :MMERGE4 => self.postal_code, 
+                  :MMERGE5 => self.participation_type, 
+                  :MMERGE6 => self.voted, 
+                  :MMERGE7 => self.called_311, 
+                  :MMERGE8 => self.primary_device_description, 
+                  :MMERGE9 => secondary_device_type_name, 
+                  :MMERGE10 => self.secondary_device_description, 
+                  :MMERGE11 =>  primary_connection_type_name , 
+                  :MMERGE12 => self.primary_connection_description, 
+                  :MMERGE13 => primary_device_type_name, 
+                  :MMERGE14 => self.preferred_contact_method}
+                  })
+              Rails.logger.info("[People->sendToMailChimp] Sent #{self.id} to Mailchimp: #{mailchimpSend}")
+            rescue Gibbon::MailChimpError => e
+              Rails.logger.fatal("[People->sendToMailChimp] fatal error sending #{self.id} to Mailchimp: #{e.message}")
+            end
+        end
+      end
+    end
+  end
 
 
   def self.initialize_from_wufoo(params)
@@ -216,6 +271,12 @@ class Person < ActiveRecord::Base
       new_person.participation_type = params['Field54']
     end
         
+    if params['Field273'] == "Email"
+      new_peson.preferred_contact_method = "EMAIL"
+    else
+      new_person.preferred_contact_method = "SMS"
+    end
+
     # Copy connection descriptions to description fields
     new_person.primary_connection_description = new_person.primary_connection_id
     new_person.secondary_connection_description = new_person.secondary_connection_id
@@ -242,6 +303,14 @@ class Person < ActiveRecord::Base
 
   def secondary_device_type_name
     Logan::Application.config.device_mappings.rassoc(secondary_device_id)[0].to_s
+  end
+
+  def primary_connection_type_name
+    Logan::Application.config.connection_mappings.rassoc(primary_connection_id)[0].to_s
+  end
+
+  def secondary_connection_type_name
+    Logan::Application.config.connection_mappings.rassoc(secondary_connection_id)[0].to_s
   end
 
   def full_name
