@@ -272,7 +272,7 @@ class Person < ActiveRecord::Base
     end
         
     if params['Field273'] == "Email"
-      new_peson.preferred_contact_method = "EMAIL"
+      new_person.preferred_contact_method = "EMAIL"
     else
       new_person.preferred_contact_method = "SMS"
     end
