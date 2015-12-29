@@ -47,7 +47,7 @@
 
   	          # Create and send an SMS message
   	          @message = client.account.messages.create(
-  	            from: ENV['TWILIO_NUMBER'],
+  	            from: ENV['TWILIO_SMS_SIGNUP_NUMBER'],
   	            to: phone_number,
   	            body: message
   	          )
