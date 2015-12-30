@@ -1,3 +1,3 @@
 Tire.configure do
-  url "http://elasticsearch.service.consul:9200"
+  url "http://localhost:9200"
 end
