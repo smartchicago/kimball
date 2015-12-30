@@ -26,3 +26,5 @@
 # personal environment variables.
 .env
 
+# vagrant instance folder
+.vagrant
