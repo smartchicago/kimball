@@ -112,20 +112,23 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
     sudo apt-get -qq update
     sudo apt-get -qq install -y \
-      postgresql-9.3 \
+      mysql-server-5.6 \
+      libmysqlclient-dev \
+      mysql-client-5.6 \
       rbenv \
       ruby-build \
       git \
-      postgresql-server-dev-9.3 \
       nodejs \
       redis-server \
       graphviz \
       nginx-full
 
-    # configuring postgres
-    sudo -u postgres psql -c "create role root with createdb login password 'password';"
-    sudo cp -rf /vagrant/config/server_conf/pg_hba.conf /etc/postgresql/9.3/main/
-    sudo service postgresql restart
+    #   postgresql-server-dev-9.3 \
+    #   postgresql-9.3
+    # # configuring postgres
+    # sudo -u postgres psql -c "create role root with createdb login password 'password';"
+    # sudo cp -rf /vagrant/config/server_conf/pg_hba.conf /etc/postgresql/9.3/main/
+    # sudo service postgresql restart
 
     # set path and init rbenv
     echo 'export PATH="$HOME/.rbenv/bin:/vagrant/bin/:$PATH"' >> /home/vagrant/.profile

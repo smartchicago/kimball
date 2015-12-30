@@ -94,6 +94,7 @@ group :testing do
   gem "mocha", :require => false
 
   gem "sqlite3"
+  gem 'memory_test_fix' # in memory DB, for the speedy
 
   # generate fake data w/faker: http://rubydoc.info/github/stympy/faker/master/frames
   gem "faker"
