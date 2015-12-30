@@ -3,7 +3,9 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0.rc1'
 
-gem 'pg'
+#gem 'pg' # soooooon!
+gem 'mysql2'
+
 gem 'dotenv-rails'
 # Gems used only for assets and not required
 # in production environments by default.
@@ -41,6 +43,7 @@ group :development do
   gem 'rack-mini-profiler'
   gem 'bullet'
   gem 'ruby-prof'
+  gem 'annotate'
 end
 
 # To use debugger

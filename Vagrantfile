@@ -110,6 +110,8 @@ Vagrant.configure(2) do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
+    debconf-set-selections <<< 'mysql-server mysql-server/root_password password password'
+    debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password password'
     sudo apt-get -qq update
     sudo apt-get -qq install -y \
       mysql-server-5.6 \
@@ -123,6 +125,7 @@ Vagrant.configure(2) do |config|
       graphviz \
       nginx-full
 
+    # SOOOOOON!!! TODO: postgres
     #   postgresql-server-dev-9.3 \
     #   postgresql-9.3
     # # configuring postgres
