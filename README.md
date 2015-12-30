@@ -36,17 +36,12 @@ Hacking
 
 Main development occurs in the development branch. HEAD on master is always the production release. New features are created in topic branches, and then merged to development via pull requests. Candidate releases are tagged from development and deployed to staging, tested, then pushed to master and production.
 
-otto development workflow:
-Install otto: https://ottoproject.io/
+Development workflow:
+Install Vagrant: https://vagrantup.com/
 ```
-otto compile
-otto dev
-otto dev ssh
-bundle install
-bundle exec rake db:setup
-unicorn_rails -D
-exit
-open http://`otto dev address`:8080
+vagrant plugin install vagrant-cachier vagrant-hostmanager
+vagrant up
+open http://`whoami`.patterns.dev
 ```
 
 Contributors
