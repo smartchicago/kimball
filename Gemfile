@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.0.rc1'
 
 #gem 'pg' # soooooon!
-gem 'mysql2'
+gem 'mysql2', '~> 0.3.18'
 
 gem 'dotenv-rails'
 # Gems used only for assets and not required

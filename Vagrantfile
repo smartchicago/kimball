@@ -85,8 +85,11 @@ Vagrant.configure(2) do |config|
   # Don't display the VirtualBox GUI when booting the machine
     vb.gui = false
 
+  # linked clones, they are speedy
+    vb.linked_clone = true if Vagrant::VERSION =~ /^1.8/
   # Customize the amount of memory on the VM:
-    vb.memory = "1024"
+    vb.memory = '2048'
+    vb.cpus = '2'
 
     # passwordless nfs
     # https://gist.github.com/cromulus/5044b9558319769aaf0b
@@ -123,7 +126,8 @@ Vagrant.configure(2) do |config|
       nodejs \
       redis-server \
       graphviz \
-      nginx-full
+      nginx-full \
+      openjdk-7-jre
 
     # SOOOOOON!!! TODO: postgres
     #   postgresql-server-dev-9.3 \
@@ -132,6 +136,14 @@ Vagrant.configure(2) do |config|
     # sudo -u postgres psql -c "create role root with createdb login password 'password';"
     # sudo cp -rf /vagrant/config/server_conf/pg_hba.conf /etc/postgresql/9.3/main/
     # sudo service postgresql restart
+
+
+    # install elasticsearch
+    wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.deb -O /tmp/elasticsearch.deb;
+    sudo dpkg -i /tmp/elasticsearch.deb;
+    sudo update-rc.d elasticsearch defaults;
+    rm /tmp/elasticsearch.deb;
+    sudo service elasticsearch start;
 
     # automatically cd to /vagrant/
     echo 'if [ -d /vagrant/ ]; then cd /vagrant/; fi' >> /home/vagrant/.bashrc

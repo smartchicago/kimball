@@ -48,6 +48,9 @@ GEM
       multi_json (~> 1.3)
       thread_safe (~> 0.1)
       tzinfo (~> 0.3.37)
+    annotate (2.6.5)
+      activerecord (>= 2.3.0)
+      rake (>= 0.8.7)
     ansi (1.4.3)
     arel (4.0.0)
     atomic (1.1.9)
@@ -103,6 +106,9 @@ GEM
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    memory_test_fix (1.2.2)
+      activerecord (>= 3.2.0, < 4.99.0)
+      railties (>= 3.2.0, < 4.99.0)
     metaclass (0.0.1)
     mime-types (1.23)
     minitest (4.7.4)
@@ -111,6 +117,7 @@ GEM
     multi_json (1.7.3)
     multi_xml (0.5.3)
     multipart-post (2.0.0)
+    mysql2 (0.3.20)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
@@ -120,7 +127,6 @@ GEM
       net-ssh (>= 2.6.5)
     newrelic_rpm (3.6.0.78)
     orm_adapter (0.4.0)
-    pg (0.18.3)
     polyglot (0.3.3)
     rack (1.5.2)
     rack-mini-profiler (0.9.7)
@@ -209,6 +215,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  annotate
   bullet
   capistrano!
   coffee-rails (~> 4.0.0.beta1)
@@ -223,9 +230,10 @@ DEPENDENCIES
   holder_rails
   jbuilder (~> 1.0.1)
   jquery-rails
+  memory_test_fix
   mocha
+  mysql2 (~> 0.3.18)
   newrelic_rpm
-  pg
   rack-mini-profiler
   rails (= 4.0.0.rc1)
   ruby-prof
@@ -242,4 +250,4 @@ DEPENDENCIES
   wuparty
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
