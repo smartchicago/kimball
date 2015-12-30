@@ -144,8 +144,8 @@ Vagrant.configure(2) do |config|
     cd ~
     source ~/.profile
 
-    rbenv install 2.1.3
-
+    rbenv install `cat /vagrant/.ruby-version`
+    rbenv rehash
     # setup our particular rails app
     cd /vagrant/
     gem install bundler --no-ri --no-rdoc
