@@ -44,6 +44,12 @@ vagrant up
 open http://`whoami`.patterns.dev
 ```
 
+To access the virtual machine, run:
+```
+vagrant ssh
+bundle exec rails c # etc. etc. etc.
+```
+
 Contributors
 ------------
 
