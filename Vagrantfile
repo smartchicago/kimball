@@ -110,8 +110,8 @@ Vagrant.configure(2) do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
-    debconf-set-selections <<< 'mysql-server mysql-server/root_password password password'
-    debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password password'
+    sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password password'
+    sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password password'
     sudo apt-get -qq update
     sudo apt-get -qq install -y \
       mysql-server-5.6 \
@@ -133,12 +133,12 @@ Vagrant.configure(2) do |config|
     # sudo cp -rf /vagrant/config/server_conf/pg_hba.conf /etc/postgresql/9.3/main/
     # sudo service postgresql restart
 
+    # automatically cd to /vagrant/
+    echo 'if [ -d /vagrant/ ]; then cd /vagrant/; fi' >> /home/vagrant/.bashrc
+
     # set path and init rbenv
     echo 'export PATH="$HOME/.rbenv/bin:/vagrant/bin/:$PATH"' >> /home/vagrant/.profile
     echo 'eval "$(rbenv init -)"' >> /home/vagrant/.profile
-
-    # automatically cd to /vagrant/
-    echo 'if [ -d /vagrant/ ]; then cd /vagrant/; fi' >> /home/vagrant/.bashrc
 
     if [ ! -d /home/vagrant/.rbenv ]; then
       git clone -q https://github.com/sstephenson/rbenv.git ~/.rbenv
@@ -150,6 +150,8 @@ Vagrant.configure(2) do |config|
     cd ~
     source ~/.profile
 
+    # cleanup and install the appropriate ruby version
+    rbenv rehash
     rbenv install `cat /vagrant/.ruby-version`
     rbenv rehash
     # setup our particular rails app

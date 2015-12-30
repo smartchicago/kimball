@@ -2,7 +2,7 @@ application {
   name = "kimball"
   type = "ruby"
   dependency {
-    source = "github.com/cromulus/otto-postgres"
+    source = "github.com/cromulus/otto-mysql"
   }
   dependency {
     source = "github.com/cromulus/otto-elasticsearch"
@@ -20,13 +20,5 @@ infrastructure "kimball" {
 }
 
 customization "ruby" {
-  ruby_version = "2.1"
-}
-
-customization "dev" {
-    vagrantfile = "Vagrantfile"
-}
-
-customization "dev-dep" {
-    vagrantfile = "Vagrantfile"
+  ruby_version = "2.2.2"
 }
