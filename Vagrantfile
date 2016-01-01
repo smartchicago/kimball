@@ -139,7 +139,7 @@ Vagrant.configure(2) do |config|
 
 
     # install elasticsearch
-    wget –quiet https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.deb -O /tmp/elasticsearch.deb;
+    wget –-quiet https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.deb -O /tmp/elasticsearch.deb;
     sudo dpkg -i /tmp/elasticsearch.deb;
     sudo update-rc.d elasticsearch defaults;
     rm /tmp/elasticsearch.deb;
