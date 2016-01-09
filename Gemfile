@@ -6,6 +6,23 @@ gem 'rails', '~> 4.2.0'
 #gem 'pg' # soooooon!
 gem 'mysql2', '~> 0.3.18'
 
+
+group :development do
+  # gem 'capistrano'
+  # mainline cap is busted w/r/t Rails 4. Try this fork instead.
+  # src: https://github.com/capistrano/capistrano/pull/412
+  gem 'capistrano', :git => "git://github.com/capistrano/capistrano.git", :tag => "v2.15.4"
+  gem 'rack-mini-profiler'
+  gem 'flamegraph'
+  gem 'stackprof' # ruby 2.1+ only
+  gem 'memory_profiler'
+  gem 'ruby-prof'
+
+  gem 'bullet'
+  gem 'annotate'
+  gem 'web-console', '~> 3.0'
+end
+
 gem 'dotenv-rails'
 
 # Gems used only for assets and not required
@@ -35,17 +52,7 @@ gem 'jbuilder', '~> 1.0.1'
 gem 'unicorn'
 
 # Deploy with Capistrano
-group :development do
 
-  # gem 'capistrano'
-  # mainline cap is busted w/r/t Rails 4. Try this fork instead.
-  # src: https://github.com/capistrano/capistrano/pull/412
-  gem 'capistrano', :git => "git://github.com/capistrano/capistrano.git", :tag => "v2.15.4"
-  gem 'rack-mini-profiler'
-  gem 'bullet'
-  gem 'ruby-prof'
-  gem 'annotate'
-end
 
 # To use debugger
 # gem 'debugger'
