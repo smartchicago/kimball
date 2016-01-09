@@ -12,17 +12,28 @@ group :development do
   # mainline cap is busted w/r/t Rails 4. Try this fork instead.
   # src: https://github.com/capistrano/capistrano/pull/412
   gem 'capistrano', :git => "git://github.com/capistrano/capistrano.git", :tag => "v2.15.4"
+
+  # this whole group makes finding performance issues much friendlier
   gem 'rack-mini-profiler'
   gem 'flamegraph'
   gem 'stackprof' # ruby 2.1+ only
   gem 'memory_profiler'
   gem 'ruby-prof'
 
+  # n+1 killer.
   gem 'bullet'
+
+  # what attributes does this model actually have?
   gem 'annotate'
-  gem 'web-console', '~> 3.0'
+
+  #a console in your tests, to find out what's actually happening
+  gem 'pry-rails'
+
+  # a console in your browser, when you want to interrogate views.
+  gem 'web-console'
 end
 
+#uses a dotfile .env for all environment variables.
 gem 'dotenv-rails'
 
 # Gems used only for assets and not required
@@ -56,12 +67,8 @@ gem 'jbuilder', '~> 1.0.1'
 # Use unicorn as the app server
 gem 'unicorn'
 
-# Deploy with Capistrano
-
-
 # To use debugger
 # gem 'debugger'
-
 
 gem 'twitter-bootstrap-rails', '~> 2.2.0'
 
