@@ -27,6 +27,11 @@ gem 'dotenv-rails'
 
 # Gems used only for assets and not required
 # in production environments by default.
+
+group :production do
+  gem 'newrelic_rpm'
+end
+
 group :assets do
   gem 'sass-rails'
   gem 'coffee-rails'
@@ -57,8 +62,8 @@ gem 'unicorn'
 # To use debugger
 # gem 'debugger'
 
-gem 'newrelic_rpm'
-gem 'twitter-bootstrap-rails'
+
+gem 'twitter-bootstrap-rails', '~> 2.2.0'
 
 # use tire for ElasticSearch integration
 gem "tire"
