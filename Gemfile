@@ -72,18 +72,8 @@ gem "tire"
 gem 'will_paginate'
 gem 'will_paginate-bootstrap' # https://github.com/nickpad/will_paginate-bootstrap
 
-<<<<<<< e7d9058a6244f66d6bc80a4c40ab8ffd8f2ddafe
-# use mysql in production
-group :production do
-  gem 'mysql2'
-
-end
-
-gem "health_check" # include health_check, for system monitoring
-=======
 # include health_check, for system monitoring
 gem "health_check"
->>>>>>> upgraded to 4.1, all tests pass
 
 # use holder for placeholder images
 gem 'holder_rails'
@@ -107,9 +97,6 @@ gem "gsm_encoder"
 # use Delayed Job to queue messages
 gem 'delayed_job_active_record'
 gem 'daemons'
-
-# mock tests w/mocha
-gem "mocha", :require => false
 
 group :testing do
   # mock tests w/mocha
