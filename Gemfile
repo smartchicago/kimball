@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.0.rc1'
+gem 'rails', '~> 4.1.0'
 
 #gem 'pg' # soooooon!
 gem 'mysql2', '~> 0.3.18'
@@ -11,8 +11,8 @@ gem 'dotenv-rails'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 4.0.0.beta1'
-  gem 'coffee-rails', '~> 4.0.0.beta1'
+  gem 'sass-rails'
+  gem 'coffee-rails'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', platforms: :ruby
@@ -60,6 +60,7 @@ gem "tire"
 gem 'will_paginate'
 gem 'will_paginate-bootstrap' # https://github.com/nickpad/will_paginate-bootstrap
 
+<<<<<<< e7d9058a6244f66d6bc80a4c40ab8ffd8f2ddafe
 # use mysql in production
 group :production do
   gem 'mysql2'
@@ -67,12 +68,16 @@ group :production do
 end
 
 gem "health_check" # include health_check, for system monitoring
+=======
+# include health_check, for system monitoring
+gem "health_check"
+>>>>>>> upgraded to 4.1, all tests pass
 
 # use holder for placeholder images
 gem 'holder_rails'
 
 # use devise for auth/identity
-gem 'devise', :git => "git://github.com/plataformatec/devise", :branch => "rails4"
+gem 'devise', '~> 3.0'
 
 # use gibbon for easy Mailchimp API access
 gem "gibbon"
