@@ -11,9 +11,15 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
+//= require best_in_place
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require turbolinks
 //= require holder
 //= require datepicker/bootstrap-datepicker.min.js
 //= require_tree .
+
+$(document).ready(function() {
+  /* Activating Best In Place */
+  jQuery(".best_in_place").best_in_place();
+});

@@ -109,6 +109,7 @@ gem 'gsm_encoder'
 gem 'delayed_job_active_record'
 gem 'daemons'
 
+<<<<<<< 8d0c7ec1b93f874c9509efb808dd9c1000d71eaf
 #for generating unique tokens for Person
 gem 'has_secure_token'
 
@@ -117,6 +118,10 @@ gem 'phony_rails'
 
 # zip code validation
 gem 'validates_zipcode'
+=======
+# in place editing
+gem 'best_in_place', '~> 3.0.1'
+>>>>>>> simple updating in place
 
 group :testing do
   # mock tests w/mocha

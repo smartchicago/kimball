@@ -57,6 +57,9 @@ GEM
     ast (2.2.0)
     backports (3.6.7)
     bcrypt (3.1.10)
+    best_in_place (3.0.3)
+      actionpack (>= 3.2)
+      railties (>= 3.2)
     builder (3.2.2)
     bullet (5.0.0)
       activesupport (>= 3.0.0)
@@ -413,6 +416,7 @@ PLATFORMS
 
 DEPENDENCIES
   annotate
+  best_in_place (~> 3.0.1)
   bullet
   capistrano!
   capybara
