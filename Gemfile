@@ -89,7 +89,7 @@ gem 'holder_rails'
 gem 'devise'
 
 # use gibbon for easy Mailchimp API access
-gem "gibbon"
+gem "gibbon", '0.4.6'
 
 # use twilio-ruby for twilio
 gem "twilio-ruby"
