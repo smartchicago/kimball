@@ -262,7 +262,7 @@ DEPENDENCIES
   daemons
   delayed_job_active_record
   coffee-rails
-  devise (~> 3.0)
+  devise
   dotenv-rails
   faker
   flamegraph

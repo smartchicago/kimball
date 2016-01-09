@@ -89,7 +89,7 @@ gem "health_check"
 gem 'holder_rails'
 
 # use devise for auth/identity
-gem 'devise', '~> 3.0'
+gem 'devise'
 
 # use gibbon for easy Mailchimp API access
 gem "gibbon"
