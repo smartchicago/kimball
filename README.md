@@ -8,6 +8,43 @@ Features
 
 Kimball is a customer relationship management application at its heart. Kimball tracks people that have signed up to participate with the CUT Group, their involvement in events and CUT Group programs.
 
+Setup
+-----
+Kimball is a Ruby on Rails app. 
+
+* Server Set up:
+  * It currently uses Capistrano for deployment to staging and production instances.
+  * ElasticSearch needs to be installed and running for Kimball to work.
+  * Environment Variables are used (saved in a local_env.yml file) for API keys and other IDs.
+* Wufoo
+  * Wufoo hosts all forms used for Kimball.
+  * On the Server Side there are 3 environment variables used:
+    * WUFOO_ACCOUNT
+    * WUFOO_API
+    * WUFOO_SIGNUP_FORM
+  * For SMS signup and form fills, "SMS Campaigns" are created in the Kimball app to associate a Wufoo form ID.
+  * Webhooks are used on Wufoo to send data back to Kimball. Currently there are 2 webhooks in use:
+    * /people : This endpoint is used for new signups via the main signup/registration wufoo form.
+    * /people/create_sms : This endpoint is used for new signups via the signup/registration Wufoo form that has been customized for SMS signup.
+    * /submissions : This endpoint is for all other Wufoo forms (call out, availability, tests). It saves the results in the submissions model. 
+* Twilio:
+  * Twilio is used to send and receive text messages for sign up, notifications, and surveys.
+  * Two Twilio phone numbers are needed. One for text message signup, notifications, and surveys. The other for text message verification.
+  * On the Server Side there are several environment variables used:
+    * TWILIO_ACCOUNT_SID
+    * TWILIO_AUTH_TOKEN
+    * TWILIO_SMS_SIGNUP_NUMBER
+    * TWILIO_SIGNUP_VERIFICATION_NUMBER
+  * The email signup verification number uses a request url with HTTP POST endpoint /receive_text/index
+  * The SMS Signup/notification number uses a request url with HTTP POST endpoint /receive_text/smssignup
+* Mailchimp:
+  * Mailchimp is used to send emails.
+  * Currently this is a one way connection Kimball --> Mailchimp.
+  * On the Server Side there are 2 environment variables used:
+    * MAILCHIMP_API_KEY
+    * MAILCHIMP_LIST_ID
+
+
 TODO
 ----
 * Events
