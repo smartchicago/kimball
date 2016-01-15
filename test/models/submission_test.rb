@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: submissions
+#
+#  id              :integer          not null, primary key
+#  raw_content     :text
+#  person_id       :integer
+#  ip_addr         :string(255)
+#  entry_id        :string(255)
+#  form_structure  :text
+#  field_structure :text
+#  created_at      :datetime
+#  updated_at      :datetime
+#
+
 require 'test_helper'
 
 class SubmissionTest < ActiveSupport::TestCase

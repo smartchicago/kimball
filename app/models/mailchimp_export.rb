@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: mailchimp_exports
+#
+#  id         :integer          not null, primary key
+#  name       :string(255)
+#  body       :text
+#  created_by :integer
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class MailchimpExport < ActiveRecord::Base
   validates_presence_of :name, :body
   validates_length_of   :name, :in => 1..50
