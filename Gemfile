@@ -84,9 +84,6 @@ gem "gsm_encoder"
 gem 'delayed_job_active_record'
 gem 'daemons'
 
-# mock tests w/mocha
-gem "mocha", :require => false
-
 group :testing do
   # mock tests w/mocha
   gem "mocha", :require => false
