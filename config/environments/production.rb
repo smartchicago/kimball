@@ -23,7 +23,7 @@ Logan::Application.configure do
   # config.action_dispatch.rack_cache = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this).
-  config.serve_static_assets = false
+  config.serve_static_files = false
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor  = :uglifier
@@ -80,7 +80,7 @@ Logan::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
-  
+
   # Analytics
   config.google_analytics_enabled = true
   config.before_configuration do
@@ -89,5 +89,5 @@ Logan::Application.configure do
       ENV[key.to_s] = value
     end if File.exists?(env_file)
   end
-  config.middleware.use Rack::TwilioWebhookAuthentication, ENV['TWILIO_AUTH_TOKEN'], '/receive_text/index'  
+  config.middleware.use Rack::TwilioWebhookAuthentication, ENV['TWILIO_AUTH_TOKEN'], '/receive_text/index'
 end

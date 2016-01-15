@@ -13,199 +13,199 @@
 
 ActiveRecord::Schema.define(version: 20151019004127) do
 
-  create_table "applications", force: true do |t|
-    t.string   "name"
-    t.text     "description"
-    t.string   "url"
-    t.string   "source_url"
-    t.string   "creator_name"
+  create_table "applications", force: :cascade do |t|
+    t.string   "name",         limit: 255
+    t.text     "description",  limit: 65535
+    t.string   "url",          limit: 255
+    t.string   "source_url",   limit: 255
+    t.string   "creator_name", limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "program_id"
-    t.integer  "created_by"
-    t.integer  "updated_by"
+    t.integer  "program_id",   limit: 4
+    t.integer  "created_by",   limit: 4
+    t.integer  "updated_by",   limit: 4
   end
 
-  create_table "comments", force: true do |t|
-    t.text     "content"
-    t.integer  "user_id"
-    t.string   "commentable_type"
-    t.integer  "commentable_id"
+  create_table "comments", force: :cascade do |t|
+    t.text     "content",          limit: 65535
+    t.integer  "user_id",          limit: 4
+    t.string   "commentable_type", limit: 255
+    t.integer  "commentable_id",   limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "created_by"
+    t.integer  "created_by",       limit: 4
   end
 
-  create_table "delayed_jobs", force: true do |t|
-    t.integer  "priority",               default: 0, null: false
-    t.integer  "attempts",               default: 0, null: false
-    t.text     "handler",                            null: false
-    t.text     "last_error"
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",               limit: 4,     default: 0, null: false
+    t.integer  "attempts",               limit: 4,     default: 0, null: false
+    t.text     "handler",                limit: 65535,             null: false
+    t.text     "last_error",             limit: 65535
     t.datetime "run_at"
     t.datetime "locked_at"
     t.datetime "failed_at"
-    t.string   "locked_by"
-    t.string   "queue"
+    t.string   "locked_by",              limit: 255
+    t.string   "queue",                  limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "delayed_reference_id"
-    t.string   "delayed_reference_type"
+    t.integer  "delayed_reference_id",   limit: 4
+    t.string   "delayed_reference_type", limit: 255
   end
 
-  add_index "delayed_jobs", ["delayed_reference_type"], name: "delayed_jobs_delayed_reference_type"
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
-  add_index "delayed_jobs", ["queue"], name: "delayed_jobs_queue"
+  add_index "delayed_jobs", ["delayed_reference_type"], name: "delayed_jobs_delayed_reference_type", using: :btree
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  add_index "delayed_jobs", ["queue"], name: "delayed_jobs_queue", using: :btree
 
-  create_table "events", force: true do |t|
-    t.string   "name"
-    t.text     "description"
+  create_table "events", force: :cascade do |t|
+    t.string   "name",           limit: 255
+    t.text     "description",    limit: 65535
     t.datetime "starts_at"
     t.datetime "ends_at"
-    t.text     "location"
-    t.text     "address"
-    t.integer  "capacity"
-    t.integer  "application_id"
+    t.text     "location",       limit: 65535
+    t.text     "address",        limit: 65535
+    t.integer  "capacity",       limit: 4
+    t.integer  "application_id", limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "created_by"
-    t.integer  "updated_by"
+    t.integer  "created_by",     limit: 4
+    t.integer  "updated_by",     limit: 4
   end
 
-  create_table "mailchimp_exports", force: true do |t|
-    t.string   "name"
-    t.text     "body"
-    t.integer  "created_by"
+  create_table "mailchimp_exports", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.text     "body",       limit: 65535
+    t.integer  "created_by", limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "people", force: true do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "email_address"
-    t.string   "address_1"
-    t.string   "address_2"
-    t.string   "city"
-    t.string   "state"
-    t.string   "postal_code"
-    t.integer  "geography_id"
-    t.integer  "primary_device_id"
-    t.string   "primary_device_description"
-    t.integer  "secondary_device_id"
-    t.string   "secondary_device_description"
-    t.integer  "primary_connection_id"
-    t.string   "primary_connection_description"
-    t.string   "phone_number"
-    t.string   "participation_type"
+  create_table "people", force: :cascade do |t|
+    t.string   "first_name",                       limit: 255
+    t.string   "last_name",                        limit: 255
+    t.string   "email_address",                    limit: 255
+    t.string   "address_1",                        limit: 255
+    t.string   "address_2",                        limit: 255
+    t.string   "city",                             limit: 255
+    t.string   "state",                            limit: 255
+    t.string   "postal_code",                      limit: 255
+    t.integer  "geography_id",                     limit: 4
+    t.integer  "primary_device_id",                limit: 4
+    t.string   "primary_device_description",       limit: 255
+    t.integer  "secondary_device_id",              limit: 4
+    t.string   "secondary_device_description",     limit: 255
+    t.integer  "primary_connection_id",            limit: 4
+    t.string   "primary_connection_description",   limit: 255
+    t.string   "phone_number",                     limit: 255
+    t.string   "participation_type",               limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "signup_ip"
+    t.string   "signup_ip",                        limit: 255
     t.datetime "signup_at"
-    t.string   "voted"
-    t.string   "called_311"
-    t.integer  "secondary_connection_id"
-    t.string   "secondary_connection_description"
-    t.string   "verified"
-    t.string   "preferred_contact_method"
+    t.string   "voted",                            limit: 255
+    t.string   "called_311",                       limit: 255
+    t.integer  "secondary_connection_id",          limit: 4
+    t.string   "secondary_connection_description", limit: 255
+    t.string   "verified",                         limit: 255
+    t.string   "preferred_contact_method",         limit: 255
   end
 
-  create_table "programs", force: true do |t|
-    t.string   "name"
-    t.text     "description"
+  create_table "programs", force: :cascade do |t|
+    t.string   "name",        limit: 255
+    t.text     "description", limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "created_by"
-    t.integer  "updated_by"
+    t.integer  "created_by",  limit: 4
+    t.integer  "updated_by",  limit: 4
   end
 
-  create_table "reservations", force: true do |t|
-    t.integer  "person_id"
-    t.integer  "event_id"
+  create_table "reservations", force: :cascade do |t|
+    t.integer  "person_id",    limit: 4
+    t.integer  "event_id",     limit: 4
     t.datetime "confirmed_at"
-    t.integer  "created_by"
+    t.integer  "created_by",   limit: 4
     t.datetime "attended_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "updated_by"
+    t.integer  "updated_by",   limit: 4
   end
 
-  create_table "submissions", force: true do |t|
-    t.text     "raw_content"
-    t.integer  "person_id"
-    t.string   "ip_addr"
-    t.string   "entry_id"
-    t.text     "form_structure"
-    t.text     "field_structure"
+  create_table "submissions", force: :cascade do |t|
+    t.text     "raw_content",     limit: 65535
+    t.integer  "person_id",       limit: 4
+    t.string   "ip_addr",         limit: 255
+    t.string   "entry_id",        limit: 255
+    t.text     "form_structure",  limit: 65535
+    t.text     "field_structure", limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "taggings", force: true do |t|
-    t.string   "taggable_type"
-    t.integer  "taggable_id"
-    t.integer  "created_by"
+  create_table "taggings", force: :cascade do |t|
+    t.string   "taggable_type", limit: 255
+    t.integer  "taggable_id",   limit: 4
+    t.integer  "created_by",    limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "tag_id"
+    t.integer  "tag_id",        limit: 4
   end
 
-  create_table "tags", force: true do |t|
-    t.string   "name"
-    t.integer  "created_by"
+  create_table "tags", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.integer  "created_by", limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "twilio_messages", force: true do |t|
-    t.string   "message_sid"
+  create_table "twilio_messages", force: :cascade do |t|
+    t.string   "message_sid",        limit: 255
     t.datetime "date_created"
     t.datetime "date_updated"
     t.datetime "date_sent"
-    t.string   "account_sid"
-    t.string   "from"
-    t.string   "to"
-    t.string   "body"
-    t.string   "status"
-    t.string   "error_code"
-    t.string   "error_message"
-    t.string   "direction"
-    t.string   "from_city"
-    t.string   "from_state"
-    t.string   "from_zip"
-    t.string   "wufoo_formid"
-    t.integer  "conversation_count"
-    t.string   "signup_verify"
+    t.string   "account_sid",        limit: 255
+    t.string   "from",               limit: 255
+    t.string   "to",                 limit: 255
+    t.string   "body",               limit: 255
+    t.string   "status",             limit: 255
+    t.string   "error_code",         limit: 255
+    t.string   "error_message",      limit: 255
+    t.string   "direction",          limit: 255
+    t.string   "from_city",          limit: 255
+    t.string   "from_state",         limit: 255
+    t.string   "from_zip",           limit: 255
+    t.string   "wufoo_formid",       limit: 255
+    t.integer  "conversation_count", limit: 4
+    t.string   "signup_verify",      limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "twilio_wufoos", force: true do |t|
-    t.string   "name"
-    t.string   "wufoo_formid"
-    t.string   "twilio_keyword"
+  create_table "twilio_wufoos", force: :cascade do |t|
+    t.string   "name",           limit: 255
+    t.string   "wufoo_formid",   limit: 255
+    t.string   "twilio_keyword", limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "status",         default: false, null: false
-    t.string   "end_message"
-    t.string   "form_type"
+    t.boolean  "status",                     default: false, null: false
+    t.string   "end_message",    limit: 255
+    t.string   "form_type",      limit: 255
   end
 
-  create_table "users", force: true do |t|
-    t.string   "email",                  default: "",    null: false
-    t.string   "encrypted_password",     default: "",    null: false
-    t.string   "reset_password_token"
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                  limit: 255, default: "",    null: false
+    t.string   "encrypted_password",     limit: 255, default: "",    null: false
+    t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0
+    t.integer  "sign_in_count",          limit: 4,   default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.string   "password_salt"
-    t.string   "invitation_token"
+    t.string   "current_sign_in_ip",     limit: 255
+    t.string   "last_sign_in_ip",        limit: 255
+    t.string   "password_salt",          limit: 255
+    t.string   "invitation_token",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "approved",               default: false, null: false
+    t.boolean  "approved",                           default: false, null: false
   end
 
 end

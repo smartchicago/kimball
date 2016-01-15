@@ -8,7 +8,7 @@ class TwilioWufoosControllerTest < ActionController::TestCase
   test "should get index" do
     get :index
     assert_response :success
-    assert_not_nil assigns(:twilio_wufoos)
+    assert_not_nil assigns(:twilio_wufoos_active)
   end
 
   test "should get new" do

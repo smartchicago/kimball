@@ -34,10 +34,10 @@
 
 class Person < ActiveRecord::Base
   include Tire::Model::Search
-  include Tire::Model::Callbacks 
+  include Tire::Model::Callbacks
   include ExternalDataMappings
 
-  validates   :phone_number, length: { is: 10 }
+  phony_normalize :phone_number, default_country_code: 'US'
 
   has_many :comments, as: :commentable, dependent: :destroy
   has_many :submissions, dependent: :destroy
@@ -50,15 +50,15 @@ class Person < ActiveRecord::Base
 
   after_update  :sendToMailChimp
   after_create  :sendToMailChimp
-  
+
   self.per_page = 15
 
-  WUFOO_FIELD_MAPPING = { 
+  WUFOO_FIELD_MAPPING = {
     'Field1'  =>  :first_name,
     'Field2'  =>  :last_name,
     'Field10' =>  :email_address,
     'Field261' =>  :voted,
-    'Field262' =>  :called_311, 
+    'Field262' =>  :called_311,
     'Field39' =>  :primary_device_id, # type of primary
     'Field21' =>  :primary_device_description, # desc of primary
     'Field40' =>  :secondary_device_id,
@@ -92,7 +92,7 @@ class Person < ActiveRecord::Base
     }
   } do
     mapping do
-      indexes :id, index: :not_analyzed 
+      indexes :id, index: :not_analyzed
       indexes :first_name
       indexes :last_name
       indexes :email_address, analyzer: "email_analyzer"
@@ -102,7 +102,7 @@ class Person < ActiveRecord::Base
       indexes :address_1  # FIXME: if we ever use address_2, this will not work
       indexes :city
       indexes :verified, analyzer: :snowball
-      
+
       # device types
       indexes :primary_device_type_name, analyzer: :snowball
       indexes :secondary_device_type_name, analyzer: :snowball
@@ -115,47 +115,47 @@ class Person < ActiveRecord::Base
       indexes :secondary_device_description
       indexes :primary_connection_description
       indexes :secondary_connection_description
-      
+
       # comments
       indexes :comments do
         indexes :content, analyzer: "snowball"
       end
-      
+
       # events
       indexes :reservations do
         indexes :event_id, index: :not_analyzed
       end
-      
+
       # submissions
-      # indexes the output of the Submission#indexable_values method      
+      # indexes the output of the Submission#indexable_values method
       indexes :submissions, analyzer: :snowball
-      
+
       # tags
       indexes :tag_values, analyzer: :keyword
 
       indexes :preferred_contact_method
-      
+
       indexes :created_at, type: "date"
     end
-  end  
+  end
 
 
   def to_indexed_json
     # customize what data is sent to ES for indexing
-    to_json( 
+    to_json(
       methods: [ :tag_values ],
-      include: {        
+      include: {
         submissions: {
           only:  [ :submission_values ],
           methods: [ :submission_values ]
         },
-        comments: { 
-          only: [ :content ] 
-        }, 
-        reservations: { 
-          only: [ :event_id ] 
-        } 
-      } 
+        comments: {
+          only: [ :content ]
+        },
+        reservations: {
+          only: [ :event_id ]
+        }
+      }
     )
   end
 
@@ -167,12 +167,12 @@ class Person < ActiveRecord::Base
     options = {}
     options[:per_page] = _per_page
     options[:page]     = params[:page] || 1
-    
-    if !(params[:device_id_type].blank?) 
+
+    if !(params[:device_id_type].blank?)
       device_id_string = params[:device_id_type].join(' ')
     end
 
-    if !(params[:connection_id_type].blank?) 
+    if !(params[:connection_id_type].blank?)
       connection_id_string = params[:connection_id_type].join(' ')
     end
 
@@ -189,22 +189,22 @@ class Person < ActiveRecord::Base
           must { string "primary_device_id:#{device_id_string} OR secondary_device_id:#{device_id_string}"} if params[:device_id_type].present?
           must { string "primary_connection_id:#{connection_id_string} OR secondary_connection_id:#{connection_id_string}"} if params[:connection_id_type].present?
           must { string "geography_id:(#{params[:geography_id]})"} if params[:geography_id].present?
-          must { string "event_id:#{params[:event_id]}"} if params[:event_id].present?          
+          must { string "event_id:#{params[:event_id]}"} if params[:event_id].present?
           must { string "address_1:#{params[:address]}"} if params[:address].present?
           must { string "city:#{params[:city]}"} if params[:city].present?
           must { string "submission_values:#{params[:submissions]}"} if params[:submissions].present?
           # must { string "tag_values:#{tags_string}"} if params[:tags].present?
           must { string "preferred_contact_method:#{params[:preferred_contact_method]}"} if !params[:preferred_contact_method].blank?
         end
-      end 
-      filter :terms, :tag_values => params[:tags] if params[:tags].present?     
+      end
+      filter :terms, :tag_values => params[:tags] if params[:tags].present?
     end
   end
 
 
   def self.initialize_from_wufoo_sms(params)
     new_person = Person.new
-    
+
     # Save to Person
     new_person.first_name = params['Field275']
     new_person.last_name = params['Field276']
@@ -224,7 +224,7 @@ class Person < ActiveRecord::Base
     else
       new_person.primary_device_id = params["Field39"]
     end
-    
+
     new_person.primary_device_description = params["Field21"]
 
 
@@ -240,13 +240,13 @@ class Person < ActiveRecord::Base
     else
       new_person.primary_connection_id = params["Field41"]
     end
-    
+
     if params['Field278'].upcase == "TEXT"
       new_person.preferred_contact_method = "SMS"
     else
       new_person.preferred_contact_method = "EMAIL"
     end
-    
+
     new_person.verified = "Verified by Text Message Signup"
     new_person.signup_at = Time.now
 
@@ -256,28 +256,28 @@ class Person < ActiveRecord::Base
   end
 
   def sendToMailChimp
-    if self.email_address.present? 
+    if self.email_address.present?
       if self.verified.present?
         if self.verified.start_with?("Verified")
             begin
               mailchimpSend = Gibbon.list_subscribe({
-                :id => Logan::Application.config.cut_group_mailchimp_list_id, 
-                :email_address => self.email_address, 
-                :double_optin => 'false', 
+                :id => Logan::Application.config.cut_group_mailchimp_list_id,
+                :email_address => self.email_address,
+                :double_optin => 'false',
                 :update_existing => 'true',
-                :merge_vars => {:FNAME => self.first_name, 
-                  :LNAME => self.last_name, 
-                  :MMERGE3 => self.geography_id, 
-                  :MMERGE4 => self.postal_code, 
-                  :MMERGE5 => self.participation_type, 
-                  :MMERGE6 => self.voted, 
-                  :MMERGE7 => self.called_311, 
-                  :MMERGE8 => self.primary_device_description, 
-                  :MMERGE9 => secondary_device_type_name, 
-                  :MMERGE10 => self.secondary_device_description, 
-                  :MMERGE11 =>  primary_connection_type_name , 
-                  :MMERGE12 => self.primary_connection_description, 
-                  :MMERGE13 => primary_device_type_name, 
+                :merge_vars => {:FNAME => self.first_name,
+                  :LNAME => self.last_name,
+                  :MMERGE3 => self.geography_id,
+                  :MMERGE4 => self.postal_code,
+                  :MMERGE5 => self.participation_type,
+                  :MMERGE6 => self.voted,
+                  :MMERGE7 => self.called_311,
+                  :MMERGE8 => self.primary_device_description,
+                  :MMERGE9 => secondary_device_type_name,
+                  :MMERGE10 => self.secondary_device_description,
+                  :MMERGE11 =>  primary_connection_type_name ,
+                  :MMERGE12 => self.primary_connection_description,
+                  :MMERGE13 => primary_device_type_name,
                   :MMERGE14 => self.preferred_contact_method}
                   })
               Rails.logger.info("[People->sendToMailChimp] Sent #{self.id} to Mailchimp: #{mailchimpSend}")
@@ -295,7 +295,7 @@ class Person < ActiveRecord::Base
     params.each_pair do |k,v|
       new_person[WUFOO_FIELD_MAPPING[k]] = v if WUFOO_FIELD_MAPPING[k].present?
     end
-    
+
     # Special handling of participation type. New form uses 2 fields where old form used 1. Need to combine into one. Manually set to "Either one" if both field53 & field54 are populated.
     if params['Field53'] != '' and params['Field54'] != ''
       new_person.participation_type = "Either one"
@@ -304,7 +304,7 @@ class Person < ActiveRecord::Base
     else
       new_person.participation_type = params['Field54']
     end
-        
+
     if params['Field273'] == "Email"
       new_person.preferred_contact_method = "EMAIL"
     else
@@ -321,13 +321,13 @@ class Person < ActiveRecord::Base
     new_person.primary_connection_id    = Person.map_connection_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:primary_connection_id).first])
     new_person.secondary_connection_id  = Person.map_connection_to_id(params[WUFOO_FIELD_MAPPING.rassoc(:secondary_connection_id).first])
 
-    # FIXME: this is a hack, since we need to initialize people 
+    # FIXME: this is a hack, since we need to initialize people
     # with a city/state, but don't ask for it in the Wufoo form
     #new_person.city  = "Chicago" With update we ask for city
     new_person.state = "Illinois"
-    
+
     new_person.signup_at = Time.now
-    
+
     new_person
   end
 

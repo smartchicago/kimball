@@ -1,0 +1,9 @@
+application {
+  name = "postgres"
+  type = "docker-external"
+}
+
+customization "docker" {
+  image = "postgres"
+  run_args = "-p 5432:5432"
+}

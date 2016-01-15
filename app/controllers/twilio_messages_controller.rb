@@ -60,6 +60,7 @@ class TwilioMessagesController < ApplicationController
 
   # GET /twilio_messages/new
   def new
+    @twilio_message = TwilioMessage.new
   end
 
   # POST /twilio_messages/updatestatus
@@ -79,7 +80,7 @@ class TwilioMessagesController < ApplicationController
 
   # POST /twilio_messages
   # POST /twilio_messages.json
-  def newtwil  
+  def newtwil
     @twilio_message = TwilioMessage.new(twilio_message_params)
     #@twilio_message = TwilioMessage.new
     @twilio_message.message_sid = params[:Sid]
@@ -95,7 +96,7 @@ class TwilioMessagesController < ApplicationController
     @twilio_message.error_message = params[:ErrorMessage]
     @twilio_message.direction = params[:Direction]
     @twilio_message.save
-    
+
     message = "Hello"
     if params[:Body] == "12345"
       @twilio_message.signup_verify = "Verified"
@@ -111,7 +112,7 @@ class TwilioMessagesController < ApplicationController
       this_person.save
     end
     @twilio_message.save
-        
+
     twiml = Twilio::TwiML::Response.new do |r|
        r.Message message
     end
@@ -163,8 +164,8 @@ class TwilioMessagesController < ApplicationController
     @twilio_message.error_message = params[:ErrorMessage]
     @twilio_message.direction = params[:Direction]
     @twilio_message.save
-    
-    
+
+
     #session["counter"] += 1
 
     #respond_to do |format|

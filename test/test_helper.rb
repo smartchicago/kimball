@@ -2,7 +2,7 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
-class ActiveSupport::TestCase  
+class ActiveSupport::TestCase
   ActiveRecord::Migration.check_pending!
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
@@ -32,17 +32,17 @@ class ActiveSupport::TestCase
       'Field44' =>  '123123 Some St', # address_1
       'Field269' =>  'Chicago', # city
       'Field48'  =>  '54654', # postal_code
-      'Field9'  =>  '8474776939', # phone_number
+      'Field9'  =>  '9172153576', # phone_number
       'IP'      =>  '69.245.247.117', # client IP, ignored for the moment
-      'HandshakeKey' => 'b51c04fdaf7f8f333061f09f623d9d5b04f12b19' # secret code, ignored      
+      'HandshakeKey' => ENV['WUFOO_HANDSHAKE_KEY'] # secret code, ignored
     }
   end
-  
+
 end
 
 class ActionController::TestCase
   include Devise::TestHelpers
-  
+
   def setup
     @user = users(:admin)
     sign_in @user
