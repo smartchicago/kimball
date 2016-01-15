@@ -4,9 +4,9 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.0.rc1'
 
 #gem 'pg' # soooooon!
+# must use this version of mysql2 for rails 4.0.0
 gem 'mysql2', '~> 0.3.18'
 
-gem 'dotenv-rails'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -59,11 +59,6 @@ gem "tire"
 gem 'will_paginate'
 gem 'will_paginate-bootstrap' # https://github.com/nickpad/will_paginate-bootstrap
 
-# use mysql in production
-group :production do
-  gem 'mysql2'
-
-end
 
 gem "health_check" # include health_check, for system monitoring
 
