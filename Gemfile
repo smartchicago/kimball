@@ -7,9 +7,6 @@ gem 'rails', '~> 4.2.0'
 # must use this version of mysql2 for rails 4.0.0
 gem 'mysql2', '~> 0.3.18'
 
-<<<<<<< HEAD
-=======
-
 group :development do
   # gem 'capistrano'
   # mainline cap is busted w/r/t Rails 4. Try this fork instead.
@@ -36,17 +33,12 @@ group :development do
   gem 'web-console'
 end
 
-#uses a dotfile .env for all environment variables.
-gem 'dotenv-rails'
-
->>>>>>> rails_upgrade
-# Gems used only for assets and not required
-# in production environments by default.
-
 group :production do
   gem 'newrelic_rpm'
 end
 
+# Gems used only for assets and not required
+# in production environments by default.
 group :assets do
   gem 'sass-rails'
   gem 'coffee-rails'

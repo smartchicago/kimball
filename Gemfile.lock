@@ -276,7 +276,7 @@ DEPENDENCIES
   coffee-rails
   daemons
   delayed_job_active_record
-  devise!
+  devise
   faker
   flamegraph
   gibbon (= 0.4.6)
