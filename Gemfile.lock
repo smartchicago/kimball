@@ -225,6 +225,7 @@ DEPENDENCIES
   health_check
   holder_rails
   jbuilder (~> 1.0.1)
+  jdbc-sqlite3
   jquery-rails
   memory_test_fix
   mocha
