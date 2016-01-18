@@ -10,17 +10,17 @@ Logan::Application.routes.draw do
     end
   end
 
-  post "receive_text/index",  defaults: { format: 'xml' }
-  post "receive_text/smssignup",  defaults: { format: 'xml' }
+  post 'receive_text/index', defaults: { format: 'xml' }
+  post 'receive_text/smssignup', defaults: { format: 'xml' }
 
-  #post "twilio_messages/updatestatus", to: 'twilio_messages/#updatestatus'
+  # post "twilio_messages/updatestatus", to: 'twilio_messages/#updatestatus'
 
-  #post "twil", to: 'twilio_messages/#newtwil'
+  # post "twil", to: 'twilio_messages/#newtwil'
 
-  get "taggings/create"
-  get "taggings/destroy"
-  get "mailchimp_export/index"
-  get "mailchimp_export/create"
+  get 'taggings/create'
+  get 'taggings/destroy'
+  get 'mailchimp_export/index'
+  get 'mailchimp_export/create'
   resources :reservations
 
   resources :events do
@@ -34,26 +34,25 @@ Logan::Application.routes.draw do
   resources :programs
 
   devise_for :users
-  get "dashboard/index"
+  get 'dashboard/index'
   resources :submissions
 
   resources :comments
   resources :taggings, only: [:create, :destroy]
 
-  get  "search/index"
-  post "search/export"  # send search results elsewhere, i.e. Mailchimp
-  post "search/exportTwilio"
+  get  'search/index'
+  post 'search/export' # send search results elsewhere, i.e. Mailchimp
+  post 'search/exportTwilio'
 
-  get "mailchimp_exports/index"
+  get 'mailchimp_exports/index'
 
   resources :people do
     collection do
       post 'create_sms'
     end
     resources :comments
-
   end
-  #post "people/create_sms"
+  # post "people/create_sms"
 
   root to: 'dashboard#index'
 

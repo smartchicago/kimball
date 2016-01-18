@@ -1,14 +1,15 @@
 class TwilioWufoosController < ApplicationController
+
   before_action :set_twilio_wufoo, only: [:show, :edit, :update, :destroy]
 
   # GET /twilio_wufoos
   # GET /twilio_wufoos.json
   def index
-    #@twilio_wufoos = TwilioWufoo.all
+    # @twilio_wufoos = TwilioWufoo.all
     @twilio_wufoos_active = TwilioWufoo.where(status: true)
     @twilio_wufoos_inactive = TwilioWufoo.where(status: false)
-    @twilio_wufoos_signups = @twilio_wufoos_active.where(form_type: "signup")
-    @twilio_wufoos_others = @twilio_wufoos_active.where.not(form_type: "signup")
+    @twilio_wufoos_signups = @twilio_wufoos_active.where(form_type: 'signup')
+    @twilio_wufoos_others = @twilio_wufoos_active.where.not(form_type: 'signup')
   end
 
   # GET /twilio_wufoos/1
@@ -19,7 +20,7 @@ class TwilioWufoosController < ApplicationController
   # GET /twilio_wufoos/new
   def new
     @twilio_wufoo = TwilioWufoo.new
-    @maximum_length = TwilioWufoo.validators_on( :end_message ).first.options[:maximum]
+    @maximum_length = TwilioWufoo.validators_on(:end_message).first.options[:maximum]
   end
 
   # GET /twilio_wufoos/1/edit
@@ -67,6 +68,7 @@ class TwilioWufoosController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_twilio_wufoo
       @twilio_wufoo = TwilioWufoo.find(params[:id])
@@ -76,4 +78,5 @@ class TwilioWufoosController < ApplicationController
     def twilio_wufoo_params
       params.require(:twilio_wufoo).permit(:name, :wufoo_formid, :twilio_keyword, :status, :end_message, :form_type)
     end
+
 end

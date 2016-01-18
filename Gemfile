@@ -11,7 +11,7 @@ group :development do
   # gem 'capistrano'
   # mainline cap is busted w/r/t Rails 4. Try this fork instead.
   # src: https://github.com/capistrano/capistrano/pull/412
-  gem 'capistrano', :git => "git://github.com/capistrano/capistrano.git", :tag => "v2.15.4"
+  gem 'capistrano', :git => 'git://github.com/capistrano/capistrano.git', :tag => 'v2.15.4'
 
   # this whole group makes finding performance issues much friendlier
   gem 'rack-mini-profiler'
@@ -69,14 +69,14 @@ gem 'unicorn'
 gem 'twitter-bootstrap-rails', '~> 2.2.0'
 
 # use tire for ElasticSearch integration
-gem "tire"
+gem 'tire'
 
 # pagniate with will_paginate: https://github.com/mislav/will_paginate
 gem 'will_paginate'
 gem 'will_paginate-bootstrap' # https://github.com/nickpad/will_paginate-bootstrap
 
 # include health_check, for system monitoring
-gem "health_check"
+gem 'health_check'
 
 # use holder for placeholder images
 gem 'holder_rails'
@@ -85,19 +85,19 @@ gem 'holder_rails'
 gem 'devise'
 
 # use gibbon for easy Mailchimp API access
-gem "gibbon", '0.4.6'
+gem 'gibbon', '0.4.6'
 
 # use twilio-ruby for twilio
-gem "twilio-ruby"
+gem 'twilio-ruby'
 
 # use Wuparty for wufoo
-gem "wuparty"
+gem 'wuparty'
 
 # for phone number normalization
 gem 'phony_rails'
 
 # Use gsm_encoder to help text messages send correctly
-gem "gsm_encoder"
+gem 'gsm_encoder'
 
 # use Delayed Job to queue messages
 gem 'delayed_job_active_record'
@@ -105,14 +105,15 @@ gem 'daemons'
 
 group :testing do
   # mock tests w/mocha
-  gem "mocha", :require => false
+  gem 'mocha', :require => false
 
-  gem "sqlite3", :platform => [:ruby, :mswin, :mingw]
+  gem 'sqlite3', :platform => [:ruby, :mswin, :mingw]
 
   # for JRuby
-  gem "jdbc-sqlite3", :platform => :jruby
+  gem 'jdbc-sqlite3', :platform => :jruby
   gem 'memory_test_fix' # in memory DB, for the speedy
 
   # generate fake data w/faker: http://rubydoc.info/github/stympy/faker/master/frames
-  gem "faker"
+  gem 'faker'
+  gem 'rubocop', require: false
 end

@@ -1,4 +1,5 @@
 class CreateDelayedJobs < ActiveRecord::Migration
+
   def self.up
     create_table :delayed_jobs, force: true do |table|
       table.integer :priority, default: 0, null: false # Allows some jobs to jump to the front of the queue
@@ -15,12 +16,13 @@ class CreateDelayedJobs < ActiveRecord::Migration
       table.string  :delayed_reference_type
     end
 
-    add_index :delayed_jobs, [:priority, :run_at], name: "delayed_jobs_priority"
-    add_index :delayed_jobs, [:queue], :name => 'delayed_jobs_queue'
-    add_index :delayed_jobs, [:delayed_reference_type], :name => 'delayed_jobs_delayed_reference_type'
+    add_index :delayed_jobs, [:priority, :run_at], name: 'delayed_jobs_priority'
+    add_index :delayed_jobs, [:queue], name: 'delayed_jobs_queue'
+    add_index :delayed_jobs, [:delayed_reference_type], name: 'delayed_jobs_delayed_reference_type'
   end
 
   def self.down
     drop_table :delayed_jobs
   end
+
 end

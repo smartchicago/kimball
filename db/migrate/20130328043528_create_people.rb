@@ -1,4 +1,5 @@
 class CreatePeople < ActiveRecord::Migration
+
   def change
     create_table :people do |t|
       t.string :first_name
@@ -22,4 +23,5 @@ class CreatePeople < ActiveRecord::Migration
       t.timestamps
     end
   end
+
 end

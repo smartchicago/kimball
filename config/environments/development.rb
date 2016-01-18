@@ -5,7 +5,7 @@ Logan::Application.configure do
   Bullet.alert = true
   Bullet.bullet_logger = true
   # base url for emails
-  config.action_mailer.default_url_options = { :host => 'localhost:8080' }
+  config.action_mailer.default_url_options = { host: 'localhost:8080' }
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
@@ -36,7 +36,7 @@ Logan::Application.configure do
     env_file = File.join(Rails.root, 'config', 'local_env.yml')
     YAML.load(File.open(env_file)).each do |key, value|
       ENV[key.to_s] = value
-    end if File.exists?(env_file)
+    end if File.exist?(env_file)
   end
   config.middleware.use Rack::TwilioWebhookAuthentication, ENV['TWILIO_AUTH_TOKEN'], '/receive_text/index'
 

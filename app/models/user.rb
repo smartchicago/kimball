@@ -21,9 +21,10 @@
 #
 
 class User < ActiveRecord::Base
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable,  :validatable, :stretches => 10
 
-  def active_for_authentication? 
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable, stretches: 10
+
+  def active_for_authentication?
     if super && approved?
       true
     else
@@ -31,15 +32,15 @@ class User < ActiveRecord::Base
       false
     end
   end
-  
-  def inactive_message 
-    if !approved? 
-      :not_approved 
-    else 
-      super # Use whatever other message 
-    end 
+
+  def inactive_message
+    if !approved?
+      :not_approved
+    else
+      super # Use whatever other message
+    end
   end
-  
+
   def approve!
     update_attributes(approved: true)
     Rails.logger.info("Approved user #{email}")
@@ -49,5 +50,5 @@ class User < ActiveRecord::Base
     update_attributes(approved: false)
     Rails.logger.info("Unapproved user #{email}")
   end
-  
+
 end
