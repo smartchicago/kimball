@@ -51,9 +51,6 @@ Style/Documentation:
 Style/GuardClause:
   Enabled: false
 
-Metrics/LineLength:
-  Enabled: false
-
 Style/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 
@@ -67,5 +64,12 @@ Style/BlockDelimiters:
   Exclude:
     - 'spec/**/*'
 
+Style/ClassAndModuleChildren:
+  Enabled: false
+
 Metrics/AbcSize:
   Max: 25
+
+Metrics/LineLength:
+  Enabled: false
+  

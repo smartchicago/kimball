@@ -1,5 +1,3 @@
-# FIXME: Refactor and re-enable cop
-# rubocop:disable Style/ClassAndModuleChildren
 class ActiveRecord::Base
 
   def with_user(user)
@@ -9,4 +7,3 @@ class ActiveRecord::Base
   end
 
 end
-# rubocop:enable Style/ClassAndModuleChildren
