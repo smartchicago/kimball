@@ -5,8 +5,4 @@ require File.expand_path('../config/application', __FILE__)
 
 Logan::Application.load_tasks
 
-RSpec::Core::RakeTask.new(:spec) do |t|
-  t.rspec_opts = '--format progress'
-end
-
 task default: [:rubocop, :test, :spec]
