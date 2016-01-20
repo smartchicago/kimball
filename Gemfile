@@ -31,6 +31,9 @@ group :development do
 
   # a console in your browser, when you want to interrogate views.
   gem 'web-console'
+
+  # silences logging of requests for assets
+  gem 'quiet_assets'
 end
 
 group :production do
@@ -119,7 +122,6 @@ group :testing do
 end
 
 group :development, :test do
-  gem 'dotenv-rails'
   gem 'rspec-rails', '~> 3.0'
   gem 'guard'
   gem 'guard-rspec', require: false
@@ -127,4 +129,7 @@ group :development, :test do
   gem 'guard-rubocop'
   gem 'guard-bundler', require: false
   gem 'capybara'
+  gem 'pry'
+  gem 'factory_girl_rails'
+  gem 'shoulda-matchers', require: false
 end

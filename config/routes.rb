@@ -1,4 +1,10 @@
 Logan::Application.routes.draw do
+  namespace :public do
+    resources :people, only: [:new, :create]
+  end
+
+  get 'registration', to: 'public/people#new'
+
   resources :twilio_wufoos
 
   resources :twilio_messages do
