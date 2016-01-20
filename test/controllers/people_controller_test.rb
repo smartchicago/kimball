@@ -72,7 +72,6 @@ class PeopleControllerTest < ActionController::TestCase
   end
 
   test 'should create via a wufoo POST' do
-    skip('another elasticsearch weirdness')
     assert_difference('Person.count') do
       post :create, wufoo_params
     end
@@ -88,9 +87,7 @@ class PeopleControllerTest < ActionController::TestCase
     assert_response 403
   end
 
-  # FIXME: on Search milestone
   test 'should accept submission without user auth' do
-    skip('another elasticsearch weirdness')
     sign_out @user
 
     assert_difference('Person.count') do
