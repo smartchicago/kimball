@@ -126,4 +126,5 @@ group :development, :test do
   gem 'guard-minitest'
   gem 'guard-rubocop'
   gem 'guard-bundler', require: false
+  gem 'capybara'
 end
