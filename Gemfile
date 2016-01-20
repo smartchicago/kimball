@@ -117,3 +117,7 @@ group :testing do
   gem 'faker'
   gem 'rubocop', require: false
 end
+
+group :development, :test do
+  gem 'rspec-rails', '~> 3.0'
+end
