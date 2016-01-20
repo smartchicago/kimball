@@ -119,7 +119,11 @@ group :testing do
 end
 
 group :development, :test do
+  gem 'dotenv-rails'
   gem 'rspec-rails', '~> 3.0'
+  gem 'guard'
+  gem 'guard-rspec', require: false
+  gem 'guard-minitest'
+  gem 'guard-rubocop'
+  gem 'guard-bundler', require: false
 end
-
-gem 'dotenv-rails', :groups => [:development, :test]
