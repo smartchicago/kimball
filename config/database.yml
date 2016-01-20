@@ -11,7 +11,7 @@ development:
   timeout: 5000
   host: localhost
   user: root
-  password: password
+  password:
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
