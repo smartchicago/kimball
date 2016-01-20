@@ -121,3 +121,5 @@ end
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'
 end
+
+gem 'dotenv-rails', :groups => [:development, :test]

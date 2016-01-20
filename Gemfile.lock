@@ -85,6 +85,10 @@ GEM
     diff-lcs (1.2.5)
     domain_name (0.5.25)
       unf (>= 0.0.5, < 1.0.0)
+    dotenv (2.1.0)
+    dotenv-rails (2.1.0)
+      dotenv (= 2.1.0)
+      railties (>= 4.0, < 5.1)
     erubis (2.7.0)
     execjs (2.6.0)
     faker (1.6.1)
@@ -306,6 +310,7 @@ DEPENDENCIES
   daemons
   delayed_job_active_record
   devise
+  dotenv-rails
   faker
   flamegraph
   gibbon (= 0.4.6)
