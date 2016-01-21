@@ -21,9 +21,7 @@ Vagrant.configure(2) do |config|
 
   if Vagrant.has_plugin?('vagrant-cachier')
     config.cache.scope = :box
-    config.cache.enable :generic, {
-      "rbenv"=>{:cache_dir => "/home/vagrant/.rbenv" }
-    }
+    config.cache.enable :generic
 
     if !Gem.win_platform?
       # passwordless nfs
@@ -92,7 +90,9 @@ Vagrant.configure(2) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+
+  #splitting shell provisioning for caching benefits.
+  config.vm.provision "shell", privileged: false, inline: %[
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password password'
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password password'
     sudo apt-get -qq update
@@ -102,6 +102,8 @@ Vagrant.configure(2) do |config|
       mysql-client-5.6 \
       rbenv \
       ruby-build \
+      ruby-dev \
+      libgmp3-dev \
       git \
       nodejs \
       redis-server \
@@ -127,27 +129,27 @@ Vagrant.configure(2) do |config|
 
     # automatically cd to /vagrant/
     echo 'if [ -d /vagrant/ ]; then cd /vagrant/; fi' >> /home/vagrant/.bashrc
+  ]
 
-    # set path and init rbenv
-    echo 'export PATH="$HOME/.rbenv/bin:/vagrant/bin/:$PATH"' >> /home/vagrant/.profile
-    echo 'eval "$(rbenv init -)"' >> /home/vagrant/.profile
+  config.vm.provision :shell, privileged: false, inline: %[
+    # rvm install is idempotent
+    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+    curl -sSL https://get.rvm.io | bash -s
 
-    if [ ! -d /home/vagrant/.rbenv ]; then
-      git clone -q https://github.com/sstephenson/rbenv.git ~/.rbenv
-      git clone -q https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
-    else
-      cd ~/.rbenv && git pull;
-      cd ~/.rbenv/plugins/ruby-build && git pull;
-    fi
     cd ~
     source ~/.profile
+  ]
 
+  config.vm.provision :shell, privileged: false, inline: %[
     # cleanup and install the appropriate ruby version
-    rbenv rehash
-    rbenv install `cat /vagrant/.ruby-version`
-    rbenv rehash
+    rvm reload
+    rvm use --default install `cat /vagrant/.ruby-version`
+    rvm cleanup all
+  ]
+  config.vm.provision :shell, privileged: false, inline: %[
     # setup our particular rails app
     cd /vagrant/
+    gem update --system
     gem install bundler --no-ri --no-rdoc
     bundle install --quiet
     bundle exec rake db:setup
@@ -161,6 +163,6 @@ Vagrant.configure(2) do |config|
     sudo mkdir -p /var/run/nginx/tmp
     sudo chown -R www-data:www-data /var/run/nginx/
     sudo service nginx restart
-  SHELL
+  ]
 
 end
