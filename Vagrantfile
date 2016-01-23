@@ -106,7 +106,6 @@ Vagrant.configure(2) do |config|
       libgmp3-dev \
       git \
       nodejs \
-      redis-server \
       graphviz \
       nginx-full \
       openjdk-7-jre
