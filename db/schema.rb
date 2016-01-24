@@ -105,10 +105,8 @@ ActiveRecord::Schema.define(version: 20151019004127) do
     t.string   "called_311"
     t.integer  "secondary_connection_id"
     t.string   "secondary_connection_description"
-    t.text     "verified",                         default: "", null: false
+    t.string   "verified"
     t.string   "preferred_contact_method"
-    t.float    "latitude"
-    t.float    "longitude"
   end
 
   create_table "programs", force: true do |t|

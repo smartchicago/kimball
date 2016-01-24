@@ -3,7 +3,9 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0.rc1'
 
-gem 'sqlite3'
+#gem 'pg' # soooooon!
+# must use this version of mysql2 for rails 4.0.0
+gem 'mysql2', '~> 0.3.18'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -33,10 +35,15 @@ gem 'unicorn'
 
 # Deploy with Capistrano
 group :development do
+
   # gem 'capistrano'
   # mainline cap is busted w/r/t Rails 4. Try this fork instead.
   # src: https://github.com/capistrano/capistrano/pull/412
   gem 'capistrano', :git => "git://github.com/capistrano/capistrano.git", :tag => "v2.15.4"
+  gem 'rack-mini-profiler'
+  gem 'bullet'
+  gem 'ruby-prof'
+  gem 'annotate'
 end
 
 # To use debugger
@@ -52,11 +59,6 @@ gem "tire"
 gem 'will_paginate'
 gem 'will_paginate-bootstrap' # https://github.com/nickpad/will_paginate-bootstrap
 
-# use mysql in production
-group :production do
-  gem 'mysql2'
-  
-end
 
 gem "health_check" # include health_check, for system monitoring
 
@@ -85,5 +87,16 @@ gem 'daemons'
 # mock tests w/mocha
 gem "mocha", :require => false
 
-# generate fake data w/faker: http://rubydoc.info/github/stympy/faker/master/frames
-gem "faker"
+group :testing do
+  # mock tests w/mocha
+  gem "mocha", :require => false
+
+  gem "sqlite3", :platform => [:ruby, :mswin, :mingw]
+
+  # for JRuby
+  gem "jdbc-sqlite3", :platform => :jruby
+  gem 'memory_test_fix' # in memory DB, for the speedy
+
+  # generate fake data w/faker: http://rubydoc.info/github/stympy/faker/master/frames
+  gem "faker"
+end
