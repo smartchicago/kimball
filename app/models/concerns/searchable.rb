@@ -73,6 +73,7 @@ module Searchable
   end
 
   module ClassMethods
+
     # FIXME: Refactor and re-enable cop
     # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     #
@@ -114,8 +115,9 @@ module Searchable
       end
     end
     # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+
   end
-  
+
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Metrics/MethodLength
   #
@@ -138,4 +140,5 @@ module Searchable
     )
   end
   # rubocop:enable Metrics/MethodLength
+
 end

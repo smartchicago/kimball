@@ -97,6 +97,7 @@ class Person < ActiveRecord::Base
   def tag_values
     tags.collect(&:name)
   end
+
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Rails/TimeZone
   #
