@@ -148,6 +148,8 @@ GEM
     rest-client (1.6.7)
       mime-types (>= 1.16)
     ruby-prof (0.15.8)
+    rvm-capistrano (1.5.6)
+      capistrano (~> 2.15.4)
     sass (3.2.7)
     sass-rails (4.0.0.beta1)
       railties (>= 4.0.0.beta, < 5.0)
@@ -234,6 +236,7 @@ DEPENDENCIES
   rack-mini-profiler
   rails (= 4.0.0.rc1)
   ruby-prof
+  rvm-capistrano
   sass-rails (~> 4.0.0.beta1)
   sqlite3
   tire
@@ -245,6 +248,3 @@ DEPENDENCIES
   will_paginate
   will_paginate-bootstrap
   wuparty
-
-BUNDLED WITH
-   1.11.2
