@@ -1,5 +1,5 @@
 set :application, "logan-staging"
-set :branch, fetch(:branch, "development")
+set :branch, fetch(:branch, "rvm-ruby218")
 set :rails_env, :staging
 
 server 'patterns-staging.smartchicagoapps.org', :app, :web, :db, :primary => true
