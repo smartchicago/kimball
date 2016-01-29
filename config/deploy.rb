@@ -1,6 +1,7 @@
 require 'bundler/capistrano'
 require 'capistrano/ext/multistage'
 require 'rvm/capistrano'
+require 'rvm/capistrano/gem_install_uninstall'
 
 set :repository, 'git@github.com:smartchicago/kimball.git'
 
@@ -16,8 +17,8 @@ set :default_stage, 'staging'
 set :bundle_flags, '--deployment --quiet'
 
 #set :default_environment, { 'PATH' => '/home/logan/.rbenv/shims:/home/logan/.rbenv/bin:$PATH' }
-set :rvm_ruby_string, '2.1.8'              # use the same ruby as used locally for deployment
 set :rvm_autolibs_flag, "read-only"       # more info: rvm help autolibs
+before 'deploy', 'rvm:install_gem  GEM=bundler' # Make sure bundler is installed for this gemset
 before 'deploy', 'rvm:install_rvm'  # install/update RVM
 before 'deploy', 'rvm:install_ruby' # install Ruby and create gemset (both if missing)
 
