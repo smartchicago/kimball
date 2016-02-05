@@ -132,7 +132,9 @@ group :development, :test do
   gem 'guard-rubocop'
   gem 'guard-bundler', require: false
   gem 'capybara'
+  gem 'capybara-email'
   gem 'pry'
   gem 'factory_girl_rails'
-  gem 'shoulda-matchers', require: false
+  gem 'shoulda-matchers', '~> 3.1.1', require: false
+  gem 'database_cleaner'
 end

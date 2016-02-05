@@ -1,6 +1,6 @@
 # This group allows to skip running RuboCop when RSpec failed.
 group :red_green_refactor, halt_on_fail: true do
-  guard :rspec, cmd: "bundle exec rspec" do
+  guard :rspec, cmd: "bundle exec rspec --fail-fast" do
     require "guard/rspec/dsl"
     dsl = Guard::RSpec::Dsl.new(self)
 
@@ -41,9 +41,31 @@ group :red_green_refactor, halt_on_fail: true do
     watch('spec/features/people_registration_spec.rb')
     watch('app/controllers/public/people_controller.rb') { 'spec/features/people_registration_spec.rb' }
     watch('app/views/public/people/new.html.erb') { 'spec/features/people_registration_spec.rb' }
+    watch('app/views/public/people/_form.html.erb') { 'spec/features/people_registration_spec.rb' }
+
+    watch('app/models/v2/event.rb') { 'spec/features/invite_person_to_phone_call_spec.rb' }
+    watch('app/models/v2/event_invitation.rb') { 'spec/features/invite_person_to_phone_call_spec.rb' }
+    watch('app/models/v2/time_window.rb') { 'spec/features/invite_person_to_phone_call_spec.rb' }
+    watch('app/models/v2/time_slot.rb') { 'spec/features/invite_person_to_phone_call_spec.rb' }
+    watch('app/mailers/event_invitation_mailer.rb') { 'spec/features/invite_person_to_phone_call_spec.rb' }
+    watch('app/controllers/v2/event_invitations_controller.rb') { 'spec/features/invite_person_to_phone_call_spec.rb' }
+    watch('app/views/v2/event_invitations/new.html.erb') { 'spec/features/invite_person_to_phone_call_spec.rb' }
+    watch('app/views/v2/event_invitations/_form.html.erb') { 'spec/features/invite_person_to_phone_call_spec.rb' }
+    watch('app/views/event_invitation_mailer/invite.html.erb') { 'spec/features/invite_person_to_phone_call_spec.rb' }
+    watch('app/views/event_invitation_mailer/invite.text.erb') { 'spec/features/invite_person_to_phone_call_spec.rb' }
+
+    watch('spec/features/person_responds_to_interview_invitation_spec.rb')
+    watch('app/views/event_invitation_mailer/invite.html.erb') { 'spec/features/person_responds_to_interview_invitation_spec.rb' }
+    watch('app/views/event_invitation_mailer/invite.text.erb') { 'spec/features/person_responds_to_interview_invitation_spec.rb' }
+
+    watch('app/mailers/event_invitation_mailer.rb') { 'spec/features/person_responds_to_interview_invitation_spec.rb' }
+    watch('app/models/v2/reservation.rb') { 'spec/features/person_responds_to_interview_invitation_spec.rb' }
+    watch('app/controllers/v2/reservations_controller.rb') { 'spec/features/person_responds_to_interview_invitation_spec.rb' }
+    watch('app/views/v2/reservations/new.html.erb') { 'spec/features/person_responds_to_interview_invitation_spec.rb' }
+    watch('app/views/v2/reservations/_form.html.erb') { 'spec/features/person_responds_to_interview_invitation_spec.rb' }
   end
 
-  guard :minitest do
+  guard :minitest, test_folders: ['test']  do
     watch(%r{^test/(.*)\/?test_(.*)\.rb$})
     watch(%r{^lib/(.*/)?([^/]+)\.rb$})     { |m| "test/#{m[1]}test_#{m[2]}.rb" }
     watch(%r{^test/test_helper\.rb$})      { 'test' }
