@@ -4,9 +4,11 @@ require 'rvm/capistrano'
 require 'rvm/capistrano/gem_install_uninstall'
 
 #loading environment variables so we can all use the same deployment
-YAML.load(File.open('local_env.yml')).each do |key, value|
+YAML.load(File.open(File.dirname(__FILE__) + '/local_env.yml')).each do |key, value|
   ENV[key.to_s] = value
-end if File.exist?(env_file)
+  puts ENV[key.to_s]
+end if File.exist?(File.dirname(__FILE__) + '/local_env.yml')
+
 
 set :repository, ENV['GIT_REPOSITORY']
 

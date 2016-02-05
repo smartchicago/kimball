@@ -34,6 +34,9 @@ group :development do
 
   # silences logging of requests for assets
   gem 'quiet_assets'
+
+  # enabling us to deploy via travis and encrypted keys!
+  gem 'travis'
 end
 
 group :production do
