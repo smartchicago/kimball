@@ -12,7 +12,7 @@ group :development do
   # mainline cap is busted w/r/t Rails 4. Try this fork instead.
   # src: https://github.com/capistrano/capistrano/pull/412
   gem 'capistrano', :git => 'git://github.com/capistrano/capistrano.git', :tag => 'v2.15.4'
-
+  gem 'rvm-capistrano', require: false
   # this whole group makes finding performance issues much friendlier
   gem 'rack-mini-profiler'
   gem 'flamegraph'

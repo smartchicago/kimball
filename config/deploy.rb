@@ -1,5 +1,7 @@
 require 'bundler/capistrano'
 require 'capistrano/ext/multistage'
+require 'rvm/capistrano'
+require 'rvm/capistrano/gem_install_uninstall'
 
 #loading environment variables so we can all use the same deployment
 YAML.load(File.open('local_env.yml')).each do |key, value|
@@ -19,7 +21,15 @@ set :default_stage, 'staging'
 
 set :bundle_flags, '--deployment --quiet'
 
-set :default_environment, { 'PATH' => '/home/logan/.rbenv/shims:/home/logan/.rbenv/bin:$PATH' }
+#set :default_environment, { 'PATH' => '/home/logan/.rbenv/shims:/home/logan/.rbenv/bin:$PATH' }
+set :rvm_autolibs_flag, "read-only"       # more info: rvm help autolibs
+before 'deploy', 'rvm:install_rvm'  # install/update RVM
+
+ENV['GEM'] = "bundler"
+before 'bundle:install', 'rvm:install_gem' # Make sure Bundler is installed for gemset
+
+before 'deploy', 'rvm:install_ruby' # install Ruby and create gemset (both if missing)
+
 set :ssh_options, { forward_agent: true }
 # set :shared_children, fetch(:shared_children) + ["sharedconfig"]
 
