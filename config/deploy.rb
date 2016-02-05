@@ -1,7 +1,12 @@
 require 'bundler/capistrano'
 require 'capistrano/ext/multistage'
 
-set :repository, 'git@github.com:smartchicago/kimball.git'
+#loading environment variables so we can all use the same deployment
+YAML.load(File.open('local_env.yml')).each do |key, value|
+  ENV[key.to_s] = value
+end if File.exist?(env_file)
+
+set :repository, ENV['GIT_REPOSITORY']
 
 set :scm, :git
 set(:deploy_to) { "/var/www/#{application}" }
