@@ -8,8 +8,8 @@ services:
 before_script:
 - sleep 10
 after_success:
-- chmod 600 deploy-key
-- mv deploy-key ~/.ssh/id_rsa
+- chmod 600 deploy_key
+- mv deploy_key ~/.ssh/id_rsa
 - chmod 600 ~/.ssh/id_rsa
 - eval "$(ssh-agent -s)"
 - ssh-add ~/.ssh/id_rsa
