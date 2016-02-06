@@ -1,5 +1,6 @@
 language: ruby
 sudo: required
+dist: precise
 bundler_args: "--jobs=4 --retry=3"
 cache: bundler
 services:

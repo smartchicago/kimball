@@ -25,9 +25,6 @@ test:
 staging:
   adapter: mysql2
   database: staging
-  user: ENV['MYSQL_USER']
-  password: ENV['MYSQL_PASSWORD']
-  host: ENV['MYSQL_HOST']
   pool: 5
   timeout: 5000
 
@@ -35,8 +32,5 @@ staging:
 production:
   adapter: mysql2
   database: production
-  user: ENV['MYSQL_USER']
-  password: ENV['MYSQL_PASSWORD']
-  host: ENV['MYSQL_HOST']
   pool: 5
   timeout: 5000

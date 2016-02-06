@@ -24,7 +24,7 @@ echo "MYSQL_USER=root" >> /etc/environment
 echo "MYSQL_PASSWORD=password" >> /etc/environment
 echo "MYSQL_HOST=localhost" >> /etc/environment
 
-apt-get update && apt-get install -y mysql-server libmysqlclient-dev redis-server openjdk-6-jre elasticsearch git git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libgmp-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev nginx gpg ruby1.8-dev
+apt-get update && apt-get install -y mysql-server libmysqlclient-dev redis-server openjdk-6-jre elasticsearch git git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libgmp-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev nginx gpg ruby1.8-dev openjdk-7-jre elasticsearch
 
 
 # we don't want the default nginx server setup.
