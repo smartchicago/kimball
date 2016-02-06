@@ -35,7 +35,7 @@ before 'deploy', 'rvm:install_ruby' # install Ruby and create gemset (both if mi
 set :ssh_options, { forward_agent: true }
 # set :shared_children, fetch(:shared_children) + ["sharedconfig"]
 
-before  'deploy:finalize_update', 'deploy:link_db_config', 'deploy:link_env_var'
+before  'deploy:finalize_update', "deploy:create_shared_directories", 'deploy:link_db_config', 'deploy:link_env_var'
 # before  'deploy:finalize_update', 'deploy:link_db_config', 'deploy:link_env_var'
 after   'deploy:finalize_update', 'deploy:create_binstubs'
 
@@ -51,6 +51,12 @@ namespace :deploy do
   task :restart do
     # unicorn reloads on USR2
     run "cd #{current_path} && kill -USR2 `cat tmp/pids/unicorn.pid`"
+  end
+
+  task :create_shared_directories do
+    run "mkdir -p #{deploy_to}/shared"
+    run "mkdir -p #{deploy_to}/releases"
+    run "mkdir -p #{shared_path}/log"
   end
 
   task :link_db_config do
