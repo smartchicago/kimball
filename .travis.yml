@@ -10,7 +10,7 @@ before_script:
 after_success:
 - chmod 600 deploy-key
 - mv deploy-key ~/.ssh/id_rsa
-- if [ $TRAVIS_BRANCH = 'development' ]; then cap staging deploy; fi
+- if [ $TRAVIS_BRANCH = 'development' ]; then bundle exec cap staging deploy; fi
 before_install:
 - openssl aes-256-cbc -K $encrypted_bde597b39305_key -iv $encrypted_bde597b39305_iv
   -in deploy_key.enc -out deploy_key -d
