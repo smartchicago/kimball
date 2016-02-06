@@ -54,7 +54,8 @@ namespace :deploy do
   end
 
   task :create_shared_directories do
-    run "mkdir -p #{deploy_to}/shared"
+    run "mkdir -p #{deploy_to}/shared/pids"
+    run "mkdir -p #{deploy_to}/shared/assets"
     run "mkdir -p #{deploy_to}/releases"
     run "mkdir -p #{shared_path}/log"
   end
