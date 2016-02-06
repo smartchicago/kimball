@@ -158,7 +158,7 @@ Vagrant.configure(2) do |config|
     if [ -L /etc/nginx/sites-enabled/default ]; then
       sudo rm /etc/nginx/sites-enabled/default
     fi
-    sudo ln -s /vagrant/config/server_conf/nginx.conf /etc/nginx/sites-enabled
+    sudo ln -s /vagrant/config/server_conf/vagrant_nginx.conf /etc/nginx/sites-enabled
     sudo mkdir -p /var/run/nginx/tmp
     sudo chown -R www-data:www-data /var/run/nginx/
     sudo service nginx restart
