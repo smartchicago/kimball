@@ -93,7 +93,8 @@ Vagrant.configure(2) do |config|
 
   #splitting shell provisioning for caching benefits.
   config.vm.provision "shell", privileged: false, inline: %[
-    export DEBIAN_FRONTEND=noninteractive;
+    sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password password'
+    sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password password'
     sudo apt-get -qq update
     sudo apt-get -qq install -y \
       mysql-server-5.6 \
@@ -109,14 +110,7 @@ Vagrant.configure(2) do |config|
       nginx-full \
       openjdk-7-jre
 
-    # SOOOOOON!!! TODO: postgres
-    #   postgresql-server-dev-9.3 \
-    #   postgresql-9.3
-    # # configuring postgres
-    # sudo -u postgres psql -c "create role root with createdb login password 'password';"
-    # sudo cp -rf /vagrant/config/server_conf/pg_hba.conf /etc/postgresql/9.3/main/
-    # sudo service postgresql restart
-
+    mysqladmin -u root -ppassword password '';
 
     if id -u "elasticsearch" >/dev/null 2>&1; then
         echo "elasticsearch installed"
@@ -137,9 +131,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision :shell, privileged: false, inline: %[
     # rvm install is idempotent
     gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-    curl -sSL https://get.rvm.io | bash -s --auto-dotfiles
-
-    cd ~
+    curl -sSL https://get.rvm.io | bash -s stable --auto-dotfiles
     source ~/.profile
   ]
 
