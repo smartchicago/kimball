@@ -93,8 +93,7 @@ Vagrant.configure(2) do |config|
 
   #splitting shell provisioning for caching benefits.
   config.vm.provision "shell", privileged: false, inline: %[
-    sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password password'
-    sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password password'
+    export DEBIAN_FRONTEND=noninteractive;
     sudo apt-get -qq update
     sudo apt-get -qq install -y \
       mysql-server-5.6 \
@@ -119,12 +118,17 @@ Vagrant.configure(2) do |config|
     # sudo service postgresql restart
 
 
-    # install elasticsearch
-    wget –-quiet https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.deb -O /tmp/elasticsearch.deb;
-    sudo dpkg -i /tmp/elasticsearch.deb;
-    sudo update-rc.d elasticsearch defaults;
-    rm /tmp/elasticsearch.deb;
-    sudo service elasticsearch start;
+    if id -u "elasticsearch" >/dev/null 2>&1; then
+        echo "elasticsearch installed"
+    else
+      wget --quiet https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.deb -O /tmp/elasticsearch.deb;
+      sudo dpkg -i /tmp/elasticsearch.deb;
+      sudo update-rc.d elasticsearch defaults;
+      rm /tmp/elasticsearch.deb;
+      update-rc.d elasticsearch defaults;
+      sudo service elasticsearch start;
+    fi
+
 
     # automatically cd to /vagrant/
     echo 'if [ -d /vagrant/ ]; then cd /vagrant/; fi' >> /home/vagrant/.bashrc
