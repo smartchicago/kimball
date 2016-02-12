@@ -137,7 +137,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision :shell, privileged: false, inline: %[
     # rvm install is idempotent
     gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-    curl -sSL https://get.rvm.io | bash -s
+    curl -sSL https://get.rvm.io | bash -s --auto-dotfiles
 
     cd ~
     source ~/.profile
@@ -145,12 +145,14 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision :shell, privileged: false, inline: %[
     # cleanup and install the appropriate ruby version
+    source ~/.profile
     rvm reload
     rvm use --default install `cat /vagrant/.ruby-version`
     rvm cleanup all
   ]
   config.vm.provision :shell, privileged: false, inline: %[
     # setup our particular rails app
+    source ~/.profile
     cd /vagrant/
     gem update --system
     gem install bundler --no-ri --no-rdoc
