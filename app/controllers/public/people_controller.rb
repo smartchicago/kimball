@@ -1,9 +1,10 @@
 class Public::PeopleController < ApplicationController
-
+  after_action :allow_iframe
   skip_before_action :authenticate_user!
 
   # GET /people/new
   def new
+    @referrer=request.env['HTTP_REFERER'] || false
     @person = ::Person.new
   end
 
@@ -47,4 +48,7 @@ class Public::PeopleController < ApplicationController
     end
   # rubocop:enable Metrics/MethodLength
 
+    def allow_iframe
+      response.headers.except! 'X-Frame-Options'
+    end
 end

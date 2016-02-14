@@ -1,5 +1,12 @@
 <h1>New Person</h1>
-
+<% if @referrer %>
+<script>
+  $.seamless.connect({
+    url: '<%= @referrer %>',
+    allowStyleInjection:true
+  });
+</script>
+<% end %>
 <%= render 'form' %>
 
 <%= link_to 'Back', people_path %>

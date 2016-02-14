@@ -1,0 +1,38 @@
+<script>
+
+var jQueryScriptOutputted = false;
+function initJQuery() {
+    //if the jQuery object isn't available
+    if (typeof(jQuery) == 'undefined') {
+        if (! jQueryScriptOutputted) {
+            //only output the script once..
+            jQueryScriptOutputted = true;
+            //output the script (load it from google api)
+            var s = document.createElement('script');
+             s.src ="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js";
+            document.head.appendChild(s);
+        }
+        setTimeout("initJQuery()", 50);
+    } else {
+        jQuery(function() {
+            var s = document.createElement('script');
+            s.src="//bill.patterns.dev/assets/seamless/build/seamless.parent.min.self.js";
+            document.head.appendChild(s);
+            setTimeout("initSeamless()", 50);
+        });
+    }
+
+}
+function initSeamless(){
+    jQuery(function() {
+        if (jQuery.isFunction(jQuery.fn.seamless)){
+            jQuery('#patterns_iframe').seamless();
+        }else{
+            setTimeout("initSeamless()", 50);
+        }
+
+  });
+}
+initJQuery();
+</script>
+<iframe id="patterns_iframe" src="http://bill.patterns.dev/public/people/new"></iframe>
