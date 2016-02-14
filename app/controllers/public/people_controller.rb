@@ -53,5 +53,5 @@ class Public::PeopleController < ApplicationController
     def allow_iframe
       response.headers.except! 'X-Frame-Options'
     end
-
+  # end private
 end
