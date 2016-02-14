@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# currently setup for a production server... prepend `staging.`
+# to `patterns.brl.nyc` for a staging server
+# additionally, change the RAILS_ENV value.
+
 #as root only
 if [ "$(id -u)" != "0" ]; then
    echo "This script must be run as root" 1>&2
@@ -23,12 +28,25 @@ debconf-set-selections <<< 'mysql-server mysql-server/root_password_again passwo
 echo "MYSQL_USER=root" >> /etc/environment
 echo "MYSQL_PASSWORD=password" >> /etc/environment
 echo "MYSQL_HOST=localhost" >> /etc/environment
+echo "RAILS_ENV=production" >> /etc/environment
 
 apt-get update && apt-get install -y mysql-server libmysqlclient-dev redis-server openjdk-6-jre elasticsearch git git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libgmp-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev nginx gpg ruby1.8-dev openjdk-7-jre elasticsearch
 
 
 # we don't want the default nginx server setup.
 rm /etc/nginx/sites-enabled/default
+openssl dhparam -out /etc/nginx/dhparam.pem 4096
+service nginx stop
+cd /root
+git clone https://github.com/letsencrypt/letsencrypt
+/root/letsencrypt/letsencrypt-auto certonly --standalone --agree-tos --email blueridgelabs@robinhood.org -d patterns.brl.nyc
+
+cat >/etc/cron.weekly/letsencrypt.sh <<EOL
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:$PATH
+/root/letsencrypt/letsencrypt-auto certonly --webroot -w /var/www/logan-production/current/public --agree-tos --email blueridgelabs@robinhood.org -d patterns.brl.nyc
+service nginx restart
+EOL
+chmod +x /etc/cron.weekly/letsencrypt.sh
 
 # creating the logan user.
 getent passwd logan  > /dev/null
