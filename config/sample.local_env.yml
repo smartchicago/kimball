@@ -1,4 +1,5 @@
 SECRET_KEY_BASE: "thisisasupersecret"
+DEVISE_PEPPER: 'f3998fdf09b95a8ca3e895d0dafaa78e410eed53cc02341d25f521071a43a9d9d3d9efda73488e9f8b9be7847638482c5d94a86dd1d549dbe1bd9a8e9d957a12'
 WUFOO_HANDSHAKE_KEY: ""
 GIBBON_API_KEY: ""
 TWILIO_API_SID: ""
@@ -18,3 +19,4 @@ STAGING_SERVER: "staging.example.com"
 STAGING_BRANCH: "devlopment"
 GIT_REPOSITORY: "git@github.com:example/example.git"
 TIME_ZONE: "Central Time (US & Canada)"
+MAILER_SENDER: "hello@example.com"
