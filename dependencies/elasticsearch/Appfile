@@ -1,9 +1,0 @@
-application {
-  name = "elasticsearch"
-  type = "docker-external"
-}
-
-customization "docker" {
-  image = "elasticsearch"
-  run_args = "-p 9200:9200"
-}
