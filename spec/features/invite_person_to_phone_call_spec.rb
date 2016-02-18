@@ -1,6 +1,9 @@
 require 'rails_helper'
 require 'faker'
+require 'support/poltergeist_js_hack_for_login'
 require 'capybara/email/rspec'
+require 'capybara/poltergeist'
+Capybara.javascript_driver = :poltergeist
 
 feature 'Invite a person to a phone call' do
   scenario 'with valid data' do
@@ -52,6 +55,24 @@ feature 'Invite a person to a phone call' do
     click_button 'Send invitation'
 
     expect(page).to have_text('There were problems with some of the fields.')
+  end
+
+  scenario 'with a call length that doesnt fit the time window perfectly, show a confirmation window', js: :true do
+    login_with_admin_user
+
+    visit '/v2/event_invitations/new'
+
+    select '30 mins', from: 'Call length'
+
+    fill_in 'Date', with: '20/02/2016'
+    select '12:00', from: 'Start time'
+    select '13:15', from: 'End time'
+
+    click_button 'Send invitation'
+    message = dismiss_confirm do
+      click_button 'Send invitation'
+    end
+    expect(message).to eq('Your time window is not a multiple of the call length. Do you still want to save the Event?')
   end
 end
 
