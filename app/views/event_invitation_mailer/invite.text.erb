@@ -1,5 +1,7 @@
 Hello, you've been invited to a phone interview
 
+<%= @event.description %>
+
 <%= link_to 'Please click to setup a time for your interview',
          new_v2_reservation_url(
            email_address: @email_address,

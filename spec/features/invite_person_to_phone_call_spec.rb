@@ -15,7 +15,9 @@ feature 'Invite a person to a phone call' do
 
     # TODO: allow to fill in multiple email addresses once basic invitation works
 
-    fill_in 'Event description', with: "We're looking for mothers between the age of 16-26 for a phone interview"
+    event_description = "We're looking for mothers between the age of 16-26 for a phone interview"
+
+    fill_in 'Event description', with: event_description
 
     select '30 mins', from: 'Call length'
 
@@ -38,9 +40,11 @@ feature 'Invite a person to a phone call' do
     [research_subject_email, admin_email].each do |email_address|
       open_email(email_address)
 
-      # TODO: substitute placeholder text
       expect(current_email).
         to have_content "Hello, you've been invited to a phone interview"
+
+      expect(current_email).
+        to have_content event_description
     end
   end
 
