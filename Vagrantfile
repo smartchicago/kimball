@@ -108,7 +108,8 @@ Vagrant.configure(2) do |config|
       nodejs \
       graphviz \
       nginx-full \
-      openjdk-7-jre
+      openjdk-7-jre \
+      phantomjs
 
     mysqladmin -u root -ppassword password '';
 
