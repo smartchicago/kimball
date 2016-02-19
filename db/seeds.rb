@@ -4,16 +4,17 @@ Person.create(
   first_name: 'Jim',
   last_name: 'Tester',
   email_address: 'jim@example.com',
-  address_1: '123 N Michigan Ave',
-  city: 'Chicago',
-  state: 'IL',
-  postal_code: '60601',
-  geography_id: '42', # ward
+  address_1: '150 Court st.',
+  city: 'Brooklyn',
+  state: 'NY',
+  postal_code: '11222',
+  geography_id: '', # ward
   primary_device_id: 1,
   primary_device_description: 'Apple Macbook Pro',
   secondary_device_id: 2,
   secondary_device_description: 'Samsung Galaxy',
   primary_connection_id: 1,
+  primary_connection_description:'cable internet',
   phone_number: '312-555-9090',
   participation_type: 'in-person'
 )
@@ -32,6 +33,7 @@ Person.create(
   secondary_device_id: 2,
   secondary_device_description: 'Apple laptop',
   primary_connection_id: 1,
+  primary_connection_description:'cable internet',
   phone_number: '312-555-8888',
   participation_type: 'remote'
 )
