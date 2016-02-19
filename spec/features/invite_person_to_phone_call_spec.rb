@@ -74,6 +74,21 @@ feature 'Invite a person to a phone call' do
     end
     expect(message).to eq('Your time window is not a multiple of the call length. Do you still want to save the Event?')
   end
+
+  scenario 'with an end time that falls before the start time', js: :true do
+    login_with_admin_user
+
+    visit '/v2/event_invitations/new'
+
+    select '13:00', from: 'Start time'
+    select '12:15', from: 'End time'
+
+    click_button 'Send invitation'
+    message = accept_alert do
+      click_button 'Send invitation'
+    end
+    expect(message).to eq('Please make sure that the End time is greater than the Start time')
+  end
 end
 
 def login_with_admin_user
