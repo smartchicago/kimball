@@ -41,7 +41,7 @@
   </div>
 
   <div class="form-actions">
-    <%= f.submit 'Send invitation', :class => 'btn btn-primary' %>
+    <%= f.submit 'Send invitation', :class => 'btn btn-primary', :id => 'submit' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 people_path, :class => 'btn' %>
   </div>
