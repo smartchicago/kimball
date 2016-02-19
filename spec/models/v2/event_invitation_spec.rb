@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe V2::EventInvitation do
-  it { is_expected.to validate_presence_of(:email_address) }
+  it { is_expected.to validate_presence_of(:email_addresses) }
   it { is_expected.to validate_presence_of(:description) }
   it { is_expected.to validate_presence_of(:slot_length) }
   it { is_expected.to validate_presence_of(:date) }
@@ -12,7 +12,7 @@ describe V2::EventInvitation do
     describe 'when valid' do
       let(:args) do
         {
-          email_address: 'some@email.com',
+          email_addresses: 'some@email.com,another@email.com',
           description: 'lorem',
           slot_length: '45 mins',
           date: '03/20/2016',

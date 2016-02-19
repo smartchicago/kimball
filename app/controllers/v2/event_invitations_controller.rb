@@ -19,16 +19,18 @@ class V2::EventInvitationsController < ApplicationController
   private
 
     def send_notifications(event_invitation)
-      EventInvitationMailer.invite(
-        email_address: event_invitation.email_address,
-        event: event_invitation.event
-      ).deliver_later
+      event_invitation.email_addresses.split(',').each do |email_address|
+        EventInvitationMailer.invite(
+          email_address: email_address,
+          event: event_invitation.event
+        ).deliver_later
+      end
     end
 
     def event_invitation_params
       params.require(:v2_event_invitation).
         permit(
-          :email_address,
+          :email_addresses,
           :description,
           :slot_length,
           :date,

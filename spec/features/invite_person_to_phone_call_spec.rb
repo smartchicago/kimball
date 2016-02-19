@@ -5,18 +5,16 @@ require 'capybara/email/rspec'
 require 'capybara/poltergeist'
 Capybara.javascript_driver = :poltergeist
 
-feature 'Invite a person to a phone call' do
+feature 'Invite people to a phone call' do
   scenario 'with valid data' do
     login_with_admin_user
 
     visit '/v2/event_invitations/new'
 
-    research_subject_email = 'person@test.com.br'
+    research_subject_emails = Array.new(3, Faker::Internet.email)
     admin_email = 'admin@what.host.should.we.have.here.com'
 
-    fill_in "Person's email address", with: research_subject_email
-
-    # TODO: allow to fill in multiple email addresses once basic invitation works
+    fill_in "People's email addresses", with: research_subject_emails.join(',')
 
     event_description = "We're looking for mothers between the age of 16-26 for a phone interview"
 
@@ -40,7 +38,7 @@ feature 'Invite a person to a phone call' do
 
     expect(page).to have_text 'Person was successfully invited.'
 
-    [research_subject_email, admin_email].each do |email_address|
+    [research_subject_emails, admin_email].flatten.each do |email_address|
       open_email(email_address)
 
       expect(current_email).

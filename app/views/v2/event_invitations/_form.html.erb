@@ -1,8 +1,9 @@
 <%= form_for @event_invitation, url: v2_event_invitations_path, html: { class: 'form-horizontal' } do |f| %>
   <div class="control-group">
-    <%= f.label :email_address, "Person's email address", :class => 'control-label' %>
+    <%= f.label :email_addresses, "People's email addresses", :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :email_address, :class => 'text_field' %>
+      <%= f.text_area :email_addresses, :class => 'text_area' %>
+      <p>* comma separated</p>
     </div>
   </div>
   <div class="control-group">

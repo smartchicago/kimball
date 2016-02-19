@@ -1,10 +1,10 @@
 class V2::EventInvitation
   include ActiveModel::Model
 
-  attr_accessor :email_address, :description, :slot_length, :date, :start_time, :end_time
+  attr_accessor :email_addresses, :description, :slot_length, :date, :start_time, :end_time
   attr_reader   :event
 
-  validates :email_address, :description, :slot_length, :date, :start_time, :end_time, presence: true
+  validates :email_addresses, :description, :slot_length, :date, :start_time, :end_time, presence: true
 
   def save
     if valid?
