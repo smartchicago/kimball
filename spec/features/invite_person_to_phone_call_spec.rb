@@ -11,7 +11,7 @@ feature 'Invite people to a phone call' do
 
     visit '/v2/event_invitations/new'
 
-    research_subject_emails = Array.new(3, Faker::Internet.email)
+    research_subject_emails = Array.new(3, FactoryGirl.create(:person).email_address)
     admin_email = 'admin@what.host.should.we.have.here.com'
 
     fill_in "People's email addresses", with: research_subject_emails.join(',')

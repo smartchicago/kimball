@@ -22,7 +22,8 @@ class V2::EventInvitationsController < ApplicationController
       event_invitation.email_addresses.split(',').each do |email_address|
         EventInvitationMailer.invite(
           email_address: email_address,
-          event: event_invitation.event
+          event: event_invitation.event,
+          person: Person.find_by(email_address: email_address)
         ).deliver_later
       end
     end

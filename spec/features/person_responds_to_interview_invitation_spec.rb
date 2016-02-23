@@ -7,7 +7,10 @@ feature 'Person responds to interview invitation' do
     @event = FactoryGirl.create(:event)
     @person = FactoryGirl.create(:person)
 
-    EventInvitationMailer.invite(email_address: @person.email_address, event: @event).deliver_now
+    EventInvitationMailer.invite(
+      email_address: @person.email_address,
+      event: @event,
+      person: @person).deliver_now
 
     open_email(@person.email_address)
 

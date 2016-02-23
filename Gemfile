@@ -109,6 +109,9 @@ gem 'gsm_encoder'
 gem 'delayed_job_active_record'
 gem 'daemons'
 
+#for generating unique tokens for Person
+gem 'has_secure_token'
+
 group :testing do
   # mock tests w/mocha
   gem 'mocha', :require => false
