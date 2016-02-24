@@ -4,7 +4,7 @@ class V2::ReservationsController < ApplicationController
   def new
     event = V2::Event.find(event_params[:event_id])
     @time_slots = event.time_slots
-    @person = Person.find_by(email_address: person_params[:email_address])
+    @person = Person.find_by(token: person_params[:token])
     @reservation = V2::Reservation.new(time_slot: V2::TimeSlot.new)
   end
 
@@ -43,6 +43,6 @@ class V2::ReservationsController < ApplicationController
     end
 
     def person_params
-      params.permit(:email_address, :person_id)
+      params.permit(:email_address, :person_id, :token)
     end
 end

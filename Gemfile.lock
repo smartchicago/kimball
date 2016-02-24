@@ -158,6 +158,8 @@ GEM
     guard-rubocop (1.2.0)
       guard (~> 2.0)
       rubocop (~> 0.20)
+    has_secure_token (1.0.0)
+      activerecord (>= 3.0)
     hashr (0.0.22)
     health_check (1.5.1)
       rails (>= 2.3.0)
@@ -428,6 +430,7 @@ DEPENDENCIES
   guard-minitest
   guard-rspec
   guard-rubocop
+  has_secure_token
   health_check
   holder_rails
   jbuilder (~> 1.0.1)

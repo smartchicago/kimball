@@ -50,6 +50,8 @@ class Person < ActiveRecord::Base
   has_many :tags, through: :taggings
   has_many :taggings, as: :taggable
 
+  has_secure_token
+
   after_update  :sendToMailChimp
   after_create  :sendToMailChimp
 
