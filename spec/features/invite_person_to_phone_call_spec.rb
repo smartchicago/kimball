@@ -57,7 +57,7 @@ feature 'Invite people to a phone call' do
 
     click_button 'Send invitation'
 
-    expect(page).to have_text('There were problems with some of the fields.')
+    expect(page).to have_text('There were problems with some of the fields: Email addresses can\'t be blank, Description can\'t be blank, Date can\'t be blank')
   end
 
   scenario 'with an unregistered email address' do
@@ -66,7 +66,6 @@ feature 'Invite people to a phone call' do
     visit '/v2/event_invitations/new'
 
     research_subject_emails = ['bogus@email.com']
-    admin_email = 'admin@what.host.should.we.have.here.com'
 
     fill_in "People's email addresses", with: research_subject_emails.join(',')
 
@@ -82,7 +81,7 @@ feature 'Invite people to a phone call' do
 
     click_button 'Send invitation'
 
-    expect(page).to have_text('There were problems with some of the fields.')
+    expect(page).to have_text('There were problems with some of the fields: Email addresses One or more of the email addresses are not registered')
   end
 
   scenario 'with a call length that doesnt fit the time window perfectly, show a confirmation window', js: :true do
