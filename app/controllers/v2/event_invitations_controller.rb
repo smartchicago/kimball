@@ -10,7 +10,8 @@ class V2::EventInvitationsController < ApplicationController
       send_notifications(@event_invitation)
       flash[:notice] = 'Person was successfully invited.'
     else
-      flash[:error] = 'There were problems with some of the fields.'
+      errors = @event_invitation.errors.full_messages.join(', ')
+      flash[:error] = 'There were problems with some of the fields: ' + errors
     end
 
     render :new
@@ -19,7 +20,7 @@ class V2::EventInvitationsController < ApplicationController
   private
 
     def send_notifications(event_invitation)
-      event_invitation.email_addresses.split(',').each do |email_address|
+      event_invitation.email_addresses_to_array.each do |email_address|
         EventInvitationMailer.invite(
           email_address: email_address,
           event: event_invitation.event,

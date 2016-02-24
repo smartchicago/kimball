@@ -9,19 +9,20 @@ describe V2::EventInvitation do
   it { is_expected.to validate_presence_of(:end_time) }
 
   describe '#save' do
-    describe 'when valid' do
-      let(:args) do
-        {
-          email_addresses: 'some@email.com,another@email.com',
-          description: 'lorem',
-          slot_length: '45 mins',
-          date: '03/20/2016',
-          start_time: '15:00',
-          end_time: '16:30'
-        }
-      end
+    let(:people) { FactoryGirl.create_list(:person, 2) }
+    let(:valid_args) do
+      {
+        email_addresses: people.map(&:email_address).join(','),
+        description: 'lorem',
+        slot_length: '45 mins',
+        date: '03/20/2016',
+        start_time: '15:00',
+        end_time: '16:30'
+      }
+    end
 
-      subject { described_class.new(args) }
+    describe 'when valid' do
+      subject { described_class.new(valid_args) }
 
       it 'creates a new event' do
         expect { subject.save }.to change { V2::Event.count }.from(0).to(1)
@@ -29,6 +30,15 @@ describe V2::EventInvitation do
 
       it 'creates a new time slots' do
         expect { subject.save }.to change { V2::TimeSlot.count }.from(0).to(2)
+      end
+    end
+
+    describe 'when unregistered email addresses are present' do
+      subject { described_class.new(valid_args.merge(email_addresses: 'bogus@email.com')) }
+
+      it 'validates email addresses belong to registered people' do
+        subject.save
+        expect(subject.errors.messages[:email_addresses]).to eql ['One or more of the email addresses are not registered']
       end
     end
 

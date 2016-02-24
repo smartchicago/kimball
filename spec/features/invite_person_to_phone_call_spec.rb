@@ -12,6 +12,7 @@ feature 'Invite people to a phone call' do
     visit '/v2/event_invitations/new'
 
     research_subject_emails = Array.new(3, FactoryGirl.create(:person).email_address)
+
     admin_email = 'admin@what.host.should.we.have.here.com'
 
     fill_in "People's email addresses", with: research_subject_emails.join(',')
@@ -53,6 +54,31 @@ feature 'Invite people to a phone call' do
     login_with_admin_user
 
     visit '/v2/event_invitations/new'
+
+    click_button 'Send invitation'
+
+    expect(page).to have_text('There were problems with some of the fields.')
+  end
+
+  scenario 'with an unregistered email address' do
+    login_with_admin_user
+
+    visit '/v2/event_invitations/new'
+
+    research_subject_emails = ['bogus@email.com']
+    admin_email = 'admin@what.host.should.we.have.here.com'
+
+    fill_in "People's email addresses", with: research_subject_emails.join(',')
+
+    event_description = "We're looking for mothers between the age of 16-26 for a phone interview"
+
+    fill_in 'Event description', with: event_description
+
+    select '30 mins', from: 'Call length'
+
+    fill_in 'Date', with: '02/02/2016'
+    select '12:00', from: 'Start time'
+    select '15:30', from: 'End time'
 
     click_button 'Send invitation'
 
