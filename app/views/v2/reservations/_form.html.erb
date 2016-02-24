@@ -1,0 +1,13 @@
+<%= form_for @reservation, url: v2_reservations_path, html: { class: 'form-horizontal' } do |form| %>
+  <%= form.hidden_field :person_id, value: @person.id.to_s %>
+
+  <% @time_slots.each do |time_slot| %>
+    <div class="radio_button">
+      <%= form.label :time_slot_id, time_slot.to_time_and_weekday, :class => 'control-label' %>
+      <%= form.radio_button :time_slot_id, time_slot.id, :class => 'radio_button' %>
+    </div>
+  <% end %>
+
+  <%= form.submit "Confirm reservation" %>
+
+<% end %>

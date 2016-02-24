@@ -16,6 +16,14 @@ Kimball is a Ruby on Rails app.
   * It currently uses Capistrano for deployment to staging and production instances.
   * ElasticSearch needs to be installed and running for Kimball to work.
   * Environment Variables are used (saved in a local_env.yml file) for API keys and other IDs.
+  * you'll need ssh-agent forwarding:
+  ```ssh-add -L``
+If the command says that no identity is available, you'll need to add your key:
+
+```ssh-add yourkey```
+On Mac OS X, ssh-agent will "forget" this key, once it gets restarted during reboots. But you can import your SSH keys into Keychain using this command:
+
+```/usr/bin/ssh-add -K yourkey```
 * Wufoo
   * Wufoo hosts all forms used for Kimball.
   * On the Server Side there are 3 environment variables used:

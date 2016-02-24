@@ -28,10 +28,10 @@ Style/DotPosition:
   EnforcedStyle: trailing
 
 Style/EmptyLinesAroundClassBody:
-  EnforcedStyle: empty_lines
+  Enabled: false
 
 Style/EmptyLinesAroundModuleBody:
-  EnforcedStyle: empty_lines
+  Enabled: false
 
 Style/IndentationConsistency:
   EnforcedStyle: rails
@@ -65,6 +65,12 @@ Style/BlockDelimiters:
     - 'spec/**/*'
 
 Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/ExtraSpacing:
+  Enabled: false
+
+Style/SpaceAroundOperators:
   Enabled: false
 
 Metrics/AbcSize:

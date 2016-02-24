@@ -31,6 +31,12 @@ group :development do
 
   # a console in your browser, when you want to interrogate views.
   gem 'web-console'
+
+  # silences logging of requests for assets
+  gem 'quiet_assets'
+
+  # enabling us to deploy via travis and encrypted keys!
+  gem 'travis'
 end
 
 group :production do
@@ -103,6 +109,9 @@ gem 'gsm_encoder'
 gem 'delayed_job_active_record'
 gem 'daemons'
 
+#for generating unique tokens for Person
+gem 'has_secure_token'
+
 group :testing do
   # mock tests w/mocha
   gem 'mocha', :require => false
@@ -119,7 +128,6 @@ group :testing do
 end
 
 group :development, :test do
-  gem 'dotenv-rails'
   gem 'rspec-rails', '~> 3.0'
   gem 'guard'
   gem 'guard-rspec', require: false
@@ -127,4 +135,10 @@ group :development, :test do
   gem 'guard-rubocop'
   gem 'guard-bundler', require: false
   gem 'capybara'
+  gem 'capybara-email'
+  gem 'pry'
+  gem 'factory_girl_rails'
+  gem 'shoulda-matchers', '~> 3.1.1', require: false
+  gem 'database_cleaner'
+  gem 'poltergeist'
 end

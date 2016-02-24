@@ -108,23 +108,22 @@ Vagrant.configure(2) do |config|
       nodejs \
       graphviz \
       nginx-full \
-      openjdk-7-jre
+      openjdk-7-jre \
+      phantomjs
 
-    # SOOOOOON!!! TODO: postgres
-    #   postgresql-server-dev-9.3 \
-    #   postgresql-9.3
-    # # configuring postgres
-    # sudo -u postgres psql -c "create role root with createdb login password 'password';"
-    # sudo cp -rf /vagrant/config/server_conf/pg_hba.conf /etc/postgresql/9.3/main/
-    # sudo service postgresql restart
+    mysqladmin -u root -ppassword password '';
 
+    if id -u "elasticsearch" >/dev/null 2>&1; then
+        echo "elasticsearch installed"
+    else
+      wget --quiet https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.deb -O /tmp/elasticsearch.deb;
+      sudo dpkg -i /tmp/elasticsearch.deb;
+      sudo update-rc.d elasticsearch defaults;
+      rm /tmp/elasticsearch.deb;
+      update-rc.d elasticsearch defaults;
+      sudo service elasticsearch start;
+    fi
 
-    # install elasticsearch
-    wget –-quiet https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.deb -O /tmp/elasticsearch.deb;
-    sudo dpkg -i /tmp/elasticsearch.deb;
-    sudo update-rc.d elasticsearch defaults;
-    rm /tmp/elasticsearch.deb;
-    sudo service elasticsearch start;
 
     # automatically cd to /vagrant/
     echo 'if [ -d /vagrant/ ]; then cd /vagrant/; fi' >> /home/vagrant/.bashrc
@@ -133,20 +132,20 @@ Vagrant.configure(2) do |config|
   config.vm.provision :shell, privileged: false, inline: %[
     # rvm install is idempotent
     gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-    curl -sSL https://get.rvm.io | bash -s
-
-    cd ~
+    curl -sSL https://get.rvm.io | bash -s stable --auto-dotfiles
     source ~/.profile
   ]
 
   config.vm.provision :shell, privileged: false, inline: %[
     # cleanup and install the appropriate ruby version
+    source ~/.profile
     rvm reload
     rvm use --default install `cat /vagrant/.ruby-version`
     rvm cleanup all
   ]
   config.vm.provision :shell, privileged: false, inline: %[
     # setup our particular rails app
+    source ~/.profile
     cd /vagrant/
     gem update --system
     gem install bundler --no-ri --no-rdoc
@@ -158,7 +157,7 @@ Vagrant.configure(2) do |config|
     if [ -L /etc/nginx/sites-enabled/default ]; then
       sudo rm /etc/nginx/sites-enabled/default
     fi
-    sudo ln -s /vagrant/config/server_conf/nginx.conf /etc/nginx/sites-enabled
+    sudo ln -s /vagrant/config/server_conf/vagrant_nginx.conf /etc/nginx/sites-enabled
     sudo mkdir -p /var/run/nginx/tmp
     sudo chown -R www-data:www-data /var/run/nginx/
     sudo service nginx restart

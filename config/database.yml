@@ -22,11 +22,15 @@ test:
   pool: 5
   timeout: 5000
 
+staging:
+  adapter: mysql2
+  database: staging
+  pool: 5
+  timeout: 5000
+
+
 production:
   adapter: mysql2
   database: production
-  user: ENV['MYSQL_USER']
-  password: ENV['MYSQL_PASSWORD']
-  host: ENV['MYSQL_HOST']
   pool: 5
   timeout: 5000

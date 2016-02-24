@@ -1,8 +1,16 @@
 Logan::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # config file
+  config.before_configuration do
+    env_file = File.join(Rails.root, 'config', 'local_env.yml')
+    YAML.load(File.open(env_file)).each do |key, value|
+      ENV[key.to_s] = value
+    end if File.exist?(env_file)
+  end
+
   # base url for emails
-  config.action_mailer.default_url_options = { host: 'patterns-staging.smartchicagoapps.org' }
+  config.action_mailer.default_url_options = { host: ENV['STAGING_SERVER'] }
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -38,13 +46,6 @@ Logan::Application.configure do
   # Version of your assets, change this if you want to expire all your assets.
   config.assets.version = '1.0'
 
-  # config file
-  config.before_configuration do
-    env_file = File.join(Rails.root, 'config', 'local_env.yml')
-    YAML.load(File.open(env_file)).each do |key, value|
-      ENV[key.to_s] = value
-    end if File.exist?(env_file)
-  end
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
