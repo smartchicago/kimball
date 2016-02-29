@@ -66,14 +66,20 @@ class Person < ActiveRecord::Base
   end
 
   validates :postal_code, presence: true
+  validates :postal_code, zipcode: { country_code: :us }
 
   validates :phone_number, presence: true,
     unless: proc { |person| person.email_address.present? }
   validates :phone_number, uniqueness: true
 
+  # phony validations and normalization
+  validates_plausible_phone :phone_number
+  phony_normalize :phone_number, default_country_code: 'US'
+
   validates :email_address, presence: true,
     unless: proc { |person| person.phone_number.present? }
-  validates :email_address, uniqueness: true
+  validates :email_address, uniqueness: true, email: true
+
 
   self.per_page = 15
 
