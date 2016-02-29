@@ -57,10 +57,14 @@ class Person < ActiveRecord::Base
 
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :primary_device_id, presence: true
-  validates :primary_device_description, presence: true
-  validates :primary_connection_id, presence: true
-  validates :primary_connection_description, presence: true
+
+  if ENV['BLUE_RIDGE'].nil?
+    validates :primary_device_id, presence: true
+    validates :primary_device_description, presence: true
+    validates :primary_connection_id, presence: true
+    validates :primary_connection_description, presence: true
+  end
+
   validates :postal_code, presence: true
 
   validates :phone_number, presence: true,

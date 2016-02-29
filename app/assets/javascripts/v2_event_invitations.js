@@ -1,10 +1,10 @@
 //All time is converted to seconds for easier comparison
 
 $(function(){
- 
+
   var slotLengthElement = $("#v2_event_invitation_slot_length");
   var startTimeElement = $("#v2_event_invitation_start_time");
-  var endTimeElement = $("#v2_event_invitation_end_time");  
+  var endTimeElement = $("#v2_event_invitation_end_time");
 
   $("#submit").click(function(e){
     var slotLength = parseInt(slotLengthElement.val().substr(0,2)) * 60;
@@ -22,7 +22,7 @@ $(function(){
       var warningMessage = "Your time window is not a multiple of the call length. Do you still want to save the Event?";
       if (!confirm(warningMessage))
         e.preventDefault();
-    } 
+    }
 
   });
 
@@ -38,4 +38,5 @@ $(function(){
     time = time.split(/:/);
     return time[0] * 3600 + time[1] * 60;
   }
+  $('.datepicker').datepicker();
 });
