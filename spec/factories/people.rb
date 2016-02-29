@@ -8,7 +8,7 @@ FactoryGirl.define do
     first_name        Faker::Name.first_name
     last_name         Faker::Name.last_name
     sequence(:email_address) { |i| "#{i}#{Faker::Internet.email}" }
-    phone_number      { Faker::PhoneNumber.phone_number }
+    phone_number      { Faker::PhoneNumber.cell_phone }
     address_1         Faker::Address.street_address
     address_2         Faker::Address.secondary_address
     city              Faker::Address.city

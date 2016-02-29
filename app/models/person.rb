@@ -73,8 +73,8 @@ class Person < ActiveRecord::Base
   validates :phone_number, uniqueness: true
 
   # phony validations and normalization
-  validates_plausible_phone :phone_number
   phony_normalize :phone_number, default_country_code: 'US'
+  #validates_plausible_phone :phone_number, normalized_country_code: 'US'
 
   validates :email_address, presence: true,
     unless: proc { |person| person.phone_number.present? }
