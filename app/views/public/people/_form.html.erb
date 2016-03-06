@@ -29,6 +29,7 @@
       <%= f.select :preferred_contact_method, [["Email", "EMAIL"],["Text Message", "SMS"]], :class => 'text_field' %>
     </div>
   </div>
+  <% if ENV['BLUE_RIDGE'].nil? %>
   <div class="control-group">
     <%= f.label :address_1, :class => 'control-label' %>
     <div class="controls">
@@ -113,6 +114,7 @@
       <%= f.text_field :participation_type, :class => 'text_field' %>
     </div>
   </div>
+  <% end %>
 
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>

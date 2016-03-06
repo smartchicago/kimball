@@ -112,6 +112,12 @@ gem 'daemons'
 #for generating unique tokens for Person
 gem 'has_secure_token'
 
+# phone number validation
+gem 'phony_rails'
+
+# zip code validation
+gem 'validates_zipcode'
+
 group :testing do
   # mock tests w/mocha
   gem 'mocha', :require => false
