@@ -27,7 +27,11 @@ function initJQuery() {
 function initSeamless(){
     jQuery(function() {
         if (jQuery.isFunction(jQuery.fn.seamless)){
-            jQuery('#patterns_iframe').seamless();
+            var child = jQuery('#patterns_iframe').seamless();
+            var cssSheets = jQuery.map(document.styleSheets,function(n,style){
+                return n.href ?  n.href : null;
+            });
+            child.send({ stylesheets: cssSheets});
         }else{
             setTimeout("initSeamless()", 50);
         }
