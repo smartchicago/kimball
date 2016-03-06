@@ -1,6 +1,6 @@
 class V2::EventInvitationsController < ApplicationController
   def new
-    @event_invitation = V2::EventInvitation.new
+    @event_invitation = V2::EventInvitation.new(email_addresses: params[:email_addresses])
   end
 
   def create
