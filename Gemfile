@@ -99,9 +99,6 @@ gem 'twilio-ruby'
 # use Wuparty for wufoo
 gem 'wuparty'
 
-# for phone number normalization
-gem 'phony_rails'
-
 # Use gsm_encoder to help text messages send correctly
 gem 'gsm_encoder'
 
@@ -117,6 +114,8 @@ gem 'phony_rails'
 
 # zip code validation
 gem 'validates_zipcode'
+
+gem 'jquery-validation-rails'
 
 group :testing do
   # mock tests w/mocha

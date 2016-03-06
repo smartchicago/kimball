@@ -6,18 +6,53 @@
   <%= csrf_meta_tags %>
 </head>
 <style>
-form.new_person{
-  height:400px;
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: table;
 }
+.error{
+  color: red;
+}
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  h2 {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 5px 5px 15px;
+    font-size: 12px;
+    margin: -7px;
+    margin-bottom: 0px;
+    background-color: #c00;
+    color: #fff;
+  }
+  ul li {
+    font-size: 12px;
+    list-style: square;
+  }
+}
+
 </style>
 <body>
-<% if @referrer %>
 <script>
+  <% if @referrer %>
   var parent = $.seamless.connect({
     url: '<%= @referrer %>',
     allowStyleInjection:true,
     container:'form.new_person'
   });
+  <% else %>
+  var parent = $.seamless.connect({
+    url: window.parent.url,
+    allowStyleInjection:true,
+    container:'form.new_person'
+  });
+  <% end %>
   parent.receive(function(data, event) {
   // Print out the data that was received.
     var urls=data.stylesheets;
@@ -36,7 +71,6 @@ form.new_person{
     $.seamless.connect();
   });
 </script>
-<% end %>
 <%= render 'form' %>
 
 <%=
