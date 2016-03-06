@@ -5,9 +5,10 @@ describe Person do
 
   it { is_expected.to validate_presence_of(:first_name) }
   it { is_expected.to validate_presence_of(:last_name) }
-  it { is_expected.to validate_presence_of(:primary_device_id) }
-  it { is_expected.to validate_presence_of(:primary_device_description) }
-  it { is_expected.to validate_presence_of(:primary_connection_id) }
+  # We don't want to force people to fill this out. not yet
+  # it { is_expected.to validate_presence_of(:primary_device_id) }
+  # it { is_expected.to validate_presence_of(:primary_device_description) }
+  # it { is_expected.to validate_presence_of(:primary_connection_id) }
   it { is_expected.to validate_presence_of(:postal_code) }
   it { is_expected.to validate_uniqueness_of(:email_address) }
   # Not working with shoulda-matchers 3.1.0

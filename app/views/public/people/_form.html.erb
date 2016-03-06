@@ -114,10 +114,16 @@
       <%= f.text_field :participation_type, :class => 'text_field' %>
     </div>
   </div>
+  <% else %>
+  <div class="control-group">
+    <%= f.label :postal_code, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :postal_code, :class => 'text_field' %>
+    </div>
+  </div>
   <% end %>
-
   <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= f.submit nil, :class => 'btn btn-primary' "Save" %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 people_path, :class => 'btn' %>
   </div>
