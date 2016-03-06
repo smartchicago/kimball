@@ -99,8 +99,6 @@ gem 'twilio-ruby'
 # use Wuparty for wufoo
 gem 'wuparty'
 
-# for phone number normalization
-gem 'phony_rails'
 
 # Use gsm_encoder to help text messages send correctly
 gem 'gsm_encoder'
