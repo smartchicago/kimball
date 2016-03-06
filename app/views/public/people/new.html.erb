@@ -1,4 +1,11 @@
-<h1>New Person</h1>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Patterns | <%= title = yield(:page_title); title.present? ? title : controller_name.humanize.titlecase %></title>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
 <% if @referrer %>
 <script>
   $.seamless.connect({
@@ -9,4 +16,8 @@
 <% end %>
 <%= render 'form' %>
 
-<%= link_to 'Back', people_path %>
+<%=
+#link_to 'Back', people_path
+%>
+</body>
+</html>

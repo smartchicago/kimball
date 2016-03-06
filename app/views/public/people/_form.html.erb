@@ -1,4 +1,4 @@
-<%= form_for @person, url: public_people_path, html: { class: 'form-horizontal' } do |f| %>
+<%= form_for @person, url: public_people_path do |f| %>
   <div class="control-group">
     <%= f.label :first_name, :class => 'control-label' %>
     <div class="controls">
@@ -14,13 +14,13 @@
   <div class="control-group">
     <%= f.label :email_address, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :email_address, :class => 'text_field' %>
+      <%= f.text_field :email_address, :class => 'text_field',:validate => true %>
     </div>
   </div>
   <div class="control-group">
     <%= f.label :phone_number, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :phone_number, :class => 'text_field' %>
+      <%= f.text_field :phone_number, :class => 'text_field',:validate => true %>
     </div>
   </div>
   <div class="control-group">
@@ -118,12 +118,12 @@
   <div class="control-group">
     <%= f.label :postal_code, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :postal_code, :class => 'text_field' %>
+      <%= f.text_field :postal_code, :class => 'text_field', :validate => true %>
     </div>
   </div>
   <% end %>
   <div class="form-actions">
-    <%= f.submit nil, :class => 'btn btn-primary' "Save" %>
+    <%= f.submit 'Save', :class => 'btn btn-primary' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 people_path, :class => 'btn' %>
   </div>

@@ -6,8 +6,21 @@ class Public::PeopleController < ApplicationController
 
   # GET /people/new
   def new
-    @referrer = request.env['HTTP_REFERER'] || false
+
+    url = params[:referrer] || false
+
+    if url
+      begin
+        uri = URI.parse(url)
+        uri.kind_of?(URI::HTTP)
+        @referrer = url
+      rescue URI::InvalidURIError
+        @referrer = false
+      end
+    end
+
     @person = ::Person.new
+    render layout: false
   end
 
   # POST /people
@@ -18,9 +31,9 @@ class Public::PeopleController < ApplicationController
       if @person.save
         flash[:notice] = 'Person was successfully created.'
       else
-        flash[:error] = 'There were problems with some of the fields.'
+        flash[:error] = @person.errors.full_messages.to_sentence
       end
-      format.html { render action: 'new' }
+      format.html { render action: 'new', layout: false }
     end
   end
 

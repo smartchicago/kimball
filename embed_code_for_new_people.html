@@ -1,5 +1,6 @@
+<iframe id="patterns_iframe" src="#"></iframe>
 <script>
-
+document.getElementById('patterns_iframe').src="http://bill.patterns.dev/public/people/new?referrer=" + window.location.href;
 var jQueryScriptOutputted = false;
 function initJQuery() {
     //if the jQuery object isn't available
@@ -35,4 +36,3 @@ function initSeamless(){
 }
 initJQuery();
 </script>
-<iframe id="patterns_iframe" src="http://bill.patterns.dev/public/people/new"></iframe>
