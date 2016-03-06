@@ -10,7 +10,7 @@ class Public::PeopleController < ApplicationController
   # POST /people
   def create
     @person = ::Person.new(person_params)
-    @person.signup_at = Time.now
+    @person.signup_at = Time.zone.now
     respond_to do |format|
       if @person.save
         flash[:notice] = 'Person was successfully created.'
