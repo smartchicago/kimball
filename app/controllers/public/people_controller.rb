@@ -1,5 +1,5 @@
 class Public::PeopleController < ApplicationController
-
+  layout false
   after_action :allow_iframe
 
   skip_before_action :authenticate_user!
@@ -20,7 +20,7 @@ class Public::PeopleController < ApplicationController
     end
 
     @person = ::Person.new
-    render layout: false
+
   end
 
   # POST /people
@@ -33,7 +33,7 @@ class Public::PeopleController < ApplicationController
       else
         flash[:error] = @person.errors.full_messages.to_sentence
       end
-      format.html { render action: 'new', layout: false }
+      format.html { render action: 'new' }
     end
   end
 

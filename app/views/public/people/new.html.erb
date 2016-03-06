@@ -5,12 +5,18 @@
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
 </head>
+<style>
+form.new_person{
+  height:400px;
+}
+</style>
 <body>
 <% if @referrer %>
 <script>
   var parent = $.seamless.connect({
     url: '<%= @referrer %>',
-    allowStyleInjection:true
+    allowStyleInjection:true,
+    container:'form.new_person'
   });
   parent.receive(function(data, event) {
   // Print out the data that was received.
@@ -25,6 +31,9 @@
         $head.append(linkElement);
       }
     })
+    // re-init because of new sizing
+    // from new styles
+    $.seamless.connect();
   });
 </script>
 <% end %>
