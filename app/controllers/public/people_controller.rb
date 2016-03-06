@@ -29,11 +29,11 @@ class Public::PeopleController < ApplicationController
 
     respond_to do |format|
       if @person.save
-        flash[:notice] = 'Person was successfully created.'
+        @msg = 'Thanks! We will be in touch soon!'
       else
-        flash[:error] = @person.errors.full_messages.to_sentence
+        @msg = "Oops! Looks like something went wrong. Please get in touch with us at <a href='mailto:#{ENV['MAILER_SENDER']}?subject=Patterns sign up problem'"
       end
-      format.html { render action: 'new' }
+      format.html { render action: 'create' }
     end
   end
 

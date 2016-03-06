@@ -5,9 +5,10 @@ feature 'People registration' do
   scenario 'with valid data' do
     visit '/registration'
 
-    complete_form_with_valid_data
+    expect { complete_form_with_valid_data }.to change(Person,:count).by(1)
 
-    expect(page).to have_text('Person was successfully created.')
+    #expect(page).to have_text('Person was successfully created.')
+
   end
 
   scenario 'with invalid data' do
@@ -15,12 +16,12 @@ feature 'People registration' do
 
     complete_form_with_invalid_data
 
-    expect(page).to have_text('There were problems with some of the fields.')
+    expect(page).to have_text('Oops! Looks like something went wrong.')
   end
 end
 
 def complete_form_with_invalid_data
-  click_button 'Create Person'
+  click_button 'Save'
 end
 
 # prooly_wanna_rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -55,6 +56,6 @@ def complete_form_with_valid_data
 
   # fill_in 'Participation type', with: 'remote'
 
-  click_button 'Create Person'
+  click_button 'Save'
 end
 # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
