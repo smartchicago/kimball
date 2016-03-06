@@ -2,7 +2,7 @@
 <div class="row page-header">
   <div class="span12">
     <h1><%=t '.title', :default => "People" %></h1>
-  </div>  
+  </div>
 </div>
 
 <div class="row">
@@ -39,6 +39,8 @@
             <td><%= person.signup_at ? person.signup_at.to_s(:long) : '' %></td>
             <td><%= person.preferred_contact_method %></td>
             <td>
+              <%= link_to t('.schedule', :default => "schedule"),
+                          new_v2_event_invitation_path(email_addresses: person.email_address), :class => 'btn btn-mini' %>
               <%= link_to t('.edit', :default => t("helpers.links.edit")),
                           edit_person_path(person), :class => 'btn btn-mini' %>
               <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
@@ -50,7 +52,7 @@
           </tr>
         <% end %>
       </tbody>
-    </table>    
+    </table>
   </div>
 </div>
 
