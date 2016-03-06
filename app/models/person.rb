@@ -75,8 +75,6 @@ class Person < ActiveRecord::Base
     unless: proc { |person| person.email_address.present? }
   validates :phone_number, uniqueness: true, allow_blank: true
 
-
-
   validates :email_address, presence: true,
     unless: proc { |person| person.phone_number.present? }
   validates :email_address, uniqueness: true, email: true, allow_blank: true

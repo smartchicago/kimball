@@ -6,33 +6,25 @@ class Public::PeopleController < ApplicationController
 
   # GET /people/new
   def new
-
-    url = params[:referrer] || false
-
-    if url
+    @referrer = false
+    if params[:referrer]
       begin
-        uri = URI.parse(url)
-        uri.kind_of?(URI::HTTP)
-        @referrer = url
+        uri = URI.parse(params[:referrer])
+        @referrer = params[:referrer] if uri.is_a?(URI::HTTP)
       rescue URI::InvalidURIError
         @referrer = false
       end
     end
-
     @person = ::Person.new
-
   end
 
   # POST /people
   def create
     @person = ::Person.new(person_params)
-
+    success = 'Thanks! We will be in touch soon!'
+    fail    = "Oops! Looks like something went wrong. Please get in touch with us at <a href='mailto:#{ENV['MAILER_SENDER']}?subject=Patterns sign up problem'"
     respond_to do |format|
-      if @person.save
-        @msg = 'Thanks! We will be in touch soon!'
-      else
-        @msg = "Oops! Looks like something went wrong. Please get in touch with us at <a href='mailto:#{ENV['MAILER_SENDER']}?subject=Patterns sign up problem'"
-      end
+      @msg = @person.save ?  success : fail
       format.html { render action: 'create' }
     end
   end
