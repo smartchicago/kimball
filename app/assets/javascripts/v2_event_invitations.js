@@ -26,6 +26,10 @@ $(function(){
 
   });
 
+  startTimeElement.change(function(){
+    endTimeElement.val(startTimeElement.val());
+  });
+
   function isTimeWindowMultipleOfSlotLength(slotLength, startTime, endTime) {
     return ((endTime - startTime) % slotLength != 0);
   }
@@ -38,5 +42,7 @@ $(function(){
     time = time.split(/:/);
     return time[0] * 3600 + time[1] * 60;
   }
+
   $('.datepicker').datepicker();
+
 });
