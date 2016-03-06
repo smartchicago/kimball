@@ -1,4 +1,5 @@
 class EventsController < ApplicationController
+
   before_action :set_event, only: [:show, :edit, :update, :destroy, :export]
 
   # GET /events
@@ -61,21 +62,26 @@ class EventsController < ApplicationController
     end
   end
 
+  # FIXME: Refactor and re-enable cop
+  # rubocop:disable Metrics/AbcSize
+  #
   def export
-    @mce = MailchimpExport.new(name: "#{@event.name[0,37]} Participants", recipients: @event.people.collect{|person| person.email_address}, created_by: current_user.id)
-    
+    @mce = MailchimpExport.new(name: "#{@event.name[0, 37]} Participants", recipients: @event.people.collect(&:email_address), created_by: current_user.id)
+
     if @mce.with_user(current_user).save
       Rails.logger.info("[export] Sent #{@mce.recipients.size} email addresses to a static segment named #{@mce.name}")
       respond_to do |format|
-        format.js { }
+        format.js {}
       end
     else
       Rails.logger.error("failed to send event to mailchimp: #{@mce.errors.inspect}")
-      format.all { render text: "failed to send event to mailchimp: #{@mce.errors.inspect}", status: 400} 
+      format.all { render text: "failed to send event to mailchimp: #{@mce.errors.inspect}", status: 400 }
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_event
       @event = Event.find(params[:id])
@@ -85,4 +91,5 @@ class EventsController < ApplicationController
     def event_params
       params.require(:event).permit(:name, :description, :starts_at, :ends_at, :location, :address, :capacity, :application_id)
     end
+
 end

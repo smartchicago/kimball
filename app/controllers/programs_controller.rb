@@ -1,4 +1,5 @@
 class ProgramsController < ApplicationController
+
   before_action :set_program, only: [:show, :edit, :update, :destroy]
 
   # GET /programs
@@ -62,6 +63,7 @@ class ProgramsController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_program
       @program = Program.find(params[:id])
@@ -71,4 +73,5 @@ class ProgramsController < ApplicationController
     def program_params
       params.require(:program).permit(:name, :description)
     end
+
 end

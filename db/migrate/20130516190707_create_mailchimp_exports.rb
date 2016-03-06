@@ -1,4 +1,5 @@
 class CreateMailchimpExports < ActiveRecord::Migration
+
   def change
     create_table :mailchimp_exports do |t|
       t.string :name
@@ -8,4 +9,5 @@ class CreateMailchimpExports < ActiveRecord::Migration
       t.timestamps
     end
   end
+
 end

@@ -2,7 +2,7 @@ Logan::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # base url for emails
-  config.action_mailer.default_url_options = { :host => 'patterns.smartchicagoapps.org' }
+  config.action_mailer.default_url_options = { host: 'patterns.smartchicagoapps.org' }
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -23,10 +23,10 @@ Logan::Application.configure do
   # config.action_dispatch.rack_cache = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this).
-  config.serve_static_assets = false
+  config.serve_static_files = false
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor  = :uglifier
+  config.assets.js_compressor = :uglifier
   # config.assets.css_compressor = :sass
 
   # Whether to fallback to assets pipeline if a precompiled asset is missed.
@@ -80,14 +80,14 @@ Logan::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
-  
+
   # Analytics
   config.google_analytics_enabled = true
   config.before_configuration do
     env_file = File.join(Rails.root, 'config', 'local_env.yml')
     YAML.load(File.open(env_file)).each do |key, value|
       ENV[key.to_s] = value
-    end if File.exists?(env_file)
+    end if File.exist?(env_file)
   end
-  config.middleware.use Rack::TwilioWebhookAuthentication, ENV['TWILIO_AUTH_TOKEN'], '/receive_text/index'  
+  config.middleware.use Rack::TwilioWebhookAuthentication, ENV['TWILIO_AUTH_TOKEN'], '/receive_text/index'
 end

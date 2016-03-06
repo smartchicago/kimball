@@ -1,4 +1,8 @@
 class TaggingsController < ApplicationController
+
+  # FIXME: Refactor and re-enable cop
+  # rubocop:disable Metrics/MethodLength
+  #
   def create
     @tag = Tag.find_or_initialize_by(name: params[:tagging].delete(:name))
     @tag.created_by ||= current_user.id
@@ -6,26 +10,28 @@ class TaggingsController < ApplicationController
 
     if @tagging.with_user(current_user).save
       respond_to do |format|
-        format.js { }
+        format.js {}
       end
     else
       respond_to do |format|
-        format.js { render text: "alert('Oh no! You can only tag an item with a given tag once.')"}
-      end      
+        format.js { render text: "alert('Oh no! You can only tag an item with a given tag once.')" }
+      end
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   def destroy
     @tagging = Tagging.find(params[:id])
-    
+
     if @tagging.destroy
       respond_to do |format|
-        format.js { }
-      end      
+        format.js {}
+      end
     else
       respond_to do |format|
         format.js { render text: "alert('failed to destroy tag.')" }
-      end      
+      end
     end
   end
+
 end
