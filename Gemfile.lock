@@ -399,7 +399,7 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
     will_paginate (3.1.0)
-    will_paginate-bootstrap (1.0.1)
+    will_paginate-bootstrap (0.2.5)
       will_paginate (>= 3.0.3)
     wuparty (1.2.6)
       httparty (>= 0.6.1)
@@ -468,7 +468,7 @@ DEPENDENCIES
   validates_zipcode
   web-console
   will_paginate
-  will_paginate-bootstrap
+  will_paginate-bootstrap (~> 0.2.5)
   wuparty
 
 BUNDLED WITH

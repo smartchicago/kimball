@@ -37,7 +37,7 @@ set :ssh_options, { forward_agent: true }
 
 before  'deploy:finalize_update', "deploy:create_shared_directories", 'deploy:link_db_config', 'deploy:link_env_var'
 # before  'deploy:finalize_update', 'deploy:link_db_config', 'deploy:link_env_var'
-after   'deploy:finalize_update', 'deploy:create_binstubs'
+after   'deploy:finalize_update', 'deploy:create_binstubs', 'deploy:generate_delayed_job'
 
 namespace :deploy do
   task :start do
@@ -85,4 +85,9 @@ namespace :deploy do
   task :create_binstubs do
     run "cd #{latest_release.shellescape} && bundle binstubs unicorn"
   end
+
+  task :generate_delayed_job do
+    run "cd #{latest_release.shellescape} && RAILS_ENV=#{rails_env.to_s.shellescape} bundle exec rails generate delayed_job && RAILS_ENV=#{rails_env.to_s.shellescape} bin/delayed_job restart"
+  end
+
 end

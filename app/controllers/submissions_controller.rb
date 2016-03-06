@@ -10,7 +10,7 @@ class SubmissionsController < ApplicationController
     @submission = Submission.new(
       raw_content:      params.to_json,
       ip_addr:          params['IP'],
-      entry_id:         params['EntryID'],
+      entry_id:         params['EntryId'],
       form_structure:   params['FormStructure'],
       field_structure:  params['FieldStructure']
     )

@@ -79,7 +79,7 @@ gem 'tire'
 
 # pagniate with will_paginate: https://github.com/mislav/will_paginate
 gem 'will_paginate'
-gem 'will_paginate-bootstrap' # https://github.com/nickpad/will_paginate-bootstrap
+gem 'will_paginate-bootstrap', '~> 0.2.5' # Bootstrap 2 support breaks at v1.0
 
 # include health_check, for system monitoring
 gem 'health_check'
