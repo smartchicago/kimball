@@ -1,9 +1,20 @@
 class Public::PeopleController < ApplicationController
+  layout false
+  after_action :allow_iframe
 
   skip_before_action :authenticate_user!
 
   # GET /people/new
   def new
+    @referrer = false
+    if params[:referrer]
+      begin
+        uri = URI.parse(params[:referrer])
+        @referrer = params[:referrer] if uri.is_a?(URI::HTTP)
+      rescue URI::InvalidURIError
+        @referrer = false
+      end
+    end
     @person = ::Person.new
   end
 
@@ -11,13 +22,13 @@ class Public::PeopleController < ApplicationController
   def create
     @person = ::Person.new(person_params)
     @person.signup_at = Time.zone.now
+
+    success = 'Thanks! We will be in touch soon!'
+    fail    = "Oops! Looks like something went wrong. Please get in touch with us at <a href='mailto:#{ENV['MAILER_SENDER']}?subject=Patterns sign up problem'"
+
     respond_to do |format|
-      if @person.save
-        flash[:notice] = 'Person was successfully created.'
-      else
-        flash[:error] = 'There were problems with some of the fields.'
-      end
-      format.html { render action: 'new' }
+      @msg = @person.save ?  success : fail
+      format.html { render action: 'create' }
     end
   end
 
@@ -45,6 +56,9 @@ class Public::PeopleController < ApplicationController
         :secondary_connection_description,
         :participation_type)
     end
-  # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/MethodLength
 
+    def allow_iframe
+      response.headers.except! 'X-Frame-Options'
+    end
 end

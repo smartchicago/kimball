@@ -58,22 +58,22 @@ class Person < ActiveRecord::Base
   validates :first_name, presence: true
   validates :last_name, presence: true
 
-  if ENV['BLUE_RIDGE'].nil?
-    validates :primary_device_id, presence: true
-    validates :primary_device_description, presence: true
-    validates :primary_connection_id, presence: true
-    validates :primary_connection_description, presence: true
-  end
+  # if ENV['BLUE_RIDGE'].nil?
+  #   validates :primary_device_id, presence: true
+  #   validates :primary_device_description, presence: true
+  #   validates :primary_connection_id, presence: true
+  #   validates :primary_connection_description, presence: true
+  # end
 
   validates :postal_code, presence: true
   validates :postal_code, zipcode: { country_code: :us }
 
-  validates :phone_number, presence: true,
-    unless: proc { |person| person.email_address.present? }
-  validates :phone_number, uniqueness: true, allow_blank: true
-
   # phony validations and normalization
   phony_normalize :phone_number, default_country_code: 'US'
+
+  validates :phone_number, presence: true, length: { in: 9..15 },
+    unless: proc { |person| person.email_address.present? }
+  validates :phone_number, uniqueness: true, allow_blank: true
 
   validates :email_address, presence: true,
     unless: proc { |person| person.phone_number.present? }

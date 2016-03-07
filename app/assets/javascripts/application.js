@@ -17,6 +17,8 @@
 //= require turbolinks
 //= require holder
 //= require datepicker/bootstrap-datepicker.min.js
+//= require jquery.validate
+//= require jquery.validate.additional-methods
 //= require_tree .
 
 $(document).ready(function() {

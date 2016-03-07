@@ -99,7 +99,6 @@ gem 'twilio-ruby'
 # use Wuparty for wufoo
 gem 'wuparty'
 
-
 # Use gsm_encoder to help text messages send correctly
 gem 'gsm_encoder'
 
@@ -118,6 +117,8 @@ gem 'validates_zipcode'
 
 # in place editing
 gem 'best_in_place', '~> 3.0.1'
+
+gem 'jquery-validation-rails'
 
 group :testing do
   # mock tests w/mocha
