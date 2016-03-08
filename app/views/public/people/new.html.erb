@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Patterns | <%= title = yield(:page_title); title.present? ? title : controller_name.humanize.titlecase %></title>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= csrf_meta_tags %>
+</head>
+<style>
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+.error{
+  color: red;
+}
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  h2 {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 5px 5px 15px;
+    font-size: 12px;
+    margin: -7px;
+    margin-bottom: 0px;
+    background-color: #c00;
+    color: #fff;
+  }
+  ul li {
+    font-size: 12px;
+    list-style: square;
+  }
+}
+
+</style>
+<body>
+<script>
+  <% if @referrer %>
+  var parent = $.seamless.connect({
+    url: '<%= @referrer %>',
+    allowStyleInjection:true,
+    container:'form.new_person'
+  });
+  <% else %>
+  var parent = $.seamless.connect({
+    url: window.parent.url,
+    allowStyleInjection:true,
+    container:'form.new_person'
+  });
+  <% end %>
+  parent.receive(function(data, event) {
+  // Print out the data that was received.
+    var urls=data.stylesheets;
+    $.each(urls,function(n,url){
+      var $head = $("head");
+      var $headlinklast = $head.find("link[rel='stylesheet']:last");
+      var linkElement = "<link rel='stylesheet' href='"+ url +"' type='text/css' media='screen'>";
+      if ($headlinklast.length){
+        $headlinklast.after(linkElement);
+      } else {
+        $head.append(linkElement);
+      }
+    })
+    // re-init because of new sizing
+    // from new styles
+    $.seamless.connect();
+  });
+</script>
+<%= render 'form' %>
+
+<%=
+#link_to 'Back', people_path
+%>
+</body>
+</html>

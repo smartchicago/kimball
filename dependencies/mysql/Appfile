@@ -1,9 +1,0 @@
-application {
-  name = "mysql"
-  type = "docker-external"
-}
-
-customization "docker" {
-  image = "mysql"
-  run_args = "-p 3306:3306"
-}

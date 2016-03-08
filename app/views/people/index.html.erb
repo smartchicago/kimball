@@ -2,7 +2,7 @@
 <div class="row page-header">
   <div class="span12">
     <h1><%=t '.title', :default => "People" %></h1>
-  </div>  
+  </div>
 </div>
 
 <div class="row">
@@ -32,13 +32,15 @@
           <tr>
             <td><%= link_to "#{person.first_name} #{person.last_name}", person_path(person) %></td>
             <td><%= address_fields_to_sentence(person) %></td>
-            <td><%= person.geography_id %></td>
-            <td><%= person.email_address %></td>
-            <td><%= person.phone_number %></td>
-            <td><%= person.verified %></td>
+            <td><%= best_in_place person, :geography_id %></td>
+            <td><%= best_in_place person, :email_address %></td>
+            <td><%= best_in_place person, :phone_number %></td>
+            <td><%= best_in_place person, :verified,as: :select, collection: ['YES','NO'] %></td>
             <td><%= person.signup_at ? person.signup_at.to_s(:long) : '' %></td>
-            <td><%= person.preferred_contact_method %></td>
+            <td><%= best_in_place person, :preferred_contact_method, as: :select, collection: %w(SMS EMAIL) %></td>
             <td>
+              <%= link_to t('.schedule', :default => "schedule"),
+                          new_v2_event_invitation_path(email_addresses: person.email_address), :class => 'btn btn-mini' %>
               <%= link_to t('.edit', :default => t("helpers.links.edit")),
                           edit_person_path(person), :class => 'btn btn-mini' %>
               <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
@@ -50,7 +52,7 @@
           </tr>
         <% end %>
       </tbody>
-    </table>    
+    </table>
   </div>
 </div>
 

@@ -1,18 +1,18 @@
 <% content_for :page_title, @person.full_name %>
 
 <div class="page-header">
-<h1><%= @person.full_name %></h1>      
+<h1><%= @person.full_name %></h1>
 </div>
 
 <div class="row">
   <div class="span6">
     <div class="row">
       <div class="span3">
-        <h3>About</h3>    
+        <h3>About</h3>
         <dl>
 
           <dt>Verified?</dt>
-          <dd><%= @person.verified %></dd>
+          <dd><%= best_in_place @person, :verified, :as => :select, :collection => %w(Unverified Screened Verified-In-Person Verified) %></dd>
 
           <dt>Address</dt>
           <dd><%= address_fields_to_sentence(@person) %></dd>
@@ -35,11 +35,11 @@
           <% end %>
 
           <dt>Preferred participation method</dt>
-          <dd><%= @person.participation_type %></dd>            
-        </dl>    
+          <dd><%= best_in_place @person, :participation_type, as: :select, :collection => %w(in-person remote) %></dd>
+        </dl>
       </div>
 
-      <div class="span3">    
+      <div class="span3">
         <h3>Contact</h3>
 
         <dl>
@@ -50,7 +50,7 @@
           <dd><%= mail_to @person.email_address %></dd>
 
           <dt>Preferred Contact Method</dt>
-          <dd><%= @person.preferred_contact_method %></dd>
+          <dd><%= best_in_place @person, :preferred_contact_method, as: :select, collection: %w(SMS EMAIL) %></dd>
 
           <dt>Voted in last election?</dt>
           <dd><%= @person.voted %></dd>
@@ -66,8 +66,8 @@
 
           <dt>Signup at</dt>
           <dd><%= @person.signup_at ? @person.signup_at.to_s(:long) : 'unknown' %></dd>
-        </dl>    
-      </div>      
+        </dl>
+      </div>
     </div>
     <div class="row">
       <div class="span6">
@@ -82,14 +82,14 @@
           <%= form.submit "Add", class: "btn span1" %>
         <% end %>
       </div>
-    </div>  
+    </div>
   </div>
-    
+
   <div class="span6">
     <h3>Location</h3>
     <a href="https://maps.google.com?q=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>" target="_blank" title="View in Google Maps"><img src="https://maps.googleapis.com/maps/api/staticmap?markers=|<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;zoom=14&amp;size=570x200&amp;sensor=false"></a>
     <img src="https://maps.googleapis.com/maps/api/streetview?size=570x200&amp;location=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;sensor=false">
-  </div>  
+  </div>
 </div>
 
 <div class="row">
@@ -104,11 +104,11 @@
 
     <div id="comments">
       <%= render partial: 'comment', collection: @person.comments.order("created_at DESC") %>
-    </div>  
+    </div>
   </div>
 
-  
-  
+
+
   <div class="span6" id="person-events">
   <h3>Communications</h3>
   <table class="table">
@@ -121,19 +121,9 @@
       </tr>
     <% end %>
     </table>
-    <h3>Events</h3>
-    <%= form_for(@reservation, remote: true, html: {class: "form-inline"}) do |form| %>
-      <%= form.select :event_id, Event.all.order("starts_at DESC").collect{|event| ["#{event.name} - #{event.application.name} - #{event.starts_at}", event.id]}, {include_blank: true}, {class: "span4"} %>
-      <%= form.hidden_field :person_id %>
-      <%= form.submit "Add to event", class: "btn span2" %>
-    <% end %>
-    
-    <div id="reservations">
-      <%= render partial: 'reservations/reservation', collection: @person.reservations.order(:created_at) %>
-    </div>
   </div>
 </div>
- 
+
 
 <div class="row">
   <div class="span12">
