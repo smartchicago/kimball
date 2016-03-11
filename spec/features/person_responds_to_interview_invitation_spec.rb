@@ -17,6 +17,10 @@ feature 'Person responds to interview invitation' do
     current_email.click_link 'Please click to setup a time for your interview'
   end
 
+  scenario 'when a time slot is already taken but others are available'
+
+  scenario 'when no time slots are avaialble anymore'
+
   scenario 'over email, successfully' do
     @event.time_slots.each do |time|
       expect(page).to have_content time.to_time_and_weekday

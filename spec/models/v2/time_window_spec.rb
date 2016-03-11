@@ -32,5 +32,7 @@ describe V2::TimeWindow do
         end
       ).to_not be_nil
     end
+
+    context 'when a time slot is already reserved'
   end
 end

@@ -114,6 +114,7 @@ feature 'Invite people to a phone call' do
     message = accept_alert do
       click_button 'Send invitation'
     end
+
     expect(message).to eq('Please make sure that the End time is greater than the Start time')
   end
 end

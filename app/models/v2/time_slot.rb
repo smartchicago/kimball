@@ -6,6 +6,12 @@ class V2::TimeSlot < ActiveRecord::Base
   validates :start_time, presence: true
   validates :end_time,   presence: true
 
+  validate :not_double_booked
+
+  def not_double_booked
+    
+  end
+
   def to_time_and_weekday
     "#{start_time.strftime('%H:%M')} - #{end_time.strftime('%H:%M')} #{start_time.strftime('%A %d')}"
   end
