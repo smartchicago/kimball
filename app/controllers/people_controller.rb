@@ -13,13 +13,15 @@ class PeopleController < ApplicationController
     @people = Person.paginate(page: params[:page]).order('signup_at DESC')
   end
 
+
   # GET /people/1
   # GET /people/1.json
   def show
     @comment = Comment.new commentable: @person
     @reservation = Reservation.new person: @person
     @tagging = Tagging.new taggable: @person
-    @outgoingmessages = TwilioMessage.where(to: @person.phone_number)
+    @outgoingmessages = TwilioMessage.where(to: @person.phone_number).where.not(wufoo_formid: nil)
+
   end
 
   # GET /people/new
