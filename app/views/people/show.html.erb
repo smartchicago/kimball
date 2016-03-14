@@ -117,7 +117,7 @@
     </tr>
     <% for message in @outgoingmessages %>
       <tr>
-      <td><%= TwilioWufoo.where(id: message.wufoo_formid).name %></td>
+      <td><%= TwilioWufoo.where(id: message.wufoo_formid).last.name %></td>
       </tr>
     <% end %>
     </table>
