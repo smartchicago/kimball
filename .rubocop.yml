@@ -1,0 +1,75 @@
+AllCops:
+  TargetRubyVersion: 2.2
+  Include:
+    - '**/Rakefile'
+  Exclude:
+    - '**/bin/**/*'
+    - 'vendor/**/*'
+    - 'gemfiles/vendor/**/*'
+    - 'spec/dummy/db/schema.rb'
+    - 'db/**/*'
+    - 'test/**/**/*'
+    - 'config/**/**/*'
+
+Rails:
+  Enabled: true
+
+Rails/Validation:
+  Enabled: false
+
+Style/AlignHash:
+  EnforcedHashRocketStyle: table
+  EnforcedLastArgumentHashStyle: always_ignore
+
+Style/BracesAroundHashParameters:
+  Enabled: false
+
+Style/DotPosition:
+  EnforcedStyle: trailing
+
+Style/EmptyLinesAroundClassBody:
+  EnforcedStyle: empty_lines
+
+Style/EmptyLinesAroundModuleBody:
+  EnforcedStyle: empty_lines
+
+Style/IndentationConsistency:
+  EnforcedStyle: rails
+
+Style/IndentHash:
+  EnforcedStyle: consistent
+
+Style/RaiseArgs:
+  EnforcedStyle: compact
+
+Style/RedundantReturn:
+  AllowMultipleReturnValues: true
+
+Style/Documentation:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
+Style/SignalException:
+  EnforcedStyle: only_raise
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Exclude:
+    - 'spec/**/*'
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 25
+
+Metrics/LineLength:
+  Enabled: false
+  

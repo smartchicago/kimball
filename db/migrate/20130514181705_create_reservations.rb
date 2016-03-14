@@ -1,4 +1,5 @@
 class CreateReservations < ActiveRecord::Migration
+
   def change
     create_table :reservations do |t|
       t.integer :person_id
@@ -10,4 +11,5 @@ class CreateReservations < ActiveRecord::Migration
       t.timestamps
     end
   end
+
 end

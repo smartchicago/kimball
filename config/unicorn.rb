@@ -15,13 +15,13 @@ preload_app true
 timeout 30
 
 # Listen on a Unix data socket
-listen "/tmp/logan-#{rails_env}.sock", :backlog => 2048
+listen "/tmp/logan-#{rails_env}.sock", backlog: 2048
 
-before_exec do |server|
-  ENV["BUNDLE_GEMFILE"] = "/var/www/logan-#{rails_env}/current/Gemfile"
+before_exec do |_server|
+  ENV['BUNDLE_GEMFILE'] = "/var/www/logan-#{rails_env}/current/Gemfile"
 end
 
-before_fork do |server, worker|
+before_fork do |server, _worker|
   ##
   # When sent a USR2, Unicorn will suffix its pidfile with .oldbin and
   # immediately start loading up a new version of itself (loaded with a new
@@ -34,17 +34,16 @@ before_fork do |server, worker|
   # Using this method we get 0 downtime deploys.
 
   old_pid = Dir.pwd + '/tmp/pids/unicorn.pid.oldbin'
-  if File.exists?(old_pid) && server.pid != old_pid
+  if File.exist?(old_pid) && server.pid != old_pid
     begin
-      Process.kill("QUIT", File.read(old_pid).to_i)
+      Process.kill('QUIT', File.read(old_pid).to_i)
     rescue Errno::ENOENT, Errno::ESRCH
       # someone else did our job for us
     end
   end
 end
 
-
-after_fork do |server, worker|
+after_fork do |_server, _worker|
   ##
   # Unicorn master loads the app then forks off workers - because of the way
   # Unix forking works, we need to make sure we aren't using any of the parent's

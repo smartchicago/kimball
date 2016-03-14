@@ -1,4 +1,5 @@
 class CreateEvents < ActiveRecord::Migration
+
   def change
     create_table :events do |t|
       t.string :name
@@ -13,4 +14,5 @@ class CreateEvents < ActiveRecord::Migration
       t.timestamps
     end
   end
+
 end

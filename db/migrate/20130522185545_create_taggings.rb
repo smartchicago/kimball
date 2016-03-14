@@ -1,4 +1,5 @@
 class CreateTaggings < ActiveRecord::Migration
+
   def change
     create_table :taggings do |t|
       t.string :taggable_type
@@ -8,4 +9,5 @@ class CreateTaggings < ActiveRecord::Migration
       t.timestamps
     end
   end
+
 end

@@ -1,4 +1,5 @@
 class ApplicationsController < ApplicationController
+
   before_action :set_application, only: [:show, :edit, :update, :destroy]
 
   # GET /applications
@@ -62,6 +63,7 @@ class ApplicationsController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_application
       @application = Application.find(params[:id])
@@ -71,4 +73,5 @@ class ApplicationsController < ApplicationController
     def application_params
       params.require(:application).permit(:name, :description, :url, :source_url, :creator_name, :program_id)
     end
+
 end
