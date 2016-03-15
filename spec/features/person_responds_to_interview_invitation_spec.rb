@@ -18,8 +18,10 @@ feature 'Person responds to interview invitation' do
   end
 
   scenario 'when a time slot is already taken but others are available'
-
+  
   scenario 'when no time slots are avaialble anymore'
+  # expect page to display message that no time slots are available any more
+  # expect the page to not display the reservation form
 
   scenario 'over email, successfully' do
     @event.time_slots.each do |time|

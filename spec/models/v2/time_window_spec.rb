@@ -34,5 +34,9 @@ describe V2::TimeWindow do
     end
 
     context 'when a time slot is already reserved'
+    # expect time slot count to not include existing slot
+
+    context 'when time window is made up of a single time slot that is already taken'
+    # TimeWindow is not valid in this case
   end
 end
