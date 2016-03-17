@@ -17,11 +17,21 @@ feature 'Person responds to interview invitation' do
     current_email.click_link 'Please click to setup a time for your interview'
   end
 
-  scenario 'when a time slot is already taken but others are available'
-  
-  scenario 'when no time slots are avaialble anymore'
-  # expect page to display message that no time slots are available any more
-  # expect the page to not display the reservation form
+  scenario 'when a time slot is already taken but others are available' do
+        
+
+  end
+
+  scenario 'when no time slots are avaialble anymore', :focus do
+    
+    
+    expect(page).to have_content "We are sorry, but no more time slots are available. Please contact insert_email_here to set up another interview"
+    
+    @event.time_slots.each do |time|
+      expect(page).to_not have_content time.to_time_and_weekday
+    end   
+
+  end
 
   scenario 'over email, successfully' do
     @event.time_slots.each do |time|

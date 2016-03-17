@@ -1,9 +1,11 @@
-<% if slots are available %>
+<% if @time_slots.count == 0 %>
 
-<h1>Please reserve a time for the call</h1>
+  <h1>Please reserve a time for the call</h1>
 
-<%= render 'form' %>
+  <%= render 'form' %>
 
 <% else %>
 
-error message
+  <h1>We are sorry, but no more time slots are available. Please contact insert_email_here to set up another interview</h1>
+
+<% end %>
