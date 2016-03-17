@@ -17,8 +17,8 @@ class ReceiveTextController < ApplicationController
     @twilio_message.date_updated = params[:DateUpdated]
     @twilio_message.date_sent = params[:DateSent]
     @twilio_message.account_sid = params[:AccountSid]
-    @twilio_message.from = params[:From].gsub('+1', '').delete('-')
-    @twilio_message.to = params[:To].gsub('+1', '').delete('-')
+    @twilio_message.from = PhonyRails.normalize_number(params[:From])
+    @twilio_message.to = PhonyRails.normalize_number(params[:To])
     @twilio_message.body = params[:Body]
     @twilio_message.status = params[:SmsStatus]
     @twilio_message.error_code = params[:ErrorCode]
@@ -26,7 +26,8 @@ class ReceiveTextController < ApplicationController
     @twilio_message.direction = 'incoming-twiml'
     @twilio_message.save
 
-    from_number = params[:From].gsub('+1', '').delete('-').to_i # Removing +1 and converting to integer
+    # from_number = params[:From].gsub('+1', '').delete('-').to_i # Removing +1 and converting to integer
+    from_number = PhonyRails.normalize_number(params[:From])
     message = "Sorry, please try again. Text 'Hello' or 12345 to complete your signup!"
     if params[:Body].include?('12345') || params[:Body].downcase.include?('hello')
       @twilio_message.signup_verify = 'Verified'
@@ -63,7 +64,7 @@ class ReceiveTextController < ApplicationController
     session['counter'] ||= 0
     session['fieldanswers'] ||= {}
     session['fieldquestions'] ||= {}
-    session['phone_number'] ||= params[:From].gsub('+1', '').delete('-').to_i # Removing +1 and converting to integer
+    session['phone_number'] ||= PhonyRails.normalize_number(params[:From]) # Removing +1 and converting to integer
     session['contact'] ||= 'EMAIL'
     session['errorcount'] ||= 0
     session['formid'] ||= ''
@@ -84,8 +85,8 @@ class ReceiveTextController < ApplicationController
     @incoming.message_sid = params[:MessageSid]
     @incoming.date_sent = params[:DateSent]
     @incoming.account_sid = params[:AccountSid]
-    @incoming.from = params[:From].gsub('+1', '').delete('-')
-    @incoming.to = params[:To].gsub('+1', '').delete('-')
+    @incoming.from = params[:From]
+    @incoming.to = params[:To]
     @incoming.body = params[:Body].strip
     @incoming.status = params[:SmsStatus]
     @incoming.error_code = params[:ErrorCode]
@@ -163,6 +164,7 @@ class ReceiveTextController < ApplicationController
       fields = @form.flattened_fields
       session['fieldanswers'][fields[sms_count - 1]['ID']] = message_body
       session['fieldanswers'][fields[sms_count]['ID']] = session['phone_number']
+      result = @form.submit(session['fieldanswers'])
       if session['form_type'] == 'signup'
         message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive a text from 773-747-6239 with more details."
         if session['contact'] == 'EMAIL'
