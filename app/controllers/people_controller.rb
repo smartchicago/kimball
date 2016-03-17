@@ -13,7 +13,6 @@ class PeopleController < ApplicationController
     @people = Person.paginate(page: params[:page]).order('signup_at DESC')
   end
 
-
   # GET /people/1
   # GET /people/1.json
   def show
@@ -21,7 +20,7 @@ class PeopleController < ApplicationController
     @reservation = Reservation.new person: @person
     @tagging = Tagging.new taggable: @person
     @outgoingmessages = TwilioMessage.where(to: @person.normalized_phone_number).where.not(wufoo_formid: nil)
-    @outgoingmessages = @outgoingmessages.to_a.uniq{|p| p.wufoo_formid}
+    @outgoingmessages = @outgoingmessages.to_a.uniq { &:wufoo_formid }
     @messageCount = @outgoingmessages.count
     Rails.logger.info("[People Controller] messageCount = #{@messageCount}")
     Rails.logger.info("[People Controller] @outgoingmessages first = #{@outgoingmessages.first}")
