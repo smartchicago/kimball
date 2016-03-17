@@ -6,7 +6,7 @@ class V2::TimeSlot < ActiveRecord::Base
 
   validates :start_time, presence: true
   validates :end_time,   presence: true
-  validates :start_time, :end_time, overlap: { exclude_edges: ['start_time', 'end_time'] }
+  validates :start_time, :end_time, overlap: { exclude_edges: %w( start_time end_time ) }
 
   def to_time_and_weekday
     "#{start_time.strftime('%H:%M')} - #{end_time.strftime('%H:%M')} #{start_time.strftime('%A %d')}"

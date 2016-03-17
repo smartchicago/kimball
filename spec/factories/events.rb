@@ -5,7 +5,7 @@ FactoryGirl.define do
     description 'Lorem ipsum for now'
 
     before(:create) do |event|
-      3.times { event.time_slots << FactoryGirl.create(:time_slot) }
+      event.time_slots << FactoryGirl.build_list(:time_slot, 3)
     end
 
     trait :fully_booked do
