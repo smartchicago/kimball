@@ -6,34 +6,24 @@ feature 'Person responds to interview invitation' do
     clear_emails
     @event = FactoryGirl.create(:event)
     @person = FactoryGirl.create(:person)
-
-    EventInvitationMailer.invite(
-      email_address: @person.email_address,
-      event: @event,
-      person: @person).deliver_now
-
-    open_email(@person.email_address)
-
-    current_email.click_link 'Please click to setup a time for your interview'
   end
 
   scenario 'when a time slot is already taken but others are available' do
-        
-
   end
 
-  scenario 'when no time slots are avaialble anymore', :focus do
-    
-    
-    expect(page).to have_content "We are sorry, but no more time slots are available. Please contact insert_email_here to set up another interview"
-    
+  scenario 'when no time slots are avaialble anymore' do
+    send_invitation_email_for_event_then_book_all_event_time_slots
+
+    expect(page).to have_content 'We are sorry, but no more time slots are available. Please contact insert_email_here to set up another interview'
+
     @event.time_slots.each do |time|
       expect(page).to_not have_content time.to_time_and_weekday
-    end   
-
+    end
   end
 
   scenario 'over email, successfully' do
+    send_invitation_email_and_click_reservation_link
+
     @event.time_slots.each do |time|
       expect(page).to have_content time.to_time_and_weekday
     end
@@ -59,8 +49,29 @@ feature 'Person responds to interview invitation' do
   end
 
   scenario 'over email, but forgetting to select a time' do
+    send_invitation_email_and_click_reservation_link
+
     click_button 'Confirm reservation'
 
     expect(page).to have_content "No time slot was selected, couldn't create the reservation"
   end
+end
+
+def send_invitation_email_and_click_reservation_link
+  EventInvitationMailer.invite(
+    email_address: @person.email_address,
+    event: @event,
+    person: @person).deliver_now
+
+  open_email(@person.email_address)
+
+  current_email.click_link 'Please click to setup a time for your interview'
+end
+
+def send_invitation_email_for_event_then_book_all_event_time_slots
+  @event.time_slots.each do |slot|
+    slot.create_reservation(person: FactoryGirl.create(:person))
+  end
+
+  send_invitation_email_and_click_reservation_link
 end

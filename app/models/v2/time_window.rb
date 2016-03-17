@@ -15,11 +15,9 @@ class V2::TimeWindow
     slot_end   = slot_start + slot_length
 
     while slot_end <= end_time
-      existing_slot = ::V2::TimeSlot.where(start_time: slot_start, end_time: slot_end).first
-      
       slot = ::V2::TimeSlot.new(start_time: slot_start, end_time: slot_end)
 
-      @slots << slot unless existing_slot
+      @slots << slot if slot.valid?
 
       slot_start = slot_end
       slot_end   += slot_length

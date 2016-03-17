@@ -1,23 +1,23 @@
 require 'rails_helper'
 
 describe V2::TimeWindow do
-  describe '#slots' do
-    subject do
-      described_class.new(
-        date:  '06/12/2016',
-        start_time: '09:30',
-        end_time:   '10:30',
-        slot_length: '30 mins'
-      ).slots
-    end
+  subject do
+    described_class.new(
+      date:  '06/12/2016',
+      start_time: '09:30',
+      end_time:   '10:30',
+      slot_length: '30 mins'
+    )
+  end
 
+  describe '#slots' do
     it 'returns 2 time slots' do
-      expect(subject.count).to eql 2
+      expect(subject.slots.count).to eql 2
     end
 
     it 'returns a time slot from 09:30 to 10:00' do
       expect(
-        subject.find do |time_slot|
+        subject.slots.find do |time_slot|
           time_slot.start_time == Time.zone.parse('12/06/2016 09:30') &&
           time_slot.end_time   == Time.zone.parse('12/06/2016 10:00')
         end
@@ -26,17 +26,11 @@ describe V2::TimeWindow do
 
     it 'returns a time slot from 10:00 to 10:30' do
       expect(
-        subject.find do |time_slot|
+        subject.slots.find do |time_slot|
           time_slot.start_time == Time.zone.parse('12/06/2016 10:00') &&
           time_slot.end_time   == Time.zone.parse('12/06/2016 10:30')
         end
       ).to_not be_nil
     end
-
-    context 'when a time slot is already reserved'
-    # expect time slot count to not include existing slot
-
-    context 'when time window is made up of a single time slot that is already taken'
-    # TimeWindow is not valid in this case
   end
 end
