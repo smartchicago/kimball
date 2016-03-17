@@ -41,6 +41,7 @@ class Person < ActiveRecord::Base
   include ExternalDataMappings
 
   phony_normalize :phone_number, default_country_code: 'US'
+  phony_normalized_method :phone_number, default_country_code: 'US'
 
   has_many :comments, as: :commentable, dependent: :destroy
   has_many :submissions, dependent: :destroy
