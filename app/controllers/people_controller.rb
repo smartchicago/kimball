@@ -81,7 +81,7 @@ class PeopleController < ApplicationController
                                          when 'A'
                                            Person.map_connection_to_id('Broadband at home')
                                          when 'B'
-                                           Person.map_connection_to_id('plan with data')
+                                           Person.map_connection_to_id('Phone plan with data')
                                          when 'C'
                                            Person.map_connection_to_id('Public wi-fi')
                                          when 'D'
