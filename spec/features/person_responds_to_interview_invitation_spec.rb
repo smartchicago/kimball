@@ -21,7 +21,7 @@ feature 'Person responds to interview invitation' do
   scenario 'over email, successfully' do
     send_invitation_email_and_click_reservation_link
 
-    @event.time_slots.each do |time|
+    @event.available_time_slots.each do |time|
       expect(page).to have_content time.to_time_and_weekday
     end
 
@@ -29,7 +29,7 @@ feature 'Person responds to interview invitation' do
 
     click_button 'Confirm reservation'
 
-    selected_time = @event.time_slots.first.to_weekday_and_time
+    selected_time = @event.available_time_slots.first.to_weekday_and_time
 
     expect(page).to have_content "An interview has been booked for #{selected_time}"
 
