@@ -56,6 +56,7 @@ end
 
 def send_invitation_email_and_click_reservation_link
   EventInvitationMailer.invite(
+    from: 'admin@what.host.should.we.have.here.com',
     email_address: @person.email_address,
     event: @event,
     person: @person).deliver_now

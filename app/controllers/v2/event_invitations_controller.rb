@@ -22,6 +22,7 @@ class V2::EventInvitationsController < ApplicationController
     def send_notifications(event_invitation)
       event_invitation.email_addresses_to_array.each do |email_address|
         EventInvitationMailer.invite(
+          from: 'admin@what.host.should.we.have.here.com',
           email_address: email_address,
           event: event_invitation.event,
           person: Person.find_by(email_address: email_address)
