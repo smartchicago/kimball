@@ -448,6 +448,7 @@ DEPENDENCIES
   jdbc-sqlite3
   jquery-rails
   jquery-validation-rails
+  mail (= 2.6.3)
   memory_profiler
   memory_test_fix
   mocha

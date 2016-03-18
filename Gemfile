@@ -9,6 +9,8 @@ gem 'mysql2', '~> 0.3.18'
 
 gem 'validates_overlap'
 
+gem 'mail', '2.6.3'
+
 group :development do
   # gem 'capistrano'
   # mainline cap is busted w/r/t Rails 4. Try this fork instead.
