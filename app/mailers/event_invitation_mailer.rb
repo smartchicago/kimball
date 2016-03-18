@@ -4,9 +4,8 @@ class EventInvitationMailer < ApplicationMailer
     @email_address = email_address
     @event = event
     @person = person
-    @from = from
     mail(to: email_address,
-         from: from,
+         from: admin_email,
          bcc: admin_email,
          subject: 'Phone call interview')
   end
