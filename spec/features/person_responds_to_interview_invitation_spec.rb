@@ -8,9 +8,6 @@ feature 'Person responds to interview invitation' do
     @person = FactoryGirl.create(:person)
   end
 
-  scenario 'when a time slot is already taken but others are available' do
-  end
-
   scenario 'when no time slots are avaialble anymore' do
     send_invitation_email_for_event_then_book_all_event_time_slots
 
