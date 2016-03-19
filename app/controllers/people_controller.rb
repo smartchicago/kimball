@@ -19,7 +19,11 @@ class PeopleController < ApplicationController
     @comment = Comment.new commentable: @person
     @reservation = Reservation.new person: @person
     @tagging = Tagging.new taggable: @person
-    @outgoingmessages = TwilioMessage.where(to: @person.phone_number)
+    @outgoingmessages = TwilioMessage.where(to: @person.normalized_phone_number).where.not(wufoo_formid: nil)
+    @outgoingmessages = @outgoingmessages.to_a.uniq { |p| p.wufoo_formid }
+    @messageCount = @outgoingmessages.count
+    Rails.logger.info("[People Controller] messageCount = #{@messageCount}")
+    Rails.logger.info("[People Controller] @outgoingmessages first = #{@outgoingmessages.first}")
   end
 
   # GET /people/new
@@ -121,14 +125,14 @@ class PeopleController < ApplicationController
         @client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
         @twilio_message = TwilioMessage.new
         @twilio_message.from = ENV['TWILIO_SIGNUP_VERIFICATION_NUMBER']
-        @twilio_message.to = @person.phone_number
+        @twilio_message.to = @person.normalized_phone_number
         @twilio_message.body = "Thank you for signing up for the CUTGroup! Please text us 'Hello' or 12345 to complete your signup. If you did not sign up, text 'Remove Me' to be removed."
 
         @twilio_message.signup_verify = 'Yes'
         @twilio_message.save
         @message = @client.messages.create(
           from: ENV['TWILIO_SIGNUP_VERIFICATION_NUMBER'],
-          to: @person.phone_number,
+          to: @person.normalized_phone_number,
           body: @twilio_message.body
         # status_callback: request.base_url + "/twilio_messages/#{@twilio_message.id}/updatestatus"
         )

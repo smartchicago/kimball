@@ -40,6 +40,7 @@ class Person < ActiveRecord::Base
   include ExternalDataMappings
 
   phony_normalize :phone_number, default_country_code: 'US'
+  phony_normalized_method :phone_number, default_country_code: 'US'
 
   has_many :comments, as: :commentable, dependent: :destroy
   has_many :submissions, dependent: :destroy
@@ -85,8 +86,8 @@ class Person < ActiveRecord::Base
     'Field1'   => :first_name,
     'Field2'   => :last_name,
     'Field10'  => :email_address,
-    'Field261' => :voted,
-    'Field262' => :called_311,
+    'Field276' => :voted,
+    'Field277' => :called_311,
     'Field39'  => :primary_device_id, # type of primary
     'Field21'  => :primary_device_description, # desc of primary
     'Field40'  => :secondary_device_id,
