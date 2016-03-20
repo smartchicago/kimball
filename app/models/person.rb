@@ -75,14 +75,10 @@ class Person < ActiveRecord::Base
   validates :phone_number, presence: true, length: { in: 9..15 },
     unless: proc { |person| person.email_address.present? }
   validates :phone_number, allow_blank: true, uniqueness: true
-     
-    
 
   validates :email_address, presence: true,
     unless: proc { |person| person.phone_number.present? }
   validates :email_address, email: true, allow_blank: true, uniqueness: true
-   
-    
 
   self.per_page = 15
 

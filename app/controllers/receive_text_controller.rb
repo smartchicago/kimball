@@ -164,7 +164,7 @@ class ReceiveTextController < ApplicationController
       fields = @form.flattened_fields
       session['fieldanswers'][fields[sms_count - 1]['ID']] = message_body
       session['fieldanswers'][fields[sms_count]['ID']] = session['phone_number']
-      result = @form.submit(session['fieldanswers'])
+      @form.submit(session['fieldanswers'])
       if session['form_type'] == 'signup'
         message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive a text from 773-747-6239 with more details."
         if session['contact'] == 'EMAIL'

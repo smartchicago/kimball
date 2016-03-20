@@ -16,7 +16,6 @@ class SubmissionsController < ApplicationController
   # rubocop:disable Metrics/MethodLength
   #
   def create
-
     if params['HandshakeKey'].present?
       if Logan::Application.config.wufoo_handshake_key != params['HandshakeKey']
         Rails.logger.warn("[wufoo] received request with invalid handshake. Full request: #{request.inspect}")
@@ -45,25 +44,25 @@ class SubmissionsController < ApplicationController
 
     else
       @submission = Submission.new(
-        entry_id:          params["submission"]["entry_id"],
-        form_id:          params["submission"]["form_id"],
-        person_id:         params["submission"]["person_id"]
+        entry_id:          params['submission']['entry_id'],
+        form_id:          params['submission']['form_id'],
+        person_id:         params['submission']['person_id']
       )
-      person_id = params["submission"]["person_id"]
-      this_form_id = params["submission"]["form_id"]
-      #Rails.logger.info "[submissions_controller create] this_form_id = #{this_form_id}"
+      person_id = params['submission']['person_id']
+      this_form_id = params['submission']['form_id']
+      # Rails.logger.info "[submissions_controller create] this_form_id = #{this_form_id}"
       if this_form_id.present?
         this_form = Logan::Application.config.wufoo.form(this_form_id)
-        @submission.field_structure = {"Fields" => this_form.fields}.to_json
+        @submission.field_structure = { 'Fields' => this_form.fields }.to_json
         @submission.form_structure = this_form.details.to_json
-        raw_content = {"FieldStructure" => @submission.field_structure}
-        raw_content["FormStructure"] = @submission.form_structure
-        this_entry_id = params["submission"]["entry_id"]
-        #Rails.logger.info "[submissions_controller create] this_entry_id = #{this_entry_id}"
+        raw_content = { 'FieldStructure' => @submission.field_structure }
+        raw_content['FormStructure'] = @submission.form_structure
+        this_entry_id = params['submission']['entry_id']
+        # Rails.logger.info "[submissions_controller create] this_entry_id = #{this_entry_id}"
         if this_entry_id.present?
-          this_entry = this_form.entries(filters: [['EntryId','Is_equal_to', this_entry_id]]).first
-          #Rails.logger.info "@submission.raw_content = #{@submission.raw_content}"
-          #Rails.logger.info "this_entry = #{this_entry}"
+          this_entry = this_form.entries(filters: [['EntryId', 'Is_equal_to', this_entry_id]]).first
+          # Rails.logger.info "@submission.raw_content = #{@submission.raw_content}"
+          # Rails.logger.info "this_entry = #{this_entry}"
           raw_content = raw_content.merge(this_entry)
           @submission.raw_content = raw_content.to_json
         end
@@ -75,8 +74,7 @@ class SubmissionsController < ApplicationController
         Rails.logger.warn("SubmissionsController#create: failed to save new submission for #{person_id}")
         format.html { render action: 'new' }
       end
-
-    end      
+    end
   end
   # rubocop:enable Metrics/MethodLength
 
