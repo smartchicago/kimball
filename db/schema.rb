@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223170354) do
+ActiveRecord::Schema.define(version: 20160320050914) do
 
   create_table "applications", force: :cascade do |t|
     t.string   "name",         limit: 255
@@ -139,6 +139,8 @@ ActiveRecord::Schema.define(version: 20160223170354) do
     t.text     "field_structure", limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "form_id",         limit: 255
+    t.integer  "form_type",       limit: 4
   end
 
   create_table "taggings", force: :cascade do |t|

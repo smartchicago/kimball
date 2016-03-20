@@ -13,20 +13,17 @@
           </div>
         <% end %>
 
-        <%= f.label :person_id %>
-        <%= f.text_field :person_id, class: 'span6' %>
+        <%= f.label "Person ID (Number)" %>
+        <%= f.text_field :person_id, class: 'span2' %>
 
-        <%= f.label :entry_id %>
-        <%= f.text_field :entry_id, class: 'span6' %>
+        <%= f.label "Wufoo Form ID" %>
+        <%= f.select :form_id, Logan::Application.config.wufoo.forms.collect{|i| [i.id, i.id] } , :class => 'span6', :include_blank => true %>
 
-        <%= f.label :form_structure %>
-        <%= f.text_area :form_structure, class: 'span6' %>
+        <%= f.label "Wufoo Form Entry ID Number" %>
+        <%= f.text_field :entry_id, class: 'span2' %>
 
-        <%= f.label :field_structure %>
-        <%= f.text_area :field_structure, class: 'span6' %>
-
-        <%= f.label :raw_content %>
-        <%= f.text_area :raw_content, class: 'span6' %>
+        <%= f.label :form_type %>
+        <%= f.text_field :form_type, class: 'span4' %>
 
         <div class="form-actions">
           <%= f.submit 'Save', class: "btn btn-primary" %>
@@ -37,6 +34,6 @@
     <% end %>    
   </div>
   <div class="span6">
-    <p class="well">Programs are the societal issue that individual applications are attempting to address. "Safe passage to school" and "affordable broadband" are examples of Programs.</p>
+    <p class="well">This form can be used to add a submission from Wufoo and join it with an existing Person.</p>
   </div>
 </div>

@@ -26,6 +26,12 @@ class SubmissionsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:submissions)
   end
 
+  test 'should get new' do
+    get :new
+    assert_response :success
+  end
+
+
   private
 
     def fake_wufoo_submission
@@ -45,5 +51,7 @@ class SubmissionsControllerTest < ActionController::TestCase
         IP:	'69.245.247.117'
       }
     end
+
+
 
 end
