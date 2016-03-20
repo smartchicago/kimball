@@ -1,0 +1,49 @@
+<%= form_for @event_invitation, url: v2_event_invitations_path, html: { class: 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :email_addresses, "People's email addresses", :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :email_addresses, :class => 'text_area' %>
+      <p>* comma separated</p>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :description, 'Event description', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :description, :class => 'text_area' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :slot_length, 'Call length', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :slot_length, options_for_select([15,30,45,60].map {|o| "#{o.to_s} mins"}), :class => 'text_field' %>
+    </div>
+  </div>
+
+  <h2>Time window</h2>
+  <div class="control-group">
+    <%= f.label :date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :date, :class => 'text_field datepicker' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :start_time, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :start_time, simple_time_select_options, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :end_time, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :end_time, simple_time_select_options, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit 'Send invitation', :class => 'btn btn-primary', :id => 'submit' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                people_path, :class => 'btn' %>
+  </div>
+<% end %>

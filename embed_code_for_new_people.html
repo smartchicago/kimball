@@ -1,0 +1,40 @@
+<iframe id="patterns_iframe" src="#"></iframe>
+<script>
+document.getElementById('patterns_iframe').src="https://patterns.brl.nyc/public/people/new?referrer=" + window.location.href;
+var jQueryScriptOutputted = false;
+function initJQuery() {
+  //if the jQuery object isn't available
+  if (typeof(jQuery) === 'undefined') {
+    if (! jQueryScriptOutputted) {
+      //only output the script once..
+      jQueryScriptOutputted = true;
+      //output the script (load it from google api)
+      var s = document.createElement('script');
+       s.src ="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js";
+      document.head.appendChild(s);
+    }
+    setTimeout("initJQuery()", 50);
+  } else {
+    jQuery(function() {
+      var s = document.createElement('script');
+      s.src = "https://patterns.brl.nyc/js/seamless.parent.min.js";
+      document.head.appendChild(s);
+      setTimeout("initSeamless()", 50);
+    });
+  }
+}
+function initSeamless(){
+  jQuery(function() {
+    if (jQuery.isFunction(jQuery.fn.seamless)){
+      var child = jQuery('#patterns_iframe').seamless();
+      var cssSheets = jQuery.map(document.styleSheets,function(n,style){
+        return n.href ?  n.href : null;
+      });
+      child.send({ stylesheets: cssSheets});
+    }else{
+      setTimeout("initSeamless()", 50);
+    }
+  });
+}
+initJQuery();
+</script>

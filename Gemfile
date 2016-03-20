@@ -31,6 +31,12 @@ group :development do
 
   # a console in your browser, when you want to interrogate views.
   gem 'web-console'
+
+  # silences logging of requests for assets
+  gem 'quiet_assets'
+
+  # enabling us to deploy via travis and encrypted keys!
+  gem 'travis'
 end
 
 group :production do
@@ -93,15 +99,26 @@ gem 'twilio-ruby'
 # use Wuparty for wufoo
 gem 'wuparty'
 
-# for phone number normalization
-gem 'phony_rails'
-
 # Use gsm_encoder to help text messages send correctly
 gem 'gsm_encoder'
 
 # use Delayed Job to queue messages
 gem 'delayed_job_active_record'
 gem 'daemons'
+
+#for generating unique tokens for Person
+gem 'has_secure_token'
+
+# phone number validation
+gem 'phony_rails'
+
+# zip code validation
+gem 'validates_zipcode'
+
+# in place editing
+gem 'best_in_place', '~> 3.0.1'
+
+gem 'jquery-validation-rails'
 
 group :testing do
   # mock tests w/mocha
@@ -119,7 +136,6 @@ group :testing do
 end
 
 group :development, :test do
-  gem 'dotenv-rails'
   gem 'rspec-rails', '~> 3.0'
   gem 'guard'
   gem 'guard-rspec', require: false
@@ -127,4 +143,10 @@ group :development, :test do
   gem 'guard-rubocop'
   gem 'guard-bundler', require: false
   gem 'capybara'
+  gem 'capybara-email'
+  gem 'pry'
+  gem 'factory_girl_rails'
+  gem 'shoulda-matchers', '~> 3.1.1', require: false
+  gem 'database_cleaner'
+  gem 'poltergeist'
 end
