@@ -3,6 +3,15 @@ class SubmissionsController < ApplicationController
   skip_before_action :authenticate_user!, if: :should_skip_janky_auth?
   skip_before_action :verify_authenticity_token, only: [:create]
 
+  # GET /submission/new
+  def new
+    @submission = Submission.new
+  end
+
+  # GET /submission/1/edit
+  def edit
+  end
+
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Metrics/MethodLength
   #
