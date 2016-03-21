@@ -4,6 +4,7 @@ class ReservationNotifier < ApplicationMailer
     @email_address = email_address
     @reservation = reservation
     mail(to: email_address,
+         from: admin_email,
          bcc: admin_email,
          subject: 'Interview scheduled')
   end
