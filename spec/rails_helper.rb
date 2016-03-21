@@ -5,6 +5,7 @@ require 'rspec/rails'
 require 'spec_helper'
 require 'shoulda/matchers'
 require 'database_cleaner'
+require 'support/helpers'
 
 ActiveRecord::Migration.maintain_test_schema!
 
@@ -16,7 +17,8 @@ Shoulda::Matchers.configure do |config|
 end
 
 RSpec.configure do |config|
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
+  config.include Helpers
+
   config.fixture_path = "#{::Rails.root}/test/fixtures"
 
   config.use_transactional_fixtures = false
