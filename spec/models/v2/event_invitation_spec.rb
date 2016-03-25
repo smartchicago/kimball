@@ -28,8 +28,13 @@ describe V2::EventInvitation do
         expect { subject.save }.to change { V2::Event.count }.from(0).to(1)
       end
 
-      it 'creates a new time slots' do
+      it 'creates new time slots' do
         expect { subject.save }.to change { V2::TimeSlot.count }.from(0).to(2)
+      end
+
+      it 'finds the invitees and associates the to the event' do
+        subject.save
+        expect(subject.invitees.collect(&:id).sort).to eql people.collect(&:id).sort
       end
     end
 

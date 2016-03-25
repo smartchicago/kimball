@@ -1,4 +1,6 @@
 class V2::Event < ActiveRecord::Base
+  self.table_name = 'v2_events'
+
   has_many :time_slots, class_name: '::V2::TimeSlot'
 
   validates :description, presence: true

@@ -153,4 +153,5 @@ group :development, :test do
   gem 'shoulda-matchers', '~> 3.1.1', require: false
   gem 'database_cleaner'
   gem 'poltergeist'
+  gem 'sms-spec'
 end

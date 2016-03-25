@@ -6,6 +6,9 @@ require 'spec_helper'
 require 'shoulda/matchers'
 require 'database_cleaner'
 require 'support/helpers'
+require 'sms_spec'
+
+SmsSpec.driver = :'twilio-ruby'
 
 ActiveRecord::Migration.maintain_test_schema!
 
@@ -18,6 +21,8 @@ end
 
 RSpec.configure do |config|
   config.include Helpers
+  config.include SmsSpec::Helpers
+  config.include SmsSpec::Matchers
 
   config.fixture_path = "#{::Rails.root}/test/fixtures"
 

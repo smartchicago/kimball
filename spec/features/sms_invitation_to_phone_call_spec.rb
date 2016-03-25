@@ -1,11 +1,10 @@
 require 'rails_helper'
-require 'faker'
-require_relative '../support/twilio_mocker'
 
 feature 'SMS invitation to phone call' do
+  include SmsSpec::Helpers
+
   before do
-    stub_const('Twilio::REST::Client', TwilioMocker)
-    TwilioMocker.messages = []
+    clear_messages
     @research_subject = FactoryGirl.create(:person, preferred_contact_method: 'SMS')
   end
 
@@ -30,20 +29,27 @@ feature 'SMS invitation to phone call' do
 
     expect(page).to have_text 'Person was successfully invited.'
 
-    last_message = TwilioMocker.messages.last
+    event = V2::Event.last
 
-    invitation_link = new_v2_reservation_url(
-      email_address: @research_subject.email_address,
-      event_id: Event.last.id,
-      token: @research_subject.token
-    )
+    open_last_text_message_for @research_subject.phone_number
 
-    expected = <<-SMS
-Hello, you've been invited to a phone interview
+    expected = "Hello #{@research_subject.first_name},\n"
 
-#{invitation_link}
-    SMS
+    expected << "#{event.description}\n"
 
-    expect(last_message.body).to eql expected
+    expected << "If you're available, would you so kind to select one of the possible times below,"
+    expected << " by texting back its respective number?\n\n"
+
+    expected << "#{event.id}0) Decline\n"
+    event.available_time_slots.each_with_index do |slot, i|
+      expected << "#{event.id}#{i+1}) #{slot.to_time_and_weekday}\n"
+    end
+
+    expected << "\nThanks in advance for you time!\n\n"
+
+    # TODO: signature should be configurable
+    expected << 'Best, Kimball team'
+
+    expect(current_text_message.body).to eql expected
   end
 end

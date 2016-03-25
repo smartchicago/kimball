@@ -20,50 +20,30 @@ class V2::EventInvitationsController < ApplicationController
   private
 
     def send_notifications(event_invitation)
-      event_invitation.email_addresses_to_array.each do |email_address|
-        person = Person.find_by(email_address: email_address)
-
-        case person.preferred_contact_method.upcase
+      event = event_invitation.event
+      event_invitation.invitees.each do |invitee|
+        case invitee.preferred_contact_method.upcase
         when 'SMS'
-          send_sms(event_invitation, person)
+          send_sms(invitee, event)
         when 'EMAIL'
-          send_email(event_invitation, person)
+          send_email(invitee, event)
         end
       end
     end
 
-    def send_email(event_invitation, person)
+    def send_email(person, event)
       EventInvitationMailer.invite(
         email_address: person.email_address,
-        event: event_invitation.event,
+        event:  event,
         person: person
       ).deliver_later
     end
 
-    def send_sms(event_invitation, person)
-      client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
-
-      client.messages.create(
-        from: ENV['TWILIO_NUMBER'],
-        to: person.phone_number,
-        body: sms_message(event_invitation, person)
-      )
+    def send_sms(person, event)
+      ::EventInvitationSms.new(to: person, event: event).send
     end
 
-    def sms_message(event_invitation, person)
-      invitation_link = new_v2_reservation_url(
-        email_address: person.email_address,
-        event_id: event_invitation.event.id,
-        token: person.token
-      )
-
-      <<-SMS
-Hello, you've been invited to a phone interview
-
-#{invitation_link}
-      SMS
-    end
-
+    # TODO: add a nested :event
     def event_invitation_params
       params.require(:v2_event_invitation).
         permit(

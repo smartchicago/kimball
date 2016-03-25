@@ -6,6 +6,7 @@ Logan::Application.routes.draw do
   namespace :v2 do
     resources :event_invitations, only: [:new, :create]
     resources :reservations, only: [:new, :create]
+    resources :sms_reservations, only: [:create]
   end
 
   get 'registration', to: 'public/people#new'
