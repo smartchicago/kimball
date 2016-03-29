@@ -69,7 +69,7 @@ module PeopleHelper
         #                 MMERGE14: person.preferred_contact_method }
         # })
       rescue Gibbon::MailChimpError => e
-        Rails.logger.fatal("[People->sendToMailChimp] fatal error sending #{person.id} to Mailchimp: #{e.message}")
+        Rails.logger.fatal("[People_Helper->sendToMailChimp] fatal error sending #{person.id} to Mailchimp: #{e.message}")
       end
     end
   end

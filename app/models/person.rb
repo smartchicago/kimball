@@ -171,44 +171,25 @@ class Person < ActiveRecord::Base
       if verified.present?
         if verified.start_with?('Verified')
           begin
-            # mailchimpSend = Gibbon.list_subscribe({
-            #   id: Logan::Application.config.cut_group_mailchimp_list_id,
-            #   email_address: email_address,
-            #   double_optin: 'false',
-            #   update_existing: 'true',
-            #   merge_vars: { FNAME: first_name,
-            #                 LNAME: last_name,
-            #                 MMERGE3: geography_id,
-            #                 MMERGE4: postal_code,
-            #                 MMERGE5: participation_type,
-            #                 MMERGE6: voted,
-            #                 MMERGE7: called_311,
-            #                 MMERGE8: primary_device_description,
-            #                 MMERGE9: secondary_device_type_name,
-            #                 MMERGE10: secondary_device_description,
-            #                 MMERGE11: primary_connection_type_name,
-            #                 MMERGE12: primary_connection_description,
-            #                 MMERGE13: primary_device_type_name,
-            #                 MMERGE14: preferred_contact_method }
-            # })
+
             gibbon = Gibbon::Request.new
             mailchimpSend = gibbon.lists(Logan::Application.config.cut_group_mailchimp_list_id).members(Digest::MD5.hexdigest(email_address.downcase)).upsert(
                 body: {email_address: email_address.downcase, 
                  status: "subscribed",
-                 merge_fields: { FNAME: first_name,
-                        LNAME: last_name,
-                        MMERGE3: geography_id,
-                        MMERGE4: postal_code,
-                        MMERGE5: participation_type,
-                        MMERGE6: voted,
-                        MMERGE7: called_311,
-                        MMERGE8: primary_device_description,
-                        MMERGE9: secondary_device_id,
-                        MMERGE10: secondary_device_description,
-                        MMERGE11: primary_connection_id,
-                        MMERGE12: primary_connection_description,
-                        MMERGE13: primary_device_id,
-                        MMERGE14: preferred_contact_method }
+                 merge_fields: { FNAME: first_name || "",
+                        LNAME: last_name || "",
+                        MMERGE3: geography_id || "",
+                        MMERGE4: postal_code || "",
+                        MMERGE5: participation_type || "",
+                        MMERGE6: voted || "",
+                        MMERGE7: called_311 || "",
+                        MMERGE8: primary_device_description || "",
+                        MMERGE9: secondary_device_id || "",
+                        MMERGE10: secondary_device_description || "",
+                        MMERGE11: primary_connection_id || "",
+                        MMERGE12: primary_connection_description || "",
+                        MMERGE13: primary_device_id || "",
+                        MMERGE14: preferred_contact_method || "" }
                  })
 
             Rails.logger.info("[People->sendToMailChimp] Sent #{id} to Mailchimp: #{mailchimpSend}")
