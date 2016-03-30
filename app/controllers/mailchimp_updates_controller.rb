@@ -6,7 +6,7 @@ class MailchimpUpdatesController < ApplicationController
   # GET /mailchimp_updates
   # GET /mailchimp_updates.json
   def index
-    @mailchimp_updates = MailchimpUpdate.all
+    @mailchimp_updates = MailchimpUpdate.paginate(page: params[:page]).order('fired_at DESC')
   end
 
   # GET /mailchimp_updates/1
