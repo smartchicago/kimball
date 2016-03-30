@@ -17,6 +17,7 @@ class MailchimpUpdate < ActiveRecord::Base
     	@comment.commentable_id = person.id
     	@comment.save
   	  end
+
   	end
   end
 
