@@ -1,5 +1,7 @@
 class MailchimpUpdatesController < ApplicationController
   before_action :set_mailchimp_update, only: [:show, :edit, :update, :destroy]
+  skip_before_action :authenticate_user!, if: :should_skip_janky_auth?
+  skip_before_action :verify_authenticity_token, only: [:create]
 
   # GET /mailchimp_updates
   # GET /mailchimp_updates.json
@@ -24,6 +26,7 @@ class MailchimpUpdatesController < ApplicationController
   # POST /mailchimp_updates
   # POST /mailchimp_updates.json
   def create
+    Rails.logger.info("MailchimpUpdatesController#create: Received new update with params: #{params}")
     @mailchimp_update = MailchimpUpdate.new(
       email:        params['data']['email'],
       update_type:  params['type'],
@@ -78,5 +81,10 @@ class MailchimpUpdatesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def mailchimp_update_params
       params.require(:mailchimp_update).permit(:raw_content, :email, :update_type, :reason, :fired_at)
+    end
+
+    def should_skip_janky_auth?
+      # don't attempt authentication on reqs from wufoo
+      params[:action] == 'create'
     end
 end
