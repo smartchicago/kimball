@@ -26,26 +26,33 @@ class MailchimpUpdatesController < ApplicationController
   # POST /mailchimp_updates
   # POST /mailchimp_updates.json
   def create
-    Rails.logger.info("MailchimpUpdatesController#create: Received new update with params: #{params}")
-    @mailchimp_update = MailchimpUpdate.new(
-      email:        params['data']['email'],
-      update_type:  params['type'],
-      fired_at:     params['fired_at'],
-      raw_content:  params.to_json
+    if params['mailchimpkey'].present? 
+      if params['mailchimpkey'] == ENV['MAILCHIMP_WEBHOOK_SECRET_KEY']
+        Rails.logger.info("MailchimpUpdatesController#create: Received new update with params: #{params}")
+        @mailchimp_update = MailchimpUpdate.new(
+          email:        params['data']['email'],
+          update_type:  params['type'],
+          fired_at:     params['fired_at'],
+          raw_content:  params.to_json
 
-      )
+          )
 
-    @mailchimp_update.reason = params['data']['reason'] || nil
+        @mailchimp_update.reason = params['data']['reason'] || nil
 
-    respond_to do |format|
-      if @mailchimp_update.save
-        format.html { redirect_to @mailchimp_update, notice: 'Mailchimp update was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @mailchimp_update }
+        respond_to do |format|
+          if @mailchimp_update.save
+            format.html { redirect_to @mailchimp_update, notice: 'Mailchimp update was successfully created.' }
+            format.json { render action: 'show', status: :created, location: @mailchimp_update }
+          else
+            format.html { render action: 'new' }
+            format.json { render json: @mailchimp_update.errors, status: :unprocessable_entity }
+          end
+        end
       else
-        format.html { render action: 'new' }
-        format.json { render json: @mailchimp_update.errors, status: :unprocessable_entity }
+        Rails.logger.warn("MailchimpUpdatesController#create: Received new update with bad secret key.")
       end
     end
+    
   end
 
   # PATCH/PUT /mailchimp_updates/1
