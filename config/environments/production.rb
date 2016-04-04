@@ -92,9 +92,17 @@ Logan::Application.configure do
   # Analytics
   config.google_analytics_enabled = true
 
-  config.action_mailer.delivery_method = :sendmail
+
+  config.action_mailer.smtp_settings = {
+    :address   => ENV["SMTP_HOST"],
+    :port      => ENV["SMTP_PORT"],
+    :user_name => ENV["SMTP_USERNAME"],
+    :password  => ENV["SMTP_PASSWORD"]
+  }
+  config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.default :charset => "utf-8"
 
   config.middleware.use Rack::TwilioWebhookAuthentication, ENV['TWILIO_AUTH_TOKEN'], '/receive_text/index'
 end
