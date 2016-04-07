@@ -17,7 +17,7 @@ class Tag < ActiveRecord::Base
   has_many :taggings
 
   def tag_count
-    self.taggings_count
+    taggings_count
   end
 
   def self.most_popular(limit = 10)

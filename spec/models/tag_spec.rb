@@ -15,7 +15,7 @@ describe Tag do
 
     @tag = Tag.find_or_initialize_by(name: subject.name)
     @tag.created_by ||= user.id
-    @tagging = Tagging.new( taggable_type: person.class.to_s,
+    @tagging = Tagging.new(taggable_type: person.class.to_s,
                             taggable_id: person.id,
                             tag: subject)
 
