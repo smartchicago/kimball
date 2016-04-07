@@ -3,12 +3,12 @@
 # Table name: submissions
 #
 #  id              :integer          not null, primary key
-#  raw_content     :text
+#  raw_content     :text(65535)
 #  person_id       :integer
 #  ip_addr         :string(255)
 #  entry_id        :string(255)
-#  form_structure  :text
-#  field_structure :text
+#  form_structure  :text(65535)
+#  field_structure :text(65535)
 #  created_at      :datetime
 #  updated_at      :datetime
 #

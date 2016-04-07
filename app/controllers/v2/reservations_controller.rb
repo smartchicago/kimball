@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: v2_reservations
+#
+#  id           :integer          not null, primary key
+#  time_slot_id :integer
+#  person_id    :integer
+#
+
 class V2::ReservationsController < ApplicationController
   skip_before_action :authenticate_user!
 

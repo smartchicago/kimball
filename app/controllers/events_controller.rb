@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: events
+#
+#  id             :integer          not null, primary key
+#  name           :string(255)
+#  description    :text(65535)
+#  starts_at      :datetime
+#  ends_at        :datetime
+#  location       :text(65535)
+#  address        :text(65535)
+#  capacity       :integer
+#  application_id :integer
+#  created_at     :datetime
+#  updated_at     :datetime
+#  created_by     :integer
+#  updated_by     :integer
+#
+
 class EventsController < ApplicationController
 
   before_action :set_event, only: [:show, :edit, :update, :destroy, :export]

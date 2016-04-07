@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: v2_events
+#
+#  id          :integer          not null, primary key
+#  user_id     :integer
+#  description :string(255)
+#
+
 class V2::Event < ActiveRecord::Base
   self.table_name = 'v2_events'
 

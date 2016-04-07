@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: reservations
+#
+#  id           :integer          not null, primary key
+#  person_id    :integer
+#  event_id     :integer
+#  confirmed_at :datetime
+#  created_by   :integer
+#  attended_at  :datetime
+#  created_at   :datetime
+#  updated_at   :datetime
+#  updated_by   :integer
+#
+
 class ReservationsController < ApplicationController
 
   before_action :set_reservation, only: [:show, :edit, :update, :destroy]

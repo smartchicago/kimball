@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: v2_event_invitations
+#
+#  id              :integer          not null, primary key
+#  v2_event_id     :integer
+#  email_addresses :string(255)
+#  description     :string(255)
+#  slot_length     :string(255)
+#  date            :string(255)
+#  start_time      :string(255)
+#  end_time        :string(255)
+#
+
 class V2::EventInvitationsController < ApplicationController
   def new
     @event_invitation = V2::EventInvitation.new(email_addresses: params[:email_addresses])

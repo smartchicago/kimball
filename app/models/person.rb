@@ -30,6 +30,7 @@
 #  secondary_connection_description :string(255)
 #  verified                         :string(255)
 #  preferred_contact_method         :string(255)
+#  token                            :string(255)
 #
 
 # FIXME: Refactor and re-enable cop

@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: v2_time_slots
+#
+#  id         :integer          not null, primary key
+#  event_id   :integer
+#  start_time :datetime
+#  end_time   :datetime
+#
+
 class V2::TimeSlot < ActiveRecord::Base
   self.table_name = 'v2_time_slots'
 

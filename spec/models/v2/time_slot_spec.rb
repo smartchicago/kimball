@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: v2_time_slots
+#
+#  id         :integer          not null, primary key
+#  event_id   :integer
+#  start_time :datetime
+#  end_time   :datetime
+#
+
 require 'rails_helper'
 
 describe V2::TimeSlot do

@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: v2_events
+#
+#  id          :integer          not null, primary key
+#  user_id     :integer
+#  description :string(255)
+#
+
 require 'rails_helper'
 
 describe V2::Event do
