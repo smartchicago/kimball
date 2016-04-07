@@ -1,18 +1,20 @@
 //All time is converted to seconds for easier comparison
 
-$(function(){
+var event_ready;
+
+event_ready = function(){
 
   var slotLengthElement = $("#v2_event_invitation_slot_length");
   var startTimeElement = $("#v2_event_invitation_start_time");
   var endTimeElement = $("#v2_event_invitation_end_time");
 
   $("#submit").click(function(e){
-    var slotLength = parseInt(slotLengthElement.val().substr(0,2)) * 60;
+    var slotLength = parseInt(slotLengthElement.val().substr(0,2),10) * 60;
     var startTime = timeToSeconds(startTimeElement.val());
     var endTime = timeToSeconds(endTimeElement.val());
 
     if(isEndTimeAfterStartTime(startTime, endTime)){
-      var alertMessage = "Please make sure that the End time is greater than the Start time"
+      var alertMessage = "Please make sure that the End time is greater than the Start time";
       alert(alertMessage);
       endTimeElement.wrap("<div class='field_with_errors'></div>");
       e.preventDefault();
@@ -31,11 +33,11 @@ $(function(){
   });
 
   function isTimeWindowMultipleOfSlotLength(slotLength, startTime, endTime) {
-    return ((endTime - startTime) % slotLength != 0);
+    return ((endTime - startTime) % slotLength !== 0);
   }
 
   function isEndTimeAfterStartTime(startTime, endTime) {
-    return !(endTime > startTime)
+    return !(endTime > startTime);
   }
 
   function timeToSeconds(time) {
@@ -45,4 +47,7 @@ $(function(){
 
   $('.datepicker').datepicker();
 
-});
+};
+
+// loading for turbolinks etc.
+$(document).on('page:load ready', event_ready);
