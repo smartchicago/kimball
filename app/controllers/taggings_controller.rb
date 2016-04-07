@@ -34,4 +34,10 @@ class TaggingsController < ApplicationController
     end
   end
 
+  def search
+    @tags = Tag.where("name like ?","#{params[:q]}%").
+                order(taggings_count: :desc)
+    render json: @tags
+  end
+
 end

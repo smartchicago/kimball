@@ -31,6 +31,8 @@ Logan::Application.routes.draw do
 
   get 'taggings/create'
   get 'taggings/destroy'
+  get 'taggings/search'
+
   get 'mailchimp_export/index'
   get 'mailchimp_export/create'
   resources :reservations

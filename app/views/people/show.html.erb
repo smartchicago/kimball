@@ -78,7 +78,7 @@
         <%= form_for(@tagging, remote: true, html: { class: "form-inline" }) do |form| %>
           <%= form.hidden_field :taggable_type, value: "Person" %>
           <%= form.hidden_field :taggable_id, value: @person.id %>
-          <%= form.text_field :name, class: "input span2", placeholder: "new tag", data: { provide: 'typeahead', source: Tag.most_popular(25).collect{|tag| tag.name } }, autocomplete: 'off' %>
+          <%= form.text_field :name, id: 'typeahead', class: "input span2 typehead", placeholder: "new tag", autocomplete: 'off' %>
           <%= form.submit "Add", class: "btn span1" %>
         <% end %>
       </div>

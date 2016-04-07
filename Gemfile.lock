@@ -379,6 +379,10 @@ GEM
       execjs
       rails (>= 3.1)
       railties (>= 3.1)
+    twitter-typeahead-rails (0.11.1)
+      actionpack (>= 3.1)
+      jquery-rails
+      railties (>= 3.1)
     typhoeus (0.8.0)
       ethon (>= 0.8.0)
     tzinfo (1.2.2)
@@ -477,6 +481,7 @@ DEPENDENCIES
   turbolinks
   twilio-ruby
   twitter-bootstrap-rails (~> 2.2.0)
+  twitter-typeahead-rails
   uglifier (>= 1.0.3)
   unicorn
   validates_overlap
