@@ -3,6 +3,17 @@ $(document).on('ready page:load', function () {
   // initialize bloodhound engine
   var searchSelector = 'input#typeahead';
 
+
+  //filters out tags that are already in the list
+  var filter = function(suggestions) {
+    var current_tags = $('#tag-list li').map(function(index,el){
+      return el.children[0].text
+    })
+    return $.grep(suggestions, function(suggestion) {
+        return $.inArray(suggestion.name,current_tags) === -1;
+    });
+  }
+
   var bloodhound = new Bloodhound({
     datumTokenizer: function (d) {
       return Bloodhound.tokenizers.whitespace(d.value);
@@ -13,7 +24,8 @@ $(document).on('ready page:load', function () {
     remote: {
       url:'/taggings/search?q=%QUERY',
       wildcard: '%QUERY',
-      limit: 10
+      limit: 20,
+      filter: filter
     }
   });
   bloodhound.initialize();
@@ -24,6 +36,6 @@ $(document).on('ready page:load', function () {
     name: 'Tags',
     displayKey: 'name',
     source: bloodhound.ttAdapter()
-  });
+  })
 
 });
