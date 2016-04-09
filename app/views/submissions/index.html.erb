@@ -5,7 +5,17 @@
     <table class="table table-striped">
       <tr><th>Submitted by</th><th>Form Name</th><th>Submitted at</th></tr>
       <% for submission in @submissions do %>
-      <tr><td><%= link_to submission.person.full_name, person_path(submission.person, anchor: "submission-#{submission.id}") %></td><td><%= submission.form_name %></td><td><%= submission.created_at.to_s(:long) %></td></tr>
+      <tr>
+      	<td>
+          <% if submission.person.present? %>
+ 		    <%= link_to submission.person.full_name, person_path(submission.person, anchor: "submission-#{submission.id}") %>
+		  <% else %>
+ 			UnMatched
+		  <% end %>
+      	</td>
+      <td><%= submission.form_name %></td>
+      <td><%= submission.created_at.to_s(:long) %></td>
+      </tr>
       <% end %>
     </table>
   </div>
