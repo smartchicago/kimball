@@ -15,7 +15,7 @@
 
 class Submission < ActiveRecord::Base
 
-  validates_presence_of :person, :raw_content
+  validates_presence_of :raw_content
   belongs_to :person
 
   def fields
@@ -52,6 +52,16 @@ class Submission < ActiveRecord::Base
     JSON.parse(field_structure)['Fields'].each do |field|
       return field_value(field['ID']) if field['Title'] == 'Email'
     end
+    return nil
+  end
+
+  def form_email_or_phone_number
+    JSON.parse(field_structure)['Fields'].each do |field|
+      return field_value(field['ID']) if field['Title'] == 'Email'
+      return field_value(field['ID']) if field['Title'] == 'Email or Phone Number'
+      return field_value(field['ID']) if field['Title'] == 'Phone number'  
+    end
+    return nil
   end
 
   def submission_values

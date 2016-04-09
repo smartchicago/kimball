@@ -32,18 +32,28 @@ class SubmissionsController < ApplicationController
 
       # Parse the email, and add the associated person
       email_address = @submission.form_email || nil
-      @submission.person = Person.find_by_email_address(email_address)
+      person_identifier = @submission.form_email_or_phone_number
+      this_person = nil
+      if person_identifier.present?
+        this_person = Person.where('lower(email_address) = ?', person_identifier.downcase).last      
+        if this_person.blank?
+          test_number = PhonyRails.normalize_number(person_identifier)
+          this_person = Person.where('phone_number = ?', test_number).last  
+        end
+      end
+      @submission.person = this_person
 
       if @submission.save
-        Rails.logger.info("SubmissionsController#create: recorded a new submission for #{email_address}")
+        Rails.logger.info("SubmissionsController#create: recorded a new submission for #{person_identifier}")
         head '201'
       else
-        Rails.logger.warn("SubmissionsController#create: failed to save new submission for #{email_address}")
+        Rails.logger.warn("SubmissionsController#create: failed to save new submission for #{person_identifier}")
         head '400'
       end
 
     else
       @submission = Submission.new(
+        raw_content:       "",
         entry_id:          params['submission']['entry_id'],
         form_id:          params['submission']['form_id'],
         person_id:         params['submission']['person_id']
