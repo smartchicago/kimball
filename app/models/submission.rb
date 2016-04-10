@@ -21,9 +21,11 @@ class Submission < ActiveRecord::Base
 
   enum form_type: {
     unknown: 0,
-    screening: 1,
-    availability: 2,
-    test: 3
+    signup: 1,
+    screening: 2,
+    availability: 3,
+    test: 4
+
   } 
 
   self.per_page = 15
