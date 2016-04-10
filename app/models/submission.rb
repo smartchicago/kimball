@@ -61,10 +61,11 @@ class Submission < ActiveRecord::Base
   end
 
   def form_email_or_phone_number
+    field_name_options = ['email', 'email or phone number', 'phone number']
     JSON.parse(field_structure)['Fields'].each do |field|
-      return field_value(field['ID']) if field['Title'] == 'Email'
-      return field_value(field['ID']) if field['Title'] == 'Email or Phone Number'
-      return field_value(field['ID']) if field['Title'] == 'Phone number'  
+      if field_name_options.include? field['Title'].downcase
+        return field_value(field['ID'])
+      end
     end
     return nil
   end
