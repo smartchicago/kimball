@@ -2,7 +2,28 @@
   <h1>Editing submission</h1>
 </div>
 
-<%= render 'form' %>
+<%= render 'formMatch' %>
+
+ <table class="table">
+      <tr>
+        <th>Form</th>
+        <th>Content</th>
+      </tr>
+      <a id="submission-<%= @submission.id %>"></a>
+      <tr>
+        <td><strong><%= @submission.form_name %></strong><br/><span title="<%= @submission.created_at %>"><%= time_ago_in_words @submission.created_at %> ago</span><br/><span class="" style="font-size:small; color:#ccc; font-style:italic"><%= @submission.ip_addr %></span></td>
+        <td>
+          <table class="table table-striped">
+            <% for field_id,field_desc in @submission.fields do %>
+              <tr>
+                <td><%= field_desc[:title] %></td>
+                <td><%= @submission.field_value(field_id) %></td>
+              </tr>
+            <% end %>
+          </table>
+        </td>
+      </tr>
+    </table>
 
 <%= link_to 'Show', @submission %> |
 <%= link_to 'Back', submissions_path %>

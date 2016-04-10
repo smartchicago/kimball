@@ -10,6 +10,22 @@ class SubmissionsController < ApplicationController
 
   # GET /submission/1/edit
   def edit
+     @submission = Submission.find(params[:id])
+  end
+
+  # PATCH/PUT /submission/1
+  # PATCH/PUT /submission/1.json
+  def update
+    respond_to do |format|
+      @submission = Submission.find(params[:id])
+      if @submission.with_user(current_user).update(submission_params)
+        format.html { redirect_to submissions_path, notice: 'Submission was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @submission.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # FIXME: Refactor and re-enable cop
@@ -89,7 +105,8 @@ class SubmissionsController < ApplicationController
   # rubocop:enable Metrics/MethodLength
 
   def index
-    @submissions = Submission.all.order('created_at DESC').includes(:person)
+    @submissionsUnmatched = Submission.order('created_at DESC').where('person_id is ?', nil)
+    @submissions = Submission.paginate(page: params[:page]).order('created_at DESC').includes(:person)
   end
 
   private
