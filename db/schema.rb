@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160330180121) do
+ActiveRecord::Schema.define(version: 20160410020822) do
 
   create_table "applications", force: :cascade do |t|
     t.string   "name",         limit: 255
@@ -150,7 +150,7 @@ ActiveRecord::Schema.define(version: 20160330180121) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "form_id",         limit: 255
-    t.integer  "form_type",       limit: 4
+    t.integer  "form_type",       limit: 4,     default: 0
   end
 
   create_table "taggings", force: :cascade do |t|

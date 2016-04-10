@@ -19,6 +19,8 @@ class Submission < ActiveRecord::Base
   belongs_to :person
   validates :person_id, numericality: { only_integer: true, allow_nil: true }
 
+  enum form_type: [ :unknown, :screening, :availability, :test ]
+
   self.per_page = 15
 
   def fields
