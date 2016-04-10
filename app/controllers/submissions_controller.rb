@@ -46,8 +46,17 @@ class SubmissionsController < ApplicationController
         field_structure:  params['FieldStructure']
       )
 
+      # Parse the form type
+      form_type = @submission.form_type_field
+      begin
+        # try to save with matching enum type
+        @submission.form_type = form_type.downcase
+      rescue
+        # Otherwise set form type as unknown
+        @submission.form_type = "unknown"
+      end
+
       # Parse the email, and add the associated person
-      email_address = @submission.form_email || nil
       person_identifier = @submission.form_email_or_phone_number
       this_person = nil
       if person_identifier.present?

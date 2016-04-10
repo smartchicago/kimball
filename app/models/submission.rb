@@ -19,7 +19,12 @@ class Submission < ActiveRecord::Base
   belongs_to :person
   validates :person_id, numericality: { only_integer: true, allow_nil: true }
 
-  enum form_type: [ :unknown, :screening, :availability, :test ]
+  enum form_type: {
+    unknown: 0,
+    screening: 1,
+    availability: 2,
+    test: 3
+  } 
 
   self.per_page = 15
 
@@ -62,6 +67,16 @@ class Submission < ActiveRecord::Base
 
   def form_email_or_phone_number
     field_name_options = ['email', 'email or phone number', 'phone number']
+    JSON.parse(field_structure)['Fields'].each do |field|
+      if field_name_options.include? field['Title'].downcase
+        return field_value(field['ID'])
+      end
+    end
+    return nil
+  end
+
+  def form_type_field
+    field_name_options = ['form type']
     JSON.parse(field_structure)['Fields'].each do |field|
       if field_name_options.include? field['Title'].downcase
         return field_value(field['ID'])
