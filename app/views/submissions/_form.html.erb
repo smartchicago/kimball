@@ -23,7 +23,7 @@
         <%= f.text_field :entry_id, class: 'span2' %>
 
         <%= f.label :form_type %>
-        <%= f.text_field :form_type, class: 'span4' %>
+        <%= f.select(:form_type, Submission.form_types.keys.map {|form_type| [form_type.titleize,form_type]}) %>
 
         <div class="form-actions">
           <%= f.submit 'Save', class: "btn btn-primary" %>
