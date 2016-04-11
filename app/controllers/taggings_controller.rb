@@ -50,7 +50,7 @@ class TaggingsController < ApplicationController
   def search
     @tags = Tag.where('name like ?', "#{params[:q]}%").
             order(taggings_count: :desc)
-    render json: @tags
+    render json: @tags.to_json(:methods => :value)
   end
 
 end

@@ -17,12 +17,13 @@
 //= require twitter/typeahead.min
 //= require turbolinks
 //= require holder
-//= require datepicker/bootstrap-datepicker.min.js
+//= require datepicker/bootstrap-datepicker.min
+//= require tokenfield/bootstrap-tokenfield.min
 //= require jquery.validate
 //= require jquery.validate.additional-methods
 //= require_tree .
 
-$(document).ready(function() {
+$(document).on('ready page:load',function() {
   /* Activating Best In Place */
   jQuery(".best_in_place").best_in_place();
 });

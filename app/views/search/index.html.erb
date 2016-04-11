@@ -29,12 +29,10 @@
         <%= text_field_tag :postal_code, params[:postal_code], :class => "input" %>
 
         <label for="address">Address</label>
-        <%= text_field_tag :address, params[:address], :class => "input-large span4" %>
+        <%= text_field_tag :address, params[:address], :class => 'input-large span4' %>
 
         <label for="tags">Tags</label>
-<!--         <%= text_field_tag :tags, params[:tags], :class => "input" %>
- -->        <%= select_tag :tags,
-         options_for_select(Tag.all.order(:name).collect{|tag| [tag.name, tag.name]}, selected: params[:tags]), :multiple => true, :class => "multiple", :size => '6' %>
+        <%= text_field_tag :tags, params[:tags], :class=>'tokenfield input-large span4' %>
       </fieldset>
     </div>
 

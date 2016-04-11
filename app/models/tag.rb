@@ -21,6 +21,11 @@ class Tag < ActiveRecord::Base
     taggings_count
   end
 
+  #needed for tokenfield.
+  def value
+    name
+  end
+
   def self.most_popular(limit = 10)
     Tag.all.order(taggings_count: :desc).limit(limit)
   end
