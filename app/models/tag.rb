@@ -21,7 +21,8 @@ class Tag < ActiveRecord::Base
     taggings_count
   end
 
-  #needed for tokenfield.
+  # needed for tokenfield.
+  # https://github.com/sliptree/bootstrap-tokenfield/issues/189
   def value
     name
   end

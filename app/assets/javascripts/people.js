@@ -25,7 +25,8 @@ $(document).on('ready page:load', function () {
       url:'/taggings/search?q=%QUERY',
       wildcard: '%QUERY',
       limit: 20,
-      filter: filter
+      filter: filter,
+      cache: false
     }
   });
   bloodhound.initialize();

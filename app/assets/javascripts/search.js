@@ -16,7 +16,6 @@ $(document).on('ready page:load', function() {
   // preventing enter from submitting form
   $(searchSelector).keydown(function(event){
     if(event.keyCode == 13) {
-      console.log('############################################');
       event.preventDefault();
       return true;
     }
@@ -59,7 +58,8 @@ $(document).on('ready page:load', function() {
       url: '/taggings/search?q=%QUERY',
       wildcard: '%QUERY',
       limit: 20,
-      filter: filter
+      filter: filter,
+      cache: false
     }
   });
 
