@@ -23,9 +23,9 @@ class TaggingsController < ApplicationController
 
     @tagging = Tagging.new(taggable_type: params[:tagging][:taggable_type],
                            taggable_id: params[:tagging][:taggable_id],
-                           tag: @tag)
+                           tag: @tag) if @tag.name != ''
 
-    if !@tagging.tag.id.nil? && @tagging.with_user(current_user).save
+    if @tagging.with_user(current_user).save
       respond_to do |format|
         format.js {}
       end
