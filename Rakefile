@@ -7,6 +7,6 @@ Coveralls::RakeTask.new
 
 Logan::Application.load_tasks
 
-task :test_with_coveralls => [:spec, :features, 'coveralls:push']
+task test_with_coveralls: [:spec, :features, 'coveralls:push']
 
 task default: [:rubocop, :test, :spec, 'coveralls:push']
