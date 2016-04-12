@@ -42,8 +42,6 @@ class SubmissionsControllerTest < ActionController::TestCase
   end
 
   test 'should get new' do
-    stub_forms = [['form_1','form_1'],['form_2','form_2']]
-    TwilioWufoo.stubs(:wufoo_form_ids).returns(stub_forms)
     get :new
     assert_response :success
   end
