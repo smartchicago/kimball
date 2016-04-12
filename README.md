@@ -95,6 +95,14 @@ vagrant ssh
 bundle exec rails c # etc. etc. etc.
 ```
 
+Unit and Integration Tests
+---------------------------
+To run all tests:
+```
+bundle exec rake
+
+```
+
 Contributors
 ------------
 
