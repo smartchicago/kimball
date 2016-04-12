@@ -18,8 +18,7 @@ class Tagging < ActiveRecord::Base
   after_destroy :destroy_orphaned_tag
 
   attr_accessor :name
-
-  validates_uniqueness_of :tag_id, scope: [:taggable_id, :taggable_type]
+  validates_uniqueness_of   :tag_id, scope: [:taggable_id, :taggable_type]
 
   private
 

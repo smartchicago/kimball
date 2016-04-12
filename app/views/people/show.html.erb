@@ -79,7 +79,7 @@
           <%= form.hidden_field :taggable_type, value: "Person" %>
           <%= form.hidden_field :taggable_id, value: @person.id %>
           <%= form.text_field :name, id: 'tag-typeahead', class: "input span2 tag-typehead", placeholder: "new tag", autocomplete: 'off' %>
-          <%= form.submit "Add", class: "btn span1", onclick: "$('input#tag-typeahead').trigger('reset');" %>
+          <%= form.submit "Add", class: "btn span1" %>
         <% end %>
       </div>
     </div>

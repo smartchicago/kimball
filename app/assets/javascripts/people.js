@@ -39,4 +39,10 @@ $(document).on('ready page:load', function () {
     source: bloodhound.ttAdapter()
   });
 
+  //submits the tag once selected from the typeahead
+  $(searchSelector).on('typeahead:selected', function(obj, datum){ //datum
+    $(searchSelector).typeahead('val',datum.name);
+    $('#tag-typeahead').submit();
+  });
+
 });
