@@ -17,7 +17,7 @@
         <%= f.text_field :person_id, class: 'span2' %>
 
         <%= f.label 'Wufoo Form ID' %>
-        <%= f.select :form_id, TwilioWufoo.wufoo_forms.collect{|i| [i.id, i.id] } , class: 'span6', include_blank: true %>
+        <%= f.select :form_id, TwilioWufoo.wufoo_form_ids, class: 'span6', include_blank: true %>
 
         <%= f.label 'Wufoo Form Entry ID Number' %>
         <%= f.text_field :entry_id, class: 'span2' %>
