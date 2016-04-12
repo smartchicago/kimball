@@ -142,6 +142,8 @@ group :testing do
   # generate fake data w/faker: http://rubydoc.info/github/stympy/faker/master/frames
   gem 'faker'
   gem 'rubocop', require: false
+  gem 'codeclimate-test-reporter', group: :test, require: nil
+  gem 'coveralls', require: false
 end
 
 group :development, :test do
@@ -159,5 +161,4 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'poltergeist'
   gem 'sms-spec'
-  gem 'coveralls', require: false
 end

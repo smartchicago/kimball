@@ -75,6 +75,8 @@ GEM
       capybara (~> 2.4)
       mail
     cliver (0.3.2)
+    codeclimate-test-reporter (0.5.0)
+      simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.0)
     coffee-rails (4.1.1)
       coffee-script (>= 2.2.0)
@@ -447,6 +449,7 @@ DEPENDENCIES
   capistrano!
   capybara
   capybara-email
+  codeclimate-test-reporter
   coffee-rails
   coveralls
   daemons
