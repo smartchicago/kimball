@@ -7,7 +7,7 @@ Capybara.javascript_driver = :poltergeist
 
 feature 'tag person'  do
   scenario 'add tag' do
-    #probably need to add js: true to this
+    # probably need to add js: true to this
 
     # login_with_admin_user
     # person = FactoryGirl.create(:person)
@@ -30,7 +30,7 @@ feature 'tag person'  do
   end
 
   scenario 'delete tag' do
-    #probably need to add js: true to this
+    # probably need to add js: true to this
 
     # login_with_admin_user
     # person = FactoryGirl.create(:person, preferred_contact_method: 'EMAIL')

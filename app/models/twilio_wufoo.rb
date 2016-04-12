@@ -14,6 +14,11 @@
 #
 
 class TwilioWufoo < ActiveRecord::Base
+  # https://robots.thoughtbot.com/inject-that-rails-configuration-dependency
+  class_attribute :wufoo_config
+  class_attribute :wufoo_forms
+  self.wufoo_config ||= Logan::Application.config.wufoo
+  self.wufoo_forms  ||= self.wufoo_config.forms
 
   validates :end_message, length: { maximum: 160 }
 

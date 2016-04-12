@@ -17,27 +17,21 @@ class TaggingsController < ApplicationController
   # rubocop:disable Metrics/MethodLength
   #
   def create
-    #empty name causes trouble.
-    if params[:tagging][:name]==''
-      respond_to do |format|
-        format.js {}
-      end
-      return
-    end
-
     @tag = Tag.find_or_initialize_by(name: params[:tagging].delete(:name))
 
     @tag.created_by ||= current_user.id
 
-    @tagging = Tagging.new(taggable_type: params[:tagging][:taggable_type], taggable_id: params[:tagging][:taggable_id], tag: @tag)
+    @tagging = Tagging.new(taggable_type: params[:tagging][:taggable_type],
+                           taggable_id: params[:tagging][:taggable_id],
+                           tag: @tag)
 
-    if @tagging.with_user(current_user).save
+    if !@tagging.tag.id.nil? && @tagging.with_user(current_user).save
       respond_to do |format|
         format.js {}
       end
     else
       respond_to do |format|
-        format.js { render text: "alert('Oh no! You can only tag an item with a given tag once.')" }
+        format.js { render text: "console.log('tag save error')" }
       end
     end
   end

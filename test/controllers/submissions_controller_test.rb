@@ -42,6 +42,8 @@ class SubmissionsControllerTest < ActionController::TestCase
   end
 
   test 'should get new' do
+
+    TwilioWufoo.wufoo_forms = mock(:form_1, :id => "first-id")
     get :new
     assert_response :success
   end
