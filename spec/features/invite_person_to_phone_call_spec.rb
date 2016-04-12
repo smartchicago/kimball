@@ -5,13 +5,13 @@ require 'capybara/email/rspec'
 require 'capybara/poltergeist'
 Capybara.javascript_driver = :poltergeist
 
-feature 'Invite people to a phone call' do
+feature 'Invite person to a phone call' do
   scenario 'with valid data' do
     login_with_admin_user
 
     visit '/v2/event_invitations/new'
 
-    research_subject_emails = Array.new(3, FactoryGirl.create(:person).email_address)
+    research_subject_emails = Array.new(3, FactoryGirl.create(:person, preferred_contact_method: 'EMAIL').email_address)
 
     admin_email = 'admin@what.host.should.we.have.here.com'
 
@@ -26,14 +26,6 @@ feature 'Invite people to a phone call' do
     fill_in 'Date', with: '02/02/2016'
     select '12:00', from: 'Start time'
     select '15:30', from: 'End time'
-
-    # TODO: implement multiple time windows after invitation for single time window works
-    #
-    # click_link 'Add another time window'
-    #
-    # fill_in 'Date', with: '02/03/2016'
-    # select '12:00', from: 'Start time'
-    # select '14:30', from: 'End time'
 
     click_button 'Send invitation'
 
@@ -114,14 +106,7 @@ feature 'Invite people to a phone call' do
     message = accept_alert do
       click_button 'Send invitation'
     end
+
     expect(message).to eq('Please make sure that the End time is greater than the Start time')
   end
-end
-
-def login_with_admin_user
-  user = FactoryGirl.create(:user)
-  visit '/users/sign_in'
-  fill_in 'Email', with: user.email
-  fill_in 'Password', with: user.password
-  click_button 'Sign in'
 end

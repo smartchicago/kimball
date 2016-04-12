@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160320050914) do
+ActiveRecord::Schema.define(version: 20160407191028) do
 
   create_table "applications", force: :cascade do |t|
     t.string   "name",         limit: 255
@@ -69,6 +69,13 @@ ActiveRecord::Schema.define(version: 20160320050914) do
     t.datetime "updated_at"
     t.integer  "created_by",     limit: 4
     t.integer  "updated_by",     limit: 4
+  end
+
+  create_table "invitation_invitees_join_table", force: :cascade do |t|
+    t.integer  "person_id",           limit: 4
+    t.integer  "event_invitation_id", limit: 4
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
   create_table "mailchimp_exports", force: :cascade do |t|
@@ -153,10 +160,11 @@ ActiveRecord::Schema.define(version: 20160320050914) do
   end
 
   create_table "tags", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.integer  "created_by", limit: 4
+    t.string   "name",           limit: 255
+    t.integer  "created_by",     limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "taggings_count", limit: 4,   default: 0, null: false
   end
 
   create_table "twilio_messages", force: :cascade do |t|
@@ -211,8 +219,19 @@ ActiveRecord::Schema.define(version: 20160320050914) do
     t.boolean  "approved",                           default: false, null: false
   end
 
+  create_table "v2_event_invitations", force: :cascade do |t|
+    t.integer "v2_event_id",     limit: 4
+    t.string  "email_addresses", limit: 255
+    t.string  "description",     limit: 255
+    t.string  "slot_length",     limit: 255
+    t.string  "date",            limit: 255
+    t.string  "start_time",      limit: 255
+    t.string  "end_time",        limit: 255
+  end
+
   create_table "v2_events", force: :cascade do |t|
-    t.integer "user_id", limit: 4
+    t.integer "user_id",     limit: 4
+    t.string  "description", limit: 255
   end
 
   create_table "v2_reservations", force: :cascade do |t|

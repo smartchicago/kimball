@@ -20,7 +20,7 @@ module Logan
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.autoload_paths += %W(#{config.root}/app/jobs #{config.root}/app/mailers)
+    config.autoload_paths += %W(#{config.root}/app/jobs #{config.root}/app/mailers #{config.root}/app/sms)
 
     # Analytics
     Logan::Application.config.google_analytics_enabled = false

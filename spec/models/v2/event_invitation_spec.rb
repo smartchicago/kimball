@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: v2_event_invitations
+#
+#  id              :integer          not null, primary key
+#  v2_event_id     :integer
+#  email_addresses :string(255)
+#  description     :string(255)
+#  slot_length     :string(255)
+#  date            :string(255)
+#  start_time      :string(255)
+#  end_time        :string(255)
+#
+
 require 'rails_helper'
 
 describe V2::EventInvitation do
@@ -28,8 +42,13 @@ describe V2::EventInvitation do
         expect { subject.save }.to change { V2::Event.count }.from(0).to(1)
       end
 
-      it 'creates a new time slots' do
+      it 'creates new time slots' do
         expect { subject.save }.to change { V2::TimeSlot.count }.from(0).to(2)
+      end
+
+      it 'finds the invitees and associates the to the event' do
+        subject.save
+        expect(subject.invitees.collect(&:id).sort).to eql people.collect(&:id).sort
       end
     end
 

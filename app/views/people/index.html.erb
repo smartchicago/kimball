@@ -35,15 +35,15 @@
             <td><%= best_in_place person, :geography_id %></td>
             <td><%= best_in_place person, :email_address %></td>
             <td><%= best_in_place person, :phone_number %></td>
-            <td><%= best_in_place person, :verified,as: :select, collection: ['YES','NO'] %></td>
+            <td><%= best_in_place person, :verified,as: :select, collection: {'YES'=>'YES','NO'=>'NO'} %></td>
             <td><%= person.signup_at ? person.signup_at.to_s(:long) : '' %></td>
-            <td><%= best_in_place person, :preferred_contact_method, as: :select, collection: %w(SMS EMAIL) %></td>
+            <td><%= best_in_place person, :preferred_contact_method, as: :select, collection: {'SMS'=>'SMS', 'EMAIL'=>'EMAIL'} %></td>
             <td>
               <%= link_to t('.schedule', :default => "schedule"),
                           new_v2_event_invitation_path(email_addresses: person.email_address), :class => 'btn btn-mini' %>
-              <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              <%= link_to t('.edit', :default => t('helpers.links.edit')),
                           edit_person_path(person), :class => 'btn btn-mini' %>
-              <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              <%= link_to t('.destroy', :default => t('helpers.links.destroy')),
                           person_path(person),
                           :method => :delete,
                           :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },

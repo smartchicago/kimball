@@ -1,9 +1,18 @@
+# == Schema Information
+#
+# Table name: v2_reservations
+#
+#  id           :integer          not null, primary key
+#  time_slot_id :integer
+#  person_id    :integer
+#
+
 class V2::ReservationsController < ApplicationController
   skip_before_action :authenticate_user!
 
   def new
     event = V2::Event.find(event_params[:event_id])
-    @time_slots = event.time_slots
+    @available_time_slots = event.available_time_slots
     @person = Person.find_by(token: person_params[:token])
     @reservation = V2::Reservation.new(time_slot: V2::TimeSlot.new)
   end
@@ -19,7 +28,7 @@ class V2::ReservationsController < ApplicationController
       flash[:error] = "No time slot was selected, couldn't create the reservation"
     end
 
-    @time_slots = []
+    @available_time_slots = []
     @person = @reservation.person
 
     render :new

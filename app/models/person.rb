@@ -30,6 +30,7 @@
 #  secondary_connection_description :string(255)
 #  verified                         :string(255)
 #  preferred_contact_method         :string(255)
+#  token                            :string(255)
 #
 
 # FIXME: Refactor and re-enable cop
@@ -50,6 +51,11 @@ class Person < ActiveRecord::Base
 
   has_many :tags, through: :taggings
   has_many :taggings, as: :taggable
+
+  # we don't really need a join model, exceptionally HABTM is more appropriate
+  # rubocop:disable Rails/HasAndBelongsToMany
+  has_and_belongs_to_many :event_invitations, class_name: '::V2::EventInvitation', join_table: :invitation_invitees_join_table
+  # rubocop:enable Rails/HasAndBelongsToMany
 
   has_secure_token
 
@@ -74,11 +80,11 @@ class Person < ActiveRecord::Base
 
   validates :phone_number, presence: true, length: { in: 9..15 },
     unless: proc { |person| person.email_address.present? }
-  #validates :phone_number, allow_blank: true, uniqueness: true
+  validates :phone_number, allow_blank: true, uniqueness: true
 
   validates :email_address, presence: true,
     unless: proc { |person| person.phone_number.present? }
-  #validates :email_address, email: true, allow_blank: true, uniqueness: true
+  validates :email_address, email: true, allow_blank: true, uniqueness: true
 
   self.per_page = 15
 
@@ -164,7 +170,7 @@ class Person < ActiveRecord::Base
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Rails/TimeZone
 
   # FIXME: Refactor and re-enable cop
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Style/MethodName, Metrics/BlockNesting, Style/VariableName
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Style/MethodName, Metrics/BlockNesting, Style/VariableName, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   #
   def sendToMailChimp
     if email_address.present?
@@ -174,23 +180,23 @@ class Person < ActiveRecord::Base
 
             gibbon = Gibbon::Request.new
             mailchimpSend = gibbon.lists(Logan::Application.config.cut_group_mailchimp_list_id).members(Digest::MD5.hexdigest(email_address.downcase)).upsert(
-                body: {email_address: email_address.downcase, 
-                 status: "subscribed",
-                 merge_fields: { FNAME: first_name || "",
-                        LNAME: last_name || "",
-                        MMERGE3: geography_id || "",
-                        MMERGE4: postal_code || "",
-                        MMERGE5: participation_type || "",
-                        MMERGE6: voted || "",
-                        MMERGE7: called_311 || "",
-                        MMERGE8: primary_device_description || "",
-                        MMERGE9: secondary_device_id || "",
-                        MMERGE10: secondary_device_description || "",
-                        MMERGE11: primary_connection_id || "",
-                        MMERGE12: primary_connection_description || "",
-                        MMERGE13: primary_device_id || "",
-                        MMERGE14: preferred_contact_method || "" }
-                 })
+              body: { email_address: email_address.downcase,
+                      status: 'subscribed',
+                      merge_fields: { FNAME: first_name || '',
+                                      LNAME: last_name || '',
+                                      MMERGE3: geography_id || '',
+                                      MMERGE4: postal_code || '',
+                                      MMERGE5: participation_type || '',
+                                      MMERGE6: voted || '',
+                                      MMERGE7: called_311 || '',
+                                      MMERGE8: primary_device_description || '',
+                                      MMERGE9: secondary_device_id || '',
+                                      MMERGE10: secondary_device_description || '',
+                                      MMERGE11: primary_connection_id || '',
+                                      MMERGE12: primary_connection_description || '',
+                                      MMERGE13: primary_device_id || '',
+                                      MMERGE14: preferred_contact_method || '' }
+               })
 
             Rails.logger.info("[People->sendToMailChimp] Sent #{id} to Mailchimp: #{mailchimpSend}")
           rescue Gibbon::MailChimpError => e
@@ -200,7 +206,7 @@ class Person < ActiveRecord::Base
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Style/MethodName, Metrics/BlockNesting, Style/VariableName
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Style/MethodName, Metrics/BlockNesting, Style/VariableName, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Rails/TimeZone, Metrics/PerceivedComplexity

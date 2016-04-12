@@ -7,6 +7,10 @@ gem 'rails', '~> 4.2.0'
 # must use this version of mysql2 for rails 4.0.0
 gem 'mysql2', '~> 0.3.18'
 
+gem 'validates_overlap'
+
+gem 'mail', '2.6.3'
+
 group :development do
   # gem 'capistrano'
   # mainline cap is busted w/r/t Rails 4. Try this fork instead.
@@ -118,7 +122,12 @@ gem 'validates_zipcode'
 # in place editing
 gem 'best_in_place', '~> 3.0.1'
 
+#validation for new persons on the public page.
 gem 'jquery-validation-rails'
+
+#for automatically populating tags
+gem 'twitter-typeahead-rails'
+
 
 group :testing do
   # mock tests w/mocha
@@ -149,4 +158,5 @@ group :development, :test do
   gem 'shoulda-matchers', '~> 3.1.1', require: false
   gem 'database_cleaner'
   gem 'poltergeist'
+  gem 'sms-spec'
 end

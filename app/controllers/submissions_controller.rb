@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: submissions
+#
+#  id              :integer          not null, primary key
+#  raw_content     :text(65535)
+#  person_id       :integer
+#  ip_addr         :string(255)
+#  entry_id        :string(255)
+#  form_structure  :text(65535)
+#  field_structure :text(65535)
+#  created_at      :datetime
+#  updated_at      :datetime
+#
+
 class SubmissionsController < ApplicationController
 
   skip_before_action :authenticate_user!, if: :should_skip_janky_auth?
@@ -13,7 +28,7 @@ class SubmissionsController < ApplicationController
   end
 
   # FIXME: Refactor and re-enable cop
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize
   #
   def create
     if params['HandshakeKey'].present?
@@ -76,7 +91,7 @@ class SubmissionsController < ApplicationController
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize
 
   def index
     @submissions = Submission.all.order('created_at DESC').includes(:person)

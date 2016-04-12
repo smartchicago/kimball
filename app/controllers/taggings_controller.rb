@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: taggings
+#
+#  id            :integer          not null, primary key
+#  taggable_type :string(255)
+#  taggable_id   :integer
+#  created_by    :integer
+#  created_at    :datetime
+#  updated_at    :datetime
+#  tag_id        :integer
+#
+
 class TaggingsController < ApplicationController
 
   # FIXME: Refactor and re-enable cop
@@ -32,6 +45,12 @@ class TaggingsController < ApplicationController
         format.js { render text: "alert('failed to destroy tag.')" }
       end
     end
+  end
+
+  def search
+    @tags = Tag.where('name like ?', "#{params[:q]}%").
+            order(taggings_count: :desc)
+    render json: @tags
   end
 
 end

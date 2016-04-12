@@ -1,4 +1,11 @@
-<h1>Please reserve a time for the call</h1>
+<% unless @available_time_slots.empty? %>
 
-<%= render 'form' %>
+  <h1>Please reserve a time for the call</h1>
 
+  <%= render 'form' %>
+
+<% else %>
+
+  <h1>We are sorry, but no more time slots are available. Please contact insert_email_here to set up another interview</h1>
+
+<% end %>

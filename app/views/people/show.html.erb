@@ -44,19 +44,19 @@
 
         <dl>
           <dt>Phone</dt>
-          <dd><%= number_to_phone @person.phone_number %></dd>
+          <dd><%= best_in_place @person, :phone_number, display_with: :number_to_phone %></dd>
 
           <dt>Email</dt>
-          <dd><%= mail_to @person.email_address %></dd>
+          <dd><%= best_in_place @person, :email_address %></dd>
 
           <dt>Preferred Contact Method</dt>
           <dd><%= best_in_place @person, :preferred_contact_method, as: :select, collection: %w(SMS EMAIL) %></dd>
 
           <dt>Voted in last election?</dt>
-          <dd><%= @person.voted %></dd>
+          <dd><%= best_in_place @person, :voted, as: :select, :collection => %w(YES NO) %></dd>
 
           <dt>Ever called 311?</dt>
-          <dd><%= @person.called_311 %></dd>
+          <dd><%= best_in_place @person, :called_311, as: :select, :collection => %w(YES NO) %></dd>
 
           <dt>Facebook</dt>
           <dd>link to facebook</dd>
@@ -78,8 +78,8 @@
         <%= form_for(@tagging, remote: true, html: { class: "form-inline" }) do |form| %>
           <%= form.hidden_field :taggable_type, value: "Person" %>
           <%= form.hidden_field :taggable_id, value: @person.id %>
-          <%= form.text_field :name, class: "input span2", placeholder: "new tag", data: { provide: 'typeahead', source: Tag.most_popular(25).collect{|tag| tag.name } }, autocomplete: 'off' %>
-          <%= form.submit "Add", class: "btn span1" %>
+          <%= form.text_field :name, id: 'typeahead', class: "input span2 typehead", placeholder: "new tag", autocomplete: 'off' %>
+          <%= form.submit "Add", class: "btn span1", onclick: "$('input#typeahead').trigger('reset');" %>
         <% end %>
       </div>
     </div>
