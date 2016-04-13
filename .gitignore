@@ -33,3 +33,6 @@ Procfile
 
 # weird mac files.
 .DS_STORE
+
+# simplecov
+/coverage
