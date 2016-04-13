@@ -10,7 +10,7 @@
 
 
 <div class="row">
-  <%= form_tag search_index_path, :method => :get, :class => "" %>
+  <%= form_tag search_index_path, :method => :get, :id => "search-form" %>
   <%= hidden_field_tag :adv, '1' %>
 
   <div class="collapse <%= "in" if params[:adv] %>" id="advanced-search">
@@ -28,8 +28,8 @@
         <label for="postal_code">ZIP Code</label>
         <%= text_field_tag :postal_code, params[:postal_code], :class => "input" %>
 
-        <label for="address">Address</label>
-        <%= text_field_tag :address, params[:address], :class => 'input-large span4' %>
+        <label for="address">Phone Number</label>
+        <%= text_field_tag :phone_number, params[:phone_number], :class => 'input-large' %>
 
         <label for="tags">Tags</label>
         <%= text_field_tag :tags, params[:tags], :class=>'tokenfield input-large span4' %>
