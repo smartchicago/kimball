@@ -15,7 +15,7 @@ $(document).on('ready page:load', function() {
 
   // preventing enter from submitting form
   $(searchSelector).keydown(function(event){
-    if(event.keyCode == 13) {
+    if(event.keyCode === 13) {
       event.preventDefault();
       return true;
     }

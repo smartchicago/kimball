@@ -37,7 +37,8 @@ set :ssh_options, { forward_agent: true }
 
 before  'deploy:finalize_update', "deploy:create_shared_directories", 'deploy:link_db_config', 'deploy:link_env_var'
 # before  'deploy:finalize_update', 'deploy:link_db_config', 'deploy:link_env_var'
-after   'deploy:finalize_update', 'deploy:create_binstubs', 'deploy:generate_delayed_job'
+
+after   'deploy:finalize_update', 'deploy:create_binstubs', 'deploy:migrate', 'deploy:generate_delayed_job'
 
 namespace :deploy do
   task :start do

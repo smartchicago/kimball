@@ -19,8 +19,6 @@ $(document).on('ready page:load', function () {
       return Bloodhound.tokenizers.whitespace(d.value);
     },
     queryTokenizer: Bloodhound.tokenizers.whitespace,
-
-    // sends ajax request to remote url where %QUERY is user input
     remote: {
       url:'/taggings/search?q=%QUERY',
       wildcard: '%QUERY',

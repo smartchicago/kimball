@@ -21,7 +21,7 @@ people_ready = function() {
         zipcodeUS: true,
         required: true
       }
-    },
+    }//,
     // errorPlacement: function(error, element) {
     //   error.appendTo( $("label:first") );
     // }
