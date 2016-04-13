@@ -1,4 +1,5 @@
 $(document).on('ready page:load', function() {
+  // this is for tags!
   var bloodhound, filter, searchSelector;
 
   $("#export-to-twilio-form-toggle").click(function() {
@@ -76,5 +77,4 @@ $(document).on('ready page:load', function() {
       }
     ]
   });
-
 });

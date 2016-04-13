@@ -25,10 +25,10 @@ module Searchable
     } do
       mapping do
         indexes :id, index: :not_analyzed
-        indexes :first_name
-        indexes :last_name
+        indexes :first_name, analyzer: :snowball
+        indexes :last_name, analyzer: :snowball
         indexes :email_address, analyzer: 'email_analyzer'
-        indexes :phone_number, index: :not_analyzed
+        indexes :phone_number, analyzer: :word_delimiter
         indexes :postal_code, index: :not_analyzed
         indexes :geography_id, index: :not_analyzed
         indexes :address_1 # FIXME: if we ever use address_2, this will not work
@@ -90,7 +90,7 @@ module Searchable
         connection_id_string = params[:connection_id_type].join(' ')
       end
 
-      tire.search options do
+      Person.tire.search options do
         query do
           boolean do
             must { string "first_name:#{params[:first_name]}" } if params[:first_name].present?
@@ -107,11 +107,11 @@ module Searchable
             must { string "address_1:#{params[:address]}" } if params[:address].present?
             must { string "city:#{params[:city]}" } if params[:city].present?
             must { string "submission_values:#{params[:submissions]}" } if params[:submissions].present?
-            # must { string "tag_values:#{tags_string}"} if params[:tags].present?
+            must { string "tag_values:#{params[:tags]}" } if params[:tags].present?
             must { string "preferred_contact_method:#{params[:preferred_contact_method]}" } unless params[:preferred_contact_method].blank?
           end
         end
-        filter :terms, tag_values: params[:tags] if params[:tags].present?
+        #filter :terms, tag_values: params[:tags] if params[:tags].present?
       end
     end
     # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
