@@ -25,8 +25,8 @@ module Searchable
     } do
       mapping do
         indexes :id, index: :not_analyzed
-        indexes :first_name
-        indexes :last_name
+        indexes :first_name, analyzer: :snowball
+        indexes :last_name, analyzer: :snowball
         indexes :email_address, analyzer: 'email_analyzer'
         indexes :phone_number, analyzer: :word_delimiter
         indexes :postal_code, index: :not_analyzed
@@ -90,7 +90,7 @@ module Searchable
         connection_id_string = params[:connection_id_type].join(' ')
       end
 
-      tire.search options do
+      Person.tire.search options do
         query do
           boolean do
             must { string "first_name:#{params[:first_name]}" } if params[:first_name].present?
@@ -111,7 +111,7 @@ module Searchable
             must { string "preferred_contact_method:#{params[:preferred_contact_method]}" } unless params[:preferred_contact_method].blank?
           end
         end
-        filter :terms, tag_values: params[:tags] if params[:tags].present?
+        #filter :terms, tag_values: params[:tags] if params[:tags].present?
       end
     end
     # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
