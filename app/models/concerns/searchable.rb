@@ -107,7 +107,7 @@ module Searchable
             must { string "address_1:#{params[:address]}" } if params[:address].present?
             must { string "city:#{params[:city]}" } if params[:city].present?
             must { string "submission_values:#{params[:submissions]}" } if params[:submissions].present?
-            must { string "tag_values:#{tags_string}" } if params[:tags].present?
+            must { string "tag_values:#{params[:tags]}" } if params[:tags].present?
             must { string "preferred_contact_method:#{params[:preferred_contact_method]}" } unless params[:preferred_contact_method].blank?
           end
         end
