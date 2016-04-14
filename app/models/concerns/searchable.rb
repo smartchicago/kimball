@@ -111,7 +111,7 @@ module Searchable
             must { string "preferred_contact_method:#{params[:preferred_contact_method]}" } unless params[:preferred_contact_method].blank?
           end
         end
-        #filter :terms, tag_values: params[:tags] if params[:tags].present?
+        # filter :terms, tag_values: params[:tags] if params[:tags].present?
       end
     end
     # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity

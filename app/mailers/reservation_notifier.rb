@@ -1,6 +1,6 @@
 class ReservationNotifier < ApplicationMailer
   def notify(email_address:, reservation:)
-    admin_email = 'admin@what.host.should.we.have.here.com'
+    admin_email = ENV['MAILER_SENDER']
     @email_address = email_address
     @reservation = reservation
     mail(to: email_address,
