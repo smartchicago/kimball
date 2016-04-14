@@ -75,7 +75,7 @@ Model.new(:my_backup, 'Description for my_backup') do
     s3.region            = 'us-east-1'
     s3.bucket            = ENV['AWS_S3_BUCKET']
     s3.path              = "/patterns_backups_#{ENV['RAILS_ENV']}"
-    s3.keep              = 15
+    s3.keep              = 50
     # s3.keep              = Time.now - 2592000 # Remove all backups older than 1 month.
   end
 
