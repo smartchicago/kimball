@@ -39,7 +39,7 @@ openssl dhparam -dsaparam -out /etc/nginx/dhparam.pem 2048
 #service nginx stop
 cd /root
 git clone https://github.com/letsencrypt/letsencrypt
-#/root/letsencrypt/letsencrypt-auto certonly --standalone --agree-tos --email blueridgelabs@robinhood.org -d staging.patterns.brl.nyc
+/root/letsencrypt/letsencrypt-auto certonly --standalone --agree-tos --email blueridgelabs@robinhood.org -d patterns.brl.nyc
 
 #service nginx start
 cat >/etc/cron.weekly/letsencrypt.sh <<EOL
@@ -78,7 +78,7 @@ EOL
   rvm install 2.2.4
   rvm use 2.2.4@staging --create
   rvm use 2.2.4@production --create
-  rvm @global do gem install backup bundler
+  rvm @global do gem install backup bundler rake
   ln -s /var/www/logan-production
   ln -s /var/www/logan-staging
   exit # back to root.

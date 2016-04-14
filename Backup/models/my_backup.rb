@@ -63,15 +63,6 @@ Model.new(:my_backup, 'Description for my_backup') do
   end
 
   ##
-  # Local (Copy) [Storage]
-  #
-  store_with Local do |local|
-    local.path       = '~/backups/'
-    local.keep       = 5
-    # local.keep       = Time.now - 2592000 # Remove all backups older than 1 month.
-  end
-
-  ##
   # Amazon Simple Storage Service [Storage]
   #
   store_with S3 do |s3|
@@ -86,6 +77,15 @@ Model.new(:my_backup, 'Description for my_backup') do
     s3.path              = "/patterns_backups_#{ENV['RAILS_ENV']}"
     s3.keep              = 15
     # s3.keep              = Time.now - 2592000 # Remove all backups older than 1 month.
+  end
+
+  ##
+  # Local (Copy) [Storage]
+  #
+  store_with Local do |local|
+    local.path       = '~/backups/'
+    local.keep       = 5
+    # local.keep       = Time.now - 2592000 # Remove all backups older than 1 month.
   end
 
   ##
