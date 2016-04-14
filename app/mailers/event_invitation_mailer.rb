@@ -1,6 +1,6 @@
 class EventInvitationMailer < ApplicationMailer
   def invite(email_address:, event:, person:)
-    admin_email = 'admin@what.host.should.we.have.here.com'
+    admin_email = ENV['MAILER_SENDER']
     @email_address = email_address
     @event = event
     @person = person

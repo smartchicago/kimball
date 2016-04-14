@@ -13,7 +13,7 @@ feature 'Invite person to a phone call' do
 
     research_subject_emails = Array.new(3, FactoryGirl.create(:person, preferred_contact_method: 'EMAIL').email_address)
 
-    admin_email = 'admin@what.host.should.we.have.here.com'
+    admin_email = ENV['MAILER_SENDER']
 
     fill_in "People's email addresses", with: research_subject_emails.join(',')
 
