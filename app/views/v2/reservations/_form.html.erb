@@ -7,7 +7,7 @@
       <%= form.radio_button :time_slot_id, time_slot.id, :class => 'radio_button' %>
     </div>
   <% end %>
-
+  <%= will_paginate @available_time_slots, :renderer => BootstrapPagination::Rails %>
   <%= form.submit "Confirm reservation" %>
 
 <% end %>
