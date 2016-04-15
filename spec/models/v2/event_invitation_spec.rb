@@ -10,6 +10,7 @@
 #  date            :string(255)
 #  start_time      :string(255)
 #  end_time        :string(255)
+#  buffer          :integer          default(0), not null
 #
 
 require 'rails_helper'

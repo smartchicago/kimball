@@ -20,9 +20,9 @@ class V2::TimeSlot < ActiveRecord::Base
   validates :start_time, presence: true
   validates :end_time,   presence: true
 
-  # this is tricky. Slots can't overlap for an event or reservation
-  validates :start_time, :end_time, overlap: { exclude_edges: %w( start_time end_time ), scope: 'event_id' }
+  validates :start_time, :end_time, overlap: { exclude_edges: %w( start_time end_time ) }
 
+  # this is tricky. Slots can't overlap for an event or reservation
   # validates :start_time, :end_time, overlap: { exclude_edges: %w( start_time end_time ), scope: :reservation }
 
   def to_time_and_weekday
