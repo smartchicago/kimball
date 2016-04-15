@@ -12,12 +12,18 @@ class V2::TimeSlot < ActiveRecord::Base
   self.table_name = 'v2_time_slots'
 
   belongs_to :event, class_name: '::V2::Event'
-  has_one :user, through: '::V2::Event'
+  has_one :user, through: :event
+
   has_one :reservation, class_name: '::V2::Reservation'
+  has_one :person, through: :reservation
 
   validates :start_time, presence: true
   validates :end_time,   presence: true
-  validates :start_time, :end_time, overlap: { exclude_edges: %w( start_time end_time ) }
+
+  # this is tricky. Slots can't overlap for an event or reservation
+  validates :start_time, :end_time, overlap: { exclude_edges: %w( start_time end_time ), scope: 'event_id' }
+
+  # validates :start_time, :end_time, overlap: { exclude_edges: %w( start_time end_time ), scope: :reservation }
 
   def to_time_and_weekday
     "#{start_time.strftime('%H:%M')} - #{end_time.strftime('%H:%M')} #{start_time.strftime('%A %d')}"
