@@ -14,8 +14,9 @@
 
 class V2::EventInvitation < ActiveRecord::Base
   self.table_name = 'v2_event_invitations'
-
+  attr_accessor :created_by
   belongs_to :event, class_name: '::V2::Event', foreign_key: :v2_event_id
+  has_one :user, through: '::V2::Event'
 
   # we don't really need a join model, exceptionally HABTM is more appropriate
   # rubocop:disable Rails/HasAndBelongsToMany
@@ -37,7 +38,8 @@ class V2::EventInvitation < ActiveRecord::Base
     def build_event
       self.event = V2::Event.create(
         description: description,
-        time_slots: break_time_window_into_time_slots
+        time_slots: break_time_window_into_time_slots,
+        user_id: created_by
       )
     end
 

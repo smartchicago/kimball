@@ -12,7 +12,7 @@ class V2::ReservationsController < ApplicationController
 
   def new
     event = V2::Event.find(event_params[:event_id])
-    @available_time_slots = event.available_time_slots.page(params[:page])
+    @available_time_slots = event.available_time_slots
     @person = Person.find_by(token: person_params[:token])
     @reservation = V2::Reservation.new(time_slot: V2::TimeSlot.new)
   end

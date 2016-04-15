@@ -12,6 +12,8 @@ class V2::Event < ActiveRecord::Base
 
   has_many :time_slots, class_name: '::V2::TimeSlot'
 
+  belongs_to :user
+
   validates :description, presence: true
   validates :time_slots, presence: true
 
