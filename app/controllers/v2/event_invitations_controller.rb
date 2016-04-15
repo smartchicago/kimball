@@ -19,7 +19,7 @@ class V2::EventInvitationsController < ApplicationController
 
   def create
     @event_invitation = V2::EventInvitation.new(event_invitation_params)
-    #saving the current_user to the event
+    # saving the current_user to the event
     @event_invitation.created_by = current_user.id
 
     if @event_invitation.save

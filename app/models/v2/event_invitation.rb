@@ -47,7 +47,7 @@ class V2::EventInvitation < ActiveRecord::Base
       return unless invitees.empty?
 
       email_addresses_to_array.each do |email_address|
-        invitee = Person.find_by(email_address: email_address)
+        invitee = Person.find_by(email_address: email_address.strip.chomp)
         if invitee
           invitees << invitee
         else

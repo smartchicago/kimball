@@ -5,6 +5,9 @@ feature 'Person responds to interview invitation over email' do
   before do
     clear_emails
     @event = FactoryGirl.create(:event)
+    @user  = FactoryGirl.create(:user)
+    @event.user = @user
+    @event.save!
     @research_subject = FactoryGirl.create(:person)
   end
 
