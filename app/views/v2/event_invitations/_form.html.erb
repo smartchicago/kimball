@@ -18,6 +18,12 @@
       <%= f.select :slot_length, options_for_select([15,30,45,60].map {|o| "#{o.to_s} mins"}), :class => 'text_field' %>
     </div>
   </div>
+  <div class="control-group">
+    <%= f.label :buffer, 'Buffer', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :buffer, options_for_select([0,5,10,15,20,30,45,60].map {|o| ["#{o.to_s} mins",o]},selected: 5), :class => 'text_field' %>
+    </div>
+  </div>
 
   <h2>Time window</h2>
   <div class="control-group">

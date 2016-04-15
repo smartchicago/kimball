@@ -45,7 +45,8 @@ event_ready = function(){
     return time[0] * 3600 + time[1] * 60;
   }
 
-  $('.datepicker').datepicker();
+  $('#v2_event_invitation_buffer').prop('selectedIndex', 1);
+  $('.datepicker').datepicker('setDate', new Date());
 
 };
 

@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: mailchimp_updates
+#
+#  id          :integer          not null, primary key
+#  raw_content :text(65535)
+#  email       :string(255)
+#  update_type :string(255)
+#  reason      :string(255)
+#  fired_at    :datetime
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
 class MailchimpUpdatesController < ApplicationController
   require 'will_paginate/array'
   before_action :set_mailchimp_update, only: [:show, :edit, :update, :destroy]

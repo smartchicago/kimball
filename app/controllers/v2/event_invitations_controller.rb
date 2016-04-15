@@ -10,6 +10,7 @@
 #  date            :string(255)
 #  start_time      :string(255)
 #  end_time        :string(255)
+#  buffer          :integer          default(0), not null
 #
 
 class V2::EventInvitationsController < ApplicationController
@@ -68,7 +69,8 @@ class V2::EventInvitationsController < ApplicationController
           :slot_length,
           :date,
           :start_time,
-          :end_time
+          :end_time,
+          :buffer
         )
     end
 end

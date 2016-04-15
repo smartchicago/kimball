@@ -6,6 +6,7 @@
 #  time_slot_id :integer
 #  person_id    :integer
 #
+# TODO: status enum: tbd, reminded, cancelled, attended.
 
 class V2::ReservationsController < ApplicationController
   skip_before_action :authenticate_user!

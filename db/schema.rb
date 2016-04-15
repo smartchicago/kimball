@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160407191028) do
+ActiveRecord::Schema.define(version: 20160415211417) do
 
   create_table "applications", force: :cascade do |t|
     t.string   "name",         limit: 255
@@ -237,6 +237,7 @@ ActiveRecord::Schema.define(version: 20160407191028) do
     t.string  "date",            limit: 255
     t.string  "start_time",      limit: 255
     t.string  "end_time",        limit: 255
+    t.integer "buffer",          limit: 4,   default: 0, null: false
   end
 
   create_table "v2_events", force: :cascade do |t|
