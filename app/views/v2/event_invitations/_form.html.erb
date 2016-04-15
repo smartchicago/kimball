@@ -1,4 +1,4 @@
-<%= form_for @event_invitation, url: v2_event_invitations_path, html: { class: 'form-horizontal' } do |f| %>
+<%= form_for @event_invitation, url: v2_event_invitations_path,method: :POST, html: { class: 'form-horizontal' } do |f| %>
   <div class="control-group">
     <%= f.label :email_addresses, "People's email addresses", :class => 'control-label' %>
     <div class="controls">

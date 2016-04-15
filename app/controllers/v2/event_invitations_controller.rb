@@ -19,6 +19,8 @@ class V2::EventInvitationsController < ApplicationController
 
   def create
     @event_invitation = V2::EventInvitation.new(event_invitation_params)
+    #saving the current_user to the event
+    @event_invitation.created_by = current_user.id
 
     if @event_invitation.save
       send_notifications(@event_invitation)
@@ -28,7 +30,7 @@ class V2::EventInvitationsController < ApplicationController
       flash[:error] = 'There were problems with some of the fields: ' + errors
     end
 
-    render :new
+    render new_v2_event_invitation_path
   end
 
   private
