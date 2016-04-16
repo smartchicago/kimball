@@ -57,6 +57,8 @@ class Person < ActiveRecord::Base
   has_and_belongs_to_many :event_invitations, class_name: '::V2::EventInvitation', join_table: :invitation_invitees_join_table
   # rubocop:enable Rails/HasAndBelongsToMany
 
+  has_many :v2_reservations, class_name: '::V2::Reservation'
+  has_many :v2_events, through: :event_invitations, foreign_key: 'v2_event_id', source: :event
   has_secure_token
 
   after_update  :sendToMailChimp
