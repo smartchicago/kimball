@@ -24,6 +24,9 @@ class User < ActiveRecord::Base
 
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable, stretches: 10
 
+  has_many :events, class_name: '::V2::Event'
+  has_many :reservations, through: :events
+
   def active_for_authentication?
     if super && approved?
       true
@@ -49,6 +52,10 @@ class User < ActiveRecord::Base
   def unapprove!
     update_attributes(approved: false)
     Rails.logger.info("Unapproved user #{email}")
+  end
+
+  def future_reservations
+    reservations.joins('v2_time_slots').where('v2_time_slots.start_time >=?', DateTime.now.in_time_zone)
   end
 
 end

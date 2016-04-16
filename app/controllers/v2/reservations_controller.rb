@@ -13,6 +13,7 @@ class V2::ReservationsController < ApplicationController
 
   def new
     event = V2::Event.find(event_params[:event_id])
+    @event_owner = event.user
     @available_time_slots = event.available_time_slots
     @person = Person.find_by(token: person_params[:token])
     @reservation = V2::Reservation.new(time_slot: V2::TimeSlot.new)
@@ -55,4 +56,22 @@ class V2::ReservationsController < ApplicationController
     def person_params
       params.permit(:email_address, :person_id, :token)
     end
+
+    def filter_obj_reservations(obj, slots)
+      if slots.length > 0
+        reservations = obj.reservations.joins('v2_time_slots').where('v2_time_slots.start_time >=?', DateTime.now.in_time_zone)
+        slots = slots.select do |s|
+          # if reservation.start
+          reservations.any? do|r|
+            overlaps?(r, s)
+          end
+        end
+      end
+      slots
+    end
+
+    def overlaps?(one, other)
+      (one.start_time - other.end_time) * (other.start_time - one.end_time) >= 0
+    end
+
 end
