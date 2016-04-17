@@ -105,27 +105,29 @@ class SearchController < ApplicationController
 
   private
 
-  def index_params
+    # lotta params...
+    # rubocop:disable Metrics/MethodLength,
+    def index_params
       params.permit(:q,
-                    :adv,
-                    :first_name,
-                    :last_name,
-                    :email_address,
-                    :postal_code,
-                    :phone_number,
-                    :verified,
-                    :device_description,
-                    :connection_description,
-                    :device_id_type,
-                    :connection_id_type,
-                    :geography_id,
-                    :event_id,
-                    :address,
-                    :city,
-                    :submissions,
-                    :tags,
-                    :preferred_contact_method,
-                    :page)
-  end
-
+        :adv,
+        :first_name,
+        :last_name,
+        :email_address,
+        :postal_code,
+        :phone_number,
+        :verified,
+        :device_description,
+        :connection_description,
+        :device_id_type,
+        :connection_id_type,
+        :geography_id,
+        :event_id,
+        :address,
+        :city,
+        :submissions,
+        :tags,
+        :preferred_contact_method,
+        :page)
+    end
+  # rubocop:enable Metrics/MethodLength
 end

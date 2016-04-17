@@ -111,8 +111,8 @@ module Searchable
       Person.tire.search options do
         query do
           boolean do
-            params.each do |k,v|
-              next if !v.present?
+            params.each do |k, v|
+              next unless v.present?
               next if v.blank?
               case k
               when :connection_description
@@ -130,10 +130,7 @@ module Searchable
               when :address
                 must { string "address_1:#{v}" }
               else # no more special cases.
-                Rails.logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                Rails.logger.info("k:#{k}, v:#{v}")
-                Rails.logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                must { string "#{k.to_s}:#{v}" }
+                must { string "#{k}:#{v}" }
               end
             end
           end
