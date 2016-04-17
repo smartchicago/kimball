@@ -5,6 +5,7 @@ require 'coveralls'
 Coveralls.wear_merged!('rails')
 
 require 'devise'
+require 'factory_girl_rails'
 
 RSpec.configure do |config|
   config.filter_run_including focus: true
