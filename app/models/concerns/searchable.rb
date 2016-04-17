@@ -41,7 +41,7 @@ module Searchable
         indexes :first_name, analyzer: :snowball
         indexes :last_name, analyzer: :snowball
         indexes :email_address, analyzer: 'email_analyzer'
-        indexes :phone_number, index: 'phone_number'
+        indexes :phone_number, index: :not_analyzed
         indexes :postal_code, index: :not_analyzed
         indexes :geography_id, index: :not_analyzed
         indexes :address_1 # FIXME: if we ever use address_2, this will not work

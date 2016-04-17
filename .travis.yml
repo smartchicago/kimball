@@ -15,7 +15,7 @@ before_install:
 - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - echo -e "Host staging.patterns.brl.nyc\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.3.1/elasticsearch-2.3.1.deb && sudo dpkg -i --force-confnew elasticsearch-2.3.1.deb && sudo service elasticsearch restart
-- sleep 10
+
 addons:
     code_climate:
         repo_token: bc9e0fee3d10d7a24d762909e4fffe85dab761dfded5db6ffddf9d7b6e5b61f4
