@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160415211417) do
+ActiveRecord::Schema.define(version: 20160416212923) do
 
   create_table "applications", force: :cascade do |t|
     t.string   "name",         limit: 255
@@ -227,6 +227,7 @@ ActiveRecord::Schema.define(version: 20160415211417) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "approved",                           default: false, null: false
+    t.string   "name",                   limit: 255
   end
 
   create_table "v2_event_invitations", force: :cascade do |t|
