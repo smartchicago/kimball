@@ -113,7 +113,8 @@ Vagrant.configure(2) do |config|
       graphviz \
       nginx-full \
       openjdk-7-jre \
-      phantomjs
+      phantomjs \
+      elasticsearch
 
     mysqladmin -u root -ppassword password '';
     sudo update-rc.d elasticsearch defaults;
