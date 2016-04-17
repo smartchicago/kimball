@@ -22,10 +22,17 @@ module Searchable
           type: 'custom'
         },
         phone_number: {
-          analyzer: ['ngram'],
-          tokenizer: %w(standard ngram_tokenizer),
-          filter: ['word_delimiter'],
+          tokenizer: 'my_ngram_tokenizer',
+          filter: ['trim'],
           type: 'custom'
+        }
+      },
+      tokenizer: {
+        my_ngram_tokenizer: {
+          type: 'nGram',
+          min_gram: '8',
+          max_gram: '11',
+          token_chars: ['digit']
         }
       }
     } do
@@ -34,7 +41,7 @@ module Searchable
         indexes :first_name, analyzer: :snowball
         indexes :last_name, analyzer: :snowball
         indexes :email_address, analyzer: 'email_analyzer'
-        indexes :phone_number, analyzer: 'phone_number'
+        indexes :phone_number, index: 'phone_number'
         indexes :postal_code, index: :not_analyzed
         indexes :geography_id, index: :not_analyzed
         indexes :address_1 # FIXME: if we ever use address_2, this will not work
@@ -88,6 +95,11 @@ module Searchable
       options[:per_page] = per_page
       options[:page]     = params[:page] || 1
 
+      params.delete(:adv)
+      params.delete(:page)
+
+      params[:phone_number].delete!('^0-9') unless params[:phone_number].blank?
+
       unless params[:device_id_type].blank?
         device_id_string = params[:device_id_type].join(' ')
       end
@@ -99,22 +111,31 @@ module Searchable
       Person.tire.search options do
         query do
           boolean do
-            must { string "first_name:#{params[:first_name]}" } if params[:first_name].present?
-            must { string "last_name:#{params[:last_name]}" } if params[:last_name].present?
-            must { string "email_address:(#{params[:email_address]})" } if params[:email_address].present?
-            must { string "postal_code:(#{params[:postal_code]})" } if params[:postal_code].present?
-            must { string "verified:(#{params[:verified]})" } if params[:verified].present?
-            must { string "primary_device_description:#{params[:device_description]} OR secondary_device_description:#{params[:device_description]}" } if params[:device_description].present?
-            must { string "primary_connection_description:#{params[:connection_description]} OR secondary_connection_description:#{params[:connection_description]}" } if params[:connection_description].present?
-            must { string "primary_device_id:#{device_id_string} OR secondary_device_id:#{device_id_string}" } if params[:device_id_type].present?
-            must { string "primary_connection_id:#{connection_id_string} OR secondary_connection_id:#{connection_id_string}" } if params[:connection_id_type].present?
-            must { string "geography_id:(#{params[:geography_id]})" } if params[:geography_id].present?
-            must { string "event_id:#{params[:event_id]}" } if params[:event_id].present?
-            must { string "address_1:#{params[:address]}" } if params[:address].present?
-            must { string "city:#{params[:city]}" } if params[:city].present?
-            must { string "submission_values:#{params[:submissions]}" } if params[:submissions].present?
-            must { string "tag_values:#{params[:tags]}" } if params[:tags].present?
-            must { string "preferred_contact_method:#{params[:preferred_contact_method]}" } unless params[:preferred_contact_method].blank?
+            params.each do |k,v|
+              next if !v.present?
+              next if v.blank?
+              case k
+              when :connection_description
+                must { string "primary_connection_description:#{v} OR secondary_connection_description:#{v}" }
+              when :device_description
+                must { string "primary_device_description:#{v} OR secondary_device_description:#{v}" }
+              when :device_id_type
+                must { string "primary_device_id:#{device_id_string} OR secondary_device_id:#{device_id_string}" }
+              when :tags
+                must { string "tag_values:#{v}" }
+              when :submissions
+                must { string "submission_values:#{v}" }
+              when :connection_id_type
+                must { string "primary_connection_id:#{connection_id_string} OR secondary_connection_id:#{connection_id_string}" }
+              when :address
+                must { string "address_1:#{v}" }
+              else # no more special cases.
+                Rails.logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                Rails.logger.info("k:#{k}, v:#{v}")
+                Rails.logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                must { string "#{k.to_s}:#{v}" }
+              end
+            end
           end
         end
         # filter :terms, tag_values: params[:tags] if params[:tags].present?

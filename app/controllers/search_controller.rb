@@ -12,10 +12,10 @@ class SearchController < ApplicationController
     # no pagination for CSV export
     per_page = request.format.to_s.eql?('text/csv') ? 10000 : Person.per_page
 
-    @results = if params[:q]
-                 Person.search params[:q], per_page: per_page, page: (params[:page] || 1)
-               elsif params[:adv]
-                 Person.complex_search(params, per_page) # FIXME: more elegant solution for returning all records
+    @results = if index_params[:q]
+                 Person.search index_params[:q], per_page: per_page, page: (index_params[:page] || 1)
+               elsif index_params[:adv]
+                 Person.complex_search(index_params, per_page) # FIXME: more elegant solution for returning all records
                else
                  []
                end
@@ -102,5 +102,30 @@ class SearchController < ApplicationController
     end
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Style/MethodName, Style/VariableName
+
+  private
+
+  def index_params
+      params.permit(:q,
+                    :adv,
+                    :first_name,
+                    :last_name,
+                    :email_address,
+                    :postal_code,
+                    :phone_number,
+                    :verified,
+                    :device_description,
+                    :connection_description,
+                    :device_id_type,
+                    :connection_id_type,
+                    :geography_id,
+                    :event_id,
+                    :address,
+                    :city,
+                    :submissions,
+                    :tags,
+                    :preferred_contact_method,
+                    :page)
+  end
 
 end
