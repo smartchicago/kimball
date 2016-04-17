@@ -17,6 +17,7 @@ after_success:
 before_install:
 - openssl aes-256-cbc -K $encrypted_bde597b39305_key -iv $encrypted_bde597b39305_iv -in deploy_key.enc -out deploy_key -d
 - echo -e "Host example.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+- curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.7.2.deb && sudo dpkg -i --force-confnew elasticsearch-1.7.2.deb && sudo service elasticsearch restart
 addons:
     code_climate:
         repo_token: bc9e0fee3d10d7a24d762909e4fffe85dab761dfded5db6ffddf9d7b6e5b61f4
