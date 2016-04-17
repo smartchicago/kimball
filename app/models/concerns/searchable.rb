@@ -20,6 +20,12 @@ module Searchable
           tokenizer: 'uax_url_email',
           filter: ['lowercase'],
           type: 'custom'
+        },
+        phone_number: {
+          analyzer: ['ngram'],
+          tokenizer: %w(standard ngram_tokenizer),
+          filter: ['word_delimiter'],
+          type: 'custom'
         }
       }
     } do
@@ -28,7 +34,7 @@ module Searchable
         indexes :first_name, analyzer: :snowball
         indexes :last_name, analyzer: :snowball
         indexes :email_address, analyzer: 'email_analyzer'
-        indexes :phone_number, analyzer: :word_delimiter
+        indexes :phone_number, analyzer: 'phone_number'
         indexes :postal_code, index: :not_analyzed
         indexes :geography_id, index: :not_analyzed
         indexes :address_1 # FIXME: if we ever use address_2, this will not work
