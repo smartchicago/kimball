@@ -9,7 +9,7 @@ before_install:
 - echo -e "Host staging.patterns.brl.nyc\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.3.1/elasticsearch-2.3.1.deb && sudo dpkg -i --force-confnew elasticsearch-2.3.1.deb && sudo service elasticsearch restart
 before_script:
-- bundle exec rake db:test:prepare
+- bundle exec rake db:migrate RAILS_ENV=test
 after_success:
 - chmod 600 deploy_key
 - mv deploy_key ~/.ssh/id_rsa
