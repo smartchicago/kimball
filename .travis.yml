@@ -5,8 +5,6 @@ bundler_args: "--jobs=4 --retry=3"
 cache: bundler
 services:
 - elasticsearch
-before_script:
-- sleep 10
 after_success:
 - chmod 600 deploy_key
 - mv deploy_key ~/.ssh/id_rsa
