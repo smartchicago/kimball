@@ -3,6 +3,13 @@ sudo: required
 dist: precise
 bundler_args: "--jobs=4 --retry=3"
 cache: bundler
+before_install:
+- openssl aes-256-cbc -K $encrypted_bde597b39305_key -iv $encrypted_bde597b39305_iv -in deploy_key.enc -out deploy_key -d
+- echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+- echo -e "Host staging.patterns.brl.nyc\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+- curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.3.1/elasticsearch-2.3.1.deb && sudo dpkg -i --force-confnew elasticsearch-2.3.1.deb && sudo service elasticsearch restart
+before_script:
+- bundle exec rake db:test:prepare
 after_success:
 - chmod 600 deploy_key
 - mv deploy_key ~/.ssh/id_rsa
@@ -10,12 +17,6 @@ after_success:
 - eval "$(ssh-agent -s)"
 - ssh-add ~/.ssh/id_rsa
 - if [ $TRAVIS_BRANCH = 'development' ]; then bundle exec cap staging deploy; fi
-before_install:
-- openssl aes-256-cbc -K $encrypted_bde597b39305_key -iv $encrypted_bde597b39305_iv -in deploy_key.enc -out deploy_key -d
-- echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-- echo -e "Host staging.patterns.brl.nyc\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-- curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.3.1/elasticsearch-2.3.1.deb && sudo dpkg -i --force-confnew elasticsearch-2.3.1.deb && sudo service elasticsearch restart
-
 addons:
     code_climate:
         repo_token: bc9e0fee3d10d7a24d762909e4fffe85dab761dfded5db6ffddf9d7b6e5b61f4
