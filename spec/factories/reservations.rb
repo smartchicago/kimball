@@ -11,10 +11,8 @@ require 'faker'
 
 FactoryGirl.define do
   factory :reservation, class: V2::Reservation do
-    person FactoryGirl.create(:person)
-
     before(:create) do |reservation|
-      # make a time_slot
+      reservation.person =  FactoryGirl.create(:person)
       reservation.time_slot = FactoryGirl.create(:time_slot)
     end
   end
