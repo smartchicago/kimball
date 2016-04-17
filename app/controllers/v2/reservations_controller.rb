@@ -13,9 +13,9 @@ class V2::ReservationsController < ApplicationController
 
   def new
     event = V2::Event.find(event_params[:event_id])
-    @event_owner = event.user
-    @available_time_slots = event.available_time_slots
     @person = Person.find_by(token: person_params[:token])
+    all_slots = event.available_time_slots
+    @available_time_slots = filter_reservations([@person, event.user], all_slots)
     @reservation = V2::Reservation.new(time_slot: V2::TimeSlot.new)
   end
 
@@ -57,21 +57,30 @@ class V2::ReservationsController < ApplicationController
       params.permit(:email_address, :person_id, :token)
     end
 
-    def filter_obj_reservations(obj, slots)
-      if slots.length > 0
-        reservations = obj.reservations.joins('v2_time_slots').where('v2_time_slots.start_time >=?', DateTime.now.in_time_zone)
-        slots = slots.select do |s|
-          # if reservation.start
-          reservations.any? do|r|
-            overlaps?(r, s)
-          end
-        end
+    def filter_reservations(arr_obj, slots)
+      arr_obj.each do|obj|
+        slots = filter_obj_reservations(obj, slots)
       end
       slots
     end
 
-    def overlaps?(one, other)
-      (one.start_time - other.end_time) * (other.start_time - one.end_time) >= 0
+    def filter_obj_reservations(obj, slots)
+      if slots.length > 0
+        res = obj.v2_reservations.joins(:time_slot).
+              where('v2_time_slots.start_time >=?',
+                DateTime.now.in_time_zone)
+
+        # TODO: refactor
+        # filtering out slots that overlap. Tricky.
+        slots = slots.select do |s|
+          res.any? { |r| not_overlaps(r, s) }
+        end if res.length > 0
+      end
+      slots
+    end
+
+    def not_overlap?(one, other)
+      !((one.start_time - other.end_time) * (other.start_time - one.end_time) >= 0)
     end
 
 end

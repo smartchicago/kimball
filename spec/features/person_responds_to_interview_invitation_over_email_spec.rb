@@ -5,15 +5,13 @@ feature 'Person responds to interview invitation over email' do
   before do
     clear_emails
     @event = FactoryGirl.create(:event)
-    @user  = FactoryGirl.create(:user)
-    @event.user = @user
+    @event.user = FactoryGirl.create(:user)
     @event.save!
     @research_subject = FactoryGirl.create(:person)
   end
 
   scenario 'successfully' do
     receive_invitation_email_and_click_reservation_link
-
     @event.available_time_slots.each do |time|
       expect(page).to have_content time.to_time_and_weekday
     end
