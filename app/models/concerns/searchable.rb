@@ -63,7 +63,7 @@ module Searchable
 
         # comments
         indexes :comments do
-          indexes :content, analyzer: 'snowball'
+          indexes :content, analyzer: :snowball
         end
 
         # events
@@ -73,7 +73,7 @@ module Searchable
 
         # submissions
         # indexes the output of the Submission#indexable_values method
-        indexes :submissions, analyzer: :snowball
+        indexes :submission_values, analyzer: :snowball
 
         # tags
         indexes :tag_values, analyzer: :keyword
@@ -148,12 +148,8 @@ module Searchable
   def to_indexed_json
     # customize what data is sent to ES for indexing
     to_json(
-      methods: [:tag_values],
+      methods: [:tag_values, :submission_values],
       include: {
-        submissions: {
-          only:  [:submission_values],
-          methods: [:submission_values]
-        },
         comments: {
           only: [:content]
         },

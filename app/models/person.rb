@@ -117,6 +117,10 @@ class Person < ActiveRecord::Base
     tags.collect(&:name)
   end
 
+  def submission_values
+    submissions.collect(&:submission_values)
+  end
+
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Rails/TimeZone
   #

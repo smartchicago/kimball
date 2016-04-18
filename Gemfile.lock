@@ -184,6 +184,7 @@ GEM
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
+    icalendar (2.3.0)
     jbuilder (1.0.2)
       activesupport (>= 3.0.0)
     jquery-rails (4.1.1)
@@ -469,6 +470,7 @@ DEPENDENCIES
   has_secure_token
   health_check
   holder_rails
+  icalendar
   jbuilder (~> 1.0.1)
   jdbc-sqlite3
   jquery-rails

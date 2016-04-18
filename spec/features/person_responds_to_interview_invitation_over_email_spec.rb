@@ -24,7 +24,7 @@ feature 'Person responds to interview invitation over email' do
 
     expect(page).to have_content "An interview has been booked for #{selected_time}"
 
-    admin_email = ENV['MAILER_SENDER']
+    admin_email = @event.user.email
     research_subject_email = @research_subject.email_address
 
     [admin_email, research_subject_email].each do |email_address|
@@ -33,13 +33,18 @@ feature 'Person responds to interview invitation over email' do
       # TODO: substitute placeholder text
       expect(current_email).
         to have_content "An interview has been booked for #{selected_time}"
+      expect(current_email.attachments.length).to eq(1)
+      attachment = current_email.attachments[0]
+      expect(attachment).to be_a_kind_of(Mail::Part)
+      expect(attachment.content_type).to start_with('application/ics')
+      expect(attachment.filename).to eq('event.ics')
     end
   end
 
   scenario 'when no time slots are avaialble anymore' do
     send_invitation_email_for_event_then_book_all_event_time_slots
 
-    expect(page).to have_content 'We are sorry, but no more time slots are available. Please contact insert_email_here to set up another interview'
+    expect(page).to have_content 'We are sorry, but no more time slots are available.'
 
     @event.time_slots.each do |time|
       expect(page).to_not have_content time.to_time_and_weekday

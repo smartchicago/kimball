@@ -28,5 +28,6 @@ FactoryGirl.define do
     password 'password'
     password_confirmation 'password'
     approved true
+    name { Faker::Name.name }
   end
 end
