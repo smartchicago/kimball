@@ -20,19 +20,6 @@ module Searchable
           tokenizer: 'uax_url_email',
           filter: ['lowercase'],
           type: 'custom'
-        },
-        phone_number: {
-          tokenizer: 'my_ngram_tokenizer',
-          filter: ['trim'],
-          type: 'custom'
-        }
-      },
-      tokenizer: {
-        my_ngram_tokenizer: {
-          type: 'nGram',
-          min_gram: '8',
-          max_gram: '11',
-          token_chars: ['digit']
         }
       }
     } do
