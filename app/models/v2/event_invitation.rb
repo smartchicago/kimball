@@ -70,7 +70,7 @@ class V2::EventInvitation < ActiveRecord::Base
         date: date,
         start_time: start_time,
         end_time: end_time,
-        buffer: 0
+        buffer: buffer
       ).slots
     end
 end

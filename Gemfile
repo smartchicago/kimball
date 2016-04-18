@@ -128,6 +128,8 @@ gem 'jquery-validation-rails'
 #for automatically populating tags
 gem 'twitter-typeahead-rails'
 
+# make ical events and feeds
+gem 'icalendar'
 
 group :testing do
   # mock tests w/mocha
