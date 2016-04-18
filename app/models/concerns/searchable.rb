@@ -112,7 +112,6 @@ module Searchable
         query do
           boolean do
             params.each do |k, v|
-              next unless v.present?
               next if v.blank?
               case k
               when :connection_description
