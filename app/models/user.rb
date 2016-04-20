@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable, stretches: 10
 
   has_many :v2_events, class_name: '::V2::Event'
-
+  has_many :event_invitations, class_name: '::V2::EventInvitation', through: :v2_events
   has_many :v2_reservations, through: :v2_events, source: :reservations
 
   has_secure_token # for calendar feeds

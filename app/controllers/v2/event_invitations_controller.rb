@@ -25,6 +25,13 @@ class V2::EventInvitationsController < ApplicationController
 
     if @event_invitation.save
       send_notifications(@event_invitation)
+
+      @event_invitation.event = V2::Event.create(
+        description: @event_invitation.description,
+        time_slots: @event_invitation.break_time_window_into_time_slots,
+        user_id: current_user || 1 # if nil, make admin owner
+      )
+
       flash[:notice] = 'Person was successfully invited.'
     else
       errors = @event_invitation.errors.full_messages.join(', ')

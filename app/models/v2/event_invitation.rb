@@ -44,6 +44,17 @@ class V2::EventInvitation < ActiveRecord::Base
     slot_length.delete(' mins').to_i.minutes
   end
 
+  def break_time_window_into_time_slots
+    V2::TimeWindow.new(
+      event_id: v2_event_id,
+      slot_length: slot_length,
+      date: date,
+      start_time: start_time,
+      end_time: end_time,
+      buffer: buffer
+    ).slots
+  end
+
   private
 
     def build_event
@@ -69,14 +80,4 @@ class V2::EventInvitation < ActiveRecord::Base
       end
     end
 
-    def break_time_window_into_time_slots
-      V2::TimeWindow.new(
-        event_id: v2_event_id,
-        slot_length: slot_length,
-        date: date,
-        start_time: start_time,
-        end_time: end_time,
-        buffer: buffer
-      ).slots
-    end
 end

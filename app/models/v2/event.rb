@@ -20,11 +20,13 @@ class V2::Event < ActiveRecord::Base
   validates :description, presence: true
   validates :time_slots, presence: true
 
+  # not sure about all this delegation
   delegate :date,        to: :event_invitation
   delegate :start_time,  to: :event_invitation
   delegate :end_time,    to: :event_invitation
   delegate :slot_length, to: :event_invitation
   delegate :duration,    to: :event_invitation
+  delegate :buffer,      to: :event_invitation
 
   def available_time_slots
     available_time_slots = time_slots.find_all { |slot| !slot.reservation.present? }
@@ -36,11 +38,4 @@ class V2::Event < ActiveRecord::Base
     nil
   end
 
-  def start_datetime
-    Date.strptime(date, '%m/%d/%Y') + Time.zone.parse(start_time)
-  end
-
-  def end_datetime
-    Date.strptime(date, '%m/%d/%Y') + Time.zone.parse(end_time)
-  end
 end

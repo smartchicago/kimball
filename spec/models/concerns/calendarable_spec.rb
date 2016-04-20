@@ -16,6 +16,12 @@ describe Calendarable do
       ics = reservation.to_ics
       expect(ics.alarms.length).to eq(1)
     end
+
+    it 'returns datetimes' do
+      expect(reservation.start_datetime.class).to eq(DateTime)
+      expect(time_slot.start_datetime.class).to eq(DateTime)
+      expect(event_invitation.start_datetime.class).to eq(DateTime)
+    end
   end
 
   context 'event_invitation' do

@@ -5,11 +5,22 @@ module Calendarable
 
   def to_ics
     e               = Icalendar::Event.new
-    e.dtstart       = generate_date_time(date, start_time)
-    e.dtend         = generate_date_time(date, end_time)
+    e.dtstart       = Icalendar::Values::DateTime.new(start_datetime)
+    e.dtend         = Icalendar::Values::DateTime.new(end_datetime)
     e.description   = description
     e.uid           = generate_ical_id
     add_alarm(e)
+  end
+
+  # for the calendar display
+  def start_datetime
+    return start_time.to_datetime if start_time.class == ActiveSupport::TimeWithZone
+    date_plus_time(date, start_time)
+  end
+
+  def end_datetime
+    return end_time.to_datetime if end_time.class == ActiveSupport::TimeWithZone
+    date_plus_time(date, end_time)
   end
 
   private
@@ -33,12 +44,8 @@ module Calendarable
       e
     end
 
-    def generate_date_time(date, time)
-      # some start/end times are dates, others are not. Why?
-      Icalendar::Values::DateTime.new(time)
-    rescue Icalendar::Values::DateTime::FormatError
-      datetime = Date.strptime(date, '%m/%d/%Y').to_datetime + Time.zone.parse(time).seconds_since_midnight.seconds
-      Icalendar::Values::DateTime.new(datetime)
+    def date_plus_time(date, time)
+      (Date.strptime(date, '%m/%d/%Y').to_datetime + Time.zone.parse(time).seconds_since_midnight.seconds).to_datetime
     end
 
     def generate_atendees

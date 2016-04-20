@@ -39,7 +39,20 @@ class CalendarController < ApplicationController
       @person.nil? ? @person : false
     end
 
+    def calendar_type
+      case allowed_params[:type]
+      when 'reservations'
+        :v2_reservations
+      when 'time_slots'
+        :time_slots
+      when 'event_invitations'
+        :event_invitations
+      else
+        :v2_reservations
+      end
+    end
+
     def allowed_params
-      params.permit(:token, :id, :event_id, :user_id)
+      params.permit(:token, :id, :event_id, :user_id, :type)
     end
 end
