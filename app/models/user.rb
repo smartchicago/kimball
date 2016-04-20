@@ -28,6 +28,8 @@ class User < ActiveRecord::Base
 
   has_many :v2_reservations, through: :v2_events, source: :reservations
 
+  has_secure_token # for calendar feeds
+
   def active_for_authentication?
     if super && approved?
       true

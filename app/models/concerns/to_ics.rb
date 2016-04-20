@@ -27,13 +27,11 @@ module ToIcs
   end
 
   def generate_date_time(date, time)
-    begin
-      # some start/end times are dates, others are not. Why?
-      Icalendar::Values::DateTime.new(time)
-    rescue Icalendar::Values::DateTime::FormatError
-      datetime = Date.strptime(date, '%m/%d/%Y') + Time.zone.parse(time)
-      Icalendar::Values::DateTime.new(datetime)
-    end
+    # some start/end times are dates, others are not. Why?
+    Icalendar::Values::DateTime.new(time)
+  rescue Icalendar::Values::DateTime::FormatError
+    datetime = Date.strptime(date, '%m/%d/%Y') + Time.zone.parse(time)
+    Icalendar::Values::DateTime.new(datetime)
   end
 
   def generate_atendees
