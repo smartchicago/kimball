@@ -10,7 +10,7 @@
 class V2::Reservation < ActiveRecord::Base
   self.table_name = 'v2_reservations'
 
-  include ToIcs
+  include Calendarable
 
   belongs_to :time_slot, class_name: '::V2::TimeSlot'
   has_one    :event, through: :time_slot

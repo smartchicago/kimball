@@ -1,19 +1,28 @@
 class CalendarController < ApplicationController
   skip_before_action :authenticate_user!, if: :person?
+
   include ActionController::MimeResponds
 
   def show
     # either it's a person or it's a user.
     @visitor = @person ? @person : current_user
-    @reservations = @visitor.v2_reservations
+    if @visitor
+      @reservations = @visitor.v2_reservations
+    else
+      redirect_to root_url
+    end
   end
 
   def feed
     @visitor = @person ? @person : current_user
-    calendar = Icalendar::Calendar.new
-    @visitor.v2_reservations.each { |r| calendar.add_event(r.to_ics) }
-    calendar.publish
-    render text: calendar.to_ical
+    if @visitor
+      calendar = Icalendar::Calendar.new
+      @visitor.v2_reservations.each { |r| calendar.add_event(r.to_ics) }
+      calendar.publish
+      render text: calendar.to_ical
+    else
+      redirect_to root_url
+    end
   end
 
   private

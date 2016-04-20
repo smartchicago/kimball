@@ -4,12 +4,13 @@ FactoryGirl.define do
   factory :event_invitation, class: V2::EventInvitation do
     description 'Lorem ipsum for now'
     slot_length 15
-
+    buffer 0
     event
 
     before(:create) do |event_invitation|
       invitees = FactoryGirl.create_list(:person, 3)
-
+      creator = FactoryGirl.create(:user)
+      event_invitation.created_by = creator.id
       event_invitation.invitees << invitees
       event_invitation.email_addresses = invitees.collect(&:email_address).join(',')
 

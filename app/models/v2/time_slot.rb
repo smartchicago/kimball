@@ -11,7 +11,7 @@
 class V2::TimeSlot < ActiveRecord::Base
   self.table_name = 'v2_time_slots'
 
-  include ToIcs
+  include Calendarable
   belongs_to :event, class_name: '::V2::Event'
   has_one :user, through: :event
   has_one :event_invitation, through: :event

@@ -13,7 +13,8 @@ FactoryGirl.define do
   factory :reservation, class: V2::Reservation do
     before(:create) do |reservation|
       reservation.person =  FactoryGirl.create(:person)
-      reservation.time_slot = FactoryGirl.create(:time_slot)
+      event = FactoryGirl.create(:event)
+      reservation.time_slot = FactoryGirl.create(:time_slot, event: event)
     end
   end
 end

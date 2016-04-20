@@ -10,7 +10,7 @@
 class V2::Event < ActiveRecord::Base
   self.table_name = 'v2_events'
 
-  include ToIcs
+  include Calendarable
   has_one :event_invitation, class_name: '::V2::EventInvitation', foreign_key: 'v2_event_id'
   has_many :time_slots, class_name: '::V2::TimeSlot'
   has_many :invitees, through: :event_invitations
@@ -20,7 +20,7 @@ class V2::Event < ActiveRecord::Base
   validates :description, presence: true
   validates :time_slots, presence: true
 
-  delegate :date,         to: :event_invitation
+  delegate :date,        to: :event_invitation
   delegate :start_time,  to: :event_invitation
   delegate :end_time,    to: :event_invitation
   delegate :slot_length, to: :event_invitation

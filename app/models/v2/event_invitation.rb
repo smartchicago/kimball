@@ -16,6 +16,7 @@
 class V2::EventInvitation < ActiveRecord::Base
   self.table_name = 'v2_event_invitations'
 
+  include Calendarable
   # to pass ownership on to the events.
   attr_accessor :created_by
 
@@ -33,6 +34,7 @@ class V2::EventInvitation < ActiveRecord::Base
 
   before_validation :find_invitees_or_add_error
   before_save :build_event, if: :valid?
+  default_scope { includes(:event) }
 
   def email_addresses_to_array
     @email_addresses_array ||= email_addresses.present? ? email_addresses.split(',') : []
