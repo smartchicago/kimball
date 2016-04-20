@@ -10,9 +10,12 @@
 class V2::Reservation < ActiveRecord::Base
   self.table_name = 'v2_reservations'
 
+  include ToIcs
+
   belongs_to :time_slot, class_name: '::V2::TimeSlot'
   has_one    :event, through: :time_slot
   has_one    :user,  through: :event
+  has_one    :event_invitation, through: :event
   belongs_to :person
 
   validates :person, presence: true
@@ -26,10 +29,11 @@ class V2::Reservation < ActiveRecord::Base
   # validates 'v2_time_slots.start_time', 'v2_time_slots.end_time',
   #   overlap: {
   #     query_options: { includes: [:time_slot, :event] },
-  #     scope: { 'v2_events.user_id' => proc { |event| event.user_id } }
+  #     scope: 'v2_events.user_id',
+  #     exclude_edges: %w( v2_time_slots.start_time v2_time_slots.end_time )
   #   }
 
-  # person can only have one reservation at a time.
+  # # person can only have one reservation at a time.
   # validates 'v2_time_slots.start_time', 'v2_time_slots.ends_time',
   #   overlap: {
   #     query_options: { includes: :time_slot },
@@ -37,17 +41,25 @@ class V2::Reservation < ActiveRecord::Base
   #     exclude_edges: %w( v2_time_slots.start_time v2_time_slots.end_time )
   #   }
 
-  delegate :start_time, to: :time_slot
-  delegate :end_time, to: :time_slot
-  delegate :event_id, to: :time_slot
-  delegate :user_id,  to: :user
-
-  def event_id
-    time_slot.event.id
+  def start_datetime
+    start_time
   end
 
-  def user_id
-    time_slot.event.user_id
+  def end_datetime
+    end_time
   end
+
+  delegate :start_time,  to: :time_slot
+  delegate :end_time,    to: :time_slot
+  delegate :event_id,    to: :time_slot
+
+  delegate :user_id,     to: :user
+
+  delegate :duration,    to: :event
+  delegate :description, to: :event
+
+  delegate :date,        to: :event_invitation
+  delegate :slot_length, to: :event_invitation
+  delegate :duration,    to: :event_invitation
 
 end

@@ -1,0 +1,9 @@
+<%= week_calendar events: @reservations do |date, meetings| %>
+  <%= date %>
+
+  <% meetings.each do |meeting| %>
+    <div>
+      <%= meeting.description %>
+    </div>
+  <% end %>
+<% end %>

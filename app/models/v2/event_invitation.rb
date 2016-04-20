@@ -38,6 +38,10 @@ class V2::EventInvitation < ActiveRecord::Base
     @email_addresses_array ||= email_addresses.present? ? email_addresses.split(',') : []
   end
 
+  def duration
+    slot_length.delete(' mins').to_i.minutes
+  end
+
   private
 
     def build_event
