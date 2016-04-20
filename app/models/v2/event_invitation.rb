@@ -34,6 +34,7 @@ class V2::EventInvitation < ActiveRecord::Base
 
   before_validation :find_invitees_or_add_error
   before_save :build_event, if: :valid?
+
   default_scope { includes(:event) }
 
   def email_addresses_to_array
