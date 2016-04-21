@@ -24,6 +24,7 @@ class V2::EventInvitationsController < ApplicationController
     @event_invitation.created_by = current_user.id
 
     if @event_invitation.save
+      # @event_invitation.event = create_event(@event_invitation)
       send_notifications(@event_invitation)
       flash[:notice] = 'Person was successfully invited.'
     else
@@ -46,6 +47,14 @@ class V2::EventInvitationsController < ApplicationController
           send_email(invitee, event)
         end
       end
+    end
+
+    def create_event(event_invitation)
+      V2::Event.create(
+        description: event_invitation.description,
+        time_slots: event_invitation.break_time_window_into_time_slots,
+        user_id: current_user || 1 # if nil, make admin owner
+      )
     end
 
     def send_email(person, event)

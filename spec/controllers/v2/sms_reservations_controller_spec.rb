@@ -6,6 +6,7 @@ describe V2::SmsReservationsController do
   let(:twilio_phone_number) { ENV['TWILIO_NUMBER'] }
   let!(:event_invitation) { FactoryGirl.create(:event_invitation) }
   let(:research_subject) { event_invitation.invitees.first }
+  # this is to ensure we create events. occasionally, the callback is too slow
   let(:event) { event_invitation.event }
 
   before do
@@ -25,7 +26,9 @@ describe V2::SmsReservationsController do
 
         it 'reserves the time slot for this person' do
           subject
-          expect(event.reload.time_slots.first.reservation).to_not be_nil
+          event_invitation.reload
+          event.reload
+          expect(event.time_slots.first.reservation).to_not be_nil
         end
 
         it 'sends out a confirmation sms for this person' do

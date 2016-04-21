@@ -1,0 +1,15 @@
+<%= week_calendar events: @reservations do |date, meetings| %>
+  <%= date %>
+
+  <% meetings.each do |meeting| %>
+    <div>
+      <%= meeting.description %>
+    </div>
+  <% end %>
+<% end %>
+
+<% if @person %>
+  <%= link_to "iCal Feed", controller: 'calendar', action: :feed, token: @person.token, format: :ics %>
+<% else %>
+  <%= link_to "iCal Feed", controller: 'calendar', action: :feed, token: current_user.token, protocol: 'webcal', format: :ics %>
+<% end %>

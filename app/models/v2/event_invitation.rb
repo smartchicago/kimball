@@ -16,6 +16,7 @@
 class V2::EventInvitation < ActiveRecord::Base
   self.table_name = 'v2_event_invitations'
 
+  include Calendarable
   # to pass ownership on to the events.
   attr_accessor :created_by
 
@@ -34,8 +35,25 @@ class V2::EventInvitation < ActiveRecord::Base
   before_validation :find_invitees_or_add_error
   before_save :build_event, if: :valid?
 
+  default_scope { includes(:event) }
+
   def email_addresses_to_array
     @email_addresses_array ||= email_addresses.present? ? email_addresses.split(',') : []
+  end
+
+  def duration
+    slot_length.delete(' mins').to_i.minutes
+  end
+
+  def break_time_window_into_time_slots
+    V2::TimeWindow.new(
+      event_id: v2_event_id,
+      slot_length: slot_length,
+      date: date,
+      start_time: start_time,
+      end_time: end_time,
+      buffer: buffer
+    ).slots
   end
 
   private
@@ -63,14 +81,4 @@ class V2::EventInvitation < ActiveRecord::Base
       end
     end
 
-    def break_time_window_into_time_slots
-      V2::TimeWindow.new(
-        event_id: v2_event_id,
-        slot_length: slot_length,
-        date: date,
-        start_time: start_time,
-        end_time: end_time,
-        buffer: buffer
-      ).slots
-    end
 end

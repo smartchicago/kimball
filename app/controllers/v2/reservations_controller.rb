@@ -12,7 +12,7 @@ class V2::ReservationsController < ApplicationController
   skip_before_action :authenticate_user!
 
   def new
-    event = V2::Event.find(event_params[:event_id])
+    event = V2::Event.find_by(id: event_params[:event_id])
     @person = Person.find_by(token: person_params[:token])
     all_slots = event.available_time_slots
     @available_time_slots = filter_reservations([@person, event.user], all_slots)

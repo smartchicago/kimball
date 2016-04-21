@@ -55,6 +55,9 @@ Logan::Application.routes.draw do
   resources :comments
   resources :taggings, only: [:create, :destroy]
 
+  get '/calendar/(:id)', to: 'calendar#show'
+  get '/calendar/(:token)/feed/', to: 'calendar#feed', defaults: { format: 'ics' }
+
   get  'search/index'
   post 'search/export' # send search results elsewhere, i.e. Mailchimp
   post 'search/exportTwilio'
