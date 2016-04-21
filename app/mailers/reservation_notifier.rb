@@ -19,8 +19,8 @@ class ReservationNotifier < ApplicationMailer
     def generate_ical(reservation)
       cal = Icalendar::Calendar.new
       cal.event do |e|
-        e.dtstart     = Icalendar::Values::Date.new(reservation.start_time)
-        e.dtend       = Icalendar::Values::Date.new(reservation.end_time)
+        e.dtstart = Icalendar::Values::DateTime.new(reservation.start_datetime)
+        e.dtend   = Icalendar::Values::DateTime.new(reservation.end_datetime)
         e.summary     = reservation.event.description
         e.description = reservation.event.description
         e.alarm do |a|
