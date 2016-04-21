@@ -1,0 +1,14 @@
+
+Scenario 1: Overlapping time windows for different events
+- time slots should be open and visible for as long as possible
+- different people will necessarily see the same time slots for the same event and different events
+- so double booking errors should be as graceful and helpful as possible
+
+Scenario 2: Multiple users trying to book
+the same people in different events
+
+- overlapping invitations will be sent to different people
+- overlapping time slots will have to be available across events (but not within the same one)
+- same graceful handling of validation errors when the same people try to book overalpping time slots
+- reservations should not overlapp either a user or a person
+- time slots that have been included in invitations to different events by the same user and reserved by a person should not be sent in the invitation
