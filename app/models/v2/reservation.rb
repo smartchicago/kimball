@@ -25,11 +25,14 @@ class V2::Reservation < ActiveRecord::Base
   has_one    :event_invitation, through: :event
   belongs_to :person
 
+  # we almost always need the time_slots and event
+  default_scope { includes(:time_slot, :event) }
+
   validates :person, presence: true
   validates :time_slot, presence: true
 
-  # we almost always need the time_slots and event
-  default_scope { includes(:time_slot, :event) }
+  # can't have the same time slot id twice.
+  validates :time_slot, uniqueness: true
 
   # these overlap validations are super tricksy.
   # do we check this here?

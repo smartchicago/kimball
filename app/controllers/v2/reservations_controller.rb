@@ -14,8 +14,7 @@ class V2::ReservationsController < ApplicationController
   def new
     event = V2::Event.find_by(id: event_params[:event_id])
     @person = Person.find_by(token: person_params[:token])
-    all_slots = event.available_time_slots
-    @available_time_slots = filter_reservations([@person, event.user], all_slots)
+    @available_time_slots = event.available_time_slots(@person)
     @reservation = V2::Reservation.new(time_slot: V2::TimeSlot.new)
   end
 

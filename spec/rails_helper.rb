@@ -35,6 +35,8 @@ RSpec.configure do |config|
 
   config.filter_rails_from_backtrace!
 
+  config.example_status_persistence_file_path = "#{::Rails.root}/tmp/rspec.data"
+
   config.use_transactional_fixtures = false
 
   config.before(:suite) do

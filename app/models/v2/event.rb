@@ -28,14 +28,42 @@ class V2::Event < ActiveRecord::Base
   delegate :duration,    to: :event_invitation
   delegate :buffer,      to: :event_invitation
 
-  def available_time_slots
-    available_time_slots = time_slots.find_all { |slot| !slot.reservation.present? }
-    available_time_slots || []
+  def available_time_slots(person = nil)
+    available_slots = time_slots.find_all do |slot|
+      !slot.reservation.present?
+    end
+
+    available_slots = filter_reservations([user, person].compact, available_slots)
+
+    available_slots || []
   end
 
-  # for calendaring
-  def person
-    nil
-  end
+  private
 
+    def filter_reservations(arr_obj, slots)
+      arr_obj.each do |obj|
+        obj.reload
+        slots = filter_obj_reservations(obj, slots)
+      end
+      slots
+    end
+
+    def filter_obj_reservations(obj, slots)
+      unless slots.empty?
+        res = obj.v2_reservations.joins(:time_slot).
+              where('v2_time_slots.start_time >=?',
+                DateTime.now.in_time_zone)
+
+        # TODO: refactor
+        # filtering out slots that overlap. Tricky.
+        slots = slots.select do |s|
+          res.any? { |r| not_overlap?(r, s) }
+        end unless res.empty?
+      end
+      slots
+    end
+
+    def not_overlap?(one, other)
+      !((one.start_time - other.end_time) * (other.start_time - one.end_time) >= 0)
+    end
 end

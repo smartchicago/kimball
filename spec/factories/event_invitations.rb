@@ -15,7 +15,8 @@ FactoryGirl.define do
       event_invitation.email_addresses = invitees.collect(&:email_address).join(',')
 
       start_time = Faker::Time.forward(2)
-      end_time = start_time + 15.minutes
+      # at least two slots should be created here
+      end_time = start_time + (15 * rand(2..5)).minutes
 
       event_invitation.date = start_time.strftime('%m/%d/%Y')
       event_invitation.start_time = start_time.strftime('%H:%M')

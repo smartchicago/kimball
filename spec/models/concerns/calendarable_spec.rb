@@ -2,12 +2,13 @@ require 'rails_helper'
 
 describe Calendarable do
   context 'reservation calendar' do
-    let(:event_invitation) { FactoryGirl.create(:event_invitation) }
-    let(:person) { event_invitation.invitees.sample }
-    let(:time_slot) { event_invitation.event.time_slots.sample }
-    let(:reservation) { V2::Reservation.create(person: person, time_slot: time_slot) }
+    let!(:event_invitation) { FactoryGirl.create(:event_invitation) }
+    let!(:person) { event_invitation.invitees.sample }
+    let!(:time_slot) { event_invitation.event.time_slots.sample }
+    let!(:reservation) { V2::Reservation.create(person: person, time_slot: time_slot) }
 
     it 'can generate an ical event' do
+      reservation.reload
       expect(reservation).to respond_to(:to_ics)
       expect(reservation.to_ics.description).to eq(reservation.description)
     end

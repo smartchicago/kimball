@@ -15,12 +15,10 @@ feature 'Person responds to interview invitation over email' do
     @event.available_time_slots.each do |time|
       expect(page).to have_content time.to_time_and_weekday
     end
+    selected_time = @event.available_time_slots.first.to_weekday_and_time
 
     find('#v2_reservation_time_slot_id_1').set(true)
-
     click_button 'Confirm reservation'
-
-    selected_time = @event.available_time_slots.first.to_weekday_and_time
 
     expect(page).to have_content "An interview has been booked for #{selected_time}"
 

@@ -1,11 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe CalendarController, type: :controller do
-  let(:event_invitation) { FactoryGirl.create(:event_invitation) }
-  let(:person) { event_invitation.invitees.sample }
-  let(:time_slot) { event_invitation.event.time_slots.sample }
-  let(:reservation) { V2::Reservation.create(person: person, time_slot: time_slot) }
   let(:user) { FactoryGirl.create(:user) }
+  let!(:event_invitation) { FactoryGirl.create(:event_invitation) }
+  let!(:person) { event_invitation.invitees.sample }
+  let!(:time_slot) { event_invitation.event.time_slots.sample }
+  let!(:reservation) { V2::Reservation.create(person: person, time_slot: time_slot) }
+
 
   describe 'admin user logged in' do
     before(:each) do
