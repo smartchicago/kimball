@@ -56,15 +56,25 @@ class V2::EventInvitation < ActiveRecord::Base
     ).slots
   end
 
-  private
-
-    def build_event
+  # this caused the heisenbug.
+  # the event would be invalid, because it didn't have slots
+  # this now creates an event on save and if the event doesn't have slots
+  # it tries again. Hacky.
+  # Similarly, events after save try to create slots using this method.
+  # hacky
+  def build_event
+    if event.blank?
       self.event = V2::Event.create(
         description: description,
         time_slots: break_time_window_into_time_slots,
-        user_id: created_by || 1 # if nil, make admin owner
+        user_id: created_by.nil? ? 1 : created_by # if nil, make admin owner
       )
+    elsif event.time_slots.blank?
+      event.time_slots = break_time_window_into_time_slots
     end
+  end
+
+  private
 
     def find_invitees_or_add_error
       return unless invitees.empty?

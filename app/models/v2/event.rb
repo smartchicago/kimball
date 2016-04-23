@@ -18,7 +18,8 @@ class V2::Event < ActiveRecord::Base
   belongs_to :user
 
   validates :description, presence: true
-  validates :time_slots, presence: true
+  # validates :user_id, presence: true
+  # validates :time_slots, presence: true
 
   # not sure about all this delegation
   delegate :date,        to: :event_invitation
@@ -27,6 +28,8 @@ class V2::Event < ActiveRecord::Base
   delegate :slot_length, to: :event_invitation
   delegate :duration,    to: :event_invitation
   delegate :buffer,      to: :event_invitation
+
+  after_save :build_slots, if: :event_invitation
 
   def available_time_slots(person = nil)
     available_slots = time_slots.find_all do |slot|
@@ -65,5 +68,9 @@ class V2::Event < ActiveRecord::Base
 
     def not_overlap?(one, other)
       !((one.start_time - other.end_time) * (other.start_time - one.end_time) >= 0)
+    end
+
+    def build_slots
+      event_invitation.build_event
     end
 end
