@@ -2,6 +2,8 @@ class MailchimpUpdate < ActiveRecord::Base
 
   after_save  :updatePerson
 
+  self.per_page = 15
+
   def updatePerson
   	Rails.logger.info("[ MailchimpUpdate#updatePerson ] email = #{email} update_type = #{update_type}")
   	
