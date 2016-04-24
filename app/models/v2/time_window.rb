@@ -19,7 +19,7 @@ class V2::TimeWindow
     slot_end   = slot_start + slot_length
     while slot_end <= end_time
       slot = ::V2::TimeSlot.new(start_time: slot_start, end_time: slot_end, event_id: @event_id)
-      @slots << slot if slot.valid?
+      @slots << slot if slot.valid? && slot.save
       slot_start = slot_end + buffer
       slot_end   = slot_start + slot_length
     end

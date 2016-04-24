@@ -4,16 +4,12 @@ describe V2::SmsReservationsController do
   include SmsSpec::Helpers
 
   let(:twilio_phone_number) { ENV['TWILIO_NUMBER'] }
-  let(:user) { FactoryGirl.create(:user) }
-  let!(:event_invitation) { FactoryGirl.create(:event_invitation) }
 
-  let(:user_2) { FactoryGirl.create(:user) }
+  let(:event_invitation) { FactoryGirl.create(:event_invitation) }
+  let(:user) { event_invitation.user }
   let(:research_subject) { event_invitation.invitees.first }
   let(:research_subject_2) { event_invitation.invitees.last }
-  let!(:event) {
-    event_invitation.event.user_id = user.id
-    event_invitation.event
-  }
+  let(:event) { event_invitation.event }
 
   before do
     clear_messages
@@ -28,11 +24,9 @@ describe V2::SmsReservationsController do
       context 'with existing time slot option' do
         let(:selected_number) { 'a' }
         let(:body) { "#{event.id}#{selected_number}" }
-        let(:selected_time) { V2::Event.find(event.id).time_slots.first.to_weekday_and_time }
+        let(:selected_time) { event.time_slots.first.to_weekday_and_time }
 
         it 'reserves the time slot for this person' do
-          event_invitation.save!
-          event.save
           subject
           expect(event.time_slots.first.reservation).to_not be_nil
         end
@@ -84,10 +78,13 @@ describe V2::SmsReservationsController do
       context 'attempts to select a reserved slot' do
         let(:selected_number) { 'a' }
         let(:body) { "#{event.id}#{selected_number}" }
-        let!(:time_slot) { event.available_time_slots.first }
+        let(:time_slot) { event.time_slots.first }
         let(:reservation){
-          V2::Reservation.create(person: research_subject_2,
-                                 time_slot: time_slot)
+          V2::Reservation.create(user: event_invitation.user,
+                             event: event,
+                             event_invitation: event_invitation,
+                             time_slot: time_slot,
+                             person: research_subject)
         }
         let!(:selected_time) { time_slot.to_weekday_and_time }
 

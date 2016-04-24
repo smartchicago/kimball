@@ -11,6 +11,9 @@
 #  start_time      :string(255)
 #  end_time        :string(255)
 #  buffer          :integer          default(0), not null
+#  created_at      :datetime
+#  updated_at      :datetime
+#  user_id         :integer
 #
 
 class V2::EventInvitationsController < ApplicationController
@@ -21,7 +24,6 @@ class V2::EventInvitationsController < ApplicationController
   def create
     @event_invitation = V2::EventInvitation.new(event_invitation_params)
     # saving the current_user to the event
-    @event_invitation.created_by = current_user.id
 
     if @event_invitation.save
       # @event_invitation.event = create_event(@event_invitation)
@@ -71,15 +73,13 @@ class V2::EventInvitationsController < ApplicationController
 
     # TODO: add a nested :event
     def event_invitation_params
-      params.require(:v2_event_invitation).
-        permit(
-          :email_addresses,
-          :description,
-          :slot_length,
-          :date,
-          :start_time,
-          :end_time,
-          :buffer
-        )
+      params.require(:v2_event_invitation).permit(:email_addresses,
+        :description,
+        :slot_length,
+        :date,
+        :start_time,
+        :end_time,
+        :buffer,
+        :user_id).merge(user_id: current_user.id)
     end
 end

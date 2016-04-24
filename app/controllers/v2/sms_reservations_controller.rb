@@ -7,7 +7,7 @@ class V2::SmsReservationsController < ApplicationController
     if declined?
       send_decline_notifications(person, event)
     else
-      reservation = V2::Reservation.new(person: person, time_slot: time_slot)
+      reservation = V2::Reservation.new(generate_reservation_params)
       if reservation.save
         send_notifications(person, reservation)
       else
@@ -21,11 +21,11 @@ class V2::SmsReservationsController < ApplicationController
   private
 
     def message
-      reservation_params[:Body]
+      sms_params[:Body]
     end
 
     def person
-      @person ||= Person.find_by(phone_number: reservation_params[:From])
+      @person ||= Person.find_by(phone_number: sms_params[:From])
     end
 
     # TODO: needs to be smarter in the edge case where
@@ -41,11 +41,27 @@ class V2::SmsReservationsController < ApplicationController
 
     def event
       event_id = message.delete('^0-9')
-      V2::Event.find_by(id: event_id)
+      @event ||= V2::Event.includes(:event_invitation, :user, :time_slots).find_by(id: event_id)
+    end
+
+    def event_invitation
+      @event_invitation ||= event.event_invitation
+    end
+
+    def user
+      @user ||= event_invitation.user
     end
 
     def time_slot
-      event.time_slots[selection]
+      @event.time_slots[selection]
+    end
+
+    def generate_reservation_params
+      { user: user,
+        person: person,
+        event: event,
+        event_invitation: event_invitation,
+        time_slot: time_slot }
     end
 
     def send_notifications(person, reservation)
@@ -57,7 +73,7 @@ class V2::SmsReservationsController < ApplicationController
     end
 
     def send_error_notification
-      ::InvalidOptionSms.new(to: reservation_params[:From]).send
+      ::InvalidOptionSms.new(to: sms_params[:From]).send
 
       render text: 'OK'
     end
@@ -86,7 +102,7 @@ class V2::SmsReservationsController < ApplicationController
       false
     end
 
-    def reservation_params
+    def sms_params
       params.permit(:From, :Body)
     end
 end

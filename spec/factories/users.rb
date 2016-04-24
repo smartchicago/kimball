@@ -18,6 +18,8 @@
 #  created_at             :datetime
 #  updated_at             :datetime
 #  approved               :boolean          default(FALSE), not null
+#  name                   :string(255)
+#  token                  :string(255)
 #
 
 require 'faker'

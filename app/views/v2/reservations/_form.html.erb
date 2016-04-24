@@ -1,6 +1,8 @@
 <%= form_for @reservation, url: v2_reservations_path, html: { class: 'form-horizontal' } do |form| %>
   <%= form.hidden_field :person_id, value: @person.id.to_s %>
-
+  <%= form.hidden_field :user_id, value: @user.id.to_s %>
+  <%= form.hidden_field :event_id, value: @event_invitation.v2_event_id.to_s %>
+  <%= form.hidden_field :event_invitation_id, value: @event_invitation.id.to_s %>
   <% @available_time_slots.each do |time_slot| %>
     <div class="radio_button">
       <%= form.label :time_slot_id, time_slot.to_time_and_weekday, :class => 'control-label' %>

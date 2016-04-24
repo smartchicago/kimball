@@ -4,10 +4,9 @@ require 'capybara/email/rspec'
 feature 'Person responds to interview invitation over email' do
   before do
     clear_emails
-    @event = FactoryGirl.create(:event)
-    @event.user = FactoryGirl.create(:user)
-    @event.save!
-    @research_subject = FactoryGirl.create(:person)
+    @event_invitation = FactoryGirl.create(:event_invitation)
+    @event = @event_invitation.event
+    @research_subject = @event_invitation.invitees.first
   end
 
   scenario 'successfully' do
@@ -16,8 +15,9 @@ feature 'Person responds to interview invitation over email' do
       expect(page).to have_content time.to_time_and_weekday
     end
     selected_time = @event.available_time_slots.first.to_weekday_and_time
+    first_slot = @event.available_time_slots.first
 
-    find('#v2_reservation_time_slot_id_1').set(true)
+    find("#v2_reservation_time_slot_id_#{first_slot.id}").set(true)
     click_button 'Confirm reservation'
 
     expect(page).to have_content "An interview has been booked for #{selected_time}"
@@ -39,6 +39,14 @@ feature 'Person responds to interview invitation over email' do
     end
   end
 
+  scenario 'but forgetting to select a time' do
+    receive_invitation_email_and_click_reservation_link
+
+    click_button 'Confirm reservation'
+
+    expect(page).to have_content "No time slot was selected, couldn't create the reservation"
+  end
+
   scenario 'when no time slots are avaialble anymore' do
     send_invitation_email_for_event_then_book_all_event_time_slots
 
@@ -47,14 +55,6 @@ feature 'Person responds to interview invitation over email' do
     @event.time_slots.each do |time|
       expect(page).to_not have_content time.to_time_and_weekday
     end
-  end
-
-  scenario 'but forgetting to select a time' do
-    receive_invitation_email_and_click_reservation_link
-
-    click_button 'Confirm reservation'
-
-    expect(page).to have_content "No time slot was selected, couldn't create the reservation"
   end
 end
 
@@ -70,8 +70,12 @@ def receive_invitation_email_and_click_reservation_link
 end
 
 def send_invitation_email_for_event_then_book_all_event_time_slots
-  @event.time_slots.each do |slot|
-    slot.create_reservation(person: FactoryGirl.create(:person))
+  @event.time_slots.each_with_index do |slot, i|
+    V2::Reservation.create(person: @event_invitation.invitees[i],
+                           time_slot: slot,
+                           user: @event_invitation.user,
+                           event: @event_invitation.event,
+                           event_invitation: @event_invitation)
   end
 
   receive_invitation_email_and_click_reservation_link

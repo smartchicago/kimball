@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160420135635) do
+ActiveRecord::Schema.define(version: 20160424183941) do
 
   create_table "applications", force: :cascade do |t|
     t.string   "name",         limit: 255
@@ -242,6 +242,7 @@ ActiveRecord::Schema.define(version: 20160420135635) do
     t.integer  "buffer",          limit: 4,   default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "user_id",         limit: 4
   end
 
   create_table "v2_events", force: :cascade do |t|
@@ -252,10 +253,13 @@ ActiveRecord::Schema.define(version: 20160420135635) do
   end
 
   create_table "v2_reservations", force: :cascade do |t|
-    t.integer  "time_slot_id", limit: 4
-    t.integer  "person_id",    limit: 4
+    t.integer  "time_slot_id",        limit: 4
+    t.integer  "person_id",           limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "user_id",             limit: 4
+    t.integer  "event_id",            limit: 4
+    t.integer  "event_invitation_id", limit: 4
   end
 
   create_table "v2_time_slots", force: :cascade do |t|

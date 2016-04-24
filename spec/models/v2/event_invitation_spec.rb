@@ -11,6 +11,9 @@
 #  start_time      :string(255)
 #  end_time        :string(255)
 #  buffer          :integer          default(0), not null
+#  created_at      :datetime
+#  updated_at      :datetime
+#  user_id         :integer
 #
 
 require 'rails_helper'
@@ -25,6 +28,7 @@ describe V2::EventInvitation do
 
   describe '#save' do
     let(:people) { FactoryGirl.create_list(:person, 2) }
+    let(:user) { FactoryGirl.create(:user) }
     let(:valid_args) do
       {
         email_addresses: people.map(&:email_address).join(','),
@@ -33,7 +37,7 @@ describe V2::EventInvitation do
         date: '03/20/2016',
         start_time: '15:00',
         end_time: '16:30',
-        created_by: 1
+        user_id: user.id
       }
     end
 
@@ -55,7 +59,7 @@ describe V2::EventInvitation do
 
       it 'associates event to its creator' do
         subject.save
-        expect(subject.event.user_id).to eq(1)
+        expect(subject.event.user_id).to eq(user.id)
       end
     end
 

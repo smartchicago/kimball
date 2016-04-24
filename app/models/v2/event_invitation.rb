@@ -11,17 +11,18 @@
 #  start_time      :string(255)
 #  end_time        :string(255)
 #  buffer          :integer          default(0), not null
+#  created_at      :datetime
+#  updated_at      :datetime
+#  user_id         :integer
 #
 
 class V2::EventInvitation < ActiveRecord::Base
   self.table_name = 'v2_event_invitations'
 
   include Calendarable
-  # to pass ownership on to the events.
-  attr_accessor :created_by
 
   belongs_to :event, class_name: '::V2::Event', foreign_key: :v2_event_id
-  has_one :user, through: '::V2::Event'
+  belongs_to :user
 
   # we don't really need a join model, exceptionally HABTM is more appropriate
   # rubocop:disable Rails/HasAndBelongsToMany
@@ -30,7 +31,7 @@ class V2::EventInvitation < ActiveRecord::Base
 
   # TODO: do away with description, it's now a V2::Event attribute
   # TODO: no longer use email addresses here. Should be person_ids
-  validates :email_addresses, :description, :slot_length, :date, :start_time, :end_time, presence: true
+  validates :email_addresses, :description, :slot_length, :date, :start_time, :end_time, :user_id, presence: true
 
   before_validation :find_invitees_or_add_error
   before_save :build_event, if: :valid?
@@ -59,19 +60,13 @@ class V2::EventInvitation < ActiveRecord::Base
   # this caused the heisenbug.
   # the event would be invalid, because it didn't have slots
   # this now creates an event on save and if the event doesn't have slots
-  # it tries again. Hacky.
-  # Similarly, events after save try to create slots using this method.
-  # hacky
+
   def build_event
-    if event.blank?
-      self.event = V2::Event.create(
-        description: description,
-        time_slots: break_time_window_into_time_slots,
-        user_id: created_by.nil? ? 1 : created_by # if nil, make admin owner
-      )
-    elsif event.time_slots.blank?
-      event.time_slots = break_time_window_into_time_slots
-    end
+    self.event = V2::Event.create(
+      description: description,
+      time_slots: break_time_window_into_time_slots,
+      user_id: user_id
+    )
   end
 
   private
