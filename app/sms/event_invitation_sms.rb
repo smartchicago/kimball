@@ -30,7 +30,7 @@ class EventInvitationSms < ApplicationSms
         body << "'#{event.id}#{slot_id_to_char(i)}' for #{slot.to_time_and_weekday}\n"
       end
       body << "Or visit https://#{ENV['PRODUCTION_SERVER']}/calendar/?token=#{@to.token} to pick a time.\n"
-      body << "If none of these times work, please respond with: #{@event.id}0)  to decline\n"
+      body << "If none of these times work, please respond with: #{@event.id}-decline  to decline\n"
       body << "\nThanks in advance for you time!\n\n"
       body << 'Best, Kimball team' # TODO: signature should be configurable
     end
