@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.0'
 
-#gem 'pg' # soooooon!
+# gem 'pg' # soooooon!
 # must use this version of mysql2 for rails 4.0.0
 gem 'mysql2', '~> 0.3.18'
 

@@ -28,6 +28,7 @@ class CalendarController < ApplicationController
   private
 
     def person?
+      @person = nil
       if !allowed_params[:token].blank?
         @person = Person.find_by(token: allowed_params[:token])
         # if we don't have a person, see if we have a user's token.
@@ -36,20 +37,25 @@ class CalendarController < ApplicationController
         @person = Person.find_by(allowed_params[:id])
       end
 
-      @person.nil? ? @person : false
+      @person.nil? ? false : true
     end
 
     def calendar_type
-      case allowed_params[:type]
-      when 'reservations'
-        :v2_reservations
-      when 'time_slots'
-        :time_slots
-      when 'event_invitations'
-        :event_invitations
-      else
-        :v2_reservations
+      res = Set.new
+      res.add :v2_reservations
+      allowed_params[:type].split(',').each do |type|
+        case type
+        when 'reservations'
+          res.add :v2_reservations
+        when 'time_slots'
+          res.add :time_slots
+        when 'event_invitations'
+          res.add :event_invitations
+        else
+          res.add :v2_reservations
+        end
       end
+      return res.to_a
     end
 
     def allowed_params
