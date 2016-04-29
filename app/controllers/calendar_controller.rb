@@ -4,6 +4,7 @@ class CalendarController < ApplicationController
   include ActionController::MimeResponds
 
   def show
+    console
     # either it's a person or it's a user.
     @visitor = @person ? @person : current_user
     if @visitor
@@ -17,7 +18,7 @@ class CalendarController < ApplicationController
     @visitor = @person ? @person : current_user
     if @visitor
       calendar = Icalendar::Calendar.new
-      @visitor.v2_reservations.each { |r| calendar.add_event(r.to_ics) }
+      @visitor.send(calendar_type).each { |r| calendar.add_event(r.to_ics) }
       calendar.publish
       render text: calendar.to_ical
     else
@@ -41,21 +42,18 @@ class CalendarController < ApplicationController
     end
 
     def calendar_type
-      res = Set.new
-      res.add :v2_reservations
-      allowed_params[:type].split(',').each do |type|
-        case type
-        when 'reservations'
-          res.add :v2_reservations
-        when 'time_slots'
-          res.add :time_slots
-        when 'event_invitations'
-          res.add :event_invitations
-        else
-          res.add :v2_reservations
-        end
+      case allowed_params[:type]
+      when 'reservations'
+        :v2_reservations
+      when 'time_slots'
+        :time_slots
+      when 'events'
+        :v2_events
+      when 'event_invitations'
+        :event_invitations
+      else
+        :v2_reservations
       end
-      return res.to_a
     end
 
     def allowed_params
