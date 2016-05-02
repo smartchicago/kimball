@@ -1,6 +1,4 @@
-<script>
-var token = <%= @person.nil? ? false : @person.token %>;
-</script>
+<script> var token = '<%= @person.nil? ? false : @person.token %>'; </script>
 <div id='calendar'></div>
 <% if @person %>
   <%= link_to "iCal Feed", controller: 'calendar', action: :feed, token: @person.token, format: :ics %>

@@ -288,6 +288,5 @@ class Person < ActiveRecord::Base
     [first_name, last_name].join(' ')
   end
 
-
 end
 # rubocop:enable ClassLength

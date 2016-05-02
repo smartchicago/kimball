@@ -3,15 +3,31 @@ $(document).on('ready page:load', function () {
 
   // users won't have a token.
   var token_param = '';
-  if (token) { token_param = "?token="+ token; }
-
+  if (typeof(token) != "undefined") { token_param = "?token="+ token; }
 
   var event_sources = {
     reservations: {
-     url: "/calendar/reservations.json" + token_param
+      url: "/calendar/reservations.json" + token_param,
+      lazyFetching: false,
+      displayed: false
     },
     event_slots: {
-      url: '/calendar/event_slots.json' + token_param
+      url: '/calendar/event_slots.json' + token_param,
+      lazyFetching: false,
+      displayed: false
+    }
+  }
+
+  var toggle_event_source = function(event_type){
+    source = event_sources[event_type]
+    $('.fc-' + event_type + '-button').toggleClass('fc-state-active');
+    $('#calendar').fullCalendar('removeEventSource',source);
+    if (!source['displayed']) {
+      $('#calendar').fullCalendar('addEventSource',source);
+      source['displayed'] = true;
+
+    }else{
+      source['displayed'] = false;
     }
   }
 
@@ -19,23 +35,40 @@ $(document).on('ready page:load', function () {
   var isMobile = window.matchMedia("only screen and (max-width: 760px)");
 
   $('#calendar').fullCalendar({
+    customButtons: {
+        event_slots: {
+            text: 'invitations',
+            click: function() {
+              toggle_event_source('event_slots');
+
+            }
+        },
+        reservations: {
+            text: 'reservations',
+            click: function() {
+                toggle_event_source('reservations');
+            }
+        }
+    },
     header: {
       left: 'prev,next today',
-      center: 'title',
+      center: 'title event_slots,reservations',
       right: 'month,agendaWeek,agendaDay'
     },
     defaultView: isMobile.matches ? 'agendaDay' : 'agendaWeek',
     defaultDate: moment( new Date().toJSON().slice(0, 10) ),
+    //eventLimit: true, // allow "more" link when too many events
     editable: false,
     businessHours:{
       start:'9:00',
       end: '20:00'
     },
-    //eventLimit: true, // allow "more" link when too many events
-    eventSources: [
-      event_sources['reservations'],
-      event_sources['event_slots']
-    ]
-  })
+    eventSources: []
+  });
+
+  if ($('#calendar').length) { // rails?
+    toggle_event_source('reservations');
+    if (token !== 'false') { toggle_event_source('event_slots'); }
+  }
 
 });

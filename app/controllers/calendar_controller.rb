@@ -9,8 +9,9 @@ class CalendarController < ApplicationController
 
   def feed
     if visitor
+      # TODO: refactor into calendarable.
       calendar = Icalendar::Calendar.new
-      visitor.send(calendar_type).each { |r| calendar.add_event(r.to_ics) }
+      visitor.v2_reservations.each { |r| calendar.add_event(r.to_ics) }
       calendar.publish
       render text: calendar.to_ical
     else
@@ -20,32 +21,33 @@ class CalendarController < ApplicationController
 
   def reservations
     if visitor
+      # TODO: refactor into reservations?
       @reservations = visitor.v2_reservations.joins(:time_slot).where('v2_time_slots.start_time >= ?', Time.zone.today)
     else
       redirect_to root_url
     end
   end
 
-  # rubocop:disable metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength
   def event_slots
     # events and their time slots.
     # TODO: refactor into user and person models with the same interface
     if visitor
       events = visitor.event_invitations.where('date >=?', Time.zone.today.strftime('%m/%d/%Y')).map(&:event)
       slots = []
-      events.each{|e|
+      events.each do|e|
         if visitor.class.to_s == 'Person'
-          e.available_time_slots(visitor).each{|ts| slots.push ts }
+          e.available_time_slots(visitor).each { |ts| slots.push ts }
         else
-          e.available_time_slots.each{|ts| slots.push ts }
+          e.available_time_slots.each { |ts| slots.push ts }
         end
-      }
+      end
       @objs = events + slots
     else
       redirect_to root_url
     end
   end
-  # rubocop:enable metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength
 
   private
 
@@ -63,18 +65,19 @@ class CalendarController < ApplicationController
       @person.nil? ? false : true
     end
 
-    def calendar_type
-      case allowed_params[:type]
-      when 'reservations'
-        :v2_reservations
-      when 'time_slots'
-        :time_slots
-      when 'events'
-        :v2_events
-      when 'event_invitations'
-        :event_invitations
-      end
-    end
+    # def calendar_type
+    #   case allowed_params[:type]
+    #   when 'reservations'
+    #     :v2_reservations
+    #   when 'time_slots'
+    #     :time_slots
+    #   when 'events'
+    #     :v2_events
+    #   when 'event_invitations'
+    #     :event_invitations
+    #   else
+    #     :v2_reservations
+    # end
 
     # this enables us to have the same interface for users and persons.
     def visitor

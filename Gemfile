@@ -131,9 +131,6 @@ gem 'twitter-typeahead-rails'
 # make ical events and feeds
 gem 'icalendar'
 
-# calendar view
-gem 'simple_calendar'
-
 group :testing do
   # mock tests w/mocha
   gem 'mocha', :require => false

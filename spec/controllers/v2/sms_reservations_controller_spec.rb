@@ -84,7 +84,7 @@ describe V2::SmsReservationsController do
                              event: event,
                              event_invitation: event_invitation,
                              time_slot: time_slot,
-                             person: research_subject)
+                             person: research_subject_2)
         }
         let!(:selected_time) { time_slot.to_weekday_and_time }
 
