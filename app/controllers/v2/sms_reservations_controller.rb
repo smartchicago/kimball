@@ -91,6 +91,13 @@ class V2::SmsReservationsController < ApplicationController
       message.downcase =~ /^\d{1,5}-decline?/
     end
 
+    # we probably want a method that will do the decline for us
+    # cases:
+    # 1) with reservation, it was a reminder, find reservation and cancel
+    #     and send reservatino cancel message
+    # 2) standard decline invitation, just send decline message to user and
+    #    person
+
     def letters_and_numbers_only?
       # up to 10k events
       message.downcase =~ /\b\d{1,5}[a-z]\b/

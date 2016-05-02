@@ -55,8 +55,13 @@ Logan::Application.routes.draw do
   resources :comments
   resources :taggings, only: [:create, :destroy]
 
+  get 'calendar/event_slots.json(:token)', to: 'calendar#event_slots', defaults: { format: 'json' }
+
+  get 'calendar/reservations.json(:token)', to: 'calendar#reservations', defaults: { format: 'json' }
+
   get '/calendar/(:id)', to: 'calendar#show'
   get '/calendar/(:token)/feed/', to: 'calendar#feed', defaults: { format: 'ics' }
+
 
   get  'search/index'
   post 'search/export' # send search results elsewhere, i.e. Mailchimp

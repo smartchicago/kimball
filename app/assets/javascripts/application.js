@@ -21,6 +21,9 @@
 //= require tokenfield/bootstrap-tokenfield.min
 //= require jquery.validate
 //= require jquery.validate.additional-methods
+//= require moment/moment.min
+//= require fullcalendar/fullcalendar.min
+//= require ical_fullcalendar/ical_fullcalendar
 //= require_tree .
 
 $(document).on('ready page:load',function() {

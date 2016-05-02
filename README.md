@@ -11,7 +11,7 @@ Kimball is a customer relationship management application at its heart. Kimball 
 
 Setup
 -----
-Kimball is a Ruby on Rails app. 
+Kimball is a Ruby on Rails app.
 
 * Server Set up:
   * It currently uses Capistrano for deployment to staging and production instances.
@@ -35,7 +35,7 @@ On Mac OS X, ssh-agent will "forget" this key, once it gets restarted during reb
   * Webhooks are used on Wufoo to send data back to Kimball. Currently there are 2 webhooks in use:
     * /people : This endpoint is used for new signups via the main signup/registration wufoo form.
     * /people/create_sms : This endpoint is used for new signups via the signup/registration Wufoo form that has been customized for SMS signup.
-    * /submissions : This endpoint is for all other Wufoo forms (call out, availability, tests). It saves the results in the submissions model. 
+    * /submissions : This endpoint is for all other Wufoo forms (call out, availability, tests). It saves the results in the submissions model.
 * Twilio:
   * Twilio is used to send and receive text messages for sign up, notifications, and surveys.
   * Two Twilio phone numbers are needed. One for text message signup, notifications, and surveys. The other for text message verification.
@@ -102,6 +102,11 @@ To run all tests:
 ```
 bundle exec rake
 
+```
+
+To constantly run red-green-refactor tests:
+```
+bundle exec guard -g red_green_refactor
 ```
 
 Contributors
