@@ -12,7 +12,7 @@ $(document).on('ready page:load', function() {
     return false;
   });
 
-  searchSelector = '.tokenfield';
+  var searchSelector = '.tokenfield';
 
   // preventing enter from submitting form
   $(searchSelector).keydown(function(event){
@@ -24,8 +24,7 @@ $(document).on('ready page:load', function() {
 
   //can't add the same tag twice
   $(searchSelector).on('tokenfield:createtoken', function(event) {
-    var existingTokens;
-    existingTokens = $(this).tokenfield('getTokens');
+    var existingTokens = $(this).tokenfield('getTokens');
     $.each(existingTokens, function(index, token) {
       if (token.value === event.attrs.value) {
         event.preventDefault();
@@ -33,8 +32,9 @@ $(document).on('ready page:load', function() {
     });
   });
 
+
   //filter pre-existing tags from the tagfield
-  filter = function(suggestions) {
+  var filter = function(suggestions) {
     var current, filtered, results;
     current = $(searchSelector).tokenfield('getTokens').map(function(e,i) {
       return e.name;
@@ -49,13 +49,13 @@ $(document).on('ready page:load', function() {
   });
 
   // searching from the server
-  bloodhound = new Bloodhound({
+  var bloodhound = new Bloodhound({
     datumTokenizer: function(d) {
       return Bloodhound.tokenizers.whitespace(d.value);
     },
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     remote: {
-      url: '/taggings/search?q=%QUERY',
+      url: $("[data-search-url]").data()['searchUrl'],
       wildcard: '%QUERY',
       limit: 20,
       filter: filter,

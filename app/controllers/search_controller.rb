@@ -21,6 +21,7 @@ class SearchController < ApplicationController
                end
 
     respond_to do |format|
+      format.json { @results.to_json }
       format.html {}
       format.csv do
         fields = Person.column_names
