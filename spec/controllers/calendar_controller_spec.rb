@@ -22,9 +22,27 @@ RSpec.describe CalendarController, type: :controller do
     describe 'GET #show' do
       subject { get :show }
       it 'renders the calendar' do
-        get :show
+        subject
         expect(response.status).to eq(200)
         expect(response).to render_template('calendar/show')
+      end
+    end
+
+    describe 'GET #reservations' do
+      subject { get :reservations, format: :json }
+      it 'returns json' do
+        subject
+        expect(response.status).to eq(200)
+        expect(response.content_type).to eq('application/json')
+      end
+    end
+
+    describe 'GET #event_slots' do
+      subject { get :event_slots, format: :json }
+      it 'returns json' do
+        subject
+        expect(response.status).to eq(200)
+        expect(response.content_type).to eq('application/json')
       end
     end
   end

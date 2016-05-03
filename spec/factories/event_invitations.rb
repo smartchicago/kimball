@@ -6,7 +6,6 @@ FactoryGirl.define do
     description 'Lorem ipsum for now'
     slot_length 15
     buffer 0
-    event
     user
 
     before(:create) do |event_invitation|
