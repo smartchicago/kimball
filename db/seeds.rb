@@ -17,7 +17,8 @@ Person.create(
   primary_connection_description:'cable internet',
   phone_number: '312-555-9090',
   participation_type: 'in-person',
-  preferred_contact_method: 'EMAIL'
+  preferred_contact_method: 'EMAIL',
+  token: 'thisismytoken'
 )
 
 Person.create(
@@ -37,7 +38,8 @@ Person.create(
   primary_connection_description:'cable internet',
   phone_number: '312-555-8888',
   participation_type: 'remote',
-  preferred_contact_method: 'SMS'
+  preferred_contact_method: 'SMS',
+  token: 'thisismytoken'
 )
 
 User.create(

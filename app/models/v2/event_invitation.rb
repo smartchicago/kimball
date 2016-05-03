@@ -29,9 +29,8 @@ class V2::EventInvitation < ActiveRecord::Base
   has_and_belongs_to_many :invitees, class_name: 'Person', join_table: :invitation_invitees_join_table
   # rubocop:enable Rails/HasAndBelongsToMany
 
-  # TODO: do away with description, it's now a V2::Event attribute
   # TODO: no longer use email addresses here. Should be person_ids
-  validates :email_addresses, :description, :slot_length, :date, :start_time, :end_time, :user_id, presence: true
+  validates :email_addresses, :description, :title, :slot_length, :date, :start_time, :end_time, :user_id, presence: true
 
   before_validation :find_invitees_or_add_error
   before_save :build_event, if: :valid?

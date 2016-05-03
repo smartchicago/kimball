@@ -22,18 +22,22 @@ class CalendarController < ApplicationController
   def reservations
     if visitor
       # TODO: refactor into reservations?
-      @reservations = visitor.v2_reservations.joins(:time_slot).where('v2_time_slots.start_time >= ?', Time.zone.today)
+      @reservations = visitor.v2_reservations.joins(:time_slot).where('v2_time_slots.start_time BETWEEN ? AND ?', cal_params[:start], cal_params[:end])
     else
       redirect_to root_url
     end
   end
 
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def event_slots
     # events and their time slots.
     # TODO: refactor into user and person models with the same interface
     if visitor
-      events = visitor.event_invitations.where('date >=?', Time.zone.today.strftime('%m/%d/%Y')).map(&:event)
+      events = visitor.
+               event_invitations.
+               includes(event: :time_slot).
+               where('date BETWEEN ? AND ?', cal_params[:start], cal_params[:end]).
+               map(&:event)
       slots = []
       events.each do|e|
         if visitor.class.to_s == 'Person'
@@ -47,7 +51,16 @@ class CalendarController < ApplicationController
       redirect_to root_url
     end
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
+  def events
+    redirect_to root_url unless current_user
+    @events = current_user.
+              events.
+              joins(:event_invitation).
+              includes(:v2_event_invitations).
+              where('v2_event_invitations.date BETWEEN ? AND ?', cal_params[:start], cal_params[:end])
+  end
 
   private
 
@@ -65,26 +78,26 @@ class CalendarController < ApplicationController
       @person.nil? ? false : true
     end
 
-    # def calendar_type
-    #   case allowed_params[:type]
-    #   when 'reservations'
-    #     :v2_reservations
-    #   when 'time_slots'
-    #     :time_slots
-    #   when 'events'
-    #     :v2_events
-    #   when 'event_invitations'
-    #     :event_invitations
-    #   else
-    #     :v2_reservations
-    # end
-
-    # this enables us to have the same interface for users and persons.
+    # both types can visit the page. they have the same interface
     def visitor
       @visitor ||= @person ? @person : current_user
     end
 
     def allowed_params
       params.permit(:token, :id, :event_id, :user_id, :type)
+    end
+
+    def cal_params
+      # default the start of our calendar to today.
+      end_time = (Time.zone.today + 7.days).strftime('%m/%d/%Y')
+      start_time = Time.zone.today.strftime('%m/%d/%Y')
+
+      defaults = { start: start_time, end: end_time }
+      params.permit(:token, :start, :end).reverse_merge(defaults)
+
+      # full calendar uses dashes, not slashes. argh.
+      params.transform_values do |v|
+        v =~ /\d{4}-\d{2}-\d{2}/ ? Time.zone.parse(v).strftime('%m/%d/%Y') : v
+      end
     end
 end

@@ -22,14 +22,25 @@ require 'faker'
 FactoryGirl.define do
   factory :event, class: V2::Event do
     description 'Lorem ipsum for now'
+    user
 
     before(:create) do |event|
       event.time_slots << FactoryGirl.build_list(:time_slot, 3).each { |t| t.event_id = event.id }
     end
 
+    after(:create) do |event|
+      FactoryGirl.create(:event_invitation, event: event)
+    end
+
     trait :fully_booked do
       after(:create) do |event|
-        event.time_slots.each { |slot| FactoryGirl.create(:reservation, time_slot: slot) }
+        event.time_slots.each do |slot|
+          V2::Reservation.create(person: FactoryGirl.create(:person),
+                                 time_slot: slot,
+                                 event: event,
+                                 event_invitation: event.event_invitation,
+                                 user: event.user)
+        end
       end
     end
   end

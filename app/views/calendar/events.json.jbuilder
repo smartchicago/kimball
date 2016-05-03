@@ -1,4 +1,4 @@
-json.array!(@objs) do |event|
+json.array!(@events) do |event|
   json.extract! event, :id, :title, :description
   json.start event.start_datetime
   json.end event.end_datetime
@@ -7,3 +7,4 @@ json.array!(@objs) do |event|
   json.type event.class.to_s.demodulize
   # json.url event_url(event, format: :html)
 end
+

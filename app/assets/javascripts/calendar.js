@@ -55,6 +55,18 @@ $(document).on('ready page:load', function () {
       center: 'title event_slots,reservations',
       right: 'month,agendaWeek,agendaDay'
     },
+    eventClick:  function(event, jsEvent, view) {
+
+      $('#modalTitle').html(event.title);
+      $('#modalBody').html(event.description);
+      $('#eventUrl').attr('href',event.url);
+      $('#calendarModal').modal();
+    },
+    eventRender: function(event, element){
+      if(event.source.rendering == 'background'){
+        element.append(event.title);
+      }
+    },
     defaultView: isMobile.matches ? 'agendaDay' : 'agendaWeek',
     defaultDate: moment( new Date().toJSON().slice(0, 10) ),
     //eventLimit: true, // allow "more" link when too many events
@@ -69,6 +81,18 @@ $(document).on('ready page:load', function () {
   if ($('#calendar').length) { // rails?
     toggle_event_source('reservations');
     if (token !== 'false') { toggle_event_source('event_slots'); }
+  }
+
+  $('#submitButton').on('click', function(e){
+    // We don't want this to act as a link so cancel the link action
+    e.preventDefault();
+
+    doSubmit();
+  });
+
+  function doSubmit(){
+    $("#calendarModal").modal('hide');
+
   }
 
 });

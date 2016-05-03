@@ -58,6 +58,7 @@ Logan::Application.routes.draw do
   get 'calendar/event_slots.json(:token)', to: 'calendar#event_slots', defaults: { format: 'json' }
 
   get 'calendar/reservations.json(:token)', to: 'calendar#reservations', defaults: { format: 'json' }
+  get 'calendar/events.json', to: 'calendar#events', defaults: { format: 'json' }
 
   get '/calendar/(:id)', to: 'calendar#show'
   get '/calendar/(:token)/feed/', to: 'calendar#feed', defaults: { format: 'ics' }

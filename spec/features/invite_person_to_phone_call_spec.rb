@@ -22,7 +22,7 @@ feature 'Invite person to a phone call' do
     fill_in "People's email addresses", with: research_subject_emails.join(',')
 
     event_description = "We're looking for mothers between the age of 16-26 for a phone interview"
-
+    fill_in 'Event title', with: 'event title'
     fill_in 'Event description', with: event_description
 
     select '30 mins', from: 'Call length'
@@ -53,7 +53,7 @@ feature 'Invite person to a phone call' do
 
     click_button 'Send invitation'
 
-    expect(page).to have_text('There were problems with some of the fields: Email addresses can\'t be blank, Description can\'t be blank, Date can\'t be blank')
+    expect(page).to have_text('There were problems with some of the fields: Email addresses can\'t be blank, Description can\'t be blank, Title can\'t be blank, Date can\'t be blank')
   end
 
   scenario 'with an unregistered email address' do

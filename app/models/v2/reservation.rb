@@ -65,6 +65,7 @@ class V2::Reservation < ActiveRecord::Base
   delegate :start_time,  to: :time_slot, allow_nil: true
   delegate :end_time,    to: :time_slot, allow_nil: true
 
+  delegate :title,       to: :event_invitation
   delegate :description, to: :event_invitation
   delegate :date,        to: :event_invitation
   delegate :slot_length, to: :event_invitation

@@ -22,7 +22,8 @@ class V2::TimeSlot < ActiveRecord::Base
   validates :end_time,   presence: true
 
   delegate :date,        to: :event_invitation
-  delegate :description, to: :event
+  delegate :title,       to: :event_invitation
+  delegate :description, to: :event_invitation
   delegate :duration,    to: :event_invitation
   delegate :slot_legnth, to: :event_invitation
 
