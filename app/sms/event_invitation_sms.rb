@@ -32,7 +32,8 @@ class EventInvitationSms < ApplicationSms
       end
       body << "Or visit https://#{ENV['PRODUCTION_SERVER']}/calendar/?token=#{@to.token} to pick a time.\n"
       body << "If none of these times work, you can just ignore this.\n"
-      body << 'Thanks, Kimball team' # TODO: signature should be configurable
+      body << 'Thanks,\n'
+      body << ENV['TEAM_NAME']
     end
   # rubocop:enable Metrics/MethodLength,
 end

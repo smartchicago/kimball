@@ -31,3 +31,4 @@ SMTP_PASSWORD: "241234"
 AWS_API_TOKEN: ""
 AWS_API_SECRET: ""
 AWS_S3_BUCKET: ''
+TEAM_NAME: 'Smart Chicago Collaborative'

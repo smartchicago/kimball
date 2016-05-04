@@ -46,5 +46,7 @@ User.create(
   email: 'cutgroup@example.com',
   password: 'foobar123',
   password_confirmation: 'foobar123',
-  approved: true
+  approved: true,
+  name: 'Joe User',
+  phone_number: '555-555-5555'
 )

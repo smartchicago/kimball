@@ -23,7 +23,7 @@ class TimeSlotNotAvailableSms < ApplicationSms
     available_slots = event.available_time_slots(to)
     body << generate_slot_messages(available_slots)
     body << "\nThanks!\n\n"
-    body << 'Best, Kimball team' # TODO: signature should be configurable
+    body << ENV['TEAM_NAME'] # TODO: signature should be configurable
   end
 
   # rubocop:disable Metrics/MethodLength,
