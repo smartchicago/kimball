@@ -5,9 +5,13 @@ module Calendarable
 
   def to_ics
     e               = Icalendar::Event.new
+    e.summary       = title
     e.dtstart       = Icalendar::Values::DateTime.new(start_datetime)
     e.dtend         = Icalendar::Values::DateTime.new(end_datetime)
-    e.description   = description
+    e.description   = cal_description
+    unless person.nil?
+      e.url  = "https://#{ENV['PRODUCTION_SERVER']}/people/#{person.id}"
+    end
     e.uid           = generate_ical_id
     add_alarm(e)
   end
@@ -24,6 +28,15 @@ module Calendarable
   end
 
   private
+
+    def cal_description
+      if person.nil?
+        description
+      else
+        res  = description + "\n tel: #{person.phone_number}"
+        res += " \n email: #{person.email_address}"
+      end
+    end
 
     def add_alarm(e)
       # only add alarms for the actual reservation

@@ -12,6 +12,7 @@ class CalendarController < ApplicationController
       # TODO: refactor into calendarable.
       calendar = Icalendar::Calendar.new
       visitor.v2_reservations.each { |r| calendar.add_event(r.to_ics) }
+      event_slots.each { |e| calendar.add_event(e.to_ics) }
       calendar.publish
       render text: calendar.to_ical
     else
@@ -22,7 +23,7 @@ class CalendarController < ApplicationController
   def reservations
     if visitor
       # TODO: refactor into reservations?
-      @reservations = visitor.v2_reservations.joins(:time_slot).where('v2_time_slots.start_time BETWEEN ? AND ?', cal_params[:start], cal_params[:end])
+      @reservations = visitor.v2_reservations.joins(:event_invitation).where('v2_event_invitations.date BETWEEN ? AND ?', cal_params[:start], cal_params[:end])
     else
       redirect_to root_url
     end

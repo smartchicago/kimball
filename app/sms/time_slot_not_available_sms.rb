@@ -37,7 +37,7 @@ class TimeSlotNotAvailableSms < ApplicationSms
         msg << "'#{event.id}#{slot_id_to_char(i)}' for #{slot.to_time_and_weekday}\n"
       end
       msg << "Or visit https://#{ENV['PRODUCTION_SERVER']}/calendar/?token=#{to.token} to pick a time.\n"
-      msg << "If none of these times work, please respond with: '#{event.id}-Decline'  to decline\n"
+      msg << "If none of these times work you can just ignore this message.\n"
     else
       msg << "There are no more available times for this event.\n"
     end

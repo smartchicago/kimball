@@ -14,7 +14,7 @@ class ReservationSms < ApplicationSms
       client.messages.create(
         from: application_number,
         to:   phone_number,
-        body: "An interview has been booked for #{selected_time}"
+        body: "A #{ duration } minute interview has been booked for #{selected_time}, with #{reservation.user.name}. \nTheir number is #{reservation.user.phone_number}"
       )
     end
   end
@@ -23,5 +23,8 @@ class ReservationSms < ApplicationSms
 
     def selected_time
       reservation.time_slot.to_weekday_and_time
+    end
+    def duration
+      reservation.duration / 60
     end
 end
