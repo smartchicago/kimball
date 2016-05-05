@@ -28,4 +28,24 @@
 $(document).on('ready page:load',function() {
   /* Activating Best In Place */
   jQuery(".best_in_place").best_in_place();
+
+
+  var show_ajax_message = function(msg, type) {
+    var cssClass = type === 'error' ? 'alert-error' : 'alert-success'
+    var html ='<div class="alert ' + cssClass + '">';
+    html +='<button type="button" class="close" data-dismiss="alert">&times;</button>';
+    html += msg +'</div>';
+    //fade_flash();
+    $("#notifications").html(html);
+  };
+
+  $(document).ajaxComplete(function(event, request) {
+    var msg = request.getResponseHeader('X-Message');
+    var type = request.getResponseHeader('X-Message-Type');
+
+    if (type !== null) {
+      show_ajax_message(msg, type);
+    }
+  });
+
 });

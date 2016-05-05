@@ -56,11 +56,25 @@ $(document).on('ready page:load', function () {
       right: 'month,agendaWeek,agendaDay'
     },
     eventClick:  function(event, jsEvent, view) {
+      if (event.type === 'TimeSlot') {
+        $('#modalTitle').html(event.title);
+        $('#modalBody').html(event.description);
+        $('#modalTime').html(event.time_and_date);
+        $('#eventUrl').attr('href',event.url);
+        $('#v2_reservation_person_id').val(event.person_id);
+        $('#v2_reservation_user_id').val(event.user_id);
+        $('#v2_reservation_event_id').val(event.event_id);
+        $('#v2_reservation_event_invitation_id').val(event.event_invitation_id);
+        $('#v2_reservation_time_slot_id').val(event.time_slot_id);
+        $('#invitationModal').modal();
+      } else if (event.type === 'Reservation'){
+        $('#resTitle').html(event.title);
+        $('#resBody').html(event.description);
+        $('#resTime').html(event.time_and_date);
+        $('#reservationModal').modal();
+      }
 
-      $('#modalTitle').html(event.title);
-      $('#modalBody').html(event.description);
-      $('#eventUrl').attr('href',event.url);
-      $('#calendarModal').modal();
+
     },
     eventRender: function(event, element){
       if(event.source.rendering == 'background'){
@@ -75,7 +89,13 @@ $(document).on('ready page:load', function () {
       start:'9:00',
       end: '20:00'
     },
-    eventSources: []
+    eventSources: [],
+
+    slotDuration:'00:10:00',
+    scrollTime: '09:00:00',
+    minTime:'07:00:00',
+    maxTime:'21:00:00',
+    weekends: false
   });
 
   if ($('#calendar').length) { // rails?
@@ -86,13 +106,13 @@ $(document).on('ready page:load', function () {
   $('#submitButton').on('click', function(e){
     // We don't want this to act as a link so cancel the link action
     e.preventDefault();
-
     doSubmit();
   });
 
   function doSubmit(){
+    $.post('/v2/reservations', $('#new_v2_reservation').serialize());
+    $("#calendar").fullCalendar( 'refetchEvents' );
     $("#calendarModal").modal('hide');
-
   }
 
 });

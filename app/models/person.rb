@@ -60,7 +60,7 @@ class Person < ActiveRecord::Base
   has_many :v2_reservations, class_name: '::V2::Reservation'
   has_many :v2_events, through: :event_invitations, foreign_key: 'v2_event_id', source: :event
 
-  has_secure_token
+  has_secure_token :token
 
   after_update  :sendToMailChimp
   after_create  :sendToMailChimp

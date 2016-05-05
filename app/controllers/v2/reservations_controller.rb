@@ -41,7 +41,10 @@ class V2::ReservationsController < ApplicationController
     @available_time_slots = []
     @person = @reservation.person
 
-    render :new
+    respond_to do |format|
+      format.js {  }
+      format.html {render :new}
+    end
   end
 
   private

@@ -38,6 +38,9 @@ class V2::Reservation < ActiveRecord::Base
   # can't have the same time slot id twice.
   validates :time_slot, uniqueness: true, presence: true
 
+  # one person can't have multiple reservations for the same event
+  validates :person, uniqueness: { scope: :event_invitation }
+
   # these overlap validations are super tricksy.
   # do we check this here?
   # User can't book over themselves.
@@ -70,8 +73,6 @@ class V2::Reservation < ActiveRecord::Base
   delegate :date,        to: :event_invitation
   delegate :slot_length, to: :event_invitation
   delegate :duration,    to: :event_invitation
-
-
 
   aasm do
     state :created, initial: true
