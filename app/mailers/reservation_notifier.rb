@@ -21,8 +21,8 @@ class ReservationNotifier < ApplicationMailer
       cal.event do |e|
         e.dtstart = Icalendar::Values::DateTime.new(reservation.start_datetime)
         e.dtend   = Icalendar::Values::DateTime.new(reservation.end_datetime)
-        e.summary     = reservation.event.description
-        e.description = reservation.event.description
+        e.summary     = reservation.title
+        e.description = reservation.description
         e.alarm do |a|
           a.summary = reservation.event.description
           a.trigger = '-P1DT0H0M0S' # 1 day before

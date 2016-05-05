@@ -12,16 +12,13 @@
 #  event_invitation_id :integer
 #
 
-# TODO: denormalize associated objects into Reservation
-# - it's the final snapshot of all scheduling, source to be checked
-# against constantly
-# - associated objects should still be in place, for cancellations
 # - potentially storing the state of the reservation:
 #   * attended, cancelled, missed, etc.
 #   * could be where we hang comments / prepaid cards
 class V2::Reservation < ActiveRecord::Base
   self.table_name = 'v2_reservations'
 
+  include AASM
   include Calendarable
 
   belongs_to :time_slot, class_name: '::V2::TimeSlot'
@@ -29,6 +26,9 @@ class V2::Reservation < ActiveRecord::Base
   belongs_to :event, class_name: '::V2::Event'
   belongs_to :user
   belongs_to :event_invitation, class_name: '::V2::EventInvitation'
+
+  # so users can take notes.
+  has_many :comments, as: :commentable, dependent: :destroy
 
   validates :person, presence: true
   validates :user, presence: true
@@ -71,4 +71,38 @@ class V2::Reservation < ActiveRecord::Base
   delegate :slot_length, to: :event_invitation
   delegate :duration,    to: :event_invitation
 
+
+
+  aasm do
+    state :created, initial: true
+    state :confirmed
+    state :cancelled
+    state :rescheduled
+    state :missed
+
+    event :confirm, after_commit: :notify_about_confirmation do
+      transitions from: :created, to: :confirmed
+    end
+
+    event :cancel, after_commit: :notify_about_cancellation do
+      transitions from: [:created, :confirmed], to: :cancelled
+    end
+
+    event :reschedule, after_commit: :notify_about_reschedule do
+      transitions from: [:created, :confirmed], to: :rescheduled
+    end
+
+    event :miss do
+      transitions from: [:created, :confirmed], to: :missed
+    end
+  end
+
+  def notify_about_confirmation
+  end
+
+  def notify_about_cancellation
+  end
+
+  def notify_about_reschedule
+  end
 end

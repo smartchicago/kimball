@@ -37,10 +37,6 @@ feature 'Invite person to a phone call' do
 
     [research_subject_emails, admin_email].flatten.each do |email_address|
       open_email(email_address)
-
-      expect(current_email).
-        to have_content "Hello, you've been invited to a phone interview"
-
       expect(current_email).
         to have_content event_description
     end

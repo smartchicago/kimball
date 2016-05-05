@@ -131,6 +131,9 @@ gem 'twitter-typeahead-rails'
 # make ical events and feeds
 gem 'icalendar'
 
+# state machine for reservations.
+gem 'aasm'
+
 group :testing do
   # mock tests w/mocha
   gem 'mocha', :require => false

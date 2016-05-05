@@ -59,6 +59,7 @@ feature 'Person responds to interview invitation over email' do
 end
 
 def receive_invitation_email_and_click_reservation_link
+  @event.reload
   EventInvitationMailer.invite(
     email_address: @research_subject.email_address,
     event: @event,
@@ -70,6 +71,7 @@ def receive_invitation_email_and_click_reservation_link
 end
 
 def send_invitation_email_for_event_then_book_all_event_time_slots
+  @event.reload
   @event.time_slots.each_with_index do |slot, i|
     V2::Reservation.create(person: @event_invitation.invitees[i],
                            time_slot: slot,

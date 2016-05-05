@@ -13,6 +13,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    aasm (4.10.0)
     actionmailer (4.2.6)
       actionpack (= 4.2.6)
       actionview (= 4.2.6)
@@ -444,6 +445,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aasm
   annotate
   best_in_place (~> 3.0.1)
   bullet
@@ -513,4 +515,4 @@ DEPENDENCIES
   wuparty
 
 BUNDLED WITH
-   1.11.2
+   1.12.2
