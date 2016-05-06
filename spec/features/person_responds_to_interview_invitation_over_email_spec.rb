@@ -8,9 +8,9 @@ require 'capybara/email/rspec'
 feature 'Person responds to interview invitation over email' do
   before do
     clear_emails
-    @event_invitation = FactoryGirl.create(:event_invitation)
+    @event_invitation = FactoryGirl.create(:event_invitation, buffer: 5)
     @event = @event_invitation.event
-    @research_subject = @event_invitation.invitees.first
+    @research_subject = @event_invitation.invitees.last
     # we need the link in our emails to be the capybara server!
     ActionMailer::Base.default_url_options = {
       host: Capybara.current_session.server.host,
@@ -39,7 +39,9 @@ feature 'Person responds to interview invitation over email' do
     click_button('Select')
     sleep 1
     selected_time = first_slot.to_weekday_and_time
-    expect(page).to have_content "An interview has been booked for #{selected_time}"
+    @research_subject.reload
+    expect(@research_subject.v2_reservations.size).to eq(1)
+    #expect(page).to have_content "An interview has been booked for #{selected_time}"
 
     admin_email = @event.user.email
     research_subject_email = @research_subject.email_address
@@ -62,7 +64,7 @@ feature 'Person responds to interview invitation over email' do
     book_all_event_time_slots
     receive_invitation_email_and_click_reservation_link
 
-    @event.available_time_slots.each do |time|
+    @event.time_slots.each do |time|
       expect(page).not_to have_content time.start_time.strftime('%l:%M')
       expect(page).not_to have_content time.end_time.strftime('%l:%M')
     end
@@ -72,7 +74,7 @@ feature 'Person responds to interview invitation over email' do
     receive_invitation_email_and_click_reservation_link
     first_slot = @event.available_time_slots.first
     book_all_event_time_slots
-    @event.available_time_slots.each do |time|
+    @event.time_slots.each do |time|
       expect(page).to have_content time.start_time.strftime('%l:%M')
       expect(page).to have_content time.end_time.strftime('%l:%M')
     end
@@ -85,7 +87,9 @@ feature 'Person responds to interview invitation over email' do
 
     click_button('Select')
     sleep 1
-    expect(page).to have_content "No time slot was selected, couldn't create the reservation"
+    @research_subject.reload
+    expect(@research_subject.v2_reservations.size).to eq(0)
+    # expect(page).to have_content "No time slot was selected, couldn't create the reservation"
   end
 end
 
@@ -102,8 +106,9 @@ end
 
 def book_all_event_time_slots
   @event.reload
+  d=[]
   @event.time_slots.each_with_index do |slot, i|
-    V2::Reservation.create(person: @event_invitation.invitees[i],
+    d << V2::Reservation.create(person: @event_invitation.invitees[i],
                            time_slot: slot,
                            user: @event_invitation.user,
                            event: @event_invitation.event,
