@@ -75,6 +75,9 @@ GEM
     capybara-email (2.4.0)
       capybara (~> 2.4)
       mail
+    capybara-screenshot (1.0.12)
+      capybara (>= 1.0, < 3)
+      launchy
     cliver (0.3.2)
     codeclimate-test-reporter (0.5.0)
       simplecov (>= 0.7.1, < 1.0.0)
@@ -452,6 +455,7 @@ DEPENDENCIES
   capistrano!
   capybara
   capybara-email
+  capybara-screenshot
   codeclimate-test-reporter
   coffee-rails
   coveralls

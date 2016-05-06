@@ -149,6 +149,8 @@ group :testing do
   gem 'rubocop', require: false
   gem 'codeclimate-test-reporter', group: :test, require: nil
   gem 'coveralls', require: false
+  # screenshots when capybara fails
+  gem 'capybara-screenshot'
 end
 
 group :development, :test do

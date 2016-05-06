@@ -1,5 +1,9 @@
 require 'rails_helper'
 require 'capybara/email/rspec'
+require 'support/poltergeist_js_hack_for_login'
+require 'capybara/email/rspec'
+
+@default_url_options = ActionMailer::Base.default_url_options
 
 feature 'Person responds to interview invitation over email' do
   before do
@@ -7,19 +11,34 @@ feature 'Person responds to interview invitation over email' do
     @event_invitation = FactoryGirl.create(:event_invitation)
     @event = @event_invitation.event
     @research_subject = @event_invitation.invitees.first
+    # we need the link in our emails to be the capybara server!
+    ActionMailer::Base.default_url_options = {
+      host: Capybara.current_session.server.host,
+      port: Capybara.current_session.server.port
+    }
   end
 
-  scenario 'successfully' do
+  after do
+    # undo our prior madness
+    ActionMailer::Base.default_url_options = @default_url_options
+  end
+
+  scenario 'successfully', js: :true  do
     receive_invitation_email_and_click_reservation_link
     @event.available_time_slots.each do |time|
-      expect(page).to have_content time.to_time_and_weekday
+      expect(page).to have_content time.start_time.strftime('%l:%M')
+      expect(page).to have_content time.end_time.strftime('%l:%M')
     end
-    selected_time = @event.available_time_slots.first.to_weekday_and_time
+
     first_slot = @event.available_time_slots.first
+    start_time = first_slot.start_time.strftime('%l:%M').delete(' ')
 
-    find("#v2_reservation_time_slot_id_#{first_slot.id}").set(true)
-    click_button 'Confirm reservation'
-
+    find("div[data-start='#{start_time}']").click
+    expect(page).to have_content(@event.description)
+    expect(page).to have_content(@event.title)
+    click_button('Select')
+    sleep 1
+    selected_time = first_slot.to_weekday_and_time
     expect(page).to have_content "An interview has been booked for #{selected_time}"
 
     admin_email = @event.user.email
@@ -39,22 +58,34 @@ feature 'Person responds to interview invitation over email' do
     end
   end
 
-  scenario 'but forgetting to select a time' do
+  scenario 'when no time slots are avaialble anymore', js: :true do
+    book_all_event_time_slots
     receive_invitation_email_and_click_reservation_link
 
-    click_button 'Confirm reservation'
-
-    expect(page).to have_content "No time slot was selected, couldn't create the reservation"
+    @event.available_time_slots.each do |time|
+      expect(page).not_to have_content time.start_time.strftime('%l:%M')
+      expect(page).not_to have_content time.end_time.strftime('%l:%M')
+    end
   end
 
-  scenario 'when no time slots are avaialble anymore' do
-    send_invitation_email_for_event_then_book_all_event_time_slots
-
-    expect(page).to have_content 'We are sorry, but no more time slots are available.'
-
-    @event.time_slots.each do |time|
-      expect(page).to_not have_content time.to_time_and_weekday
+  scenario 'when time slots are not longer avaialble', js: :true do
+    receive_invitation_email_and_click_reservation_link
+    first_slot = @event.available_time_slots.first
+    book_all_event_time_slots
+    @event.available_time_slots.each do |time|
+      expect(page).to have_content time.start_time.strftime('%l:%M')
+      expect(page).to have_content time.end_time.strftime('%l:%M')
     end
+
+    start_time = first_slot.start_time.strftime('%l:%M').delete(' ')
+
+    find("div[data-start='#{start_time}']").click
+    expect(page).to have_content(@event.description)
+    expect(page).to have_content(@event.title)
+
+    click_button('Select')
+    sleep 1
+    expect(page).to have_content "No time slot was selected, couldn't create the reservation"
   end
 end
 
@@ -66,11 +97,10 @@ def receive_invitation_email_and_click_reservation_link
     person: @research_subject).deliver_now
 
   open_email(@research_subject.email_address)
-
   current_email.click_link 'Please click to setup a time for your interview'
 end
 
-def send_invitation_email_for_event_then_book_all_event_time_slots
+def book_all_event_time_slots
   @event.reload
   @event.time_slots.each_with_index do |slot, i|
     V2::Reservation.create(person: @event_invitation.invitees[i],
@@ -79,6 +109,4 @@ def send_invitation_email_for_event_then_book_all_event_time_slots
                            event: @event_invitation.event,
                            event_invitation: @event_invitation)
   end
-
-  receive_invitation_email_and_click_reservation_link
 end

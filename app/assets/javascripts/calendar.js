@@ -95,7 +95,6 @@ $(document).on('ready page:load', function () {
     scrollTime: '09:00:00',
     minTime: isMobile.matches ? '08:30:00' : '07:00:00',
     maxTime: isMobile.matches ? '20:00:00' : '21:00:00',
-    weekends: false,
     allDaySlot: false
   });
 
