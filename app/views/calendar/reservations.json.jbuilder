@@ -9,6 +9,7 @@ json.array!(@reservations) do |res|
 
   json.start          res.start_datetime
   json.end            res.end_datetime
+  json.color          'red'
   json.type           res.class.to_s.demodulize
   #json.url event_url(event, format: :html)
 end

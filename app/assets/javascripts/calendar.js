@@ -82,6 +82,7 @@ $(document).on('ready page:load', function () {
       }
     },
     defaultView: isMobile.matches ? 'agendaDay' : 'agendaWeek',
+    aspectRatio: isMobile.matches ? 0.7 : 1.35 ,
     defaultDate: moment( new Date().toJSON().slice(0, 10) ),
     //eventLimit: true, // allow "more" link when too many events
     editable: false,
@@ -90,18 +91,19 @@ $(document).on('ready page:load', function () {
       end: '20:00'
     },
     eventSources: [],
-
-    slotDuration:'00:10:00',
+    slotDuration: isMobile.matches ? '00:15:00' : '00:10:00',
     scrollTime: '09:00:00',
-    minTime:'07:00:00',
-    maxTime:'21:00:00',
-    weekends: false
+    minTime: isMobile.matches ? '08:30:00' : '07:00:00',
+    maxTime: isMobile.matches ? '20:00:00' : '21:00:00',
+    weekends: false,
+    allDaySlot: false
   });
 
   if ($('#calendar').length) { // rails?
     toggle_event_source('reservations');
     if (token !== 'false') { toggle_event_source('event_slots'); }
   }
+
 
   $('#submitButton').on('click', function(e){
     // We don't want this to act as a link so cancel the link action

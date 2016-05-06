@@ -27,25 +27,24 @@ class V2::ReservationsController < ApplicationController
     @reservation = V2::Reservation.new(time_slot: V2::TimeSlot.new)
   end
 
+  # rubocop:disable Metrics/MethodLength
+  # TODO: refactor
   def create
     @reservation = V2::Reservation.new(reservation_params)
-
     if @reservation.save
       flash[:notice] = "An interview has been booked for #{@reservation.time_slot.to_weekday_and_time}"
-
       send_notifications(@reservation)
     else
       flash[:error] = "No time slot was selected, couldn't create the reservation"
     end
-
     @available_time_slots = []
     @person = @reservation.person
-
     respond_to do |format|
-      format.js {  }
-      format.html {render :new}
+      format.js {}
+      format.html { render :new }
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   private
 
