@@ -74,27 +74,33 @@ class V2::Reservation < ActiveRecord::Base
   delegate :slot_length, to: :event_invitation
   delegate :duration,    to: :event_invitation
 
+  # reservations can move through states
   aasm do
     state :created, initial: true
+    state :reminded
     state :confirmed
     state :cancelled
     state :rescheduled
     state :missed
 
+    event :remind, after_commit: :send_reminder do
+      transitions from: :created, to: :reminded
+    end
+
     event :confirm, after_commit: :notify_about_confirmation do
-      transitions from: :created, to: :confirmed
+      transitions from: [:created, :reminded], to: :confirmed
     end
 
     event :cancel, after_commit: :notify_about_cancellation do
-      transitions from: [:created, :confirmed], to: :cancelled
+      transitions from: [:created, :reminded, :confirmed], to: :cancelled
     end
 
     event :reschedule, after_commit: :notify_about_reschedule do
-      transitions from: [:created, :confirmed], to: :rescheduled
+      transitions from: [:created, :reminded, :confirmed], to: :rescheduled
     end
 
     event :miss do
-      transitions from: [:created, :confirmed], to: :missed
+      transitions from: [:created, :reminded, :confirmed], to: :missed
     end
   end
 
