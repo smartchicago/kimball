@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   <strong>Person:</strong>
   <%= @reservation.person.full_name %>
@@ -23,8 +21,8 @@
 </p>
 
 <p>
-  <strong>Attended at:</strong>
-  <%= @reservation.attended_at %>
+  <strong>Time Slot:</strong>
+  <%= @reservation.time_slot.to_weekday_and_time %>
 </p>
 
 <%= link_to 'Back', v2_reservations_path %>

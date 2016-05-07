@@ -37,6 +37,14 @@ class V2::EventInvitationsController < ApplicationController
     render new_v2_event_invitation_path
   end
 
+  def index
+    @events = V2::EventInvitation.all.page(params[:page])
+  end
+
+  def show
+    @event =  V2::EventInvitation.find_by(params[:id])
+  end
+
   private
 
     def send_notifications(event_invitation)

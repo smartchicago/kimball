@@ -12,6 +12,26 @@ class ReservationNotifier < ApplicationMailer
          content_type: 'multipart/mixed')
   end
 
+  def remind(email_address:, reservations:)
+    @email_address = email_address
+    @reservation = reservations
+
+    mail(to: email_address,
+         from: reservation.user.email,
+         bcc: reservation.user.email,
+         subject: 'Today\'s Interview Reminder',
+         content_type: 'multipart/mixed')
+  end
+
+  def cancel(email_address:, reservation:)
+  end
+
+  def confirm(email_address:, reservation:)
+  end
+
+  def reschedule(email_address:, reservation:)
+  end
+
   private
 
     # FIXME: Refactor and re-enable cop

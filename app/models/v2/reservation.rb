@@ -21,6 +21,11 @@ class V2::Reservation < ActiveRecord::Base
   include AASM
   include Calendarable
 
+  scope :for_today, lambda {
+    joins(:event_invitation).
+      where('v2_event_invitations.date = ?', Time.zone.now.strftime('%m/%d/%Y'))
+  }
+
   belongs_to :time_slot, class_name: '::V2::TimeSlot'
   belongs_to :person
   belongs_to :event, class_name: '::V2::Event'
@@ -82,8 +87,9 @@ class V2::Reservation < ActiveRecord::Base
     state :cancelled
     state :rescheduled
     state :missed
+    state :attended
 
-    event :remind, after_commit: :send_reminder do
+    event :remind do
       transitions from: :created, to: :reminded
     end
 
@@ -99,12 +105,18 @@ class V2::Reservation < ActiveRecord::Base
       transitions from: [:created, :reminded, :confirmed], to: :rescheduled
     end
 
+    event :attend do
+      transitions to: :attended
+    end
+
     event :miss do
       transitions from: [:created, :reminded, :confirmed], to: :missed
     end
   end
 
   def send_reminder
+    person.reservation_remind
+    user.reservation
   end
 
   def notify_about_confirmation

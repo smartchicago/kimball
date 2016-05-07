@@ -288,5 +288,11 @@ class Person < ActiveRecord::Base
     [first_name, last_name].join(' ')
   end
 
+  def self.send_all_reminders
+    # this is where reservation_reminders
+    # called by whenever in /config/schedule.rb
+    Person.all.find_each { |u| u.v2_reservations.for_today }
+  end
+
 end
 # rubocop:enable ClassLength

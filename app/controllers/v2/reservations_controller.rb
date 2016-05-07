@@ -14,6 +14,7 @@
 
 class V2::ReservationsController < ApplicationController
   skip_before_action :authenticate_user!
+  before_action :set_reservation, only: [:show, :edit, :update, :destroy]
 
   def new
     @person = Person.find_by(token: person_params[:token])
@@ -46,7 +47,30 @@ class V2::ReservationsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength
 
+  # no authorization here. yet.
+
+  def index
+    @reservations = V2::Reservation.page(params[:page])
+  end
+
+  def show
+  end
+
+  def edit
+  end
+
+  def destroy
+    @reservation.destroy!
+    respond_to do |format|
+      format.html { redirect_to v2_reservation_url }
+      format.json { head :no_content }
+    end
+  end
+
   private
+    def set_reservation
+      @reservation = V2::Reservation.find_by(params[:id])
+    end
 
     def send_notifications(reservation)
       ReservationNotifier.notify(

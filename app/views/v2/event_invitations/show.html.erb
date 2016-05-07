@@ -1,0 +1,54 @@
+<% content_for :page_title, @event.title %>
+
+<div class="page-header">
+  <h1><%= @event.title %></h1>
+</div>
+
+<div class="row">
+  <div class="span3">
+    <%= simple_format @event.description %>
+  </div>
+  <div class="span6">
+    <h3>Invitees</h3>
+    <% if @event.event.reservations.any? %>
+    <table class="table table-hover">
+      <tbody>
+        <tr><th>Name</th><th>Status</th><th>Attended</th></tr>
+        <% for reservation in @event.event.reservations.includes(:person) do %>
+          <tr>
+          <td><%= link_to reservation.person.full_name, reservation.person %></td>
+          <%= form_for(reservation, remote: true) do |form| %>
+            <td><%= form.select :aasm_state, options_for_select(reservation.aasm.states(permitted: true).map(&:name), reservation.aasm_state) %></td>
+          <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <% else %>
+    <p>No attendees yet</p>
+    <% end %>
+  </div>
+  <div class="span3">
+    <div class="well">
+      <dl>
+        <dt>Starts at</dt>
+        <dd><%= @event.start_datetime %></dd>
+        <dt>Ends at</dt>
+        <dd><%= @event.end_datetime %></dd>
+        <dt>Creator</dt>
+        <dd><%= @event.user.name %></dd>
+        <dt>Invited</dt>
+        <dd><%= @event.invitees.size %></dd>
+        <dt>Reserved</dt>
+        <dd><%= @event.event.reservations.size %></p>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <!-- should link back to all events or somesuch here. -->
+  </div>
+</div>

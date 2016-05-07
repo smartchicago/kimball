@@ -12,7 +12,8 @@ every 30.minutes do
 end
 
 every :weekday, at: "8:00am" do
-  runner "V2::Reservations.send_all_reminders"
+  runner "User.send_all_reminders"
+  runner "Person.send_all_reminder"
 end
 #
 # every 4.days do
