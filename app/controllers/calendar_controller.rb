@@ -13,7 +13,7 @@ class CalendarController < ApplicationController
       # TODO: refactor into calendarable.
       calendar = Icalendar::Calendar.new
       visitor.v2_reservations.each { |r| calendar.add_event(r.to_ics) }
-      visitor.v2_events.each {|e| calendar.add_event(e.to_ics) }
+      visitor.v2_events.each { |e| calendar.add_event(e.to_ics) }
       calendar.publish
       render text: calendar.to_ical
     else

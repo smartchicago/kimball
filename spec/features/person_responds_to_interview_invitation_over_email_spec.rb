@@ -8,7 +8,7 @@ require 'capybara/email/rspec'
 feature 'Person responds to interview invitation over email' do
   before do
     # Set Time.now to September 1, 2008 10:05:00 AM (at this instant), but allow it to move forward
-    t = Time.local(2016, 5, 4, 10, 5, 0)
+    t = Time.zone.local(2016, 5, 4, 10, 5, 0)
     Timecop.travel(t)
     clear_emails
     @event_invitation = FactoryGirl.create(:event_invitation, buffer: 5)
@@ -45,7 +45,7 @@ feature 'Person responds to interview invitation over email' do
     selected_time = first_slot.to_weekday_and_time
     @research_subject.reload
     expect(@research_subject.v2_reservations.size).to eq(1)
-    #expect(page).to have_content "An interview has been booked for #{selected_time}"
+    # expect(page).to have_content "An interview has been booked for #{selected_time}"
 
     admin_email = @event.user.email
     research_subject_email = @research_subject.email_address
