@@ -7,6 +7,9 @@ require 'capybara/email/rspec'
 
 feature 'Person responds to interview invitation over email' do
   before do
+    # Set Time.now to September 1, 2008 10:05:00 AM (at this instant), but allow it to move forward
+    t = Time.local(2016, 5, 4, 10, 5, 0)
+    Timecop.travel(t)
     clear_emails
     @event_invitation = FactoryGirl.create(:event_invitation, buffer: 5)
     @event = @event_invitation.event
@@ -21,6 +24,7 @@ feature 'Person responds to interview invitation over email' do
   after do
     # undo our prior madness
     ActionMailer::Base.default_url_options = @default_url_options
+    Timecop.return
   end
 
   scenario 'successfully', js: :true  do

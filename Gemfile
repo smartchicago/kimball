@@ -151,6 +151,12 @@ group :testing do
   gem 'coveralls', require: false
   # screenshots when capybara fails
   gem 'capybara-screenshot'
+
+  # retry poltergeist specs. they are finicky
+  gem 'rspec-retry'
+
+  # calendaring tests will almost always break on saturdays.
+  gem 'timecop'
 end
 
 group :development, :test do
