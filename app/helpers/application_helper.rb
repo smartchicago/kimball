@@ -7,4 +7,17 @@ module ApplicationHelper
     end.flatten
     options_for_select(options)
   end
+
+  def nav_bar(classes = 'nav navbar-nav')
+    content_tag(:ul, class: classes) do
+      yield
+    end
+  end
+
+  def nav_link(text, path, options = {class: ''})
+    options[:class].prepend(current_page?(path) ? 'active ' : '')
+    content_tag(:li, options) do
+      link_to text, path
+    end
+  end
 end

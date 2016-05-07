@@ -68,6 +68,7 @@ class V2::ReservationsController < ApplicationController
   end
 
   private
+
     def set_reservation
       @reservation = V2::Reservation.find_by(params[:id])
     end

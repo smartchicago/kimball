@@ -70,8 +70,8 @@ class User < ActiveRecord::Base
   def self.send_all_reminders
     # this is where reservation_reminders
     # called by whenever in /config/schedule.rb
-    User.all.find_each { |u|
+    User.all.find_each do |u|
       u.reservations.for_today
-    }
+    end
   end
 end
