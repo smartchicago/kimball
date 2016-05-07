@@ -104,6 +104,9 @@ class V2::Reservation < ActiveRecord::Base
     end
   end
 
+  def send_reminder
+  end
+
   def notify_about_confirmation
   end
 

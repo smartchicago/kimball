@@ -15,7 +15,7 @@ group :development do
   # gem 'capistrano'
   # mainline cap is busted w/r/t Rails 4. Try this fork instead.
   # src: https://github.com/capistrano/capistrano/pull/412
-  gem 'capistrano', :git => 'git://github.com/capistrano/capistrano.git', :tag => 'v2.15.4'
+  gem 'capistrano', git: 'git://github.com/capistrano/capistrano.git', tag: 'v2.15.4'
   gem 'rvm-capistrano', require: false
   # this whole group makes finding performance issues much friendlier
   gem 'rack-mini-profiler'
@@ -30,7 +30,7 @@ group :development do
   # what attributes does this model actually have?
   gem 'annotate'
 
-  #a console in your tests, to find out what's actually happening
+  # a console in your tests, to find out what's actually happening
   gem 'pry-rails'
 
   # a console in your browser, when you want to interrogate views.
@@ -110,7 +110,7 @@ gem 'gsm_encoder'
 gem 'delayed_job_active_record'
 gem 'daemons'
 
-#for generating unique tokens for Person
+# for generating unique tokens for Person
 gem 'has_secure_token'
 
 # phone number validation
@@ -122,10 +122,10 @@ gem 'validates_zipcode'
 # in place editing
 gem 'best_in_place', '~> 3.0.1'
 
-#validation for new persons on the public page.
+# validation for new persons on the public page.
 gem 'jquery-validation-rails'
 
-#for automatically populating tags
+# for automatically populating tags
 gem 'twitter-typeahead-rails'
 
 # make ical events and feeds
@@ -134,14 +134,17 @@ gem 'icalendar'
 # state machine for reservations.
 gem 'aasm'
 
+# cron jobs for backups and sending reminders
+gem 'whenever', require: false
+
 group :testing do
   # mock tests w/mocha
-  gem 'mocha', :require => false
+  gem 'mocha', require: false
 
-  gem 'sqlite3', :platform => [:ruby, :mswin, :mingw]
+  gem 'sqlite3', platform: [:ruby, :mswin, :mingw]
 
   # for JRuby
-  gem 'jdbc-sqlite3', :platform => :jruby
+  gem 'jdbc-sqlite3', platform: :jruby
   gem 'memory_test_fix' # in memory DB, for the speedy
 
   # generate fake data w/faker: http://rubydoc.info/github/stympy/faker/master/frames

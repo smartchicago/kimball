@@ -78,6 +78,7 @@ GEM
     capybara-screenshot (1.0.12)
       capybara (>= 1.0, < 3)
       launchy
+    chronic (0.10.2)
     cliver (0.3.2)
     codeclimate-test-reporter (0.5.0)
       simplecov (>= 0.7.1, < 1.0.0)
@@ -437,6 +438,8 @@ GEM
     websocket-driver (0.6.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
+    whenever (0.9.4)
+      chronic (>= 0.6.3)
     will_paginate (3.1.0)
     will_paginate-bootstrap (0.2.5)
       will_paginate (>= 3.0.3)
@@ -519,6 +522,7 @@ DEPENDENCIES
   validates_overlap
   validates_zipcode
   web-console
+  whenever
   will_paginate
   will_paginate-bootstrap (~> 0.2.5)
   wuparty
