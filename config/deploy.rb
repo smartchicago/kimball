@@ -38,7 +38,7 @@ set :ssh_options, { forward_agent: true }
 before  'deploy:finalize_update', "deploy:create_shared_directories", 'deploy:link_db_config', 'deploy:link_env_var'
 # before  'deploy:finalize_update', 'deploy:link_db_config', 'deploy:link_env_var'
 
-after   'deploy:finalize_update', 'deploy:create_binstubs', 'deploy:migrate', 'deploy:generate_delayed_job'
+after   'deploy:finalize_update', 'deploy:create_binstubs', 'deploy:migrate', 'deploy:generate_delayed_job','deploy:reload_nginx'
 
 namespace :deploy do
   task :start do
@@ -70,6 +70,10 @@ namespace :deploy do
   task :link_env_var do
     # pull in database.yml on server
     run "rm -f #{release_path}/config/local_env.yml && ln -s #{deploy_to}/shared/local_env.yml #{release_path}/config/local_env.yml"
+  end
+
+  task :reload_nginx do
+    run "service nginx reload"
   end
 
   # https://github.com/capistrano/capistrano/issues/362#issuecomment-14158487

@@ -27,11 +27,19 @@ module Logan
 
     # compile the placeholder
     config.assets.precompile += %w( holder.js )
+
     config.before_configuration do
       env_file = File.join(Rails.root, 'config', 'local_env.yml')
+      defaults = File.join(Rails.root, 'config', 'sample.local_env.yml')
+
       YAML.load(File.open(env_file)).each do |key, value|
         ENV[key.to_s] = value
       end if File.exist?(env_file)
+
+      # load in defaults unless they are already set
+      YAML.load(File.open(defaults)).each do |key, value|
+        ENV[key.to_s] = value unless ENV[key]
+      end
     end
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
