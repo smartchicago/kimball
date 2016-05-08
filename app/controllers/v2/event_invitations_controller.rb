@@ -47,6 +47,14 @@ class V2::EventInvitationsController < ApplicationController
 
   private
 
+    def create_event(event_invitation)
+      V2::Event.create(
+        description: event_invitation.description,
+        time_slots: event_invitation.break_time_window_into_time_slots,
+        user_id: current_user || 1 # if nil, make admin owner
+      )
+    end
+
     def send_notifications(event_invitation)
       event = event_invitation.event
       event_invitation.invitees.each do |invitee|
@@ -59,14 +67,6 @@ class V2::EventInvitationsController < ApplicationController
       end
     end
 
-    def create_event(event_invitation)
-      V2::Event.create(
-        description: event_invitation.description,
-        time_slots: event_invitation.break_time_window_into_time_slots,
-        user_id: current_user || 1 # if nil, make admin owner
-      )
-    end
-
     def send_email(person, event)
       EventInvitationMailer.invite(
         email_address: person.email_address,
@@ -76,7 +76,7 @@ class V2::EventInvitationsController < ApplicationController
     end
 
     def send_sms(person, event)
-      ::EventInvitationSms.new(to: person, event: event).send
+      ::EventInvitationSms.new(to: person, event: event).delay.send
     end
 
     # TODO: add a nested :event

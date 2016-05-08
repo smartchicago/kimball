@@ -18,10 +18,11 @@ class ReminderSms < ApplicationSms
   end
 
   private
+
     def generate_res_msgs
       msg = ''
-      reservations.each {|r|
-        msg +=  "#{r.description} on #{r.to_weekday_and_time} for #{r.duration / 60 } minutes with #{r.user.name} tel: #{r.user.phone_number}} \n"
+      reservations.each do|r|
+        msg +=  "#{r.description} on #{r.to_weekday_and_time} for #{r.duration / 60} minutes with #{r.user.name} tel: #{r.user.phone_number}} \n"
       end
       msg
     end
@@ -33,7 +34,7 @@ class ReminderSms < ApplicationSms
       msg += "Reply 'Cancel' to cancel them all\n"
       msg += "Reply 'Reschedule' to notify the other people to setup other times\n"
       msg += "You can send 'Schedule' at any time to see your schedule"
-      msg += 'Thanks!'
+      msg + 'Thanks!'
     end
 
 end

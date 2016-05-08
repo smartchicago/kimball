@@ -6,7 +6,13 @@ Logan::Application.routes.draw do
 
   namespace :v2 do
     resources :event_invitations
-    resources :reservations
+    resources :reservations do
+      collection do
+        post 'confirm'
+        post 'cancel'
+        post 'reschedule'
+      end
+    end
     resources :sms_reservations, only: [:create]
   end
 

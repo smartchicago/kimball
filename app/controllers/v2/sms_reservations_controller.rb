@@ -82,15 +82,27 @@ class V2::SmsReservationsController < ApplicationController
       ::TimeSlotNotAvailableSms.new(to: person, event: event).send
     end
 
-    def only_numbers_and_at_least_two_of_them?
-      message =~ /^\d(\d)+\s?$/
-    end
-
     def declined?
+      # this is no longer in use. still might be handt though...
       # up to 10k events.
       message.downcase =~ /^\d{1,5}-decline?/
     end
 
+    def confirm?
+      message.downcase =~ /^confirm?/
+    end
+
+    def cancel?
+      message.downcase =~ /^confirm?/
+    end
+
+    def reschedule?
+      message.downcase =~ /^reschedule?/
+    end
+
+    def calendar?
+      message.downcase =~ /^calendar?/
+    end
     # we probably want a method that will do the decline for us
     # cases:
     # 1) with reservation, it was a reminder, find reservation and cancel
@@ -99,10 +111,12 @@ class V2::SmsReservationsController < ApplicationController
     #    person
 
     def letters_and_numbers_only?
+      # this is for accepting only. many messages now won't pass.
       # up to 10k events
       message.downcase =~ /\b\d{1,5}[a-z]\b/
     end
 
+    # this needs to change. lots more potential valid messages
     def valid_message?
       return true if declined?
       return true if letters_and_numbers_only?

@@ -12,10 +12,18 @@
 #  event_invitation_id :integer
 #
 
+# FIXME: Refactor and re-enable cop
+# rubocop:disable ClassLength
 class V2::ReservationsController < ApplicationController
   skip_before_action :authenticate_user!
-  before_action :set_reservation, only: [:show, :edit, :update, :destroy]
-
+  before_action :set_reservation_and_visitor, only: [:show,
+                                                     :edit,
+                                                     :update,
+                                                     :destroy,
+                                                     :confirm,
+                                                     :cancel,
+                                                     :reschedule]
+  # need a before action here for authentication of reservation changes
   def new
     @person = Person.find_by(token: person_params[:token])
 
@@ -59,11 +67,32 @@ class V2::ReservationsController < ApplicationController
   def edit
   end
 
+  # these are our methods to
+  def confirm
+    @reservation.confirm
+  end
+
+  def cancel
+    @reservation.cancel
+  end
+
+  def reschedule
+    @reservation.reschedule
+  end
+
   def update
-    @reservation = V2::Reservation.find_by(params[:id])
-    # flasha  notice here and return a js file that reloads the page
+    # flash a  notice here and return a js file that reloads the page
     # or calls turbolinks to reload or somesuch
-    @reservation.update(update_params)
+    if @reservation.update(update_params)
+      flash[:notice] = 'Reservation updated'
+    else
+      flash[:error]  = 'update failed'
+    end
+
+    respond_to do |format|
+      format.html { redirect_to(:back) }
+      format.json {}
+    end
   end
 
   def destroy
@@ -76,8 +105,17 @@ class V2::ReservationsController < ApplicationController
 
   private
 
-    def set_reservation
+    def set_reservation_and_visitor
+      @visitor = nil
+      unless allowed_params[:token].blank?
+        @visitor = Person.find_by(token: params[:token])
+        # if we don't have a person, see if we have a user's token.
+        # thus we can provide a feed without auth1
+        @visitor = current_user if @visitor.nil? && current_user
+      end
       @reservation = V2::Reservation.find_by(params[:id])
+      return false unless @reservation.owner?(@visitor)
+      @person.nil? ? false : true
     end
 
     def send_notifications(reservation)
@@ -101,6 +139,7 @@ class V2::ReservationsController < ApplicationController
         :aasm_event,
         :aasm_state)
     end
+
     def update_params
       params.permit(
         :id,
@@ -112,8 +151,10 @@ class V2::ReservationsController < ApplicationController
         :aasm_event,
         :aasm_state)
     end
+
     def person_params
       params.permit(:email_address, :person_id, :token)
     end
 
 end
+# rubocop:enable ClassLength

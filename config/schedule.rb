@@ -11,9 +11,10 @@ every 30.minutes do
   command "backup perform --trigger my_backup -r Backup/"
 end
 
+# this queues up all the email/sms for the day!
 every :weekday, at: "8:00am" do
   runner "User.send_all_reminders"
-  runner "Person.send_all_reminder"
+  runner "Person.send_all_reminders"
 end
 #
 # every 4.days do

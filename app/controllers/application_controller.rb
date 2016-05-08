@@ -4,9 +4,18 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  before_action :authenticate_user!
-
   after_action :flash_to_headers
+
+  # this is so that json requests don't redirect without a user
+  before_action :authenticate_user!
+  # before_action :authenticate_user!, unless: request.format == :json
+  # before_action :user_needed, if: request.format == :json
+
+  def user_needed
+    unless current_user
+      render json: { 'error' => 'authentication error' }, status: 401
+    end
+  end
 
   def flash_to_headers
     return unless request.xhr?

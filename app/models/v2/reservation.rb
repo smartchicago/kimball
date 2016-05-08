@@ -114,47 +114,42 @@ class V2::Reservation < ActiveRecord::Base
     end
   end
 
-
-  # def person_string
-  #   %{ #{description} on #{to_weekday_and_time} for #{duration} minutes
-  #    with #{user.name} tel: #{user.phone_number}}
-  # end
-
-  # def person_html
-    # %{<div class='reservation'>
-    #   <p>#{description} on #{to_weekday_and_time} for #{duration} minutes \n with #{user.name} tel: #{user.phone_number}"</p>
-    #     <p>click to confirm, cancel or ask to reschedule below.</p>
-    #     <ul>
-    #       <li>
-    #         <a href="https://#{ENV['PRODUCTION_SERVER']}/v2/reservation/#{id}/confirm/?token=#{person.token}">Confirm</a>
-    #       </li>
-    #       <li>
-    #         <a href="https://#{ENV['PRODUCTION_SERVER']}/v2/reservation/#{id}/cancel/?token=#{person.token}">Cancel</a>
-    #       </li>
-    #       <li>
-    #         <a href="https://#{ENV['PRODUCTION_SERVER']}/v2/reservation/#{id}/reschedule/?token=#{person.token}">Reschedule</a>
-    #       </li>
-    #     </ul>
-    #   </div> }
-  # end
-
-  def user_string
-    %{ Reservation: #{description} on #{to_weekday_and_time} for #{duration} minutes
-    with {person.full_name} tel: #{person.phone_number}
-    link: https://#{ENV['PRODUCTION_SERVER']}/v2/reservation/#{id} }
+  def owner?(person_or_user)
+    # both people and users can own a reservation.
+    return true if user == person_or_user
+    return true if person == person_or_user
+    return false if person_or_user.nil?
+    false
   end
 
-  def send_reminder
-    person.reservation_remind
-    user.reservation
-  end
-
+  # these three could definitely be refactored. too much copy-paste
   def notify_about_confirmation
+    ReservationNotifier.confirm(user.email, self).deliver_later
+    case person.preferred_contact_method.upcase
+    when 'SMS'
+      ::ReservationConfirmSms.new(to: person, reservation: self).delay.send
+    when 'EMAIL'
+      ReservationNotifier.confirm(person.email_address, self).deliver_later
+    end
   end
 
   def notify_about_cancellation
+    ReservationNotifier.cancel(user.email, self).deliver_later
+    case person.preferred_contact_method.upcase
+    when 'SMS'
+      ::ReservationCancelSms.new(to: person, reservation: self).delay.send
+    when 'EMAIL'
+      ReservationNotifier.cancel(person.email_address, self).deliver_later
+    end
   end
 
   def notify_about_reschedule
+    ReservationNotifier.reschedule(user.email, self).deliver_later
+    case person.preferred_contact_method.upcase
+    when 'SMS'
+      ::ReservationRescheduleSms.new(to: person, reservation: self).delay.send
+    when 'EMAIL'
+      ReservationNotifier.reschedule(person.email_address, self).deliver_later
+    end
   end
 end
