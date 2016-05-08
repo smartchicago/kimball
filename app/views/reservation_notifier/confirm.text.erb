@@ -1,5 +1,5 @@
 Hi <% @reservations.first.person.first_name %>,
-An interview has been booked for <%= @reservation.time_slot.to_weekday_and_time %> with <%= @reservation.user.name %> tel:<%= @reservation.user.phone_number %>
+An interview has been booked for <%= @reservation.time_slot.to_weekday_and_time %>
 
 You can always check and manage your schedule here: https://<%=ENV['PRODUCTION_SERVER']%>/calendar/?token=<%= @reservations.first.person.token %>
 

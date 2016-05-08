@@ -1,0 +1,28 @@
+<p>Hi <% @reservations.first.person.first_name %>,</p>
+<p><%= @reservations.size %> interview<%= @reservation.size > 1 ? 's have' : ' has' %> been booked for you today.</p>
+
+<% @reservations.each do |r| %>
+   %{<div class='reservation'>
+      <p><%= r.description %> on <%= r.to_weekday_and_time %> for <%= r.duration / 60 %> minutes \n with <%= r.user.name %> tel: <%= r.user.phone_number %>"</p>
+        <p>click to confirm, cancel or ask to reschedule below.</p>
+        <ul>
+          <li>
+            <a href="https://<%= ENV['PRODUCTION_SERVER'] %>/v2/reservation/<%= r.id %>/confirm/?token=<%= r.person.token %>">Confirm</a>
+          </li>
+          <li>
+            <a href="https://<%= ENV['PRODUCTION_SERVER'] %>/v2/reservation/<%= r.id %>/cancel/?token=<%= r.person.token %>">Cancel</a>
+          </li>
+          <li>
+            <a href="https://<%= ENV['PRODUCTION_SERVER'] %>/v2/reservation/<%= r.id %>/reschedule/?token=<%= r.person.token %>">Reschedule</a>
+          </li>
+        </ul>
+      </div>  %>
+<% end %>
+
+<p>
+You can always check your schedule here: https://<%=ENV['PRODUCTION_SERVER']%>/calendar/?token=<%= @reservations.first.person.token %>
+</p>
+
+<p>Thanks!,</p>
+<p><%= ENV['TEAM_NAME'] %></p>
+

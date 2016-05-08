@@ -114,6 +114,36 @@ class V2::Reservation < ActiveRecord::Base
     end
   end
 
+
+  # def person_string
+  #   %{ #{description} on #{to_weekday_and_time} for #{duration} minutes
+  #    with #{user.name} tel: #{user.phone_number}}
+  # end
+
+  # def person_html
+    # %{<div class='reservation'>
+    #   <p>#{description} on #{to_weekday_and_time} for #{duration} minutes \n with #{user.name} tel: #{user.phone_number}"</p>
+    #     <p>click to confirm, cancel or ask to reschedule below.</p>
+    #     <ul>
+    #       <li>
+    #         <a href="https://#{ENV['PRODUCTION_SERVER']}/v2/reservation/#{id}/confirm/?token=#{person.token}">Confirm</a>
+    #       </li>
+    #       <li>
+    #         <a href="https://#{ENV['PRODUCTION_SERVER']}/v2/reservation/#{id}/cancel/?token=#{person.token}">Cancel</a>
+    #       </li>
+    #       <li>
+    #         <a href="https://#{ENV['PRODUCTION_SERVER']}/v2/reservation/#{id}/reschedule/?token=#{person.token}">Reschedule</a>
+    #       </li>
+    #     </ul>
+    #   </div> }
+  # end
+
+  def user_string
+    %{ Reservation: #{description} on #{to_weekday_and_time} for #{duration} minutes
+    with {person.full_name} tel: #{person.phone_number}
+    link: https://#{ENV['PRODUCTION_SERVER']}/v2/reservation/#{id} }
+  end
+
   def send_reminder
     person.reservation_remind
     user.reservation

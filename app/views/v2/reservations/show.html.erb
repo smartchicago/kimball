@@ -25,5 +25,12 @@
   <strong>Time Slot:</strong>
   <%= @reservation.time_slot.to_weekday_and_time %>
 </p>
+<% d=[]; @reservation.aasm.events.map(&:name).each_with_index{|e,i|  d << [@reservation.aasm.states(permitted: true).map(&:name)[i].to_s,e.to_s] } %>
+<div class="btn-group" role="group" aria-label="Basic example">
+<% d.each do |e| %>
+   <%= button_to e[1], v2_reservation_path, params: {aasm_state: e[0]}, method: :patch,  class: "btn btn-secondary", remote: true %>
+<% end %>
+</div>
+<br>
 
 <%= link_to 'Back', v2_reservations_path %>

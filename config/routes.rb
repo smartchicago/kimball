@@ -6,7 +6,7 @@ Logan::Application.routes.draw do
 
   namespace :v2 do
     resources :event_invitations
-    resources :reservations, only: [:new, :create, :show, :destroy, :index]
+    resources :reservations
     resources :sms_reservations, only: [:create]
   end
 

@@ -1,5 +1,7 @@
 <p>Hi <% @reservations.first.person.first_name %>,</p>
-<p>An interview has been booked for <%= @reservation.time_slot.to_weekday_and_time %> with <%= @reservation.user.name %>, phone number: <%=r.user.phone_number %></p>
+
+<p>Your interview <%= @reservation.time_slot.to_weekday_and_time %> with <%= @reservation.user.name %>, phone number: <%=r.user.phone_number %> has been cancelled.
+</p>
 
 <p>You can always check your schedule by clicking this link: </p>
 <p>

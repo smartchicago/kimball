@@ -14,7 +14,7 @@ module ApplicationHelper
     end
   end
 
-  def nav_link(text, path, options = {class: ''})
+  def nav_link(text, path, options = { class: '' })
     options[:class].prepend(current_page?(path) ? 'active ' : '')
     content_tag(:li, options) do
       link_to text, path

@@ -291,7 +291,20 @@ class Person < ActiveRecord::Base
   def self.send_all_reminders
     # this is where reservation_reminders
     # called by whenever in /config/schedule.rb
-    Person.all.find_each { |u| u.v2_reservations.for_today }
+    Person.all.find_each { |u| u.send_reservation_reminder }
+  end
+
+  def send_reservation_reminder
+    return if reservations.for_today.size == 0
+    case preferred_contact_method.upcase
+    when 'SMS'
+      ::EventInvitationSms.new(to: self, reservations: v2_reservations.for_today).delay.send
+    when 'EMAIL'
+      ReservationNotifier.remind(
+        reservations:  v2_reservations.for_today,
+        person: person
+      ).deliver_later
+    end
   end
 
 end

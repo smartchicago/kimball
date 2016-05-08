@@ -59,6 +59,13 @@ class V2::ReservationsController < ApplicationController
   def edit
   end
 
+  def update
+    @reservation = V2::Reservation.find_by(params[:id])
+    # flasha  notice here and return a js file that reloads the page
+    # or calls turbolinks to reload or somesuch
+    @reservation.update(update_params)
+  end
+
   def destroy
     @reservation.destroy!
     respond_to do |format|
@@ -90,9 +97,21 @@ class V2::ReservationsController < ApplicationController
         :time_slot_id,
         :event_id,
         :event_invitation_id,
-        :user_id)
+        :user_id,
+        :aasm_event,
+        :aasm_state)
     end
-
+    def update_params
+      params.permit(
+        :id,
+        :person_id,
+        :time_slot_id,
+        :event_id,
+        :event_invitation_id,
+        :user_id,
+        :aasm_event,
+        :aasm_state)
+    end
     def person_params
       params.permit(:email_address, :person_id, :token)
     end
