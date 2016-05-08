@@ -3,6 +3,7 @@
 # but a unit test would make coverage more robust
 class EventInvitationSms < ApplicationSms
   attr_reader :to, :event
+  handle_asynchronously :send  # we queue up a bunch of these
 
   def initialize(to:, event:)
     super

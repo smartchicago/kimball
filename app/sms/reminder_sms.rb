@@ -1,7 +1,8 @@
-# TODO: needs a spec. The spec for SmsReservationsController covers it,
+# TODO: needs a spec.
 # but a unit test would make coverage more robust
 class ReminderSms < ApplicationSms
   attr_reader :to, :reservations
+  handle_asynchronously :send # we queue up a bunch of these
 
   def initialize(to:, reservations:)
     super
@@ -33,7 +34,7 @@ class ReminderSms < ApplicationSms
       msg += "Reply 'Confirm' to confirm them all\n"
       msg += "Reply 'Cancel' to cancel them all\n"
       msg += "Reply 'Reschedule' to notify the other people to setup other times\n"
-      msg += "You can send 'Schedule' at any time to see your schedule"
+      msg += "You can send 'Calendar' at any time to see your schedule for the day"
       msg + 'Thanks!'
     end
 

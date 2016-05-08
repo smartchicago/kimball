@@ -76,8 +76,8 @@ class User < ActiveRecord::Base
   def send_reservation_reminder
     return if v2_reservations.for_today.size == 0
     ReservationNotifier.remind(
-        reservations:  v2_reservations.for_today,
-        person: email
-      ).deliver_later
+      reservations:  v2_reservations.for_today,
+      person: email
+    ).deliver_later
   end
 end

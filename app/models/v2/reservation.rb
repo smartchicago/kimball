@@ -12,9 +12,8 @@
 #  event_invitation_id :integer
 #
 
-# - potentially storing the state of the reservation:
-#   * attended, cancelled, missed, etc.
-#   * could be where we hang comments / prepaid cards
+# FIXME: Refactor and re-enable cop
+# rubocop:disable ClassLength
 class V2::Reservation < ActiveRecord::Base
   self.table_name = 'v2_reservations'
 
@@ -26,6 +25,13 @@ class V2::Reservation < ActiveRecord::Base
       where('v2_event_invitations.date = ?', Time.zone.now.strftime('%m/%d/%Y'))
   }
 
+  scope :for_today_and_tomorrow,
+    lambda {
+      joins(:event_invitation).
+        where('v2_event_invitations.date = ? or v2_event_invitations.date = ?',
+          Time.zone.now.strftime('%m/%d/%Y'),
+          Time.zone.tomorrow.strftime('%m/%d/%Y'))
+    }
   belongs_to :time_slot, class_name: '::V2::TimeSlot'
   belongs_to :person
   belongs_to :event, class_name: '::V2::Event'
@@ -127,7 +133,7 @@ class V2::Reservation < ActiveRecord::Base
     ReservationNotifier.confirm(user.email, self).deliver_later
     case person.preferred_contact_method.upcase
     when 'SMS'
-      ::ReservationConfirmSms.new(to: person, reservation: self).delay.send
+      ::ReservationConfirmSms.new(to: person, reservation: self).send
     when 'EMAIL'
       ReservationNotifier.confirm(person.email_address, self).deliver_later
     end
@@ -137,7 +143,7 @@ class V2::Reservation < ActiveRecord::Base
     ReservationNotifier.cancel(user.email, self).deliver_later
     case person.preferred_contact_method.upcase
     when 'SMS'
-      ::ReservationCancelSms.new(to: person, reservation: self).delay.send
+      ::ReservationCancelSms.new(to: person, reservation: self).send
     when 'EMAIL'
       ReservationNotifier.cancel(person.email_address, self).deliver_later
     end
@@ -147,9 +153,10 @@ class V2::Reservation < ActiveRecord::Base
     ReservationNotifier.reschedule(user.email, self).deliver_later
     case person.preferred_contact_method.upcase
     when 'SMS'
-      ::ReservationRescheduleSms.new(to: person, reservation: self).delay.send
+      ::ReservationRescheduleSms.new(to: person, reservation: self).send
     when 'EMAIL'
       ReservationNotifier.reschedule(person.email_address, self).deliver_later
     end
   end
 end
+# rubocop:enable ClassLength

@@ -12,7 +12,7 @@ class InvalidOptionSms < ApplicationSms
     client.messages.create(
       from: application_number,
       to:   to,
-      body: "Sorry, that's not a valid option"
+      body: "Sorry, I didn't understand that! I'm just a computer..."
     )
   end
 end

@@ -76,7 +76,7 @@ class V2::EventInvitationsController < ApplicationController
     end
 
     def send_sms(person, event)
-      ::EventInvitationSms.new(to: person, event: event).delay.send
+      ::EventInvitationSms.new(to: person, event: event).send
     end
 
     # TODO: add a nested :event
