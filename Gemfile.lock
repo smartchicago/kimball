@@ -65,7 +65,7 @@ GEM
     bullet (5.0.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.9.0)
-    capybara (2.6.0)
+    capybara (2.7.1)
       addressable
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
@@ -263,6 +263,7 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
+    puma (3.4.0)
     pusher-client (0.6.2)
       json
       websocket (~> 1.0)
@@ -497,6 +498,7 @@ DEPENDENCIES
   poltergeist
   pry
   pry-rails
+  puma
   quiet_assets
   rack-mini-profiler
   rails (~> 4.2.0)

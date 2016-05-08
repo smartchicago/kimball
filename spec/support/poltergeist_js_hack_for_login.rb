@@ -17,6 +17,7 @@ Capybara.register_driver :poltergeist_debug do |app|
   Capybara::Poltergeist::Driver.new(app, options)
 end
 
+Capybara.register_server :puma
 Capybara.javascript_driver = :poltergeist_debug
 
 # rubocop:disable all

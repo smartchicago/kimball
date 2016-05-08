@@ -160,6 +160,9 @@ group :testing do
 
   # calendaring tests will almost always break on saturdays.
   gem 'timecop'
+
+  # webrick is slow, capybara will use puma instead
+  gem 'puma'
 end
 
 group :development, :test do

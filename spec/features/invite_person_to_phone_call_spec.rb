@@ -3,6 +3,8 @@ require 'faker'
 require 'support/poltergeist_js_hack_for_login'
 require 'capybara/email/rspec'
 
+Capybara.register_server :puma
+
 feature 'Invite person to a phone call' do
   scenario 'with valid data' do
     login_with_admin_user
