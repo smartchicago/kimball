@@ -1,5 +1,7 @@
 
-<script> var token = '<%= @person.nil? ? false : @person.token %>'; </script>
+<script>
+var token = '<%= @person.nil? ? false : @person.token %>';
+</script>
 <% if current_user %>
 <%= render :partial => 'layouts/v2_event_menu' %>
 <% end %>

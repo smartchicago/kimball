@@ -42,6 +42,7 @@ feature 'Person responds to interview invitation over email' do
     expect(page).to have_content(@event.title)
     click_button('Select')
     sleep 1
+
     selected_time = first_slot.to_weekday_and_time
     @research_subject.reload
     expect(@research_subject.v2_reservations.size).to eq(1)

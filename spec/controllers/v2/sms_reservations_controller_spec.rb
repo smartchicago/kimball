@@ -71,7 +71,7 @@ describe V2::SmsReservationsController do
         it 'sends out an error sms for this person' do
           subject
           open_last_text_message_for research_subject.phone_number
-          expect(current_text_message.body).to eql "Sorry, that's not a valid option"
+          expect(current_text_message.body).to eql "Sorry, I didn't understand that! I'm just a computer..."
         end
       end
 

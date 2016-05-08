@@ -20,10 +20,10 @@
       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
-
   </script>
-
   <% end %>
+  <!-- TimeCop extends it's reach into js. -->
+  <script>var today = '<%= Time.zone.now.strftime('%F') %>';</script>
 </head>
 <body>
     <div class="navbar navbar-inverse">

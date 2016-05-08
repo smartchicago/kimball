@@ -3,7 +3,7 @@ class CalendarController < ApplicationController
 
   include ActionController::MimeResponds
 
-  def index
+  def show
     @reservation = V2::Reservation.new
     redirect_to root_url unless visitor
   end

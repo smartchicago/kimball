@@ -83,7 +83,7 @@ $(document).on('ready page:load', function () {
     },
     defaultView: isMobile.matches ? 'agendaDay' : 'agendaWeek',
     aspectRatio: isMobile.matches ? 0.7 : 1.35 ,
-    defaultDate: moment( new Date().toJSON().slice(0, 10) ),
+    defaultDate: today,
     //eventLimit: true, // allow "more" link when too many events
     editable: false,
     businessHours:{
