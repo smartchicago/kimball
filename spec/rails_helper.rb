@@ -5,6 +5,8 @@ require 'rspec/rails'
 require 'spec_helper'
 require 'shoulda/matchers'
 require 'database_cleaner'
+require 'devise'
+require 'support/controller_macros'
 
 ActiveRecord::Migration.maintain_test_schema!
 
@@ -19,6 +21,9 @@ RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/test/fixtures"
 
+  config.include Devise::TestHelpers, :type => :controller
+  config.extend ControllerMacros, :type => :controller
+  
   config.use_transactional_fixtures = false
 
   config.infer_spec_type_from_file_location!

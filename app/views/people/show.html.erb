@@ -137,7 +137,7 @@
       <% for submission in @person.submissions %>
       <a id="submission-<%= submission.id %>"></a>
       <tr>
-        <td><strong><%= submission.form_name %></strong><br/><span title="<%= submission.created_at %>"><%= time_ago_in_words submission.created_at %> ago</span><br/><span class="" style="font-size:small; color:#ccc; font-style:italic"><%= submission.ip_addr %></span></td>
+        <td><strong><%= submission.form_name %></strong><br/>Form Type: <%= submission.form_type %><br/><span title="<%= submission.created_at %>"><%= time_ago_in_words submission.created_at %> ago</span><br/><span class="" style="font-size:small; color:#ccc; font-style:italic"><%= submission.ip_addr %></span></td>
         <td>
           <table class="table table-striped">
             <% for field_id,field_desc in submission.fields do %>

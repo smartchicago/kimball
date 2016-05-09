@@ -40,7 +40,7 @@
 
             <ul class="nav">
               <li class=""><%= link_to "People <span class='badge'>#{Person.count}</span>".html_safe, people_path %></li>
-              <li class=""><%= link_to "Submissions <span class='badge'>#{Submission.count}</span>".html_safe, submissions_path %></li>
+              <li class=""><%= link_to "Submissions <span class='badge'>#{Submission.where('person_id is ?', nil).count}</span>".html_safe, submissions_path %></li>
               <li><%= link_to "SMS Campaigns", twilio_wufoos_path %></li>
               <li><%= link_to "Import Phone Numbers", '/twilio_messages/sendmessages' %></li>
               <li><%= link_to "Events", events_path %></li>
@@ -52,7 +52,7 @@
                   <li><%= link_to "Add Submission", new_submission_path %></li>
                   <li><%= link_to "MailChimp Updates", mailchimp_updates_path %></li>
                   <li><%= link_to "Text Message Log", twilio_messages_path %></li>
-                  <li><%= link_to "Invite To Event", new_v2_event_invitation_path %></li>
+                  <!-- <li><%= link_to "Invite To Event", new_v2_event_invitation_path %></li> -->
                   <li><%= link_to "Programs", programs_path %></li>
                   <li><%= link_to "Applications", applications_path %></li>
                 </ul>
