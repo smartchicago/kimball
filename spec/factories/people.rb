@@ -49,7 +49,7 @@ FactoryGirl.define do
     city              { Faker::Address.city }
     state             { Faker::Address.state }
     postal_code       { Faker::Address.zip }
-    signup_at         DateTime.now.in_time_zone
+    signup_at         Time.zone.now
     primary_device_id devices[:desktop]
     primary_device_description 'crawling'
 

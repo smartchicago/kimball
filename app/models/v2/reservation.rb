@@ -12,23 +12,30 @@
 #  event_invitation_id :integer
 #
 
-# TODO: denormalize associated objects into Reservation
-# - it's the final snapshot of all scheduling, source to be checked
-# against constantly
-# - associated objects should still be in place, for cancellations
-# - potentially storing the state of the reservation:
-#   * attended, cancelled, missed, etc.
-#   * could be where we hang comments / prepaid cards
+# FIXME: Refactor and re-enable cop
+# rubocop:disable ClassLength
 class V2::Reservation < ActiveRecord::Base
   self.table_name = 'v2_reservations'
 
+  include AASM
   include Calendarable
 
+  scope :for_today, lambda {
+    joins(:time_slot).where('v2_time_slots.start_time > ? and v2_time_slots.start_time < ? ',  Time.zone.today.beginning_of_day, Time.zone.today.end_of_day)
+  }
+
+  scope :for_today_and_tomorrow,
+    lambda {
+      joins(:time_slot).where('v2_time_slots.start_time > ? and v2_time_slots.start_time < ? ',  Time.zone.today.beginning_of_day, (Time.zone.today + 1.day).end_of_day)
+    }
   belongs_to :time_slot, class_name: '::V2::TimeSlot'
   belongs_to :person
   belongs_to :event, class_name: '::V2::Event'
   belongs_to :user
   belongs_to :event_invitation, class_name: '::V2::EventInvitation'
+
+  # so users can take notes.
+  has_many :comments, as: :commentable, dependent: :destroy
 
   validates :person, presence: true
   validates :user, presence: true
@@ -37,6 +44,9 @@ class V2::Reservation < ActiveRecord::Base
 
   # can't have the same time slot id twice.
   validates :time_slot, uniqueness: true, presence: true
+
+  # one person can't have multiple reservations for the same event
+  validates :person, uniqueness: { scope: :event_invitation }
 
   # these overlap validations are super tricksy.
   # do we check this here?
@@ -65,9 +75,84 @@ class V2::Reservation < ActiveRecord::Base
   delegate :start_time,  to: :time_slot, allow_nil: true
   delegate :end_time,    to: :time_slot, allow_nil: true
 
+  delegate :title,       to: :event_invitation
   delegate :description, to: :event_invitation
   delegate :date,        to: :event_invitation
   delegate :slot_length, to: :event_invitation
   delegate :duration,    to: :event_invitation
 
+  # reservations can move through states
+  aasm do
+    state :created, initial: true
+    state :reminded
+    state :confirmed
+    state :cancelled
+    state :rescheduled
+    state :missed
+    state :attended
+
+    event :remind do
+      transitions from: :created, to: :reminded
+    end
+
+    event :confirm, before: :notify_about_confirmation do
+      transitions from: [:created, :reminded], to: :confirmed
+    end
+
+    event :cancel, before: :notify_about_cancellation do
+      transitions from: [:created, :reminded, :confirmed], to: :cancelled
+    end
+
+    event :reschedule, before: :notify_about_reschedule do
+      transitions from: [:created, :reminded, :confirmed], to: :rescheduled
+    end
+
+    event :attend do
+      transitions to: :attended
+    end
+
+    event :miss do
+      transitions from: [:created, :reminded, :confirmed], to: :missed
+    end
+  end
+
+  def owner?(person_or_user)
+    # both people and users can own a reservation.
+    return true if user == person_or_user
+    return true if person == person_or_user
+    return false if person_or_user.nil?
+    false
+  end
+
+  # these three could definitely be refactored. too much copy-paste
+  def notify_about_confirmation
+    ReservationNotifier.confirm(email_address: user.email, reservation: self).deliver_later
+    case person.preferred_contact_method.upcase
+    when 'SMS'
+      ::ReservationConfirmSms.new(to: person, reservation: self).send
+    when 'EMAIL'
+      ReservationNotifier.confirm(email_address: person.email_address, reservation: self).deliver_later
+    end
+  end
+
+  def notify_about_cancellation
+    ReservationNotifier.cancel(email_address: user.email, reservation: self).deliver_later
+    case person.preferred_contact_method.upcase
+    when 'SMS'
+      ::ReservationCancelSms.new(to: person, reservation: self).send
+    when 'EMAIL'
+      ReservationNotifier.cancel(email_address: person.email_address, reservation: self).deliver_later
+    end
+  end
+
+  def notify_about_reschedule
+    ReservationNotifier.reschedule(email_address: user.email, reservation: self).deliver_later
+    case person.preferred_contact_method.upcase
+    when 'SMS'
+      ::ReservationRescheduleSms.new(to: person, reservation: self).send
+    when 'EMAIL'
+      ReservationNotifier.reschedule(email_address: person.email_address, reservation: self).deliver_later
+    end
+  end
 end
+# rubocop:enable ClassLength

@@ -1,15 +1,66 @@
-<%= week_calendar events: @reservations do |date, meetings| %>
-  <%= date %>
 
-  <% meetings.each do |meeting| %>
-    <div>
-      <%= meeting.description %>
-    </div>
-  <% end %>
+<script>
+var token = '<%= @person.nil? ? false : @person.token %>';
+</script>
+<% if current_user %>
+<%= render :partial => 'layouts/v2_event_menu' %>
 <% end %>
-
+<div id='calendar'></div>
 <% if @person %>
   <%= link_to "iCal Feed", controller: 'calendar', action: :feed, token: @person.token, format: :ics %>
 <% else %>
   <%= link_to "iCal Feed", controller: 'calendar', action: :feed, token: current_user.token, protocol: 'webcal', format: :ics %>
 <% end %>
+
+<div id="invitationModal" class="modal fade">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+              <h4 id="modalTitle" class="modal-title"></h4>
+              <h5 id="modalTime" class="modal-title"></h5>
+          </div>
+          <div id="modalBody" class="modal-body"></div>
+          <div>Choose this time slot</div>
+            <% if @person %>
+              <%= form_for @reservation, url: v2_reservations_path, html: { class: 'form-horizontal' } do |form| %>
+              <%= form.hidden_field :person_id %>
+              <%= form.hidden_field :user_id %>
+              <%= form.hidden_field :event_id %>
+              <%= form.hidden_field :event_invitation_id %>
+              <%= form.hidden_field :time_slot_id %>
+              <% end %>
+            <% end %>
+          </div>
+
+          <div class="modal-footer">
+            <% if @person %>
+              <button type="submit" class="btn btn-primary" data-dismiss="modal" id="submitButton">Select</button>
+            <% end %>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div id="reservationModal" class="modal fade">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+              <h4 id="resTitle" class="modal-title"></h4>
+              <h5 id="resTime" class="modal-title"></h5>
+          </div>
+          <div id="resAttendees" class="modal-body"></div>
+          <div id="resBody" class="modal-body"></div>
+          </div>
+
+          <div class="modal-footer">
+            <% if @person %>
+              <!-- <button class="btn btn-primary" data-dismiss="modal" id="submitButton">Confirm</button> -->
+            <% end %>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>

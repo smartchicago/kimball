@@ -22,7 +22,8 @@ class V2::TimeSlot < ActiveRecord::Base
   validates :end_time,   presence: true
 
   delegate :date,        to: :event_invitation
-  delegate :description, to: :event
+  delegate :title,       to: :event_invitation
+  delegate :description, to: :event_invitation
   delegate :duration,    to: :event_invitation
   delegate :slot_legnth, to: :event_invitation
 
@@ -32,13 +33,5 @@ class V2::TimeSlot < ActiveRecord::Base
 
   # this is tricky. Slots can't overlap for an event or reservation
   # validates :start_time, :end_time, overlap: { exclude_edges: %w( start_time end_time ), scope: :reservation }
-
-  def to_time_and_weekday
-    "#{start_time.strftime('%H:%M')} - #{end_time.strftime('%H:%M')} #{start_time.strftime('%A %d')}"
-  end
-
-  def to_weekday_and_time
-    "#{start_time.strftime('%A %d')} #{start_time.strftime('%H:%M')} - #{end_time.strftime('%H:%M')}"
-  end
 
 end

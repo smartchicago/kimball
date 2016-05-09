@@ -1,11 +1,8 @@
-<p>Hello, you've been invited to a phone interview</p>
+<p>Hello <%= @person.first_name %>,</p>
+<p>you've been invited to a <%= @event.duration / 60 %> minute interview on <%=  @event.event_invitation.date %> between <%= @event.event_invitation.to_time_and_weekday %>. </p>
 
 <p><%= @event.description %></p>
 
 <p><%= link_to 'Please click to setup a time for your interview',
-         new_v2_reservation_url(
-           email_address: @email_address,
-           event_id: @event.id,
-           token: @person.token
-         ) %></p>
+          {controller: "calendar", action: "show", token: @person.token} %></p>
 

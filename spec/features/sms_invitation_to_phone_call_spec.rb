@@ -17,6 +17,7 @@ feature 'SMS invitation to phone call' do
 
     event_description = "We're looking for mothers between the age of 16-26 for a phone interview"
 
+    fill_in 'Event title', with: 'event title'
     fill_in 'Event description', with: event_description
 
     select '30 mins', from: 'Call length'

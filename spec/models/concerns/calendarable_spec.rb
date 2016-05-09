@@ -16,7 +16,7 @@ describe Calendarable do
     it 'can generate an ical event' do
       reservation.reload
       expect(reservation).to respond_to(:to_ics)
-      expect(reservation.to_ics.description).to eq(reservation.description)
+      expect(reservation.to_ics.description).to include(reservation.description)
     end
 
     it 'has  an alarm' do
@@ -25,9 +25,10 @@ describe Calendarable do
     end
 
     it 'returns datetimes' do
-      expect(reservation.start_datetime.class).to eq(DateTime)
-      expect(time_slot.start_datetime.class).to eq(DateTime)
-      expect(event_invitation.start_datetime.class).to eq(DateTime)
+      klass = ActiveSupport::TimeWithZone
+      expect(reservation.start_datetime.class).to eq(klass)
+      expect(time_slot.start_datetime.class).to eq(klass)
+      expect(event_invitation.start_datetime.class).to eq(klass)
     end
   end
 
@@ -36,7 +37,7 @@ describe Calendarable do
 
     it 'can generate an ical event' do
       expect(ei).to respond_to(:to_ics)
-      expect(ei.to_ics.description).to eq(ei.description)
+      expect(ei.to_ics.description).to include(ei.description)
     end
 
     it 'should not have an alarm' do

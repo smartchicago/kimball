@@ -67,4 +67,17 @@ class User < ActiveRecord::Base
     v2_events
   end
 
+  def self.send_all_reminders
+    # this is where reservation_reminders
+    # called by whenever in /config/schedule.rb
+    User.all.find_each(&:send_reservation_reminder)
+  end
+
+  def send_reservation_reminder
+    return if v2_reservations.for_today.size == 0
+    ReservationNotifier.remind(
+      reservations:  v2_reservations.for_today,
+      person: email
+    ).deliver_later
+  end
 end

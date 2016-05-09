@@ -1,0 +1,12 @@
+<section class="comment" id="comment-<%= comment.id %>">
+  <a id="comment-<%= comment.id %>"></a>
+  <%= best_in_place comment, :content,:ok_button => 'Save', :cancel_button => 'Cancel',as: :textarea %>
+  <br>
+  <span class="comment-byline">
+    <% if comment.created_by %>
+      <%= User.find(comment.created_by).email %> &mdash;
+    <% end %>
+    <%= link_to "#{time_ago_in_words(comment.created_at)} ago", v2_reservation_path(comment.commentable, anchor: "comment-#{comment.id}"), title: comment.created_at.to_s(:long) %>
+    <%= link_to 'delete note', comment_path(comment.id), method: :delete, remote: true, data: { confirm: "Delete this note? This cannot be undone." }, class: "comment-delete-link" %>
+  </span>
+</section>

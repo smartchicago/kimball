@@ -23,7 +23,7 @@ class TimeSlotNotAvailableSms < ApplicationSms
     available_slots = event.available_time_slots(to)
     body << generate_slot_messages(available_slots)
     body << "\nThanks!\n\n"
-    body << 'Best, Kimball team' # TODO: signature should be configurable
+    body << ENV['TEAM_NAME'] # TODO: signature should be configurable
   end
 
   # rubocop:disable Metrics/MethodLength,
@@ -37,7 +37,7 @@ class TimeSlotNotAvailableSms < ApplicationSms
         msg << "'#{event.id}#{slot_id_to_char(i)}' for #{slot.to_time_and_weekday}\n"
       end
       msg << "Or visit https://#{ENV['PRODUCTION_SERVER']}/calendar/?token=#{to.token} to pick a time.\n"
-      msg << "If none of these times work, please respond with: '#{event.id}-Decline'  to decline\n"
+      msg << "If none of these times work you can just ignore this message.\n"
     else
       msg << "There are no more available times for this event.\n"
     end

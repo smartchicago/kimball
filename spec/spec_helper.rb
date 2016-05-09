@@ -6,6 +6,8 @@ Coveralls.wear_merged!('rails')
 
 require 'devise'
 require 'factory_girl_rails'
+# spec/spec_helper.rb
+# require 'rspec/retry'
 
 RSpec.configure do |config|
   config.filter_run_including focus: true

@@ -31,5 +31,6 @@ FactoryGirl.define do
     password_confirmation 'password'
     approved true
     name { Faker::Name.name }
+    phone_number { Faker::PhoneNumber.cell_phone }
   end
 end

@@ -21,6 +21,7 @@ require 'rails_helper'
 describe V2::EventInvitation do
   it { is_expected.to validate_presence_of(:email_addresses) }
   it { is_expected.to validate_presence_of(:description) }
+  it { is_expected.to validate_presence_of(:title) }
   it { is_expected.to validate_presence_of(:slot_length) }
   it { is_expected.to validate_presence_of(:date) }
   it { is_expected.to validate_presence_of(:start_time) }
@@ -37,6 +38,7 @@ describe V2::EventInvitation do
         date: '03/20/2016',
         start_time: '15:00',
         end_time: '16:30',
+        title: 'title',
         user_id: user.id
       }
     end
