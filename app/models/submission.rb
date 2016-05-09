@@ -11,6 +11,8 @@
 #  field_structure :text(65535)
 #  created_at      :datetime
 #  updated_at      :datetime
+#  form_id         :string(255)
+#  form_type       :integer
 #
 
 class Submission < ActiveRecord::Base

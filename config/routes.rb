@@ -5,8 +5,15 @@ Logan::Application.routes.draw do
   end
 
   namespace :v2 do
-    resources :event_invitations, only: [:new, :create]
-    resources :reservations, only: [:new, :create]
+    resources :event_invitations
+    resources :reservations do
+      collection do
+        post 'confirm'
+        post 'cancel'
+        post 'reschedule'
+      end
+      resources :comments, controller: '/comments'
+    end
     resources :sms_reservations, only: [:create]
   end
 
@@ -46,6 +53,7 @@ Logan::Application.routes.draw do
 
   resources :applications
 
+
   resources :programs
 
   devise_for :users
@@ -54,6 +62,15 @@ Logan::Application.routes.draw do
 
   resources :comments
   resources :taggings, only: [:create, :destroy]
+
+  get 'calendar/event_slots.json(:token)', to: 'calendar#event_slots', defaults: { format: 'json' }
+
+  get 'calendar/reservations.json(:token)', to: 'calendar#reservations', defaults: { format: 'json' }
+  get 'calendar/events.json', to: 'calendar#events', defaults: { format: 'json' }
+
+  get '/calendar/(:id)', to: 'calendar#show', as: :calendar
+  get '/calendar/(:token)/feed/', to: 'calendar#feed', defaults: { format: 'ics' }
+
 
   get  'search/index'
   post 'search/export' # send search results elsewhere, i.e. Mailchimp

@@ -10,6 +10,10 @@
 #  date            :string(255)
 #  start_time      :string(255)
 #  end_time        :string(255)
+#  buffer          :integer          default(0), not null
+#  created_at      :datetime
+#  updated_at      :datetime
+#  user_id         :integer
 #
 
 class V2::EventInvitationsController < ApplicationController
@@ -19,8 +23,10 @@ class V2::EventInvitationsController < ApplicationController
 
   def create
     @event_invitation = V2::EventInvitation.new(event_invitation_params)
+    # saving the current_user to the event
 
     if @event_invitation.save
+      # @event_invitation.event = create_event(@event_invitation)
       send_notifications(@event_invitation)
       flash[:notice] = 'Person was successfully invited.'
     else
@@ -28,10 +34,26 @@ class V2::EventInvitationsController < ApplicationController
       flash[:error] = 'There were problems with some of the fields: ' + errors
     end
 
-    render :new
+    render new_v2_event_invitation_path
+  end
+
+  def index
+    @events = V2::EventInvitation.all.page(params[:page])
+  end
+
+  def show
+    @event =  V2::EventInvitation.find_by(params[:id])
   end
 
   private
+
+    def create_event(event_invitation)
+      V2::Event.create(
+        description: event_invitation.description,
+        time_slots: event_invitation.break_time_window_into_time_slots,
+        user_id: current_user || 1 # if nil, make admin owner
+      )
+    end
 
     def send_notifications(event_invitation)
       event = event_invitation.event
@@ -59,14 +81,14 @@ class V2::EventInvitationsController < ApplicationController
 
     # TODO: add a nested :event
     def event_invitation_params
-      params.require(:v2_event_invitation).
-        permit(
-          :email_addresses,
-          :description,
-          :slot_length,
-          :date,
-          :start_time,
-          :end_time
-        )
+      params.require(:v2_event_invitation).permit(:email_addresses,
+        :description,
+        :slot_length,
+        :date,
+        :start_time,
+        :end_time,
+        :buffer,
+        :title,
+        :user_id).merge(user_id: current_user.id)
     end
 end

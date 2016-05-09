@@ -8,4 +8,9 @@ class ApplicationSms
     )
     @application_number = ENV['TWILIO_NUMBER']
   end
+
+  def slot_id_to_char(id)
+    raise ArgumentError if id >= 26
+    (id + 97).chr
+  end
 end

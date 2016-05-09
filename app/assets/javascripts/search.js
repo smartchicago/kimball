@@ -77,4 +77,24 @@ $(document).on('ready page:load', function() {
       }
     ]
   });
+
+  // validating our search fields
+  $("#search-form").validate({
+    rules: {
+      "email_address": {
+        email: true
+      },
+      "phone_number": {
+        digits: true,
+        maxlength: 11,
+        minlength: 11
+      },
+      "postal_code":{
+        zipcodeUS: true
+      }
+    }
+  });
+
+
+
 });

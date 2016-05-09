@@ -7,6 +7,7 @@ require 'shoulda/matchers'
 require 'database_cleaner'
 require 'support/helpers'
 require 'sms_spec'
+require 'timecop'
 
 SmsSpec.driver = :'twilio-ruby'
 
@@ -20,6 +21,16 @@ Shoulda::Matchers.configure do |config|
 end
 
 RSpec.configure do |config|
+  # # show retry status in spec process
+  # config.verbose_retry = true
+  # # show exception that triggers a retry if verbose_retry is set to true
+  # config.display_try_failure_messages = true
+
+  # # run retry only on features
+  # config.around :each, :js do |ex|
+  #   ex.run_with_retry retry: 3
+  # end
+
   config.include Helpers
   config.include SmsSpec::Helpers
   config.include SmsSpec::Matchers
@@ -30,7 +41,12 @@ RSpec.configure do |config|
 
   config.infer_spec_type_from_file_location!
 
+  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::TestHelpers, type: :view
+
   config.filter_rails_from_backtrace!
+
+  config.example_status_persistence_file_path = "#{::Rails.root}/tmp/rspec.data"
 
   config.use_transactional_fixtures = false
 

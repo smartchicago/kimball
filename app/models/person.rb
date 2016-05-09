@@ -57,7 +57,10 @@ class Person < ActiveRecord::Base
   has_and_belongs_to_many :event_invitations, class_name: '::V2::EventInvitation', join_table: :invitation_invitees_join_table
   # rubocop:enable Rails/HasAndBelongsToMany
 
-  has_secure_token
+  has_many :v2_reservations, class_name: '::V2::Reservation'
+  has_many :v2_events, through: :event_invitations, foreign_key: 'v2_event_id', source: :event
+
+  has_secure_token :token
 
   after_update  :sendToMailChimp
   after_create  :sendToMailChimp
@@ -113,6 +116,10 @@ class Person < ActiveRecord::Base
 
   def tag_values
     tags.collect(&:name)
+  end
+
+  def submission_values
+    submissions.collect(&:submission_values)
   end
 
   # FIXME: Refactor and re-enable cop
@@ -279,6 +286,25 @@ class Person < ActiveRecord::Base
 
   def full_name
     [first_name, last_name].join(' ')
+  end
+
+  def self.send_all_reminders
+    # this is where reservation_reminders
+    # called by whenever in /config/schedule.rb
+    Person.all.find_each(&:send_reservation_reminder)
+  end
+
+  def send_reservation_reminder
+    return if v2_reservations.for_today.size == 0
+    case preferred_contact_method.upcase
+    when 'SMS'
+      ::ReservationReminderSms.new(to: self, reservations: v2_reservations.for_today).send
+    when 'EMAIL'
+      ReservationNotifier.remind(
+        reservations:  v2_reservations.for_today,
+        person: email_address
+      ).deliver_later
+    end
   end
 
 end

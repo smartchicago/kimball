@@ -5,13 +5,15 @@
 #  id          :integer          not null, primary key
 #  user_id     :integer
 #  description :string(255)
+#  created_at  :datetime
+#  updated_at  :datetime
 #
 
 require 'rails_helper'
 
 describe V2::Event do
   it { is_expected.to validate_presence_of(:description) }
-  it { is_expected.to validate_presence_of(:time_slots) }
+  # it { is_expected.to validate_presence_of(:time_slots) }
 
   describe '#available_time_slots' do
     subject { FactoryGirl.create(:event) }

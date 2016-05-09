@@ -1,9 +1,15 @@
-<%= form_for @event_invitation, url: v2_event_invitations_path, html: { class: 'form-horizontal' } do |f| %>
+<%= form_for @event_invitation, url: v2_event_invitations_path, method: :POST, html: { class: 'form-horizontal' } do |f| %>
   <div class="control-group">
     <%= f.label :email_addresses, "People's email addresses", :class => 'control-label' %>
     <div class="controls">
       <%= f.text_area :email_addresses, :class => 'text_area' %>
       <p>* comma separated</p>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :title, 'Event title', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :title, :class => 'text_field' %>
     </div>
   </div>
   <div class="control-group">
@@ -16,6 +22,12 @@
     <%= f.label :slot_length, 'Call length', :class => 'control-label' %>
     <div class="controls">
       <%= f.select :slot_length, options_for_select([15,30,45,60].map {|o| "#{o.to_s} mins"}), :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :buffer, 'Buffer', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :buffer, options_for_select([0,5,10,15,20,30,45,60].map {|o| ["#{o.to_s} mins",o]},selected: 5), :class => 'text_field' %>
     </div>
   </div>
 

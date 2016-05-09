@@ -95,6 +95,10 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", privileged: false, inline: %[
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password password'
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password password'
+
+    # installing elastic search
+    wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+    echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main" |  sudo tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list
     sudo apt-get -qq update
     sudo apt-get -qq install -y \
       mysql-server-5.6 \
@@ -109,29 +113,19 @@ Vagrant.configure(2) do |config|
       graphviz \
       nginx-full \
       openjdk-7-jre \
-      phantomjs
+      phantomjs \
+      elasticsearch
 
     mysqladmin -u root -ppassword password '';
-
-    if id -u "elasticsearch" >/dev/null 2>&1; then
-        echo "elasticsearch installed"
-    else
-      wget --quiet https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.deb -O /tmp/elasticsearch.deb;
-      sudo dpkg -i /tmp/elasticsearch.deb;
-      sudo update-rc.d elasticsearch defaults;
-      rm /tmp/elasticsearch.deb;
-      update-rc.d elasticsearch defaults;
-      sudo service elasticsearch start;
-    fi
-
-
+    sudo update-rc.d elasticsearch defaults;
+    sudo service elasticsearch start;
     # automatically cd to /vagrant/
     echo 'if [ -d /vagrant/ ]; then cd /vagrant/; fi' >> /home/vagrant/.bashrc
   ]
 
   config.vm.provision :shell, privileged: false, inline: %[
     # rvm install is idempotent
-    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+    curl -sSL https://rvm.io/mpapis.asc | gpg --import -
     curl -sSL https://get.rvm.io | bash -s stable --auto-dotfiles
     source ~/.profile
   ]

@@ -60,7 +60,7 @@ group :red_green_refactor, halt_on_fail: true do
     watch('app/sms/event_invitation_sms.rb') { 'spec/features/sms_invitation_to_phone_call_spec.rb' }
     watch('app/sms/reservation_sms.rb') { 'spec/controllers/v2/sms_reservations_controller_spec.rb' }
     watch('app/sms/decline_invitation_sms.rb') { 'spec/controllers/v2/sms_reservations_controller_spec.rb' }
-
+    watch('app/sms/time_slot_not_available_sms.rb') { 'spec/controllers/v2/sms_reservations_controller_spec.rb' }
     watch('app/controllers/v2/event_invitations_controller.rb') { 'spec/features/invite_person_to_phone_call_spec.rb' }
     watch('app/controllers/v2/event_invitations_controller.rb') { 'spec/features/sms_invitation_to_phone_call_spec.rb' }
     watch('app/controllers/v2/reservations_controller.rb') { 'spec/features/person_responds_to_interview_invitation_over_email_spec.rb' }

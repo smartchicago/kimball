@@ -1,14 +1,6 @@
 Logan::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  #load our local_env first
-  config.before_configuration do
-    env_file = File.join(Rails.root, 'config', 'local_env.yml')
-    YAML.load(File.open(env_file)).each do |key, value|
-      ENV[key.to_s] = value
-    end if File.exist?(env_file)
-  end
-
   # base url for emails
   config.action_mailer.default_url_options = { host:  ENV['PRODUCTION_SERVER']}
 

@@ -2,51 +2,48 @@ require 'rails_helper'
 require 'faker'
 require 'support/poltergeist_js_hack_for_login'
 require 'capybara/email/rspec'
-require 'capybara/poltergeist'
-Capybara.javascript_driver = :poltergeist
 
 feature 'tag person'  do
-  scenario 'add tag' do
-    # probably need to add js: true to this
+  scenario 'add tag', js: :true  do
+    person = FactoryGirl.create(:person)
+    login_with_admin_user
 
-    # login_with_admin_user
-    # person = FactoryGirl.create(:person)
-    # tag_name = Faker::Company.buzzword
-    # visit "/people/#{person.id}"
+    tag_name = Faker::Company.buzzword
+    visit "/people/#{person.id}"
+    expect(page).to have_button('Add')
 
-    # expect(page).to have_button('Add')
+    fill_in_autocomplete '#tag-typeahead', tag_name
 
-    # #fill_in_autocomplete '#tag-typeahead', tag_name
-    # fill_in 'tagging[name]', with: tag_name
-    # find_button('Add').trigger('click')
+    find_button('Add').trigger('click')
+    sleep 1 # wait for our page to save
+    # gotta reload so that we don't cache tags
+    person.reload
+    found_tag = person.taggings.first ? person.taggings.first.tag.name : false
+    expect(found_tag).to eq(tag_name)
 
-    # # gotta reload so that we don't cache tags
-    # person.reload
-    # found_tag = person.taggings.first ? person.taggings.first.name : false
-    # expect(found_tag).to eq(tag_name)
-
-    # # should have a deletable tag there.
-    # expect(page).to have_selector('.delete-link')
+    visit "/people/#{person.id}"
+    # should have a deletable tag there.
+    expect(page.evaluate_script("$('a.delete-link').length")).to eq(1)
   end
 
-  scenario 'delete tag' do
-    # probably need to add js: true to this
+  scenario 'delete tag', js: :true  do
+    person = FactoryGirl.create(:person, preferred_contact_method: 'EMAIL')
+    login_with_admin_user
 
-    # login_with_admin_user
-    # person = FactoryGirl.create(:person, preferred_contact_method: 'EMAIL')
-    # tag_name = Faker::Company.buzzword
-    # visit "/people/#{person.id}"
+    tag_name = Faker::Company.buzzword
+    visit "/people/#{person.id}"
 
-    # expect(page).to have_button('Add')
+    expect(page).to have_button('Add')
 
-    # fill_in 'tagging[name]', with: tag_name
+    fill_in_autocomplete '#tag-typeahead', tag_name
 
-    # find_button('Add').trigger('click')
-    # expect(page).to have_selector('.delete-link')
+    find_button('Add').trigger('click')
+    sleep 1
+    expect(page.evaluate_script("$('a.delete-link').length")).to eq(1)
 
-    # expect(find(:css,'#tag-typeahead').value).to_not eq(tag_name)
-
-    # find(:css,".delete-link").find("a").click
-    # expect(page).to_not have_text(tag_name)
+    expect(find(:css, '#tag-typeahead').value).to_not eq(tag_name)
+    page.execute_script("$('a.delete-link').click();")
+    sleep 1
+    expect(page).to_not have_text(tag_name)
   end
 end

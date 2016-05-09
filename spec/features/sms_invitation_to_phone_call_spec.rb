@@ -17,6 +17,7 @@ feature 'SMS invitation to phone call' do
 
     event_description = "We're looking for mothers between the age of 16-26 for a phone interview"
 
+    fill_in 'Event title', with: 'event title'
     fill_in 'Event description', with: event_description
 
     select '30 mins', from: 'Call length'
@@ -33,23 +34,19 @@ feature 'SMS invitation to phone call' do
 
     open_last_text_message_for @research_subject.phone_number
 
-    expected = "Hello #{@research_subject.first_name},\n"
+    slots=[]
 
-    expected << "#{event.description}\n"
-
-    expected << "If you're available, would you so kind to select one of the possible times below,"
-    expected << " by texting back its respective number?\n\n"
-
-    expected << "#{event.id}0) Decline\n"
-    event.available_time_slots.each_with_index do |slot, i|
-      expected << "#{event.id}#{i+1}) #{slot.to_time_and_weekday}\n"
+    event.available_time_slots(@research_subject).each_with_index do |slot, i|
+      slots << "'#{event.id}#{(i + 97).chr}' for #{slot.to_time_and_weekday}\n"
     end
 
-    expected << "\nThanks in advance for you time!\n\n"
+    # should use the person's name.
+    expect(current_text_message.body).to have_text(@research_subject.first_name)
 
-    # TODO: signature should be configurable
-    expected << 'Best, Kimball team'
+    # should describe the event.
+    expect(current_text_message.body).to have_text(event.description)
 
-    expect(current_text_message.body).to eql expected
+    # needs each slot to be in the message
+    slots.each { |s| expect(current_text_message.body).to have_text(s) }
   end
 end

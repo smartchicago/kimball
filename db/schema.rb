@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160407191028) do
+ActiveRecord::Schema.define(version: 20160505192830) do
 
   create_table "applications", force: :cascade do |t|
     t.string   "name",         limit: 255
@@ -227,26 +227,42 @@ ActiveRecord::Schema.define(version: 20160407191028) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "approved",                           default: false, null: false
+    t.string   "name",                   limit: 255
+    t.string   "token",                  limit: 255
+    t.string   "phone_number",           limit: 255
   end
 
   create_table "v2_event_invitations", force: :cascade do |t|
-    t.integer "v2_event_id",     limit: 4
-    t.string  "email_addresses", limit: 255
-    t.string  "description",     limit: 255
-    t.string  "slot_length",     limit: 255
-    t.string  "date",            limit: 255
-    t.string  "start_time",      limit: 255
-    t.string  "end_time",        limit: 255
+    t.integer  "v2_event_id",     limit: 4
+    t.string   "email_addresses", limit: 255
+    t.string   "description",     limit: 255
+    t.string   "slot_length",     limit: 255
+    t.string   "date",            limit: 255
+    t.string   "start_time",      limit: 255
+    t.string   "end_time",        limit: 255
+    t.integer  "buffer",          limit: 4,   default: 0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id",         limit: 4
+    t.string   "title",           limit: 255
   end
 
   create_table "v2_events", force: :cascade do |t|
-    t.integer "user_id",     limit: 4
-    t.string  "description", limit: 255
+    t.integer  "user_id",     limit: 4
+    t.string   "description", limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "v2_reservations", force: :cascade do |t|
-    t.integer "time_slot_id", limit: 4
-    t.integer "person_id",    limit: 4
+    t.integer  "time_slot_id",        limit: 4
+    t.integer  "person_id",           limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id",             limit: 4
+    t.integer  "event_id",            limit: 4
+    t.integer  "event_invitation_id", limit: 4
+    t.string   "aasm_state",          limit: 255
   end
 
   create_table "v2_time_slots", force: :cascade do |t|

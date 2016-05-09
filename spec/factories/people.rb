@@ -40,16 +40,16 @@ connections = Logan::Application.config.connection_mappings
 
 FactoryGirl.define do
   factory :person do
-    first_name        Faker::Name.first_name
-    last_name         Faker::Name.last_name
-    sequence(:email_address) { |i| "#{i}#{Faker::Internet.email}" }
+    first_name        { Faker::Name.first_name }
+    last_name         { Faker::Name.last_name }
+    email_address     { Faker::Internet.email }
     phone_number      { Faker::PhoneNumber.cell_phone }
-    address_1         Faker::Address.street_address
-    address_2         Faker::Address.secondary_address
-    city              Faker::Address.city
-    state             Faker::Address.state
-    postal_code       Faker::Address.zip
-    signup_at         DateTime.now.in_time_zone
+    address_1         { Faker::Address.street_address }
+    address_2         { Faker::Address.secondary_address }
+    city              { Faker::Address.city }
+    state             { Faker::Address.state }
+    postal_code       { Faker::Address.zip }
+    signup_at         Time.zone.now
     primary_device_id devices[:desktop]
     primary_device_description 'crawling'
 
