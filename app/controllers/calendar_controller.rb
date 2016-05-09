@@ -39,7 +39,7 @@ class CalendarController < ApplicationController
                event_invitations.
                includes(event: :time_slots).
                where('date BETWEEN ? AND ?', cal_params[:start], cal_params[:end]).
-               map(&:event)
+               map(&:event).compact
       slots = []
       events.each do|e|
         if visitor.class.to_s == 'Person'
