@@ -65,8 +65,8 @@ class ReservationsController < ApplicationController
   # PATCH/PUT /reservations/1.json
   def update
     respond_to do |format|
-      @reservation.confirmed_at = (params[:reservation].delete(:confirmed_at).to_i == 1) ? DateTime.now : nil
-      @reservation.attended_at  = (params[:reservation].delete(:attended_at).to_i == 1) ? DateTime.now : nil
+      @reservation.confirmed_at = (params[:reservation].delete(:confirmed_at).to_i == 1) ? Time.zone.now : nil
+      @reservation.attended_at  = (params[:reservation].delete(:attended_at).to_i == 1) ? Time.zone.now : nil
 
       if @reservation.with_user(current_user).save
         format.js   { head :ok }

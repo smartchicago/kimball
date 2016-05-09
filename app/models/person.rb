@@ -298,7 +298,7 @@ class Person < ActiveRecord::Base
     return if v2_reservations.for_today.size == 0
     case preferred_contact_method.upcase
     when 'SMS'
-      ::EventInvitationSms.new(to: self, reservations: v2_reservations.for_today).delay.send
+      ::ReservationReminderSms.new(to: self, reservations: v2_reservations.for_today).send
     when 'EMAIL'
       ReservationNotifier.remind(
         reservations:  v2_reservations.for_today,

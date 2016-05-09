@@ -9,10 +9,21 @@ describe V2::SmsReservationsController do
   let(:user) { event_invitation.user }
   let(:research_subject) { event_invitation.invitees.first }
   let(:research_subject_2) { event_invitation.invitees.last }
+  let(:contact_method) {
+    research_subject.preferred_contact_method = 'SMS'
+    research_subject.save
+    research_subject_2.preferred_contact_method = 'SMS'
+    research_subject_2.save
+  }
   let(:event) { event_invitation.event }
+  let(:time_slot) { event.time_slots.first }
 
   before do
     clear_messages
+  end
+
+  after do
+    # Timecop.return
   end
 
   describe 'POST #create' do
@@ -109,6 +120,73 @@ describe V2::SmsReservationsController do
 
           person_token = research_subject.token
           expect(message_body).to have_text(person_token)
+        end
+      end
+
+      context 'confirming a reservation' do
+        let(:body) { 'confirm' }
+        let(:reservation){
+          V2::Reservation.create(user: event_invitation.user,
+                             event: event,
+                             event_invitation: event_invitation,
+                             time_slot: time_slot,
+                             person: research_subject)
+        }
+
+        it 'responds with confirmation message' do
+          Timecop.travel(reservation.date)
+          research_subject.preferred_contact_method = 'SMS'
+          research_subject.save
+          subject
+          open_last_text_message_for research_subject.phone_number
+          message_text = 'You have confirmed a'
+          expect(current_text_message.body).to have_text(message_text)
+          Timecop.return
+        end
+      end
+
+      context 'Cancelling a reservation' do
+        let(:body) { 'cancel' }
+        let(:reservation){
+          V2::Reservation.create(user: event_invitation.user,
+                             event: event,
+                             event_invitation: event_invitation,
+                             time_slot: time_slot,
+                             person: research_subject)
+        }
+        it 'responds with Cancelleation message' do
+          pry
+          Timecop.travel(reservation.date)
+          research_subject.preferred_contact_method = 'SMS'
+          research_subject.save
+          reservation.save
+          subject
+          open_last_text_message_for research_subject.phone_number
+          expect(current_text_message.body).to have_text 'has been cancelled'
+          Timecop.return
+        end
+      end
+
+      context 'Requesting the calendar' do
+        let(:body) { 'Calendar' }
+        let(:reservation){
+          V2::Reservation.create(user: event_invitation.user,
+                             event: event,
+                             event_invitation: event_invitation,
+                             time_slot: time_slot,
+                             person: research_subject)
+        }
+        it 'responds with current reservations' do
+          Timecop.travel(reservation.date)
+          research_subject.preferred_contact_method = 'SMS'
+          research_subject.save
+          subject
+          research_subject.reload
+          open_last_text_message_for research_subject.phone_number
+          res_count = research_subject.v2_reservations.for_today_and_tomorrow.size
+          msg = "You have #{res_count} reservation#{res_count >1 ? 's' : ''} today"
+          expect(current_text_message.body).to have_text(msg)
+          Timecop.return
         end
       end
     end

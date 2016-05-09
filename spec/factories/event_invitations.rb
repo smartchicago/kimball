@@ -13,7 +13,7 @@ FactoryGirl.define do
       event_invitation.invitees << invitees
       event_invitation.email_addresses = invitees.collect(&:email_address).join(',')
 
-      start_time = DateTime.now.in_time_zone + 1.day
+      start_time = Time.zone.now + 1.day
       # three slots, one for each person
       end_time = start_time + (15 * 3).minutes
 

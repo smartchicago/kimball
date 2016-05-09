@@ -1,22 +1,44 @@
 class V2::SmsReservationsController < ApplicationController
   skip_before_action :authenticate_user!
-
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def create
-    send_error_notification && return unless valid_message?
-    if declined?
-      send_decline_notifications(person, event)
-    else
+    send_error_notification && return unless person
+    # FIXME: this needs a refactor badly.
+    if letters_and_numbers_only? # they are trying to accept!
       reservation = V2::Reservation.new(generate_reservation_params)
       if reservation.save
-        send_notifications(person, reservation)
+        send_new_reservation_notifications(person, reservation)
       else
         resend_available_slots(person, event)
       end
+    elsif declined? # currently not used.
+      send_decline_notifications(person, event)
+    elsif confirm? # confirmation for the days reservations
+      if person.v2_reservations.for_today.size > 0
+        person.v2_reservations.for_today.each(&:confirm)
+      else
+        ::ReservationReminderSms.new(to: person, reservations: person.v2_reservations.for_today).send
+      end
+    elsif cancel?
+      if person.v2_reservations.for_today.size > 0
+        person.v2_reservations.for_today.each(&:cancel)
+      else
+        ::ReservationReminderSms.new(to: person, reservations: person.v2_reservations.for_today).send
+      end
+    elsif change?
+      if person.v2_reservations.for_today.size > 0
+        person.v2_reservations.for_today.each(&:reschedule)
+      else
+        ::ReservationReminderSms.new(to: person, reservations: person.v2_reservations.for_today).send
+      end
+    elsif calendar?
+      ::ReservationReminderSms.new(to: person, reservations: person.v2_reservations.for_today_and_tomorrow).send
+    else
+      send_error_notification && return
     end
     render text: 'OK'
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   private
 
@@ -28,8 +50,7 @@ class V2::SmsReservationsController < ApplicationController
       @person ||= Person.find_by(phone_number: sms_params[:From])
     end
 
-    # TODO: needs to be smarter in the edge case where
-    # there are more than 9 slot options and 0 comes up again
+    # TODO: need to handle more than 26 slots
     def selection
       slot_letter = message.downcase.delete('^a-z')
       # "a".ord - ("A".ord + 32) == 0
@@ -40,7 +61,7 @@ class V2::SmsReservationsController < ApplicationController
     end
 
     def event
-      event_id = message.delete('^0-9')
+      event_id = message.delete('^0-9').to_i
       @event ||= V2::Event.includes(:event_invitation, :user, :time_slots).find_by(id: event_id)
     end
 
@@ -64,8 +85,9 @@ class V2::SmsReservationsController < ApplicationController
         time_slot: time_slot }
     end
 
-    def send_notifications(person, reservation)
+    def send_new_reservation_notifications(person, reservation)
       ::ReservationSms.new(to: person, reservation: reservation).send
+      ReservationNotifier.notify(email_address: reservation.user.email, reservation: reservation).deliver_later
     end
 
     def send_decline_notifications(person, event)
@@ -89,38 +111,25 @@ class V2::SmsReservationsController < ApplicationController
     end
 
     def confirm?
-      message.downcase =~ /^confirm?/
+      message.downcase.include?('confirm')
     end
 
     def cancel?
-      message.downcase =~ /^confirm?/
+      message.downcase.include?('cancel')
     end
 
-    def reschedule?
-      message.downcase =~ /^reschedule?/
+    def change?
+      message.downcase.include?('change') || message.downcase.include?('reschedule')
     end
 
     def calendar?
-      message.downcase =~ /^calendar?/
+      message.downcase.include?('calendar')
     end
-    # we probably want a method that will do the decline for us
-    # cases:
-    # 1) with reservation, it was a reminder, find reservation and cancel
-    #     and send reservatino cancel message
-    # 2) standard decline invitation, just send decline message to user and
-    #    person
 
     def letters_and_numbers_only?
       # this is for accepting only. many messages now won't pass.
       # up to 10k events
       message.downcase =~ /\b\d{1,5}[a-z]\b/
-    end
-
-    # this needs to change. lots more potential valid messages
-    def valid_message?
-      return true if declined?
-      return true if letters_and_numbers_only?
-      false
     end
 
     def sms_params

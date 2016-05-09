@@ -99,15 +99,15 @@ class V2::Reservation < ActiveRecord::Base
       transitions from: :created, to: :reminded
     end
 
-    event :confirm, after_commit: :notify_about_confirmation do
+    event :confirm, before: :notify_about_confirmation do
       transitions from: [:created, :reminded], to: :confirmed
     end
 
-    event :cancel, after_commit: :notify_about_cancellation do
+    event :cancel, before: :notify_about_cancellation do
       transitions from: [:created, :reminded, :confirmed], to: :cancelled
     end
 
-    event :reschedule, after_commit: :notify_about_reschedule do
+    event :reschedule, before: :notify_about_reschedule do
       transitions from: [:created, :reminded, :confirmed], to: :rescheduled
     end
 
@@ -130,32 +130,32 @@ class V2::Reservation < ActiveRecord::Base
 
   # these three could definitely be refactored. too much copy-paste
   def notify_about_confirmation
-    ReservationNotifier.confirm(user.email, self).deliver_later
+    ReservationNotifier.confirm(email_address: user.email, reservation: self).deliver_later
     case person.preferred_contact_method.upcase
     when 'SMS'
       ::ReservationConfirmSms.new(to: person, reservation: self).send
     when 'EMAIL'
-      ReservationNotifier.confirm(person.email_address, self).deliver_later
+      ReservationNotifier.confirm(email_address: person.email_address, reservation: self).deliver_later
     end
   end
 
   def notify_about_cancellation
-    ReservationNotifier.cancel(user.email, self).deliver_later
+    ReservationNotifier.cancel(email_address: user.email, reservation: self).deliver_later
     case person.preferred_contact_method.upcase
     when 'SMS'
       ::ReservationCancelSms.new(to: person, reservation: self).send
     when 'EMAIL'
-      ReservationNotifier.cancel(person.email_address, self).deliver_later
+      ReservationNotifier.cancel(email_address: person.email_address, reservation: self).deliver_later
     end
   end
 
   def notify_about_reschedule
-    ReservationNotifier.reschedule(user.email, self).deliver_later
+    ReservationNotifier.reschedule(email_address: user.email, reservation: self).deliver_later
     case person.preferred_contact_method.upcase
     when 'SMS'
       ::ReservationRescheduleSms.new(to: person, reservation: self).send
     when 'EMAIL'
-      ReservationNotifier.reschedule(person.email_address, self).deliver_later
+      ReservationNotifier.reschedule(email_address: person.email_address, reservation: self).deliver_later
     end
   end
 end

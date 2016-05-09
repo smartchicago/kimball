@@ -18,12 +18,12 @@ module Calendarable
 
   # for the calendar display
   def start_datetime
-    return start_time.to_datetime if start_time.class == ActiveSupport::TimeWithZone
+    return start_time if start_time.class == ActiveSupport::TimeWithZone
     date_plus_time(date, start_time)
   end
 
   def end_datetime
-    return end_time.to_datetime if end_time.class == ActiveSupport::TimeWithZone
+    return end_time if end_time.class == ActiveSupport::TimeWithZone
     date_plus_time(date, end_time)
   end
 
@@ -67,7 +67,7 @@ module Calendarable
     end
 
     def date_plus_time(date, time)
-      (Date.strptime(date, '%m/%d/%Y').to_datetime + Time.zone.parse(time).seconds_since_midnight.seconds).to_datetime
+      (Date.strptime(date, '%m/%d/%Y') + Time.zone.parse(time).seconds_since_midnight.seconds)
     end
 
     def generate_atendees

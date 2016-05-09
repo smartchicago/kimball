@@ -13,7 +13,7 @@ class ReservationRescheduleSms < ApplicationSms
     client.messages.create(
       from: application_number,
       to:   to.phone_number,
-      body: "You have asked to reschedule the #{duration} minute interview for #{selected_time}.\n#{reservation.user.name} will get in touch with you soon to another time.\nTheir number is #{reservation.user.phone_number}")
+      body: "It looks like we'll need to reschedule the #{duration} minute interview for #{selected_time}.\n#{reservation.user.name} will get in touch with you soon to another time.\nTheir number is #{reservation.user.phone_number}")
   end
 
   private
