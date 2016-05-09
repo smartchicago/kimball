@@ -1,12 +1,80 @@
 <div class="row">
   <div class="span12">
-    <h2>Form Submissions</h2>
+    <h2>Unmatched Form Submissions</h2>
     
     <table class="table table-striped">
-      <tr><th>Submitted by</th><th>Form Name</th><th>Submitted at</th></tr>
-      <% for submission in @submissions do %>
-      <tr><td><%= link_to submission.person.full_name, person_path(submission.person, anchor: "submission-#{submission.id}") %></td><td><%= submission.form_name %></td><td><%= submission.created_at.to_s(:long) %></td></tr>
+     <thead>
+      <tr>
+      	<th>Edit</th>
+      	<th>Form Type</th>
+      	<th>Form Name</th>
+      	<th>Submitted by</th>
+      	<th>Submitted at</th>
+      </tr>
+      </thead>
+      <% for submission in @submissionsUnmatched do %>
+      <tr>
+      	<td>
+      		<%= link_to t('.edit', :default => t("helpers.links.edit")),
+                          edit_submission_path(submission), :class => 'btn btn-mini' %>
+        </td>
+        <td><%= submission.form_type %></td>
+        <td><%= submission.form_name %></td>
+      	<td>
+          <% if submission.person.present? %>
+ 		    <%= link_to submission.person.full_name, person_path(submission.person, anchor: "submission-#{submission.id}") %>
+		  <% else %>
+ 			UnMatched
+		  <% end %>
+      	</td>
+      <td><%= submission.created_at.to_s(:long) %></td>
+      </tr>
       <% end %>
     </table>
+  </div>
+</div>
+
+
+
+<div class="row">
+  <div class="span12">
+    <h3>All Form Submissions</h3>
+    
+    <table class="table table-striped">
+     <thead>
+      <tr>
+      	<th>Edit</th>
+      	<th>Form Type</th>
+      	<th>Form Name</th>
+      	<th>Submitted by</th>
+      	<th>Submitted at</th>
+      </tr>
+     </thead>
+      <% for submission in @submissions do %>
+      <tr>
+      	<td>
+      		<%= link_to t('.edit', :default => t("helpers.links.edit")),
+                          edit_submission_path(submission), :class => 'btn btn-mini' %>
+        </td>
+        <td><%= submission.form_type %></td>
+        <td><%= submission.form_name %></td>
+      	<td>
+          <% if submission.person.present? %>
+ 		    <%= link_to submission.person.full_name, person_path(submission.person, anchor: "submission-#{submission.id}") %>
+		  <% else %>
+ 			UnMatched
+		  <% end %>
+      	</td>
+      
+      <td><%= submission.created_at.to_s(:long) %></td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12" style="text-align:center">
+    <%= will_paginate @submissions, :renderer => BootstrapPagination::Rails %>
   </div>
 </div>

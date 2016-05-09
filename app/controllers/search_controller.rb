@@ -24,6 +24,7 @@ class SearchController < ApplicationController
       format.html {}
       format.csv do
         fields = Person.column_names
+        fields.push("tags")
         output = CSV.generate do |csv|
           # Generate the headers
           csv << fields.map(&:titleize)
@@ -40,6 +41,12 @@ class SearchController < ApplicationController
                 human_device_type_name(field_value)
               elsif human_connections.include? f
                 human_connection_type_name(field_value)
+              elsif f == "tags"
+                if person.tag_values.blank?
+                  ""
+                else
+                  person.tag_values.join('|')
+                end
               else
                 field_value
               end
