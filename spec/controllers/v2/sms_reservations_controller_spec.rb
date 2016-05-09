@@ -45,14 +45,14 @@ describe V2::SmsReservationsController do
         it 'sends out a confirmation sms for this person' do
           subject
           open_last_text_message_for research_subject.phone_number
-          expected = "A #{event_invitation.duration / 60} minute interview has been booked for #{selected_time}, with #{event.user.name}. \nTheir number is #{event.user.phone_number}"
+          expected = "A #{event_invitation.duration / 60} minute interview has been booked for #{selected_time}, with #{event.user.name}. \nTheir number is #{event.user.phone_number}\n. You'll get a reminder that morning."
           expect(current_text_message.body).to eql expected
         end
 
         it 'sends out a confirmation sms for the admin user' do
           subject
           open_last_text_message_for ENV['TWILIO_NUMBER']
-          expected = "A #{event_invitation.duration / 60} minute interview has been booked for #{selected_time}, with #{event.user.name}. \nTheir number is #{event.user.phone_number}"
+          expected = "A #{event_invitation.duration / 60} minute interview has been booked for #{selected_time}, with #{event.user.name}. \nTheir number is #{event.user.phone_number}\n. You'll get a reminder that morning."
           expect(current_text_message.body).to eql expected
         end
       end

@@ -13,7 +13,7 @@
             <a href="https://<%= ENV['PRODUCTION_SERVER'] %>/v2/reservation/<%= r.id %>/cancel/?token=<%= r.person.token %>">Cancel</a>
           </li>
           <li>
-            <a href="https://<%= ENV['PRODUCTION_SERVER'] %>/v2/reservation/<%= r.id %>/reschedule/?token=<%= r.person.token %>">Reschedule</a>
+            <a href="https://<%= ENV['PRODUCTION_SERVER'] %>/v2/reservation/<%= r.id %>/reschedule/?token=<%= r.person.token %>">Change</a>
           </li>
         </ul>
       </div>  %>

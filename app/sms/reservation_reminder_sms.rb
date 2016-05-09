@@ -27,7 +27,7 @@ class ReservationReminderSms < ApplicationSms
       end
       msg += "Reply 'Confirm' to confirm them all\n"
       msg += "Reply 'Cancel' to cancel them all\n"
-      msg += "Reply 'Reschedule' to notify the other people to setup other times\n"
+      msg += "Reply 'Change' to reschedule and notify the other people to setup other times\n"
       msg += "You can send 'Calendar' at any time to see your schedule for today and tomorrow"
       msg += 'Thanks!'
     end
