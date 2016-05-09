@@ -62,6 +62,7 @@ class V2::ReservationsController < ApplicationController
   end
 
   def show
+    @comment = Comment.new commentable: @reservation
   end
 
   def edit
@@ -112,7 +113,6 @@ class V2::ReservationsController < ApplicationController
         # thus we can provide a feed without auth1
         @visitor = current_user if @visitor.nil? && current_user
       end
-      console
       @reservation = V2::Reservation.find_by(id: params[:id])
       return false unless @reservation.owner?(@visitor)
       @person.nil? ? false : true

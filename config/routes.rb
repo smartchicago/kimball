@@ -12,6 +12,7 @@ Logan::Application.routes.draw do
         post 'cancel'
         post 'reschedule'
       end
+      resources :comments, controller: '/comments'
     end
     resources :sms_reservations, only: [:create]
   end

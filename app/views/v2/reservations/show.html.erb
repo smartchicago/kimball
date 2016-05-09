@@ -33,4 +33,20 @@
 </div>
 <br>
 
-<%= link_to 'Back', v2_reservations_path %>
+<div class="row">
+  <div class="span6">
+    <h3>Notes</h3>
+    <%= form_for([@reservation, @comment], remote: true) do |form| %>
+      <%= form.hidden_field :commentable_type, :value => 'V2::Reservation' %>
+      <%= form.hidden_field :commentable_id, :value => @reservation.id %>
+      <%= form.text_area :content, rows: 3, class: "span6 input-block-level" %>
+      <%= form.submit 'Add note', :class => "btn" %>
+    <% end %>
+
+    <div id="comments">
+      <%= render partial: 'comment', collection: @reservation.comments.order("created_at DESC") %>
+    </div>
+  </div>
+</div>
+
+<%= button_to 'Back', v2_reservations_path %>
