@@ -91,7 +91,6 @@ class V2::ReservationsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(:back) }
-      format.json {}
     end
   end
 
@@ -107,13 +106,14 @@ class V2::ReservationsController < ApplicationController
 
     def set_reservation_and_visitor
       @visitor = nil
-      unless allowed_params[:token].blank?
+      unless params[:token].blank?
         @visitor = Person.find_by(token: params[:token])
         # if we don't have a person, see if we have a user's token.
         # thus we can provide a feed without auth1
         @visitor = current_user if @visitor.nil? && current_user
       end
-      @reservation = V2::Reservation.find_by(params[:id])
+      console
+      @reservation = V2::Reservation.find_by(id: params[:id])
       return false unless @reservation.owner?(@visitor)
       @person.nil? ? false : true
     end

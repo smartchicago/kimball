@@ -134,7 +134,7 @@ describe V2::SmsReservationsController do
         }
 
         it 'responds with confirmation message' do
-          Timecop.travel(reservation.date)
+          Timecop.travel(reservation.time_slot.start_time - 1.hour)
           research_subject.preferred_contact_method = 'SMS'
           research_subject.save
           subject
@@ -155,10 +155,9 @@ describe V2::SmsReservationsController do
                              person: research_subject)
         }
         it 'responds with cancelled message' do
-          Timecop.travel(reservation.date)
+          Timecop.travel(reservation.time_slot.start_time - 1.hour)
           research_subject.preferred_contact_method = 'SMS'
           research_subject.save
-          reservation.save
           subject
           open_last_text_message_for research_subject.phone_number
           expect(current_text_message.body).to have_text 'has been cancelled'
@@ -176,7 +175,7 @@ describe V2::SmsReservationsController do
                              person: research_subject)
         }
         it 'responds with current reservations' do
-          Timecop.travel(reservation.date)
+          Timecop.travel(reservation.time_slot.start_time - 1.hour)
           research_subject.preferred_contact_method = 'SMS'
           research_subject.save
           subject

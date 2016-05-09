@@ -1,12 +1,12 @@
-<p>Hi <% @reservation.first.person.first_name %>,</p>
-<p>The interview booked for <%= @reservation.time_slot.to_weekday_and_time %> with <%= @reservation.user.name %>, phone number: <%=r.user.phone_number %> will need to get rescheduled. </p>
+<p>Hi <% @reservation.person.first_name %>,</p>
+<p>The interview booked for <%= @reservation.time_slot.to_weekday_and_time %> with <%= @reservation.user.name %>, phone number: <%= @reservation.user.phone_number %> will need to get rescheduled. </p>
 
 <p> <%= @reservation.user.name %> will get in touch with you soon to find a better time.</p>
 
 <p>You can always check your schedule by clicking this link: </p>
 <p>
-  <a href="https://<%=ENV['PRODUCTION_SERVER']%>/calendar/?token=<%= @reservations.first.person.token %>">
-  https://<%=ENV['PRODUCTION_SERVER']%>/calendar/?token=<%= @reservations.first.person.token %>
+  <a href="https://<%=ENV['PRODUCTION_SERVER']%>/calendar/?token=<%= @reservation.person.token %>">
+  https://<%=ENV['PRODUCTION_SERVER']%>/calendar/?token=<%= @reservation.person.token %>
   </a>
 </p>
 

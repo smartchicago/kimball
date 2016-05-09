@@ -21,16 +21,12 @@ class V2::Reservation < ActiveRecord::Base
   include Calendarable
 
   scope :for_today, lambda {
-    joins(:event_invitation).
-      where('v2_event_invitations.date = ?', Time.zone.now.strftime('%m/%d/%Y'))
+    joins(:time_slot).where('v2_time_slots.start_time > ? and v2_time_slots.start_time < ? ',  Time.zone.today.beginning_of_day, Time.zone.today.end_of_day)
   }
 
   scope :for_today_and_tomorrow,
     lambda {
-      joins(:event_invitation).
-        where('v2_event_invitations.date = ? or v2_event_invitations.date = ?',
-          Time.zone.now.strftime('%m/%d/%Y'),
-          Time.zone.tomorrow.strftime('%m/%d/%Y'))
+      joins(:time_slot).where('v2_time_slots.start_time > ? and v2_time_slots.start_time < ? ',  Time.zone.today.beginning_of_day, (Time.zone.today + 1.day).end_of_day)
     }
   belongs_to :time_slot, class_name: '::V2::TimeSlot'
   belongs_to :person

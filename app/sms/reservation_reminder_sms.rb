@@ -21,7 +21,7 @@ class ReservationReminderSms < ApplicationSms
   private
 
     def generate_res_msgs
-      msg = "You have #{r.size} reservation#{r.size > 1 ? 's': ''} today.\n"
+      msg = "You have #{res_count} reservation#{res_count > 1 ? 's': ''} today.\n"
       reservations.each do|r|
         msg +=  "#{r.description} on #{r.to_weekday_and_time} for #{r.duration / 60} minutes with #{r.user.name} tel: #{r.user.phone_number}} \n"
       end
@@ -30,6 +30,10 @@ class ReservationReminderSms < ApplicationSms
       msg += "Reply 'Reschedule' to notify the other people to setup other times\n"
       msg += "You can send 'Calendar' at any time to see your schedule for today and tomorrow"
       msg += 'Thanks!'
+    end
+
+    def res_count
+      @reservations.size
     end
 
     def generate_body

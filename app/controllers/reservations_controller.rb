@@ -59,7 +59,7 @@ class ReservationsController < ApplicationController
   # rubocop:enable Metrics/MethodLength
 
   # FIXME: Refactor and re-enable cop
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Rails/TimeZone
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   #
   # PATCH/PUT /reservations/1
   # PATCH/PUT /reservations/1.json

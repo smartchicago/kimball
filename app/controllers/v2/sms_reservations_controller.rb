@@ -1,3 +1,5 @@
+# FIXME: Refactor and re-enable cop
+# rubocop:disable ClassLength
 class V2::SmsReservationsController < ApplicationController
   skip_before_action :authenticate_user!
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -136,3 +138,4 @@ class V2::SmsReservationsController < ApplicationController
       params.permit(:From, :Body)
     end
 end
+# rubocop:enable ClassLength

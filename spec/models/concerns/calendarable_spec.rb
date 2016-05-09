@@ -25,9 +25,10 @@ describe Calendarable do
     end
 
     it 'returns datetimes' do
-      expect(reservation.start_datetime.class).to eq(DateTime)
-      expect(time_slot.start_datetime.class).to eq(DateTime)
-      expect(event_invitation.start_datetime.class).to eq(DateTime)
+      klass = ActiveSupport::TimeWithZone
+      expect(reservation.start_datetime.class).to eq(klass)
+      expect(time_slot.start_datetime.class).to eq(klass)
+      expect(event_invitation.start_datetime.class).to eq(klass)
     end
   end
 

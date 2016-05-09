@@ -75,7 +75,7 @@ class CalendarController < ApplicationController
         # thus we can provide a feed without auth1
         @person = User.find_by(token: allowed_params[:token]) if @person.nil?
       elsif !allowed_params[:id].blank?
-        @person = Person.find_by(allowed_params[:id])
+        @person = Person.find_by(id: allowed_params[:id])
       end
       @person.nil? ? false : true
     end
