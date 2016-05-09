@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Raw content:</strong>
+  <%= @mailchimp_update.raw_content %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @mailchimp_update.email %>
+</p>
+
+<p>
+  <strong>Update type:</strong>
+  <%= @mailchimp_update.update_type %>
+</p>
+
+<p>
+  <strong>Reason:</strong>
+  <%= @mailchimp_update.reason %>
+</p>
+
+<p>
+  <strong>Fired at:</strong>
+  <%= @mailchimp_update.fired_at %>
+</p>
+
+<%= link_to 'Edit', edit_mailchimp_update_path(@mailchimp_update) %> |
+<%= link_to 'Back', mailchimp_updates_path %>

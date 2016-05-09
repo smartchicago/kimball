@@ -151,7 +151,8 @@
         <%= submit_tag "Export", class: "btn btn-primary", data: {disable_with: "Exporting ..."} %>
       </form>
     </div>
-
+  </div>
+  <div class="span12">
     <div id="export-to-twilio-form">
       <%= form_tag search_exportTwilio_path, remote: true, class: "form-inline" %>
         <%= text_area_tag :message1, '', class: "input-xlarge", placeholder: "Enter a message to send (required)", required: true %><br />

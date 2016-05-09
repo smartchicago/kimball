@@ -28,10 +28,14 @@ class MailchimpExport < ActiveRecord::Base
 
     def send_to_mailchimp
       # create a new static segment
-      new_static_segment_id = Gibbon.listStaticSegmentAdd(id: Logan::Application.config.cut_group_mailchimp_list_id, name: name)
+      #new_static_segment_id = Gibbon.listStaticSegmentAdd(id: Logan::Application.config.cut_group_mailchimp_list_id, name: name)
 
       # add the email addresses to the new static segment
-      resp = Gibbon.listStaticSegmentMembersAdd(id: Logan::Application.config.cut_group_mailchimp_list_id, seg_id: new_static_segment_id, batch: recipients)
+      #resp = Gibbon.listStaticSegmentMembersAdd(id: Logan::Application.config.cut_group_mailchimp_list_id, seg_id: new_static_segment_id, batch: recipients)
+
+      # New API 3.0 version:
+      gibbon = Gibbon::Request.new
+      resp = gibbon.lists(Logan::Application.config.cut_group_mailchimp_list_id).segments.create( body: { name: name, static_segment: recipients})
 
       Rails.logger.info("[MailchimpExport#send_to_mailchimp] exported #{resp['success']} email addresses to static segment named \"#{name}\"")
       true

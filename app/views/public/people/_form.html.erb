@@ -1,0 +1,128 @@
+<%= form_for @person, url: public_people_path do |f| %>
+  <div class="control-group">
+    <%= f.label :first_name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :first_name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :last_name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :last_name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :email_address, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :email_address, :class => 'text_field contact',:validate => true %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :phone_number, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :phone_number, :class => 'text_field contact',:validate => true %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :preferred_contact_method, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :preferred_contact_method, [["Email", "EMAIL"],["Text Message", "SMS"]], :class => 'text_field' %>
+    </div>
+  </div>
+  <% if ENV['BLUE_RIDGE'].nil? %>
+  <div class="control-group">
+    <%= f.label :address_1, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :address_1, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :address_2, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :address_2, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :city, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :city, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :state, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :state, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :postal_code, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :postal_code, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :primary_device_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :primary_device_id, Logan::Application.config.device_mappings.collect{|i| [i.first, i.last] } , :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :primary_device_description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :primary_device_description, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :secondary_device_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :secondary_device_id, Logan::Application.config.device_mappings.collect{|i| [i.first, i.last] }, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :secondary_device_description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :secondary_device_description, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :primary_connection_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :primary_connection_id, Logan::Application.config.connection_mappings.collect{|i| [i.first.to_s.humanize, i.last] }, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :primary_connection_description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :primary_connection_description, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :secondary_connection_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :secondary_connection_id, Logan::Application.config.connection_mappings.collect{|i| [i.first.to_s.humanize, i.last] }, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :secondary_connection_description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :secondary_connection_description, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :participation_type, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :participation_type, :class => 'text_field' %>
+    </div>
+  </div>
+  <% else %>
+  <div class="control-group">
+    <%= f.label :postal_code, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :postal_code, :class => 'text_field', :validate => true %>
+    </div>
+  </div>
+  <% end %>
+  <div class="form-actions">
+    <%= f.submit 'Save', :class => 'btn btn-primary' %>
+  </div>
+<% end %>

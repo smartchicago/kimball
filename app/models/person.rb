@@ -36,8 +36,7 @@
 # rubocop:disable ClassLength
 class Person < ActiveRecord::Base
 
-  include Tire::Model::Search
-  include Tire::Model::Callbacks
+  include Searchable
   include ExternalDataMappings
 
   phony_normalize :phone_number, default_country_code: 'US'
@@ -52,8 +51,34 @@ class Person < ActiveRecord::Base
   has_many :tags, through: :taggings
   has_many :taggings, as: :taggable
 
+  has_secure_token
+
   after_update  :sendToMailChimp
   after_create  :sendToMailChimp
+
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+
+  # if ENV['BLUE_RIDGE'].nil?
+  #   validates :primary_device_id, presence: true
+  #   validates :primary_device_description, presence: true
+  #   validates :primary_connection_id, presence: true
+  #   validates :primary_connection_description, presence: true
+  # end
+
+  validates :postal_code, presence: true
+  validates :postal_code, zipcode: { country_code: :us }
+
+  # phony validations and normalization
+  phony_normalize :phone_number, default_country_code: 'US'
+
+  validates :phone_number, presence: true, length: { in: 9..15 },
+    unless: proc { |person| person.email_address.present? }
+  #validates :phone_number, allow_blank: true, uniqueness: true
+
+  validates :email_address, presence: true,
+    unless: proc { |person| person.phone_number.present? }
+  #validates :email_address, email: true, allow_blank: true, uniqueness: true
 
   self.per_page = 15
 
@@ -80,137 +105,9 @@ class Person < ActiveRecord::Base
 
   }.freeze
 
-  # update index if a comment is added
-  after_touch { tire.update_index }
-
-  # namespace indices
-  index_name "person-#{Rails.env}"
-
-  settings analysis: {
-    analyzer: {
-      email_analyzer: {
-        tokenizer: 'uax_url_email',
-        filter: ['lowercase'],
-        type: 'custom'
-      }
-    }
-  } do
-    mapping do
-      indexes :id, index: :not_analyzed
-      indexes :first_name
-      indexes :last_name
-      indexes :email_address, analyzer: 'email_analyzer'
-      indexes :phone_number, index: :not_analyzed
-      indexes :postal_code, index: :not_analyzed
-      indexes :geography_id, index: :not_analyzed
-      indexes :address_1 # FIXME: if we ever use address_2, this will not work
-      indexes :city
-      indexes :verified, analyzer: :snowball
-
-      # device types
-      indexes :primary_device_type_name, analyzer: :snowball
-      indexes :secondary_device_type_name, analyzer: :snowball
-
-      indexes :primary_device_id
-      indexes :secondary_device_id
-
-      # device descriptions
-      indexes :primary_device_description
-      indexes :secondary_device_description
-      indexes :primary_connection_description
-      indexes :secondary_connection_description
-
-      # comments
-      indexes :comments do
-        indexes :content, analyzer: 'snowball'
-      end
-
-      # events
-      indexes :reservations do
-        indexes :event_id, index: :not_analyzed
-      end
-
-      # submissions
-      # indexes the output of the Submission#indexable_values method
-      indexes :submissions, analyzer: :snowball
-
-      # tags
-      indexes :tag_values, analyzer: :keyword
-
-      indexes :preferred_contact_method
-
-      indexes :created_at, type: 'date'
-    end
-  end
-
-  # FIXME: Refactor and re-enable cop
-  # rubocop:disable Metrics/MethodLength
-  #
-  def to_indexed_json
-    # customize what data is sent to ES for indexing
-    to_json(
-      methods: [:tag_values],
-      include: {
-        submissions: {
-          only:  [:submission_values],
-          methods: [:submission_values]
-        },
-        comments: {
-          only: [:content]
-        },
-        reservations: {
-          only: [:event_id]
-        }
-      }
-    )
-  end
-  # rubocop:enable Metrics/MethodLength
-
   def tag_values
     tags.collect(&:name)
   end
-
-  # FIXME: Refactor and re-enable cop
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-  #
-  def self.complex_search(params, per_page)
-    options = {}
-    options[:per_page] = per_page
-    options[:page]     = params[:page] || 1
-
-    unless params[:device_id_type].blank?
-      device_id_string = params[:device_id_type].join(' ')
-    end
-
-    unless params[:connection_id_type].blank?
-      connection_id_string = params[:connection_id_type].join(' ')
-    end
-
-    tire.search options do
-      query do
-        boolean do
-          must { string "first_name:#{params[:first_name]}" } if params[:first_name].present?
-          must { string "last_name:#{params[:last_name]}" } if params[:last_name].present?
-          must { string "email_address:(#{params[:email_address]})" } if params[:email_address].present?
-          must { string "postal_code:(#{params[:postal_code]})" } if params[:postal_code].present?
-          must { string "verified:(#{params[:verified]})" } if params[:verified].present?
-          must { string "primary_device_description:#{params[:device_description]} OR secondary_device_description:#{params[:device_description]}" } if params[:device_description].present?
-          must { string "primary_connection_description:#{params[:connection_description]} OR secondary_connection_description:#{params[:connection_description]}" } if params[:connection_description].present?
-          must { string "primary_device_id:#{device_id_string} OR secondary_device_id:#{device_id_string}" } if params[:device_id_type].present?
-          must { string "primary_connection_id:#{connection_id_string} OR secondary_connection_id:#{connection_id_string}" } if params[:connection_id_type].present?
-          must { string "geography_id:(#{params[:geography_id]})" } if params[:geography_id].present?
-          must { string "event_id:#{params[:event_id]}" } if params[:event_id].present?
-          must { string "address_1:#{params[:address]}" } if params[:address].present?
-          must { string "city:#{params[:city]}" } if params[:city].present?
-          must { string "submission_values:#{params[:submissions]}" } if params[:submissions].present?
-          # must { string "tag_values:#{tags_string}"} if params[:tags].present?
-          must { string "preferred_contact_method:#{params[:preferred_contact_method]}" } unless params[:preferred_contact_method].blank?
-        end
-      end
-      filter :terms, tag_values: params[:tags] if params[:tags].present?
-    end
-  end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Rails/TimeZone
@@ -274,26 +171,27 @@ class Person < ActiveRecord::Base
       if verified.present?
         if verified.start_with?('Verified')
           begin
-            mailchimpSend = Gibbon.list_subscribe({
-              id: Logan::Application.config.cut_group_mailchimp_list_id,
-              email_address: email_address,
-              double_optin: 'false',
-              update_existing: 'true',
-              merge_vars: { FNAME: first_name,
-                            LNAME: last_name,
-                            MMERGE3: geography_id,
-                            MMERGE4: postal_code,
-                            MMERGE5: participation_type,
-                            MMERGE6: voted,
-                            MMERGE7: called_311,
-                            MMERGE8: primary_device_description,
-                            MMERGE9: secondary_device_type_name,
-                            MMERGE10: secondary_device_description,
-                            MMERGE11: primary_connection_type_name,
-                            MMERGE12: primary_connection_description,
-                            MMERGE13: primary_device_type_name,
-                            MMERGE14: preferred_contact_method }
-            })
+
+            gibbon = Gibbon::Request.new
+            mailchimpSend = gibbon.lists(Logan::Application.config.cut_group_mailchimp_list_id).members(Digest::MD5.hexdigest(email_address.downcase)).upsert(
+                body: {email_address: email_address.downcase, 
+                 status: "subscribed",
+                 merge_fields: { FNAME: first_name || "",
+                        LNAME: last_name || "",
+                        MMERGE3: geography_id || "",
+                        MMERGE4: postal_code || "",
+                        MMERGE5: participation_type || "",
+                        MMERGE6: voted || "",
+                        MMERGE7: called_311 || "",
+                        MMERGE8: primary_device_description || "",
+                        MMERGE9: secondary_device_id || "",
+                        MMERGE10: secondary_device_description || "",
+                        MMERGE11: primary_connection_id || "",
+                        MMERGE12: primary_connection_description || "",
+                        MMERGE13: primary_device_id || "",
+                        MMERGE14: preferred_contact_method || "" }
+                 })
+
             Rails.logger.info("[People->sendToMailChimp] Sent #{id} to Mailchimp: #{mailchimpSend}")
           rescue Gibbon::MailChimpError => e
             Rails.logger.fatal("[People->sendToMailChimp] fatal error sending #{id} to Mailchimp: #{e.message}")

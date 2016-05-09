@@ -1,0 +1,37 @@
+<%= form_for(@mailchimp_update) do |f| %>
+  <% if @mailchimp_update.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@mailchimp_update.errors.count, "error") %> prohibited this mailchimp_update from being saved:</h2>
+
+      <ul>
+      <% @mailchimp_update.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :raw_content %><br>
+    <%= f.text_area :raw_content %>
+  </div>
+  <div class="field">
+    <%= f.label :email %><br>
+    <%= f.text_field :email %>
+  </div>
+  <div class="field">
+    <%= f.label :update_type %><br>
+    <%= f.text_field :update_type %>
+  </div>
+  <div class="field">
+    <%= f.label :reason %><br>
+    <%= f.text_field :reason %>
+  </div>
+  <div class="field">
+    <%= f.label :fired_at %><br>
+    <%= f.datetime_select :fired_at %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

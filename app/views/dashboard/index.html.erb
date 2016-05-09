@@ -4,8 +4,8 @@
     <%= render partial: 'person', collection: @people %>    
   </div>
   <div class="span4">
-    <h3>Recent form submissions</h3>
-    <%= render partial: 'person', collection: @submissions.map(&:person) %>
+    <h3>Recent unmatched submissions</h3>
+    <%= render partial: 'submission', collection: @submissions %>    
   </div>
 
   <div class="span4">
