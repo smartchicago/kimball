@@ -61,6 +61,10 @@ namespace :deploy do
     run "mkdir -p #{deploy_to}/shared/assets"
     run "mkdir -p #{deploy_to}/releases"
     run "mkdir -p #{shared_path}/log"
+    run "mkdir -p #{shared_path}/tmp"
+    run "mkdir -p #{shared_path}/assets"
+    run "mkdir -p #{shared_path}/bundle"
+    run "mkdir -p #{shared_path}/cached-copy"
   end
 
   task :link_db_config do
@@ -74,7 +78,8 @@ namespace :deploy do
   end
 
   task :reload_nginx do
-    run "service nginx reload"
+    # i don't like this sudo here.
+    run "sudo service nginx reload"
   end
 
   # https://github.com/capistrano/capistrano/issues/362#issuecomment-14158487

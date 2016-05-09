@@ -19,13 +19,13 @@ ARG1=${1:-'production'}
 echo "setting up $ARG1 environment on this server";
 
 
-
+hostname $ARG1;
 echo "RAILS_ENV=$ARG1" >> /etc/environment
-
+echo "$ARG1" > /etc/hostname
 echo "MYSQL_USER=root" >> /etc/environment
 echo "MYSQL_PASSWORD=password" >> /etc/environment
 echo "MYSQL_HOST=localhost" >> /etc/environment
-
+echo "127.0.0.1 $ARG1" >> /etc/hosts
 source /etc/environment;
 
 wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
@@ -40,8 +40,8 @@ debconf-set-selections <<< 'mysql-server mysql-server/root_password_again passwo
 apt-get update && apt-get install -y mysql-server libmysqlclient-dev redis-server openjdk-6-jre elasticsearch git git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libgmp-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev nginx gpgv2 ruby-dev openjdk-7-jre autoconf libgdbm-dev libncurses5-dev automake libtool bison gawk g++ gcc make libreadline6-dev zlib1g-dev libssl-dev libyaml-dev libsqlite3-dev sqlite3 autoconf libgdbm-dev libncurses5-dev automake libtool bison pkg-config libffi-dev nodejs
 
 service elasticsearch start
-# we don't want the default nginx server setup.
-rm /etc/nginx/sites-enabled/default
+
+
 openssl dhparam -dsaparam -out /etc/nginx/dhparam.pem 2048
 
 # stop nginx for letsencrypt initial setup
@@ -52,6 +52,7 @@ git clone https://github.com/letsencrypt/letsencrypt
 
 service nginx start
 
+# we don't want the default nginx server setup.
 if [ -f /etc/nginx/sites-enabled/default ];
 then
    rm /etc/nginx/sites-enabled/default
@@ -59,7 +60,7 @@ fi
 
 # use the nginx config in our repo
 rm /etc/nginx/sites_enabled/logan.conf;
-ln -s /etc/nginx/sites_enabled/logan.conf /var/www/logan-`echo $RAILS_ENV`/current/config/server_conf/`echo $RAILS_ENV`_nginx.conf;
+ln -s /var/www/logan-`echo $RAILS_ENV`/current/config/server_conf/`echo $RAILS_ENV`_nginx.conf  /etc/nginx/sites-enabled/logan.conf;
 
 
 # weekly ssl cert update
@@ -72,17 +73,16 @@ EOL
 chmod +x /etc/cron.weekly/letsencrypt.sh
 
 # setting up regular backups
-cat >/etc/cron.d/patterns_backup.sh <<EOL
-32 *    * * *   logan   /home/logan/.rvm/wrappers/ruby-2.2.4@global/backup perform --trigger my_backup -r /var/www/logan-`echo $RAILS_ENV`/current/Backup/
-EOL
-chmod +x /etc/cron.d/patterns_backup.sh
+# cat >/etc/cron.d/patterns_backup.sh <<EOL
+# 32 *    * * *   logan   /home/logan/.rvm/wrappers/ruby-2.2.4@global/backup perform --trigger my_backup -r /var/www/logan-`echo $RAILS_ENV`/current/Backup/
+# EOL
+# chmod +x /etc/cron.d/patterns_backup.sh
 
 service cron restart
 
 #passwordless sudo for logan, or else we can't install rvm
 echo 'logan ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/logan
-
-mkdir /var/www/logan-`echo $RAILS_ENV`
+mkdir -p /var/www/logan-`echo $RAILS_ENV`
 
 # creating the logan user.
 getent passwd logan  > /dev/null
@@ -100,7 +100,8 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDRCFqdXUioU3N1GIRK5bowUfJ9DKswJeMp6diQDOfC
 EOL
   # so we don't have key failures for github
   ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-
+  echo 'export PATH=$PATH:/usr/sbin' >> ~/.bashrc
+  echo 'gem: --no-document' >> ~/.gemrc
   # installing ruby and rvm
   gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
   curl -sSL https://get.rvm.io | bash -s stable
@@ -108,13 +109,14 @@ EOL
   source /home/logan/.rvm/scripts/rvm
   rvm install 2.2.4
   rvm use 2.2.4@`echo $RAILS_ENV` --create
-  rvm @global do gem install backup bundler rake
+  rvm @global do gem install backup bundler rake whenever
   ln -s /var/www/logan-`echo $RAILS_ENV`/current `echo $RAILS_ENV`
   exit # back to root.
 fi
 
 # remove our logan passwordless sudo, for security
-rm /etc/sudoers.d/logan
+# exit
+# rm /etc/sudoers.d/logan
 chown -R logan:logan /var/www/logan*
 
 #we've provisioned this server
