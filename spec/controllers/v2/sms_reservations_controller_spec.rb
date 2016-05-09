@@ -154,8 +154,7 @@ describe V2::SmsReservationsController do
                              time_slot: time_slot,
                              person: research_subject)
         }
-        it 'responds with Cancelleation message' do
-          pry
+        it 'responds with cancelled message' do
           Timecop.travel(reservation.date)
           research_subject.preferred_contact_method = 'SMS'
           research_subject.save
