@@ -67,6 +67,10 @@ class User < ActiveRecord::Base
     v2_events
   end
 
+  def full_name # convienence for calendar view.
+    name
+  end
+
   def self.send_all_reminders
     # this is where reservation_reminders
     # called by whenever in /config/schedule.rb

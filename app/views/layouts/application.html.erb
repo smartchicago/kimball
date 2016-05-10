@@ -12,7 +12,7 @@
   <script type="text/javascript">
 
     var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-37739534-12']);
+    _gaq.push(['_setAccount', '<%= ENV['GOOGLE_ANALYTICS_ID'] %>']);
     _gaq.push(['_trackPageview']);
 
     (function() {
@@ -23,7 +23,7 @@
   </script>
   <% end %>
   <!-- TimeCop extends it's reach into js. -->
-  <script>var today = '<%= Time.zone.now.strftime('%F') %>';</script>
+  <script>var today = '<%= Time.current.strftime('%F') %>';</script>
 </head>
 <body>
     <div class="navbar navbar-inverse">

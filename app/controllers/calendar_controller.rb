@@ -1,4 +1,6 @@
 class CalendarController < ApplicationController
+  # this is so that people can also visit the calendar.
+  # identified by their secure token.
   skip_before_action :authenticate_user!, if: :person?
 
   include ActionController::MimeResponds

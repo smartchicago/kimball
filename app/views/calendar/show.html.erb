@@ -1,17 +1,16 @@
-
 <script>
 var token = '<%= @person.nil? ? false : @person.token %>';
 </script>
 <% if current_user %>
 <%= render :partial => 'layouts/v2_event_menu' %>
 <% end %>
+<div class='well well-sm'>
+Calendar for <%= @visitor.full_name %>
+</div>
 <div id='calendar'></div>
-<% if @person %>
-  <%= link_to "iCal Feed", controller: 'calendar', action: :feed, token: @person.token, format: :ics %>
-<% else %>
-  <%= link_to "iCal Feed", controller: 'calendar', action: :feed, token: current_user.token, protocol: 'webcal', format: :ics %>
-<% end %>
-
+<div>
+<%= link_to "Add to this your calendar", controller: 'calendar', action: :feed, token: @visitor.token, protocol: 'webcal', format: :ics %>
+</div>
 <div id="invitationModal" class="modal fade">
   <div class="modal-dialog">
       <div class="modal-content">
@@ -57,7 +56,7 @@ var token = '<%= @person.nil? ? false : @person.token %>';
 
           <div class="modal-footer">
             <% if @person %>
-              <!-- <button class="btn btn-primary" data-dismiss="modal" id="submitButton">Confirm</button> -->
+              <%= button_to
             <% end %>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>

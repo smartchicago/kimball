@@ -1,6 +1,5 @@
 $(document).on('ready page:load', function () {
 
-
   // users won't have a token.
   var token_param = '';
   if (typeof(token) != "undefined") { token_param = "?token="+ token; }
@@ -71,6 +70,7 @@ $(document).on('ready page:load', function () {
         $('#resTitle').html(event.title);
         $('#resBody').html(event.description);
         $('#resTime').html(event.time_and_date);
+        $('#resUser').html(event.user);
         $('#reservationModal').modal();
       }
 

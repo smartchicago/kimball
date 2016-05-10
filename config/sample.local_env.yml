@@ -31,3 +31,4 @@ AWS_API_SECRET: ""
 AWS_S3_BUCKET: ''
 TEAM_NAME: 'Smart Chicago Collaborative'
 SITE_NAME: 'Patterns'
+GOOGLE_ANALYTICS_ID: 'UA-37739534-12'

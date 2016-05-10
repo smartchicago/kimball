@@ -36,6 +36,17 @@
 
           <dt>Preferred participation method</dt>
           <dd><%= best_in_place @person, :participation_type, as: :select, collection: %w(in-person remote) %></dd>
+          <dt>Interviews</dt>
+          <dd><%= link_to "Calendar", calendar_path(token: @person.token) %></dd>
+          <dt>Invitations</dt>
+          <dd><%= @person.event_invitations.size %></dd>
+
+          <dt>Reserved</dt>
+          <dd><%=@person.v2_reservations.size %></dd>
+          <dt>Attended</dt>
+          <dd><%= @person.v2_reservations.attended.size %></dd>
+          <dt>Cancel</dt>
+          <dd><%= @person.v2_reservations.cancelled.size %> </dd>
         </dl>
       </div>
 
@@ -88,7 +99,7 @@
   <div class="span6">
     <h3>Location</h3>
     <a href="https://maps.google.com?q=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>" target="_blank" title="View in Google Maps"><img src="https://maps.googleapis.com/maps/api/staticmap?markers=|<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;zoom=14&amp;size=570x200&amp;sensor=false"></a>
-    <img src="https://maps.googleapis.com/maps/api/streetview?size=570x200&amp;location=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;sensor=false">
+    <!-- <img src="https://maps.googleapis.com/maps/api/streetview?size=570x200&amp;location=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;sensor=false"> -->
   </div>
 </div>
 
