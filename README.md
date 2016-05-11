@@ -75,12 +75,12 @@ If a variable isn't defined in your local_env.yml,  we use the default from samp
   * On the Server Side there are several environment variables used:
     * TWILIO_ACCOUNT_SID
     * TWILIO_AUTH_TOKEN
-    * TWILIO_SMS_SIGNUP_NUMBER
-      - /receive_text/index #POST
+    * TWILIO_SURVEY_NUMBER
+      - /submissions #POST
     * TWILIO_SIGNUP_VERIFICATION_NUMBER
-      - /receive_text/smssignup #POST
-    * TWILIO_SCHEDULING_NUMBER #POST
-      - /v2/sms_reservations
+      - /receive_text #POST
+    * TWILIO_SCHEDULING_NUMBER
+      - /v2/sms_reservations  #POST
 
 * Mailchimp:
   * Mailchimp is used to send emails.

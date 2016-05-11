@@ -46,7 +46,7 @@ class SendTwilioMessagesJob < Struct.new(:messages, :phone_numbers, :smsCampaign
             @outgoing = TwilioMessage.new
             @outgoing.to = phone_number.gsub('+1', '').delete('-')
             @outgoing.body = message
-            @outgoing.from = ENV['TWILIO_NUMBER'].gsub('+1', '').delete('-')
+            @outgoing.from = ENV['TWILIO_SURVEY_NUMBER'].gsub('+1', '').delete('-')
             @outgoing.wufoo_formid = smsCampaign
             # @incoming.direction = "incoming-twiml"
             @outgoing.save

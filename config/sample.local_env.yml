@@ -2,12 +2,11 @@ SECRET_KEY_BASE: "thisisasupersecret"
 DEVISE_PEPPER: 'f3998fdf09b95a8ca3e895d0dafaa78e410eed53cc02341d25f521071a43a9d9d3d9efda73488e9f8b9be7847638482c5d94a86dd1d549dbe1bd9a8e9d957a12'
 WUFOO_HANDSHAKE_KEY: ""
 TWILIO_API_SID: ""
-TWILIO_API_TOKEN: ""
-TWILIO_ACCOUNT_SID: ""
 TWILIO_AUTH_TOKEN: ""
-TWILIO_NUMBER: ""
+TWILIO_SIGNUP_NUMBER: ""
+TWILIO_SIGNUP_VERIFICATION_NUMBER: ""
 TWILIO_SURVEY_NUMBER: ""
-TWILIO_SCHEDULE_NUMBER: ""
+TWILIO_SCHEDULING_NUMBER: ""
 WUFOO_ACCOUNT: ""
 WUFOO_API: ""
 WUFOO_SIGNUP_FORM: ""
@@ -31,4 +30,9 @@ AWS_API_SECRET: ""
 AWS_S3_BUCKET: ''
 TEAM_NAME: 'Smart Chicago Collaborative'
 SITE_NAME: 'Patterns'
+GROUP_NAME: 'CUTGroup'
 GOOGLE_ANALYTICS_ID: 'UA-37739534-12'
+VERIFICATION_SMS_MESSAGE: 'Thank you for verifying your account. We will mail you your $5 VISA gift card right away.'
+SIGNUP_EMAIL_MESSAGE: "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive an email from smarziano@cct.org with details."
+SIGNUP_SMS_MESSAGE: "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive a text from 773-747-6239 with more details."
+SIGNUP_ERROR_MESSAGE: "If you are having trouble email smarziano@cct.org or text '98765' and you will be contacted later."

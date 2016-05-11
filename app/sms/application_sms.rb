@@ -6,7 +6,7 @@ class ApplicationSms
       ENV['TWILIO_ACCOUNT_SID'],
       ENV['TWILIO_AUTH_TOKEN']
     )
-    @application_number = ENV['TWILIO_NUMBER']
+    @application_number = ENV['TWILIO_SCHEDULE_NUMBER']
   end
 
   def slot_id_to_char(id)

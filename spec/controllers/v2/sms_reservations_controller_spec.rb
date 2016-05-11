@@ -3,7 +3,7 @@ require 'rails_helper'
 describe V2::SmsReservationsController do
   include SmsSpec::Helpers
 
-  let(:twilio_phone_number) { ENV['TWILIO_NUMBER'] }
+  let(:twilio_phone_number) { ENV['TWILIO_SCHEDULING_NUMBER'] }
 
   let(:event_invitation) { FactoryGirl.create(:event_invitation) }
   let(:user) { event_invitation.user }
@@ -51,7 +51,7 @@ describe V2::SmsReservationsController do
 
         it 'sends out a confirmation sms for the admin user' do
           subject
-          open_last_text_message_for ENV['TWILIO_NUMBER']
+          open_last_text_message_for ENV['TWILIO_SCHEDULING_NUMBER']
           expected = "A #{event_invitation.duration / 60} minute interview has been booked for #{selected_time}, with #{event.user.name}. \nTheir number is #{event.user.phone_number}\n. You'll get a reminder that morning."
           expect(current_text_message.body).to eql expected
         end
@@ -69,7 +69,7 @@ describe V2::SmsReservationsController do
 
         it 'sends out a confirmation email for the admin user' do
           subject
-          open_last_text_message_for ENV['TWILIO_NUMBER']
+          open_last_text_message_for ENV['TWILIO_SCHEDULING_NUMBER']
           expected = "#{research_subject.full_name} has declined the invitation for event #{event.id}. "
           expected << 'Thanks for the heads-up.'
           expect(current_text_message.body).to eql expected
