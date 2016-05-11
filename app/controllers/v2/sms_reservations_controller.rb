@@ -17,19 +17,19 @@ class V2::SmsReservationsController < ApplicationController
       send_decline_notifications(person, event)
     elsif confirm? # confirmation for the days reservations
       if person.v2_reservations.for_today.size > 0
-        person.v2_reservations.for_today.each(&:confirm)
+        person.v2_reservations.for_today.each(&:confirm!)
       else
         ::ReservationReminderSms.new(to: person, reservations: person.v2_reservations.for_today).send
       end
     elsif cancel?
       if person.v2_reservations.for_today.size > 0
-        person.v2_reservations.for_today.each(&:cancel)
+        person.v2_reservations.for_today.each(&:cancel!)
       else
         ::ReservationReminderSms.new(to: person, reservations: person.v2_reservations.for_today).send
       end
     elsif change?
       if person.v2_reservations.for_today.size > 0
-        person.v2_reservations.for_today.each(&:reschedule)
+        person.v2_reservations.for_today.each(&:reschedule!)
       else
         ::ReservationReminderSms.new(to: person, reservations: person.v2_reservations.for_today).send
       end
