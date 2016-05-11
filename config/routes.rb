@@ -10,7 +10,7 @@ Logan::Application.routes.draw do
       collection do
         post 'confirm'
         post 'cancel'
-        post 'reschedule'
+        post 'change'
       end
       resources :comments, controller: '/comments'
     end
@@ -70,6 +70,26 @@ Logan::Application.routes.draw do
 
   get '/calendar/(:id)', to: 'calendar#show', as: :calendar
   get '/calendar/(:token)/feed/', to: 'calendar#feed', defaults: { format: 'ics' }
+  get '/calendar/show_actions/:id/(:token)',
+      to: 'calendar#show_actions',
+      defaults: { format: 'js' },
+      as: :calendar_show_actions
+
+  get '/calendar/show_reservation/:id/(:token)',
+      to: 'calendar#show_reservation',
+      defaults: { format: 'js' },
+      as: :calendar_show_reservation
+
+  get '/calendar/show_invitation/:id/(:token)',
+      to: 'calendar#show_invitation',
+      defaults: { format: 'js' },
+      as: :calendar_show_invitation
+
+  get '/calendar/show_event/:id/(:token)',
+      to: 'calendar#show_event',
+      defaults: { format: 'js' },
+      as: :calendar_show_event
+
 
 
   get  'search/index'

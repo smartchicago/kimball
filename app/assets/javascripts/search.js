@@ -40,7 +40,6 @@ $(document).on('ready page:load', function() {
       return e.name;
     });
     return $.grep(suggestions, function(suggestion) {
-      console.log(suggestion.name);
       return $.inArray(suggestion.name, current) === -1;
     });
   };

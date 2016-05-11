@@ -1,3 +1,5 @@
+# FIXME: Refactor and re-enable cop
+# rubocop:disable ClassLength
 class CalendarController < ApplicationController
   # this is so that people can also visit the calendar.
   # identified by their secure token.
@@ -6,7 +8,6 @@ class CalendarController < ApplicationController
   include ActionController::MimeResponds
 
   def show
-    @reservation = V2::Reservation.new
     redirect_to root_url unless visitor
   end
 
@@ -66,6 +67,37 @@ class CalendarController < ApplicationController
               where('v2_event_invitations.date BETWEEN ? AND ?', cal_params[:start], cal_params[:end])
   end
 
+  def show_actions
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def show_reservation
+    visitor
+    @reservation = V2::Reservation.find_by(id: allowed_params[:id])
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def show_invitation
+    visitor
+    @reservation = V2::Reservation.new
+    @time_slot = V2::TimeSlot.find_by(id: allowed_params[:id])
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def show_event
+    visitor
+    @event = V2::Event.find_by(id: allowed_params[:id])
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
 
     # this does the token based auth for users and persons
@@ -105,3 +137,4 @@ class CalendarController < ApplicationController
       end
     end
 end
+# rubocop:enable ClassLength

@@ -95,15 +95,15 @@ class V2::Reservation < ActiveRecord::Base
       transitions from: :created, to: :reminded
     end
 
-    event :confirm, before: :notify_about_confirmation do
+    event :confirm, after_commit: :notify_about_confirmation do
       transitions from: [:created, :reminded], to: :confirmed
     end
 
-    event :cancel, before: :notify_about_cancellation do
+    event :cancel, after_commit: :notify_about_cancellation do
       transitions from: [:created, :reminded, :confirmed], to: :cancelled
     end
 
-    event :reschedule, before: :notify_about_reschedule do
+    event :reschedule, after_commit: :notify_about_reschedule do
       transitions from: [:created, :reminded, :confirmed], to: :rescheduled
     end
 
@@ -116,7 +116,7 @@ class V2::Reservation < ActiveRecord::Base
     end
   end
 
-  def owner?(person_or_user)
+  def owner_or_invitee?(person_or_user)
     # both people and users can own a reservation.
     return true if user == person_or_user
     return true if person == person_or_user
@@ -154,5 +154,31 @@ class V2::Reservation < ActiveRecord::Base
       ReservationNotifier.reschedule(email_address: person.email_address, reservation: self).deliver_later
     end
   end
+
+  def permitted_events
+    aasm.events.map(&:name).map(&:to_s)
+  end
+
+  def permitted_states
+    aasm.states(permitted: true).map(&:name).map(&:to_s)
+  end
+
+  def state_action_array
+    permitted_events.each_with_index.map do |e, i|
+      [permitted_states[i], e]
+    end
+  end
+
+  def human_state
+    case aasm_state
+    when 'created' || 'reminded'
+      'Unconfirmed'
+    when 'rescheduled'
+      'Rescheduling'
+    else
+      aasm_state.capitalize
+    end
+  end
+
 end
 # rubocop:enable ClassLength
