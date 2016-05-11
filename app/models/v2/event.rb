@@ -61,7 +61,7 @@ class V2::Event < ActiveRecord::Base
       unless slots.empty?
         res = obj.v2_reservations.joins(:time_slot).
               where('v2_time_slots.start_time >=?',
-                Time.zone.now)
+                Time.current)
 
         # TODO: refactor
         # filtering out slots that overlap. Tricky.
