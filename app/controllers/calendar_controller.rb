@@ -8,6 +8,8 @@ class CalendarController < ApplicationController
   include ActionController::MimeResponds
 
   def show
+    @default_date = default_time
+    @show_modal = modal_to_load
     redirect_to root_url unless visitor
   end
 
@@ -77,7 +79,12 @@ class CalendarController < ApplicationController
     visitor
     @reservation = V2::Reservation.find_by(id: allowed_params[:id])
     respond_to do |format|
-      format.js
+      if @reservation.owner_or_invitee?(@visitor)
+        format.js { }
+      else
+        flash[:error] = 'invalid option'
+        format.js { render json: {}, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -120,7 +127,49 @@ class CalendarController < ApplicationController
     end
 
     def allowed_params
-      params.permit(:token, :id, :event_id, :user_id, :type)
+      params.permit(:token,
+                    :id,
+                    :event_id,
+                    :user_id,
+                    :type,
+                    :reservation_id,
+                    :time_slot_id,
+                    :default_time)
+    end
+
+    def event
+      if allowed_params['event_id']
+        @event ||= V2::Event.find_by(id: allowed_params['event_id'])
+      end
+    end
+
+    def reservation
+      if allowed_params['reservation_id']
+        @reservation ||= V2::Reservation.find_by(id: allowed_params['reservation_id'])
+      end
+    end
+
+    def time_slot
+      if allowed_params['time_slot_id']
+        @time_slot ||= V2::TimeSlot.find_by(id: allowed_params['time_slot_id'])
+      end
+    end
+
+    def default_time
+      return reservation.start_datetime.strftime('%F') if reservation
+      return time_slot.start_datetime.strftime('%F') if time_slot
+      return event.start_datetime.strftime('%F') if event
+      if allowed_params['default_time']
+        return Time.zone.parse(allowed_params['default_time']).strftime('%F')
+      end
+      Time.current.strftime('%F')
+    end
+
+    def modal_to_load
+      return 'reservation' if reservation
+      return 'time_slot' if time_slot
+      return 'event' if event
+      false
     end
 
     def cal_params

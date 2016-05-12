@@ -5,9 +5,7 @@
 
 <p>You can always check your schedule by clicking this link: </p>
 <p>
-  <a href="https://<%=ENV['PRODUCTION_SERVER']%>/calendar/?token=<%= @reservation.person.token %>">
-  https://<%=ENV['PRODUCTION_SERVER']%>/calendar/?token=<%= @reservation.person.token %>
-  </a>
+  <%=link_to "Calendar",calendar_url(token: @reservation.person.token) %>
 </p>
 
 <p>Thanks!,</p>

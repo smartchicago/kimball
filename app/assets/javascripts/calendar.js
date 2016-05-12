@@ -3,7 +3,7 @@ $(document).on('ready page:load', function () {
   // users won't have a token.
   var token_param = '';
   if (typeof(token) != "undefined") { token_param = "?token="+ token; }
-
+  if (typeof(defaultDate) != "undefined") { defaultDate = moment(); }
   var event_sources = {
     reservations: {
       url: "/calendar/reservations.json" + token_param,
@@ -57,10 +57,7 @@ $(document).on('ready page:load', function () {
       // https://coderwall.com/p/kqb3xq/rails-4-how-to-partials-ajax-dead-easy
       // and
       // https://coderwall.com/p/ej0mhg/open-a-rails-form-with-twitter-bootstrap-modals
-      $.ajax({
-        url: event.modal_url,
-        dataType: "script"
-      });
+      $.getScript(event.modal_url);
     },
     eventRender: function(event, element){
       if(event.rendering == 'background'){
@@ -91,7 +88,7 @@ $(document).on('ready page:load', function () {
     },
     defaultView: isMobile.matches ? 'agendaDay' : 'agendaWeek',
     aspectRatio: isMobile.matches ? 0.7 : 1.35 ,
-    defaultDate: today,
+    defaultDate: defaultDate,
     //eventLimit: true, // allow "more" link when too many events
     editable: false,
     businessHours:{

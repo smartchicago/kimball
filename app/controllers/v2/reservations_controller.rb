@@ -79,6 +79,7 @@ class V2::ReservationsController < ApplicationController
     else
       flash[:alert] = 'Error'
     end
+
     respond_to do |format|
       format.html { redirect_to(calendar_path(token: @visitor.token)) }
       format.js { render text: "$('#reservationModal').modal('hide'); $('#calendar').fullCalendar( 'refetchEvents' );" }

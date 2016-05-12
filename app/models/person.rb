@@ -301,7 +301,7 @@ class Person < ActiveRecord::Base
       ::ReservationReminderSms.new(to: self, reservations: v2_reservations.for_today).send
     when 'EMAIL'
       ReservationNotifier.remind(
-        reservations:  v2_reservations.for_today.to_a,
+        reservations:  v2_reservations.for_today_and_tomorrow.to_a,
         email_address: email_address
       ).deliver_later
     end

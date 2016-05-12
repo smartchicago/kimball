@@ -1,10 +1,10 @@
 Hi <% @reservations.first.person.first_name %>,
 The interview booked for <%= @reservation.time_slot.to_weekday_and_time %> with <%= @reservation.user.name %>, phone number: <%=r.user.phone_number %> will need to get rescheduled.
 
-<%= @reservation.user.name %> will get in touch with you soon to find a better time.</p>
+<%= @reservation.user.name %> will get in touch with you soon to find a better time.
 
 
-You can always check and manage your schedule here: https://<%=ENV['PRODUCTION_SERVER']%>/calendar/?token=<%= @reservations.first.person.token %>
+You can always check your schedule here: <%= calendar_url(token: @reservation.person.token) %>
 
 Thanks!,
 <%= ENV['TEAM_NAME'] %>

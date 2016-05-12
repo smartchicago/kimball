@@ -1,5 +1,5 @@
 <p>Hi <% @reservations.first.person.first_name %>,</p>
-<p><%= @reservations.size %> interview<%= @reservation.size > 1 ? 's have' : ' has' %> been booked for you today.</p>
+<p><%= @reservations.size %> interview<%= @reservations.size > 1 ? 's have' : ' has' %> been booked for you today.</p>
 
 <% @reservations.each do |r| %>
    %{<div class='reservation'>
@@ -7,20 +7,21 @@
         <p>click to confirm, cancel or ask to reschedule below.</p>
         <ul>
           <li>
-            <a href="https://<%= ENV['PRODUCTION_SERVER'] %>/v2/reservation/<%= r.id %>/confirm/?token=<%= r.person.token %>">Confirm</a>
+            <%= link_to "Confirm", confirm_v2_reservations_url(id:r.id,token:r.person.token) %>
+
           </li>
           <li>
-            <a href="https://<%= ENV['PRODUCTION_SERVER'] %>/v2/reservation/<%= r.id %>/cancel/?token=<%= r.person.token %>">Cancel</a>
+            <%= link_to "Cancel", cancel_v2_reservations_url(id:r.id,token:r.person.token) %>
           </li>
           <li>
-            <a href="https://<%= ENV['PRODUCTION_SERVER'] %>/v2/reservation/<%= r.id %>/reschedule/?token=<%= r.person.token %>">Change</a>
+            <%= link_to "Change", change_v2_reservations_url(id:r.id,token:r.person.token) %>
           </li>
         </ul>
       </div>  %>
 <% end %>
 
 <p>
-You can always check your schedule here: https://<%=ENV['PRODUCTION_SERVER']%>/calendar/?token=<%= @reservations.first.person.token %>
+You can always check your schedule here: <%=link_to "Calendar",calendar_url(token: @reservations.first.person.token) %>
 </p>
 
 <p>Thanks!,</p>

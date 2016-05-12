@@ -8,9 +8,24 @@ Logan::Application.routes.draw do
     resources :event_invitations
     resources :reservations do
       collection do
-        post 'confirm'
-        post 'cancel'
-        post 'change'
+        post ':id/confirm/(:token)',
+              to: 'reservations#confirm',
+              as: :confirm
+        post ':id/cancel/(:token)',
+              to: 'reservations#cancel',
+              as: :cancel
+        post ':id/change/(:token)',
+              to: 'reservations#change',
+              as: :change
+        get ':id/confirm/(:token)',
+              to: 'reservations#confirm',
+              as: :remote_confirm
+        get ':id/cancel/(:token)',
+              to: 'reservations#cancel',
+              as: :remote_cancel
+        get ':id/change/(:token)',
+              to: 'reservations#change',
+              as: :remote_change
       end
       resources :comments, controller: '/comments'
     end
