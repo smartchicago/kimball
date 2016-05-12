@@ -32,6 +32,7 @@ TEAM_NAME: 'Smart Chicago Collaborative'
 SITE_NAME: 'Patterns'
 GROUP_NAME: 'CUTGroup'
 GOOGLE_ANALYTICS_ID: 'UA-37739534-12'
+NEW_RELIC_LICENSE_KEY: '09577a43a0ccb7a9ae0cfe80ce8e70f13949b9e1'
 VERIFICATION_SMS_MESSAGE: 'Thank you for verifying your account. We will mail you your $5 VISA gift card right away.'
 SIGNUP_EMAIL_MESSAGE: "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive an email from smarziano@cct.org with details."
 SIGNUP_SMS_MESSAGE: "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive a text from 773-747-6239 with more details."
