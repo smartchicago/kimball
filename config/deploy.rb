@@ -39,15 +39,7 @@ set :ssh_options, { forward_agent: true }
 before  'deploy:finalize_update', "deploy:create_shared_directories", 'deploy:link_db_config', 'deploy:link_env_var'
 # before  'deploy:finalize_update', 'deploy:link_db_config', 'deploy:link_env_var'
 
-after   'deploy:finalize_update', 'deploy:create_binstubs', 'deploy:migrate', 'deploy:generate_delayed_job','deploy:reload_nginx'
-
-after :finished, :set_current_version do
-  # dump current git version
-  within release_path do
-    execute :echo, "#{capture("cd #{repo_path} && git rev-parse --short HEAD")} >> public/version"
-  end
-
-end
+after   'deploy:finalize_update', 'deploy:create_binstubs', 'deploy:migrate', 'deploy:generate_delayed_job','deploy:reload_nginx', 'deploy:set_current_version'
 
 
 namespace :deploy do
