@@ -2,7 +2,6 @@
 # but a unit test would make coverage more robust
 class ReservationReminderSms < ApplicationSms
   attr_reader :to, :reservations
-  handle_asynchronously :send # we queue up a bunch of these
 
   def initialize(to:, reservations:)
     super

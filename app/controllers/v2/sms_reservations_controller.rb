@@ -2,6 +2,7 @@
 # rubocop:disable ClassLength
 class V2::SmsReservationsController < ApplicationController
   skip_before_action :authenticate_user!
+  skip_before_action :verify_authenticity_token, only: [:create]
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def create
     send_error_notification && return unless person
