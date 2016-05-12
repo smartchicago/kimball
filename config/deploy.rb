@@ -42,13 +42,12 @@ before  'deploy:finalize_update', "deploy:create_shared_directories", 'deploy:li
 after   'deploy:finalize_update', 'deploy:create_binstubs', 'deploy:migrate', 'deploy:generate_delayed_job','deploy:reload_nginx'
 
 after :finished, :set_current_version do
-    on roles(:app) do
-      # dump current git version
-      within release_path do
-        execute :echo, "#{capture("cd #{repo_path} && git rev-parse --short HEAD")} >> public/version"
-      end
-    end
+  # dump current git version
+  within release_path do
+    execute :echo, "#{capture("cd #{repo_path} && git rev-parse --short HEAD")} >> public/version"
   end
+
+end
 
 
 namespace :deploy do
