@@ -18,7 +18,7 @@ class ReservationNotifier < ApplicationMailer
 
     mail(to: email_address,
          from: ENV['MAILER_SENDER'],
-         bcc: bcc_or_nil(email_address, reservation),
+         bcc: bcc_or_nil(email_address, reservations),
          subject: 'Today\'s Interview Reminders',
          content_type: 'multipart/mixed')
   end
