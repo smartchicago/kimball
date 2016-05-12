@@ -4,7 +4,6 @@
 class EventInvitationSms < ApplicationSms
   attr_reader :to, :event
 
-
   def initialize(to:, event:)
     super
     @to = to

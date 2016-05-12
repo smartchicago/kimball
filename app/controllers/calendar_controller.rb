@@ -80,7 +80,7 @@ class CalendarController < ApplicationController
     @reservation = V2::Reservation.find_by(id: allowed_params[:id])
     respond_to do |format|
       if @reservation.owner_or_invitee?(@visitor)
-        format.js { }
+        format.js {}
       else
         flash[:error] = 'invalid option'
         format.js { render json: {}, status: :unprocessable_entity }
@@ -128,13 +128,13 @@ class CalendarController < ApplicationController
 
     def allowed_params
       params.permit(:token,
-                    :id,
-                    :event_id,
-                    :user_id,
-                    :type,
-                    :reservation_id,
-                    :time_slot_id,
-                    :default_time)
+        :id,
+        :event_id,
+        :user_id,
+        :type,
+        :reservation_id,
+        :time_slot_id,
+        :default_time)
     end
 
     def event

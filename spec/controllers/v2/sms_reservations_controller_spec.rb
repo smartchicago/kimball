@@ -182,7 +182,7 @@ describe V2::SmsReservationsController do
           research_subject.reload
           open_last_text_message_for research_subject.phone_number
           res_count = research_subject.v2_reservations.for_today_and_tomorrow.size
-          msg = "You have #{res_count} reservation#{res_count >1 ? 's' : ''} today"
+          msg = "You have #{res_count} reservation#{res_count >1 ? 's' : ''} soon."
           expect(current_text_message.body).to have_text(msg)
           Timecop.return
         end

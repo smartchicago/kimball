@@ -32,7 +32,7 @@
 
   </div>
 </div>
-
+<%= will_paginate @events, :renderer => BootstrapPagination::Rails %>
 <div class="row">
   <div class="span12">
     <p><%= link_to 'New Event', new_event_path %></p>

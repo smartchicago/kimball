@@ -4,5 +4,5 @@
 <p><%= @event.description %></p>
 
 <p><%= link_to 'Please click to setup a time for your interview',
-          {controller: "calendar", action: "show", token: @person.token} %></p>
+           calendar_url(token: @person.token, event_id: @event.id) %></p>
 

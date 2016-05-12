@@ -3,8 +3,11 @@
 class V2::SmsReservationsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create]
   skip_before_action :authenticate_user!
+
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def create
+    save_twilio_message # see receive_text_controller
+
     send_error_notification && return unless person
     # FIXME: this needs a refactor badly.
     if letters_and_numbers_only? # they are trying to accept!
@@ -137,6 +140,22 @@ class V2::SmsReservationsController < ApplicationController
 
     def sms_params
       params.permit(:From, :Body)
+    end
+
+    def twilio_params
+      res = {}
+      params.permit(:From, :To, :Body, :MessageSid, :DateCreated, :DateUpdated, :DateSent, :AccountSid, :WufooFormid, :SmsStatus, :FromZip, :FromCity,
+        :FromState, :ErrorCode, :ErrorMessage).to_unsafe_hash.keys do |k, v|
+        # behold the horror
+        res[k.gsub!(/(.)([A-Z])/, '\1_\2').downcase] = v
+      end
+      res
+    end
+
+    def save_twilio_message
+      tm = TwilioMessage.new(twilio_params)
+      tm.direction = 'twiml-incoming'
+      tm.save
     end
 end
 # rubocop:enable ClassLength

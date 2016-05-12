@@ -3,7 +3,10 @@ $(document).on('ready page:load', function () {
   // users won't have a token.
   var token_param = '';
   if (typeof(token) != "undefined") { token_param = "?token="+ token; }
-  if (typeof(defaultDate) != "undefined") { defaultDate = moment(); }
+  // this is to be able to change to the right date on the calendar.
+  // also timecop
+  if (typeof(defaultDate) === "undefined") { defaultDate = moment(); }
+
   var event_sources = {
     reservations: {
       url: "/calendar/reservations.json" + token_param,
@@ -66,7 +69,6 @@ $(document).on('ready page:load', function () {
 
       if (event.type === 'Reservation') {
         var icon = '';
-        console.log(event.status)
         switch(event.status){
           case 'Unconfirmed':
             icon = 'icon-question';

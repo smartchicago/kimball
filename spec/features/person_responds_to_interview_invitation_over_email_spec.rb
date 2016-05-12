@@ -29,13 +29,14 @@ feature 'Person responds to interview invitation over email' do
 
   scenario 'successfully', js: :true  do
     receive_invitation_email_and_click_reservation_link
+    sleep 1
     @event.available_time_slots.each do |time|
       expect(page).to have_content time.start_time.strftime('%l:%M')
       expect(page).to have_content time.end_time.strftime('%l:%M')
     end
 
     first_slot = @event.available_time_slots.first
-    start_time = first_slot.start_time.strftime('%l:%M').delete(' ')
+    start_time = first_slot.start_time.strftime('%l:%M')
 
     find("div[data-start='#{start_time}']").click
     expect(page).to have_content(@event.description)

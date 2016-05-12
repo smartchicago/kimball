@@ -295,10 +295,10 @@ class Person < ActiveRecord::Base
   end
 
   def send_reservation_reminder
-    return if v2_reservations.for_today.size == 0
+    return if v2_reservations.for_today_and_tomorrow.size == 0
     case preferred_contact_method.upcase
     when 'SMS'
-      ::ReservationReminderSms.new(to: self, reservations: v2_reservations.for_today).send
+      ::ReservationReminderSms.new(to: self, reservations: v2_reservations.for_today_and_tomorrow).send
     when 'EMAIL'
       ReservationNotifier.remind(
         reservations:  v2_reservations.for_today_and_tomorrow.to_a,

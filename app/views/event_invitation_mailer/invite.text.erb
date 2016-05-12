@@ -4,4 +4,4 @@ you've been invited to a <%= @event.duration / 60 %> minute interview on <%=  @e
 <%= @event.description %>
 
 <%= link_to 'Please click to setup a time for your interview',
-         {controller: "calendar", action: "show", token: @person.token} %>
+         calendar_url(token: @person.token, event_id: @event.id) %>

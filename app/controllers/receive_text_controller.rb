@@ -58,6 +58,7 @@ class ReceiveTextController < ApplicationController
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/BlockNesting
   #
   def smssignup
+    # this is where surveys and new signups land.
     wufoo = WuParty.new(ENV['WUFOO_ACCOUNT'], ENV['WUFOO_API'])
     wufoo.forms
 

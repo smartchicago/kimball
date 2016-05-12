@@ -13,4 +13,5 @@ class ApplicationSms
     raise ArgumentError if id >= 26
     (id + 97).chr
   end
+
 end
