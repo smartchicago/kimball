@@ -10,7 +10,7 @@
 
 
 <div class="row">
-  <%= form_tag search_index_path, :method => :get, :id => "search-form" %>
+  <%= form_tag search_index_path, method: :get, id: "search-form"%>
   <%= hidden_field_tag :adv, '1' %>
 
   <div class="collapse <%= "in" if params[:adv] %>" id="advanced-search">
@@ -30,17 +30,6 @@
 
         <label for="address">Phone Number</label>
         <%= text_field_tag :phone_number, params[:phone_number], class: 'input-large', placeholder: "11 digit number start with 1" %>
-
-        <label for="tags">Tags</label>
-        <%= text_field_tag :tags,
-                            params[:tags],
-                            class: 'tokenfield input-large span4',
-                            data: { search_url: '/taggings/search?q=%QUERY',
-                                    submit_id: 'search-tag-hidden-input',
-                                    pre_populate: Tag.where(name: params[:tags]).to_json(methods: [:value,:label])
-                                  }
-                          %>
-        <%= hidden_field_tag :tags_hidden, params[:tags], id:'search-tag-hidden-input' %>
       </fieldset>
     </div>
 
@@ -67,9 +56,17 @@
       <label for="connection_description">Connection description</label>
       <%= text_field_tag :connection_description, params[:connection_description], :class => "input span5" %>
 
-      <p class="alert alert-info">
-        <span class="label label-info">Search tips</span><br/>To search for more than one ward or zip code, separate values with a space.<br/>To search Tags, Device Type, or Device Connection use Control+Click or Command+Click to select/deselect options.
-      </p>
+      <label for="tags">Tags</label>
+        <%= text_field_tag :tags,
+                            params[:tags],
+                            class: 'tokenfield input-large span5',
+                            data: { search_url: '/taggings/search?q=%QUERY',
+                                    submit_id: 'search-tag-hidden-input',
+                                    pre_populate: Tag.where(name: params[:tags]).to_json(methods: [:value,:label])
+                                  }
+                          %>
+        <%= hidden_field_tag :tags_hidden, params[:tags], id:'search-tag-hidden-input' %>
+      <label for='additional'>&nbsp;</label>
       <span data-toggle="collapse" data-target="#additional-options"  class="btn btn-default">Click to Show Additional Options</span>
       <div class="collapse" id="additional-options">
         <label for="verified">Verified?</label>

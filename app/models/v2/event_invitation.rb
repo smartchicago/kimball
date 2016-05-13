@@ -64,7 +64,6 @@ class V2::EventInvitation < ActiveRecord::Base
     ).slots
   end
 
-
   # this caused the heisenbug.
   # the event would be invalid, because it didn't have slots
   # this now creates an event on save and if the event doesn't have slots

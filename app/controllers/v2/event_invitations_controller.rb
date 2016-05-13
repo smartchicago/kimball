@@ -18,13 +18,11 @@
 
 class V2::EventInvitationsController < ApplicationController
   def new
-
     # people_ids should come from a session.
     people_ids = params[:people_ids].nil? ? '' : params[:people_ids]
 
     @event_invitation = V2::EventInvitation.new(people_ids: people_ids)
     @people = @event_invitation.people
-
   end
 
   def create
