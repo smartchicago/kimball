@@ -127,6 +127,21 @@ TODO
   * Audit trails
   * Comments on all objects
 
+
+Usage
+--------
+# Running a Test!
+  1. create a survey
+    * email and web link: https://smartchicago2012.wufoo.com/forms/cutgroup-test-political-contribution-website/
+    * SMS survey: https://smartchicago2012.wufoo.com/forms/sms-cutgroup-test-political-contributions-website/
+  2. Pick people to receive the survey and send it to em.
+  3. Choose people and send them an availability survey:
+    * https://smartchicago2012.wufoo.com/forms/cutgroup-test-political-contribution-availability/
+    * people can choose multiple slots
+  4. Tell people individually what tests youve chosen for them and manually create a reservation for them.
+  5. create a survey that is filled out during the test itself, either via SMS or web.
+
+
 Hacking
 -------
 
