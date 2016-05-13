@@ -73,13 +73,13 @@ class V2::ReservationsController < ApplicationController
 
   # these are our methods to
   def confirm
-    if @reservation.confirm
+    # can't confirma reservation in the past!
+    render false && return unless @reservation.start_datetime > Time.current
+    if @reservation.confirm && @reservation.save
       flash[:notice] = "You are confirmed for #{@reservation.to_weekday_and_time}, with #{@reservation.user.name}."
-      @reservation.save
     else
       flash[:alert] = 'Error'
     end
-
     respond_to do |format|
       format.html { redirect_to calendar_path(token: @visitor.token, reservation_id: @reservation.id) }
       format.js { render text: "$('#reservationModal').modal('hide'); $('#calendar').fullCalendar( 'refetchEvents' );" }
