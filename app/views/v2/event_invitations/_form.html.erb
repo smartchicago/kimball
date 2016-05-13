@@ -2,7 +2,10 @@
   <div class="control-group">
     <%= f.label :email_addresses, "People's email addresses", :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_area :email_addresses, :class => 'text_area tokenfield', data: { search_url: '/search/index.json?q=%QUERY' } %>
+      <%= f.text_area :email_addresses,
+                      class: 'tokenfield text_area',
+                      style: 'border: 1px solid #cccccc; border-radius:5px;',
+                      data: { search_url: '/search/index.json?q=%QUERY' } %>
       <p>* comma separated</p>
     </div>
   </div>

@@ -59,22 +59,22 @@ $(document).on('ready page:load',function() {
   $(tokenSelector).on('tokenfield:createtoken', function(event) {
     var existingTokens = $(this).tokenfield('getTokens');
     var should_prevent_default =  false
+
     // can't add the same tag twice
     $.each(existingTokens, function(index, token) {
       if (token.value === event.attrs.value) {
-        console.log('same token:'+ token.value)
         should_prevent_default = true;
       }
     });
 
     // can't add a token not in the sugestions
+    // this is a very rudimentary cache.
     suggestion_values = cached_suggestions.map(function(e,i) {
       return e.value;
     });
 
     if ($.inArray(event.attrs.value,suggestion_values) === -1) {
       should_prevent_default = true;
-      console.log('not in suggestion:'+ event.attrs.value);
     }
     // failed the tests above
     if(should_prevent_default === true){ event.preventDefault(); }
@@ -86,6 +86,8 @@ $(document).on('ready page:load',function() {
 
   //filter pre-existing tags from the tagfield
   var filter = function(suggestions) {
+    // this is a relatively ugly caching mechanism.
+    // would like something better.
     cached_suggestions = suggestions;
     var current, filtered, results;
     current = $(tokenSelector).tokenfield('getTokens').map(function(e,i) {
@@ -132,7 +134,10 @@ $(document).on('ready page:load',function() {
         showAutocompleteOnFocus: true
       }
     ]
-  });
+  })
+  // a little style. delayed, because reasons. that's why.
+  $('.tokenfield').delay( 800 ).css('border','1px solid #cccccc');
+  $('.tokenfield').delay( 800 ).css('border-radius','5px');
 
 
 });

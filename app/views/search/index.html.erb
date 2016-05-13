@@ -17,22 +17,22 @@
     <div class="span4">
       <fieldset>
         <label for="first_name">First name</label>
-        <%= text_field_tag :first_name, params[:first_name], :class => "input" %>
+        <%= text_field_tag :first_name, params[:first_name], class: "input" %>
 
         <label for="last_name">Last name</label>
-        <%= text_field_tag :last_name, params[:last_name], :class => "input" %>
+        <%= text_field_tag :last_name, params[:last_name], class: "input" %>
 
         <label for="email_address">Email address</label>
-        <%= text_field_tag :email_address, params[:email_address], :class => "input" %>
+        <%= text_field_tag :email_address, params[:email_address], class: "input" %>
 
         <label for="postal_code">ZIP Code</label>
-        <%= text_field_tag :postal_code, params[:postal_code], :class => "input" %>
+        <%= text_field_tag :postal_code, params[:postal_code], class: "input" %>
 
         <label for="address">Phone Number</label>
-        <%= text_field_tag :phone_number, params[:phone_number], :class => 'input-large',:placeholder => "11 digit number start with 1" %>
+        <%= text_field_tag :phone_number, params[:phone_number], class: 'input-large', placeholder: "11 digit number start with 1" %>
 
         <label for="tags">Tags</label>
-        <%= text_field_tag :tags, params[:tags], :class=>'tokenfield input-large span4' ,data: { search_url: '/taggings/search?q=%QUERY' }%>
+        <%= text_field_tag :tags, params[:tags], class: 'tokenfield input-large span4' ,data: { search_url: '/taggings/search?q=%QUERY' }%>
       </fieldset>
     </div>
 
