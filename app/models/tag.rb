@@ -24,7 +24,7 @@ class Tag < ActiveRecord::Base
   # needed for tokenfield.
   # https://github.com/sliptree/bootstrap-tokenfield/issues/189
   def value
-    name
+    id
   end
 
   def self.most_popular(limit = 10)

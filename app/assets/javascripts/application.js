@@ -18,7 +18,7 @@
 //= require turbolinks
 //= require holder
 //= require datepicker/bootstrap-datepicker.min
-//= require tokenfield/bootstrap-tokenfield.min
+//= require tokenfield/bootstrap-tokenfield.js
 //= require jquery.validate
 //= require jquery.validate.additional-methods
 //= require moment/moment.min
@@ -47,5 +47,92 @@ $(document).on('ready page:load',function() {
       show_ajax_message(msg, type);
     }
   });
+
+  // this is used on search and on interview/event_invitation
+  // can't create new tokens with this.
+  var tokenSelector = '.tokenfield';
+  var bloodhound, filter, tokenSelector, cached_suggestions;
+
+  // untill we get em, we save em.
+  cached_suggestions = [];
+
+  $(tokenSelector).on('tokenfield:createtoken', function(event) {
+    var existingTokens = $(this).tokenfield('getTokens');
+    var should_prevent_default =  false
+    // can't add the same tag twice
+    $.each(existingTokens, function(index, token) {
+      if (token.value === event.attrs.value) {
+        console.log('same token:'+ token.value)
+        should_prevent_default = true;
+      }
+    });
+
+    // can't add a token not in the sugestions
+    suggestion_values = cached_suggestions.map(function(e,i) {
+      return e.value;
+    });
+
+    if ($.inArray(event.attrs.value,suggestion_values) === -1) {
+      should_prevent_default = true;
+      console.log('not in suggestion:'+ event.attrs.value);
+    }
+    // failed the tests above
+    if(should_prevent_default === true){ event.preventDefault(); }
+  });
+
+  $(tokenSelector).on('typeahead:selected', function (){
+    $(tokenSelector).tokenfield('createTokensFromInput');
+  });
+
+  //filter pre-existing tags from the tagfield
+  var filter = function(suggestions) {
+    cached_suggestions = suggestions;
+    var current, filtered, results;
+    current = $(tokenSelector).tokenfield('getTokens').map(function(e,i) {
+      return e.name;
+    });
+
+    return $.grep(suggestions, function(suggestion) {
+      return $.inArray(suggestion.value, current) === -1;
+    });
+  };
+
+  // searching from the server
+  var bloodhound = new Bloodhound({
+    datumTokenizer: function(d) {
+      return Bloodhound.tokenizers.whitespace(d.name);
+    },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    remote: {
+      url: $("[data-search-url]").data()['searchUrl'],
+      wildcard: '%QUERY',
+      limit: 20,
+      filter: filter,
+      cache: false
+    }
+  });
+
+  bloodhound.initialize();
+
+  // preventing enter from submitting form
+  $(tokenSelector).keydown(function(event){
+    if(event.keyCode === 13) {
+      event.preventDefault();
+      return true;
+    }
+  });
+
+  //tokenfield. Might be better than typeahead
+  $(tokenSelector).tokenfield({
+    typeahead: [
+      null, {
+        source: bloodhound.ttAdapter(),
+        display: 'name',
+        displayKey: 'name',
+        showAutocompleteOnFocus: true
+      }
+    ]
+  });
+
 
 });

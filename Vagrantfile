@@ -124,6 +124,7 @@ Vagrant.configure(2) do |config|
   ]
 
   config.vm.provision :shell, privileged: false, inline: %[
+    echo 'gem: --no-rdoc --no-ri' | sudo tee /etc/gemrc;
     # rvm install is idempotent
     curl -sSL https://rvm.io/mpapis.asc | gpg --import -
     curl -sSL https://get.rvm.io | bash -s stable --auto-dotfiles
