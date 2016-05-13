@@ -27,6 +27,10 @@ class Tag < ActiveRecord::Base
     id
   end
 
+  def label
+    name
+  end
+
   def self.most_popular(limit = 10)
     Tag.all.order(taggings_count: :desc).limit(limit)
   end

@@ -18,7 +18,13 @@
 
 class V2::EventInvitationsController < ApplicationController
   def new
-    @event_invitation = V2::EventInvitation.new(email_addresses: params[:email_addresses])
+
+    # people_ids should come from a session.
+    people_ids = params[:people_ids].nil? ? '' : params[:people_ids]
+
+    @event_invitation = V2::EventInvitation.new(people_ids: people_ids)
+    @people = @event_invitation.people
+
   end
 
   def create
@@ -81,7 +87,7 @@ class V2::EventInvitationsController < ApplicationController
 
     # TODO: add a nested :event
     def event_invitation_params
-      params.require(:v2_event_invitation).permit(:email_addresses,
+      params.require(:v2_event_invitation).permit(:people_ids,
         :description,
         :slot_length,
         :date,

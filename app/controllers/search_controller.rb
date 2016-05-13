@@ -10,6 +10,7 @@ class SearchController < ApplicationController
   #
   def index
     # no pagination for CSV export
+    console
     per_page = request.format.to_s.eql?('text/csv') ? 10000 : Person.per_page
 
     @results = if index_params[:q]

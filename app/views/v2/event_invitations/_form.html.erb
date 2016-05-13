@@ -1,12 +1,13 @@
 <%= form_for @event_invitation, url: v2_event_invitations_path, method: :POST, html: { class: 'form-horizontal' } do |f| %>
   <div class="control-group">
-    <%= f.label :email_addresses, "People's email addresses", :class => 'control-label' %>
+    <%= f.label :people_ids, "People's email addresses", :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_area :email_addresses,
-                      class: 'tokenfield text_area',
+      <%= f.text_area :thing, class: 'tokenfield text_area',
                       style: 'border: 1px solid #cccccc; border-radius:5px;',
-                      data: { search_url: '/search/index.json?q=%QUERY' } %>
-      <p>* comma separated</p>
+                      data: { search_url: '/search/index.json?q=%QUERY',
+                              submit_id: '#people_ids',
+                              pre_populate: @event_invitation.people_name_and_id.to_json} %>
+      <%= hidden_field_tag :people_ids, @event_invitation.people_ids %>
     </div>
   </div>
   <div class="control-group">
