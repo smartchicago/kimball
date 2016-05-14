@@ -29,6 +29,7 @@ class V2::EventInvitationsController < ApplicationController
     @event_invitation = V2::EventInvitation.new(event_invitation_params)
     if @event_invitation.save
       send_notifications(@event_invitation)
+      session[:cart] = []
       flash[:notice] = "#{@event_invitation.invitees.size} invitations sent!"
     else
       errors = @event_invitation.errors.full_messages.join(', ')

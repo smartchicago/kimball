@@ -82,7 +82,7 @@ class V2::ReservationsController < ApplicationController
     end
     respond_to do |format|
       format.html { redirect_to calendar_path(token: @visitor.token, reservation_id: @reservation.id) }
-      format.js { render text: "$('#reservationModal').modal('hide'); $('#calendar').fullCalendar( 'refetchEvents' );" }
+      format.js { render text: "$('#reservationModal').modal('hide'); $('#calendar').delay(800).fullCalendar( 'refetchEvents' );" }
     end
   end
 
@@ -95,7 +95,7 @@ class V2::ReservationsController < ApplicationController
     end
     respond_to do |format|
       format.html { redirect_to calendar_path(token: @visitor.token, reservation_id: @reservation.id) }
-      format.js { render text: "$('#reservationModal').modal('hide'); $('#calendar').fullCalendar( 'refetchEvents' );" }
+      format.js { render text: "$('#reservationModal').modal('hide'); $('#calendar').delay(800).fullCalendar( 'refetchEvents' );" }
     end
   end
 
@@ -108,7 +108,7 @@ class V2::ReservationsController < ApplicationController
     end
     respond_to do |format|
       format.html { redirect_to calendar_path(token: @visitor.token, reservation_id: @reservation.id) }
-      format.js { render text: "$('#reservationModal').modal('hide'); $('#calendar').fullCalendar( 'refetchEvents' );" }
+      format.js { render text: "$('#reservationModal').modal('hide'); $('#calendar').delay(800).fullCalendar( 'refetchEvents' );" }
     end
   end
 
