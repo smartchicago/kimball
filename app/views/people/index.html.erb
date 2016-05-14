@@ -39,14 +39,7 @@
             <td><%= person.signup_at ? person.signup_at.to_s(:long) : '' %></td>
             <td><%= best_in_place person, :preferred_contact_method, as: :select, collection: {'SMS'=>'SMS', 'EMAIL'=>'EMAIL'} %></td>
             <td>
-              <!-- event invitation scheduling handling. -->
-              <% if session[:cart].blank? || !session[:cart].include?(person.id) %>
-              <%= link_to t('.schedule', :default => "add to event"),
-                          add_cart_path(person_id: person.id), :class => 'btn btn-mini', remote: true %>
-              <% elsif session[:cart].include?(person.id) %>
-              <%= link_to t('.schedule', :default => "remove from event"),
-                          delete_cart_path(person_id: person.id), :class => 'btn btn-mini', remote: true %>
-              <% end %>
+              <%= render partial: 'add_remove_cart',locals: {person: person} %>
               <%= link_to t('.edit', :default => t('helpers.links.edit')),
                           edit_person_path(person), :class => 'btn btn-mini' %>
               <%= link_to t('.destroy', :default => t('helpers.links.destroy')),

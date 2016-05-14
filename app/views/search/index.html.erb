@@ -111,6 +111,7 @@
         <td class="span4">
           <strong><%= link_to "#{result.first_name} #{result.last_name}", person_path(:id => result.id) %></strong><br/><br/>
            Tags: <% if !(result.tag_values.blank?) %><%= search_result_field result.tag_values, :tags %><% end %>
+           <%= render partial: 'people/add_remove_cart',locals: {person: Person.find_by(id: result.id)} %>
         </td>
         <td class="span4">
           Address: <%= search_result_field result.address_1, :address  %><br/>
