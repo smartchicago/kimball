@@ -2,9 +2,11 @@
 $('#timeSlotSubmitButton').on('click', function(e){
   // We don't want this to act as a link so cancel the link action
   e.preventDefault();
-  $.post('/v2/reservations', $('#new_v2_reservation').serialize());
-  $('#calendar').fullCalendar( 'refetchEvents' );
-  $('#invitationModal').modal('hide');
+  $.post('/v2/reservations', $('#new_v2_reservation').serialize())
+  .done(function(){
+    $('#calendar').fullCalendar( 'refetchEvents' );
+    $('#invitationModal').modal('hide');
+  });
 });
 </script>
 <div id="invitationModal" class="modal fade" tabindex='-1'>
