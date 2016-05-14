@@ -1,4 +1,4 @@
-<% @deleted.each do |delete| %>
+<% Array(@deleted).each do |delete| %>
 $('#<%= delete %>-cart-delete').hide();
 $('#<%= delete %>-cart-add').show();
 <% end %>

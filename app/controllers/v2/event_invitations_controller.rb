@@ -23,7 +23,6 @@ class V2::EventInvitationsController < ApplicationController
 
     @event_invitation = V2::EventInvitation.new(people_ids: people_ids)
     @people = @event_invitation.people
-    console
   end
 
   def create

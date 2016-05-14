@@ -7,14 +7,13 @@ class V2::CartController < ApplicationController
     render json: session[:cart].to_json
   end
 
-  # Add
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def add
     init
     to_add = cart_params[:person_id].to_i
     person = Person.find_by(id: to_add) # only people ids here.
-    unless session[:cart].include?(person.id) || person.nil?
-      session[:cart] << person.id
-    end
+
+    session[:cart] << person.id unless session[:cart].include?(person.id) || person.nil?
 
     @added = person.id
     respond_to do |format|
@@ -28,20 +27,20 @@ class V2::CartController < ApplicationController
   def delete
     init
     to_delete = cart_params[:person_id].to_i
-
     if params[:all].blank?
-      deleted = session[:cart].delete(to_delete) unless to_delete.blank?
+      @deleted = session[:cart].delete(to_delete) unless to_delete.blank?
     else
-      deleted = session[:cart]
+      @deleted = session[:cart]
       session[:cart] = []
     end
-    @deleted = Array(deleted)
+
     respond_to do |format|
       format.js
       format.json { render json: session[:cart].to_json }
       format.html { render json: session[:cart].to_json }
     end
   end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   private
 
