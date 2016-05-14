@@ -18,10 +18,11 @@
 
 class V2::EventInvitationsController < ApplicationController
   def new
+    console
     # people_ids should come from a session.
-    people_ids = session[:cart].blank? ? '' : session[:cart].uniq.to_s
+    @people_ids = session[:cart].blank? ? '' : session[:cart].uniq.join(',')
 
-    @event_invitation = V2::EventInvitation.new(people_ids: people_ids)
+    @event_invitation = V2::EventInvitation.new(people_ids: @people_ids)
     @people = @event_invitation.people
   end
 

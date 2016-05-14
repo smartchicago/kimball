@@ -50,10 +50,14 @@ $(document).on('ready page:load',function() {
       }else{
         // add person_id to our hidden field
         // also add it to our cart session!
-        if (typeof attrs.id !== 'undefined' && attrs.type != 'tag'){
-          var old_values = hidden_val_to_array();
-          old_values.push(attrs.id);
-          $.unique(old_values);
+
+        if (typeof attrs.id !== 'undefined' && attrs.type !== 'tag'){
+          var eid = parseInt(attrs.id);
+          var old_values = hidden_input_to_array();
+          old_values.push(eid);
+          old_values = $.unique(old_values);
+
+          $(hiddenInput).val(old_values);
           $.ajax('/v2/cart/add/'+ attrs.id)
         }
       }
@@ -67,7 +71,7 @@ $(document).on('ready page:load',function() {
     // remove old valued from hidden form
     $(tokenSelector).on('tokenfield:removetoken',function(e){
       if (e.attrs.type !== 'tag') {
-        var old_values = hidden_val_to_array();
+        var old_values = hidden_input_to_array();
         var index = old_values.indexOf(e.attrs.id);
         old_values.splice(index, 1);
         $.unique(old_values);
@@ -77,7 +81,7 @@ $(document).on('ready page:load',function() {
     });
 
     // sometimes we get null and undefined here.
-    var hidden_val_to_array = function(){
+    var hidden_input_to_array = function(){
       var hidden_val = $(hiddenInput).val();
       var arr = []
       if (typeof hidden_val === 'undefined') {
@@ -85,9 +89,12 @@ $(document).on('ready page:load',function() {
       }else{
          arr = $.grep(hidden_val.split(','),function(n){
           if (typeof n !== 'undefined') {
-            return(n);
+            return(parseInt(n));
           }
         });
+         arr = $.map(arr,function(n){return parseInt(n)});
+         arr = $.unique(arr);
+         console.log(arr);
         return arr;
       }
     }
@@ -152,7 +159,6 @@ $(document).on('ready page:load',function() {
 
     var prepopulate_tokens = function(tokens){
       cached_suggestions = tokens;
-      console.log(tokens);
       $(tokenSelector).tokenfield('setTokens',tokens)
     }
 

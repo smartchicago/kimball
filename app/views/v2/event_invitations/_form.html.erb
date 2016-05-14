@@ -11,7 +11,7 @@
                       data: { search_url: '/search/index.json?q=%QUERY',
                               submit_id: '#people_ids',
                               pre_populate: @event_invitation.people_name_and_id.to_json} %>
-      <%= f.hidden_field :people_ids, id: 'people_ids', value: session[:cart] ||= []  %>
+      <%= f.hidden_field :people_ids, id: 'people_ids', value: @people_ids.to_s %>
     </div>
   </div>
   <div class="control-group">
