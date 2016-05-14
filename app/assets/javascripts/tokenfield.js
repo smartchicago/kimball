@@ -48,12 +48,15 @@ $(document).on('ready page:load',function() {
       if(should_prevent_default === true){
         event.preventDefault();
       }else{
-        // add it to our hidden field
+        // add person_id to our hidden field
+        // also add it to our cart session!
         if (typeof event.attrs.id !== 'undefined' ) {
           var old_values = hidden_val_to_array();
           old_values.push(event.attrs.id);
           $.unique(old_values);
+          $.ajax('/v2/cart/add/'+event.attrs.id)
         }
+
       }
     });
 
@@ -69,6 +72,7 @@ $(document).on('ready page:load',function() {
         old_values.splice(index, 1);
         $.unique(old_values);
         $(hiddenInput).val(old_values.toString());
+        $.ajax('/v2/cart/delete/' + e.attrs.id);
     });
 
     // sometimes we get null and undefined here.

@@ -41,7 +41,7 @@ class V2::EventInvitation < ActiveRecord::Base
   # people_ids should be a postgres array type.
   # http://blog.plataformatec.com.br/2014/07/rails-4-and-postgresql-arrays/
   def people_ids_to_array
-    @people_ids_array ||= people_ids.present? ? people_ids.split(',').map(&:to_i) : []
+    @people_ids_array ||= people_ids.present? ? people_ids.split(',').map { |x| x[/\d+/] } - [0] : []
   end
 
   def people

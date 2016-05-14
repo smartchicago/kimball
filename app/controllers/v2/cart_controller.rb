@@ -1,37 +1,31 @@
-class CartController < ApplicationController
+class V2::CartController < ApplicationController
   include ApplicationHelper
-  before_action :init_cart
+
   # Index
   def index
-    @people_ids = @session[:cart]
+    init
+    render json: session[:cart].to_json
   end
 
   # Add
   def add
-    people_ids = @session[:cart]
-    # If exists, add new, else create new variable
-    if people_ids && people_ids != []
-      session[:cart] << cart_params[:people_ids]
-    else
-      session[:cart] = Array(cart_params[:people_ids])
+    init
+    to_add = cart_params[:person_id].to_i
+    person = Person.find_by(id: to_add) # only people ids here.
+    unless session[:cart].include?(person) || person.nil?
+      session[:cart] << cart_params[:person_id].to_i
     end
-    session[:cart].map(&:to_i).uniq!
     render json: session[:cart].to_json
   end
 
   # Delete
   def delete
-    people_ids = @session[:cart]
-
-    to_delete = cart_params[:people_ids]
+    init
+    to_delete = cart_params[:person_id].to_i
     all = params[:all]
     # Is ID present?
-    unless to_delete.blank?
-      unless all.blank?
-        session[:cart].delete(cart_params[:people_ids])
-      else
-        session[:cart].delete_if {|c| cart_params[:people_ids].include?(c) }
-      end
+    if all.blank?
+      session[:cart].delete(to_delete) unless to_delete.blank?
     else
       session[:cart] = []
     end
@@ -40,13 +34,14 @@ class CartController < ApplicationController
 
   private
 
-  def car_params
-    params.permit(:people_ids, :all)
-  end
+    def cart_params
+      # person id is a single int.
+      params.permit(:person_id, :all)
+    end
 
-  def init_cart
-    @session = session
-    @session[:cart] ||= []
-    @session[:cart].map(&:to_i).uniq!
-  end
+    def init
+      # this is a bit of a hack here.
+      # before filter seems to break things. I don't know why
+      session[:cart] = (session[:cart] ||= []).map(&:to_i).uniq - [0]
+    end
 end
