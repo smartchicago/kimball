@@ -39,11 +39,13 @@ feature 'Person responds to interview invitation over email' do
     start_time = first_slot.start_time.strftime('%l:%M')
 
     find("div[data-start='#{start_time}']").click
+    wait_for_ajax
+    sleep 1
     expect(page).to have_content(@event.description)
     expect(page).to have_content(@event.title)
     click_button('Select')
+    wait_for_ajax
     sleep 1
-
     selected_time = first_slot.to_weekday_and_time
     @research_subject.reload
     expect(@research_subject.v2_reservations.size).to eq(1)
@@ -69,7 +71,8 @@ feature 'Person responds to interview invitation over email' do
   scenario 'when no time slots are avaialble anymore', js: :true do
     book_all_event_time_slots
     receive_invitation_email_and_click_reservation_link
-
+    sleep 1
+    wait_for_ajax
     @event.time_slots.each do |time|
       expect(page).not_to have_content time.start_time.strftime('%l:%M')
       expect(page).not_to have_content time.end_time.strftime('%l:%M')
@@ -88,10 +91,13 @@ feature 'Person responds to interview invitation over email' do
     start_time = first_slot.start_time.strftime('%l:%M').delete(' ')
 
     find("div[data-start='#{start_time}']").click
+    wait_for_ajax
+    sleep 1
     expect(page).to have_content(@event.description)
     expect(page).to have_content(@event.title)
 
     click_button('Select')
+    wait_for_ajax
     sleep 1
     @research_subject.reload
     expect(@research_subject.v2_reservations.size).to eq(0)

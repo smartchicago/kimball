@@ -15,6 +15,7 @@ feature 'tag person'  do
     fill_in_autocomplete '#tag-typeahead', tag_name
 
     find_button('Add').trigger('click')
+    wait_for_ajax
     sleep 1 # wait for our page to save
     # gotta reload so that we don't cache tags
     person.reload
@@ -36,13 +37,16 @@ feature 'tag person'  do
     expect(page).to have_button('Add')
     sleep 1
     fill_in_autocomplete '#tag-typeahead', tag_name
+    wait_for_ajax
     sleep 1
     find_button('Add').trigger('click')
+    wait_for_ajax
     sleep 1
     expect(page.evaluate_script("$('a.delete-link').length")).to eq(1)
 
     expect(find(:css, '#tag-typeahead').value).to_not eq(tag_name)
     page.execute_script("$('a.delete-link').click();")
+    wait_for_ajax
     sleep 1
     expect(page).to_not have_text(tag_name)
   end
