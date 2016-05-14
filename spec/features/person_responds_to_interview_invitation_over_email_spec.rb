@@ -27,7 +27,7 @@ feature 'Person responds to interview invitation over email' do
     Timecop.return
   end
 
-  scenario 'successfully', js: :true  do
+  scenario 'successfully', js: :true do
     receive_invitation_email_and_click_reservation_link
     sleep 1
     @event.available_time_slots.each do |time|

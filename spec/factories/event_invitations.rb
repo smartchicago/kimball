@@ -11,7 +11,7 @@ FactoryGirl.define do
     before(:create) do |event_invitation|
       invitees = FactoryGirl.create_list(:person, 3)
       event_invitation.invitees << invitees
-      event_invitation.email_addresses = invitees.collect(&:email_address).join(',')
+      event_invitation.people_ids = invitees.collect(&:id).join(',')
 
       start_time = Time.current + 1.day
       # three slots, one for each person

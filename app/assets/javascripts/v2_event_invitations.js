@@ -45,8 +45,10 @@ $(document).on('page:load ready', function(){
     parseInt(slotLengthElement.val().substr(0,2),10) * 60;
   };
 
+  // defaulting the buffer.
   $('#v2_event_invitation_buffer').prop('selectedIndex', 1);
   $('.datepicker').datepicker('setDate', new Date());
+  // defaulting to a reasonable time
   startTimeElement.prop('selectedIndex', 38).change();
 
 });

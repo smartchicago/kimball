@@ -61,12 +61,12 @@ Vagrant.configure(2) do |config|
   #
 
   config.vm.provider "virtualbox" do |vb, override|
-  # Don't display the VirtualBox GUI when booting the machine
+    # Don't display the VirtualBox GUI when booting the machine
     vb.gui = false
 
-  # linked clones, they are speedy
+    # linked clones, they are speedy
     vb.linked_clone = true if Vagrant::VERSION =~ /^1.8/
-  # Customize the amount of memory on the VM:
+    # Customize the amount of memory on the VM:
     vb.memory = '2048'
     vb.cpus = '2'
 

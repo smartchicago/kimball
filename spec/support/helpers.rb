@@ -8,12 +8,13 @@ module Helpers
   end
 
   def fill_in_autocomplete(selector, value)
-    find(selector).native.send_keys(*value.chars)
+    el = find(selector)
+    el.native.send_keys(*value.chars)
   end
 
   def choose_autocomplete(text)
-    find('.tt-selectable').has_content?(text)
-    find(".tt-selectable:contains(\"#{text}\").a").click
+    find('.tt-selectable').has_content?(text).click
+    find(".tt-selectable:contains('#{text}').a").click
   end
 
   def wait_for_ajax

@@ -19,7 +19,7 @@
 require 'rails_helper'
 
 describe V2::EventInvitation do
-  it { is_expected.to validate_presence_of(:email_addresses) }
+  it { is_expected.to validate_presence_of(:people_ids) }
   it { is_expected.to validate_presence_of(:description) }
   it { is_expected.to validate_presence_of(:title) }
   it { is_expected.to validate_presence_of(:slot_length) }
@@ -32,7 +32,7 @@ describe V2::EventInvitation do
     let(:user) { FactoryGirl.create(:user) }
     let(:valid_args) do
       {
-        email_addresses: people.map(&:email_address).join(','),
+        people_ids: people.map(&:id).join(','),
         description: 'lorem',
         slot_length: '45 mins',
         date: '03/20/2016',
@@ -65,12 +65,12 @@ describe V2::EventInvitation do
       end
     end
 
-    describe 'when unregistered email addresses are present' do
-      subject { described_class.new(valid_args.merge(email_addresses: 'bogus@email.com')) }
+    describe 'when bogus ids are present' do
+      subject { described_class.new(valid_args.merge(people_ids: '5343,123412,32423')) }
 
       it 'validates email addresses belong to registered people' do
         subject.save
-        expect(subject.errors.messages[:email_addresses]).to eql ['One or more of the email addresses are not registered']
+        expect(subject.errors.messages[:people_ids]).to eql ['One or more of the people are not registered']
       end
     end
 

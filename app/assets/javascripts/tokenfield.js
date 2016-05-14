@@ -19,7 +19,7 @@ $(document).on('ready page:load',function() {
 
 
     $(tokenSelector).on('tokenfield:createtoken', function(event) {
-      console.log('in create token')
+
       var existingTokens = $(this).tokenfield('getTokens');
       var should_prevent_default =  false
       var event_value = event.attrs.value.toString();
@@ -31,21 +31,17 @@ $(document).on('ready page:load',function() {
         }
       });
 
+      // can't add a token not in the sugestions
+      // this is a very rudimentary cache.
       if (prePopulate!=='') {
         cached_suggestions = cached_suggestions.concat();
       }
-      // can't add a token not in the sugestions
-      // this is a very rudimentary cache.
-      console.log('in create_token');
-      console.log(cached_suggestions);
-      console.log('^ create_token');
       suggestion_values = cached_suggestions.map(function(e,i) {
         return e.value.toString();
       });
 
       if ($.inArray(event_value,suggestion_values) === -1) {
 
-        console.log('not in suggestions:' + event_value);
         should_prevent_default = true;
       }
       // failed the tests above
@@ -54,11 +50,10 @@ $(document).on('ready page:load',function() {
       }else{
         // add it to our hidden field
         if (typeof event.attrs.id !== 'undefined' ) {
-        var old_values = hidden_val_to_array();
-        old_values.push(event.attrs.id);
-        $.unique(old_values);
-        $(hiddenInput).val(old_values.toString());
-      }
+          var old_values = hidden_val_to_array();
+          old_values.push(event.attrs.id);
+          $.unique(old_values);
+        }
       }
     });
 
@@ -152,7 +147,7 @@ $(document).on('ready page:load',function() {
 
     var prepopulate_tokens = function(tokens){
       cached_suggestions = tokens;
-      console.log(tokens);
+
       $(tokenSelector).tokenfield('setTokens',tokens)
     }
 

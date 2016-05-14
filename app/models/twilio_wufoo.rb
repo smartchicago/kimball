@@ -17,7 +17,8 @@ class TwilioWufoo < ActiveRecord::Base
 
   # https://robots.thoughtbot.com/inject-that-rails-configuration-dependency
   class_attribute :wufoo_form_ids
-  # self.wufoo_form_ids ||= Logan::Application.config.wufoo.forms.collect { |i| [i.id, i.id] }
+  # this needs to stop. must cache!
+  self.wufoo_form_ids ||= Logan::Application.config.wufoo.forms.collect { |i| [i.id, i.id] }
 
   validates :end_message, length: { maximum: 160 }
 

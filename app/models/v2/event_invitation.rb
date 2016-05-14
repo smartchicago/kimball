@@ -31,7 +31,6 @@ class V2::EventInvitation < ActiveRecord::Base
   has_and_belongs_to_many :invitees, class_name: 'Person', join_table: :invitation_invitees_join_table
   # rubocop:enable Rails/HasAndBelongsToMany
 
-  # TODO: no longer use email addresses here. Should be person_ids
   validates :people_ids, :description, :title, :slot_length, :date, :start_time, :end_time, :user_id, presence: true
 
   before_validation :find_invitees_or_add_error
@@ -92,7 +91,7 @@ class V2::EventInvitation < ActiveRecord::Base
       return unless invitees.empty?
 
       people_ids_to_array.each do |person_id|
-        invitee = Person.find_by(id: person_id.strip.chomp)
+        invitee = Person.find_by(id: person_id)
         if invitee
           # this is where the join table is created, yes?
           invitees << invitee
