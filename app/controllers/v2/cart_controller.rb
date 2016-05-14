@@ -12,24 +12,35 @@ class V2::CartController < ApplicationController
     init
     to_add = cart_params[:person_id].to_i
     person = Person.find_by(id: to_add) # only people ids here.
-    unless session[:cart].include?(person) || person.nil?
-      session[:cart] << cart_params[:person_id].to_i
+    unless session[:cart].include?(person.id) || person.nil?
+      session[:cart] << person.id
     end
-    render json: session[:cart].to_json
+
+    @added = person.id
+    respond_to do |format|
+      format.js
+      format.json { render json: session[:cart].to_json }
+      format.html { render json: session[:cart].to_json }
+    end
   end
 
   # Delete
   def delete
     init
     to_delete = cart_params[:person_id].to_i
-    all = params[:all]
-    # Is ID present?
-    if all.blank?
-      session[:cart].delete(to_delete) unless to_delete.blank?
+
+    if params[:all].blank?
+      deleted = session[:cart].delete(to_delete) unless to_delete.blank?
     else
+      deleted = session[:cart]
       session[:cart] = []
     end
-    render json: session[:cart].to_json
+    @deleted = Array(deleted)
+    respond_to do |format|
+      format.js
+      format.json { render json: session[:cart].to_json }
+      format.html { render json: session[:cart].to_json }
+    end
   end
 
   private
