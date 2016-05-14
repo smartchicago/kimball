@@ -6,7 +6,8 @@ require 'capybara/email/rspec'
 Capybara.register_server :puma
 
 feature 'Invite person to a phone call' do
-  scenario 'with valid data', js: :true, skip: true do
+  scenario 'with valid data', js: :true do
+    skip 'poltergeist wonkery causes this to fail. need to figure out why'
     login_with_admin_user
     visit '/v2/event_invitations/new'
 
@@ -41,7 +42,8 @@ feature 'Invite person to a phone call' do
     end
   end
 
-  scenario 'with invalid data', js: :true, skip: true do
+  scenario 'with invalid data', js: :true do
+    skip 'poltergeist wonkery causes this to fail. need to figure out why'
     login_with_admin_user
 
     visit '/v2/event_invitations/new'

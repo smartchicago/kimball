@@ -8,7 +8,8 @@ feature 'SMS invitation to phone call' do
     @research_subject = FactoryGirl.create(:person, preferred_contact_method: 'SMS')
   end
 
-  scenario 'Texting a link to the invitation, successfully', js: :true, skip: true do
+  scenario 'Texting a link to the invitation, successfully', js: :true do
+    skip 'poltergeist wonkery causes this to fail. need to figure out why'
     #  skipping for now. need to button down these poltergeist tests
     login_with_admin_user
 
