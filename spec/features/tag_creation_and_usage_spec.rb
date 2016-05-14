@@ -34,9 +34,9 @@ feature 'tag person'  do
     visit "/people/#{person.id}"
 
     expect(page).to have_button('Add')
-
+    sleep 1
     fill_in_autocomplete '#tag-typeahead', tag_name
-
+    sleep 1
     find_button('Add').trigger('click')
     sleep 1
     expect(page.evaluate_script("$('a.delete-link').length")).to eq(1)
