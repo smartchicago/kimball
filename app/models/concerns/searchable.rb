@@ -63,7 +63,7 @@ module Searchable
         indexes :submission_values, analyzer: :snowball
 
         # tags
-        indexes :tag_values, analyzer: :keyword
+        indexes :tag_values, analyzer: :not_analyzed
 
         indexes :preferred_contact_method
 

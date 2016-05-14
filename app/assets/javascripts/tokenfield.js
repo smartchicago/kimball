@@ -23,7 +23,7 @@ $(document).on('ready page:load',function() {
       var existingTokens = $(this).tokenfield('getTokens');
       var should_prevent_default =  false
       var event_value = event.attrs.value.toString();
-
+      var attrs = event.attrs
       // can't add the same tag twice
       $.each(existingTokens, function(index, token) {
         if (token.value.toString() === event_value) {
@@ -50,13 +50,12 @@ $(document).on('ready page:load',function() {
       }else{
         // add person_id to our hidden field
         // also add it to our cart session!
-        if (typeof event.attrs.id !== 'undefined' ) {
+        if (typeof attrs.id !== 'undefined' && attrs.type != 'tag'){
           var old_values = hidden_val_to_array();
-          old_values.push(event.attrs.id);
+          old_values.push(attrs.id);
           $.unique(old_values);
-          $.ajax('/v2/cart/add/'+event.attrs.id)
+          $.ajax('/v2/cart/add/'+ attrs.id)
         }
-
       }
     });
 
@@ -67,12 +66,14 @@ $(document).on('ready page:load',function() {
 
     // remove old valued from hidden form
     $(tokenSelector).on('tokenfield:removetoken',function(e){
+      if (e.attrs.type !== 'tag') {
         var old_values = hidden_val_to_array();
         var index = old_values.indexOf(e.attrs.id);
         old_values.splice(index, 1);
         $.unique(old_values);
         $(hiddenInput).val(old_values.toString());
         $.ajax('/v2/cart/delete/' + e.attrs.id);
+      }
     });
 
     // sometimes we get null and undefined here.
@@ -151,7 +152,7 @@ $(document).on('ready page:load',function() {
 
     var prepopulate_tokens = function(tokens){
       cached_suggestions = tokens;
-
+      console.log(tokens);
       $(tokenSelector).tokenfield('setTokens',tokens)
     }
 

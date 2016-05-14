@@ -17,18 +17,17 @@ class Tag < ActiveRecord::Base
 
   has_many :taggings
 
+  # needed for tokenfield.
+  # https://github.com/sliptree/bootstrap-tokenfield/issues/189
+  alias_attribute :value, :name
+  alias_attribute :label, :name
+
   def tag_count
     taggings_count
   end
 
-  # needed for tokenfield.
-  # https://github.com/sliptree/bootstrap-tokenfield/issues/189
-  def value
-    id
-  end
-
-  def label
-    name
+  def type
+    'tag'
   end
 
   def self.most_popular(limit = 10)

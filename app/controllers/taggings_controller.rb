@@ -57,7 +57,7 @@ class TaggingsController < ApplicationController
 
     # the methods=> :value is needed for tokenfield.
     # https://github.com/sliptree/bootstrap-tokenfield/issues/189
-    render json: @tags.to_json(methods: [:value, :label])
+    render json: @tags.to_json(methods: [:value, :label, :type])
   end
 
 end

@@ -15,7 +15,8 @@ class V2::CartController < ApplicationController
 
     session[:cart] << person.id unless session[:cart].include?(person.id) || person.nil?
 
-    @added = person.id
+    # don't update if we don't find a persons
+    @added = person.nil? ? 0 : person.id
     respond_to do |format|
       format.js
       format.json { render json: session[:cart].to_json }

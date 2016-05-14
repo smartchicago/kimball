@@ -10,7 +10,6 @@ class SearchController < ApplicationController
   #
   def index
     # no pagination for CSV export
-
     per_page = request.format.to_s.eql?('text/csv') ? 10000 : Person.per_page
 
     @results = if index_params[:q]
@@ -20,9 +19,10 @@ class SearchController < ApplicationController
                else
                  []
                end
+    @tags = index_params[:tags].blank? ? '[]' : Tag.where(name: index_params[:tags].split(',').map(&:strip)).to_json(methods: [:value, :label, :type])
 
     respond_to do |format|
-      format.json { @results.to_json }
+      format.json { @results.map { |r| r['type'] = 'person' }.to_json }
       format.html {}
       format.csv do
         fields = Person.column_names

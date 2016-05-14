@@ -62,10 +62,10 @@
                             class: 'tokenfield input-large span5',
                             data: { search_url: '/taggings/search?q=%QUERY',
                                     submit_id: 'search-tag-hidden-input',
-                                    pre_populate: Tag.where(name: params[:tags]).to_json(methods: [:value,:label])
+                                    pre_populate: @tags
                                   }
                           %>
-        <%= hidden_field_tag :tags_hidden, params[:tags], id:'search-tag-hidden-input' %>
+        <%= hidden_field_tag :tags_hidden,'', id:'search-tag-hidden-input' %>
       <label for='additional'>&nbsp;</label>
       <span data-toggle="collapse" data-target="#additional-options"  class="btn btn-default">Click to Show Additional Options</span>
       <div class="collapse" id="additional-options">
@@ -109,9 +109,10 @@
       <% #result = result.person %>
       <tr>
         <td class="span4">
-          <strong><%= link_to "#{result.first_name} #{result.last_name}", person_path(:id => result.id) %></strong><br/><br/>
+          <strong><%= link_to "#{result.first_name} #{result.last_name}", person_path(:id => result.id) %></strong>
+          <%= render partial: 'people/add_remove_cart',locals: {person: Person.find_by(id: result.id)} %>
+          <br/><br/>
            Tags: <% if !(result.tag_values.blank?) %><%= search_result_field result.tag_values, :tags %><% end %>
-           <%= render partial: 'people/add_remove_cart',locals: {person: Person.find_by(id: result.id)} %>
         </td>
         <td class="span4">
           Address: <%= search_result_field result.address_1, :address  %><br/>
