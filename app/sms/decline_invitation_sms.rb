@@ -15,7 +15,8 @@ class DeclineInvitationSms < ApplicationSms
       to:   to.phone_number,
       body: 'You have declined this invitation. Thanks for the heads-up.'
     )
-    also_send_to_admin
+    # this could get loopy
+    # also_send_to_admin
   end
 
   private

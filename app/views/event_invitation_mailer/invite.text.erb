@@ -5,3 +5,7 @@ you've been invited to a <%= @event.duration / 60 %> minute interview on <%=  @e
 
 <%= link_to 'Please click to setup a time for your interview',
          calendar_url(token: @person.token, event_id: @event.id) %>
+
+Thanks!,
+<%= ENV['TEAM_NAME'] %>
+
