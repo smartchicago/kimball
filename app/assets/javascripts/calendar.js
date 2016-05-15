@@ -36,7 +36,7 @@ $(document).on('ready page:load', function () {
   // simple mobile detection
   var isMobile = window.matchMedia("only screen and (max-width: 760px)");
   var buttons = '';
-  if (token !== 'false') { buttons = ' event_slots,reservations'; }
+  if (token_param !== '') { buttons = ' event_slots,reservations'; }
   $('#calendar').fullCalendar({
     customButtons: {
         event_slots: {
