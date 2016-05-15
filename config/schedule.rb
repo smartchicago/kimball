@@ -5,10 +5,10 @@
 
 # Example:
 path = File.expand_path(File.dirname(File.dirname(__FILE__)))
-set :output, "#{path}/../log/cron_log.log"
+set :output, "#{path}/log/cron_log.log"
 #
 every 30.minutes do
-  command "backup perform --trigger my_backup -r Backup/"
+  command "backup perform --trigger my_backup -r #{path}Backup/"
 end
 
 # this queues up all the email/sms for the day!
