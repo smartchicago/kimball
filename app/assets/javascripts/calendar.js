@@ -94,6 +94,7 @@ $(document).on('ready page:load', function () {
     defaultDate: defaultDate,
     //eventLimit: true, // allow "more" link when too many events
     editable: false,
+    nowIndicator: true,
     businessHours:{
       start:'9:00',
       end: '20:00'
