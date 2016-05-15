@@ -75,8 +75,12 @@ $(document).on('ready page:load',function() {
         var index = old_values.indexOf(e.attrs.id);
         old_values.splice(index, 1);
         $.unique(old_values);
-        $(hiddenInput).val(old_values.toString());
-        $.ajax('/v2/cart/delete/' + e.attrs.id);
+        $.ajax('/v2/cart/delete/' + e.attrs.id)
+          .done(function(){
+            // we successfully removed the person from the cart
+            $(hiddenInput).val(old_values.toString());
+            return true;
+          }).error(function(){return false;})
       }
     });
 
@@ -94,7 +98,6 @@ $(document).on('ready page:load',function() {
         });
          arr = $.map(arr,function(n){return parseInt(n)});
          arr = $.unique(arr);
-         console.log(arr);
         return arr;
       }
     }

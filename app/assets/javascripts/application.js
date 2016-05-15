@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require fastclick/fastclick
 //= require best_in_place
 //= require twitter/bootstrap
 //= require twitter/typeahead.min
@@ -27,6 +28,7 @@
 //= require_tree .
 
 $(document).on('ready page:load',function() {
+  FastClick.attach(document.body);
   /* Activating Best In Place */
   jQuery(".best_in_place").best_in_place();
 
