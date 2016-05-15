@@ -111,6 +111,29 @@ $(document).on('ready page:load', function () {
   }
 
 
+  if (isMobile.matches) {
+    $("#calendar").swipe( {
+      tap:function(event, target) {
+
+          msg(target);
+      },
+      doubleTap:function(event, target) {
+
+          msg(target);
+      },
+      longTap:function(event, target) {
+
+          msg(target);
+      },
+      swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
+        if (direction == 'left') { $('#calendar').fullCalendar('prev'); }
+        if (direction == 'right') { $('#calendar').fullCalendar('next'); }
+      },
+      threshold:50,
+      fingers:'all',
+      allowPageScroll:"vertical"
+    });
+  }
 
 
 });

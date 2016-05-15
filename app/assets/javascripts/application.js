@@ -23,6 +23,7 @@
 //= require jquery.validate.additional-methods
 //= require moment/moment.min
 //= require fullcalendar/fullcalendar.min
+//= require jquery-touchswipe/jquery.touchSwipe.min
 //= require_tree .
 
 $(document).on('ready page:load',function() {
