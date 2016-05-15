@@ -35,7 +35,8 @@ $(document).on('ready page:load', function () {
 
   // simple mobile detection
   var isMobile = window.matchMedia("only screen and (max-width: 760px)");
-
+  var buttons = '';
+  if (token !== 'false') { buttons = ' event_slots,reservations'; }
   $('#calendar').fullCalendar({
     customButtons: {
         event_slots: {
@@ -52,9 +53,9 @@ $(document).on('ready page:load', function () {
         }
     },
     header: {
-      left: 'prev,next today',
-      center: 'title event_slots,reservations',
-      right: 'month,agendaWeek,agendaDay'
+      right: 'prev,next today',
+      center: 'title' + buttons,
+      left: 'month,agendaWeek,agendaDay'
     },
     eventClick:  function(event, jsEvent, view) {
       // https://coderwall.com/p/kqb3xq/rails-4-how-to-partials-ajax-dead-easy
