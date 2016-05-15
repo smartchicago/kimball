@@ -12,7 +12,7 @@ class ReservationSms < ApplicationSms
   def send
     client.messages.create(
       from: application_number,
-      to:   phone_number,
+      to:   to.phone_number,
       body: "A #{duration} minute interview has been booked for #{selected_time}, with #{reservation.user.name}. \nTheir number is #{reservation.user.phone_number}\n. You'll get a reminder that morning."
     )
   end
