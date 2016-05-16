@@ -5,8 +5,8 @@
 
 # loading our environment variables and defaults
 require 'yaml'
-env_file = File.join(Rails.root, 'config', 'local_env.yml')
-defaults = File.join(Rails.root, 'config', 'sample.local_env.yml')
+env_file = File.dirname(__FILE__) + '/local_env.yml'
+defaults = File.dirname(__FILE__) + '/sample.local_env.yml'
 
 YAML.load(File.open(env_file)).each do |key, value|
   ENV[key.to_s] = value
@@ -16,7 +16,10 @@ end if File.exist?(env_file)
 YAML.load(File.open(defaults)).each do |key, value|
   ENV[key.to_s] = value unless ENV[key]
 end
+
 path = File.expand_path(File.dirname(File.dirname(__FILE__)))
+
+# run our jobs in the right time zone
 set :job_template, "TZ=\"#{ENV['TIME_ZONE']}\" bash -l -c ':job'"
 set :output, "#{path}/log/cron_log.log"
 #

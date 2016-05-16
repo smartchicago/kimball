@@ -11,8 +11,8 @@
 #
 require 'yaml'
 Model.new(:my_backup, 'Description for my_backup') do
-  env_file = File.join(Rails.root, 'config', 'local_env.yml')
-  defaults = File.join(Rails.root, 'config', 'sample.local_env.yml')
+  env_file = File.dirname(__FILE__) + '/../../config/local_env.yml'
+  defaults = File.dirname(__FILE__) + '/../../config/sample.local_env.yml'
 
   YAML.load(File.open(env_file)).each do |key, value|
     ENV[key.to_s] = value
