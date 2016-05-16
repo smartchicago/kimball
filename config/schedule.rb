@@ -3,8 +3,21 @@
 # It's helpful, but not entirely necessary to understand cron before proceeding.
 # http://en.wikipedia.org/wiki/Cron
 
-# Example:
+# loading our environment variables and defaults
+require 'yaml'
+env_file = File.join(Rails.root, 'config', 'local_env.yml')
+defaults = File.join(Rails.root, 'config', 'sample.local_env.yml')
+
+YAML.load(File.open(env_file)).each do |key, value|
+  ENV[key.to_s] = value
+end if File.exist?(env_file)
+
+# load in defaults unless they are already set
+YAML.load(File.open(defaults)).each do |key, value|
+  ENV[key.to_s] = value unless ENV[key]
+end
 path = File.expand_path(File.dirname(File.dirname(__FILE__)))
+set :job_template, "TZ=\"#{ENV['TIME_ZONE']}\" bash -l -c ':job'"
 set :output, "#{path}/log/cron_log.log"
 #
 every 30.minutes do

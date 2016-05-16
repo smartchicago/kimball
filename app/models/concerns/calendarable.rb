@@ -35,6 +35,10 @@ module Calendarable
     "#{start_datetime.strftime('%A %d')} #{start_datetime.strftime('%H:%M')} - #{end_datetime.strftime('%H:%M')}"
   end
 
+  def start_time_human
+    "#{start_datetime.strftime('%R %p, %a %b')} #{start_datetime.strftime('%d').ordinalize}"
+  end
+
   private
 
     def cal_description
