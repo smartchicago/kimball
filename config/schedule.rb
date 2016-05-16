@@ -6,6 +6,8 @@
 # loading our environment variables and defaults
 require 'yaml'
 require 'time'
+require 'tzinfo'
+
 env_file = File.dirname(__FILE__) + '/local_env.yml'
 defaults = File.dirname(__FILE__) + '/sample.local_env.yml'
 
