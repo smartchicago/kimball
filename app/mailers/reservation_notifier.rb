@@ -30,7 +30,7 @@ class ReservationNotifier < ApplicationMailer
     mail(to: email_address,
          from: ENV['MAILER_SENDER'],
          bcc: bcc_or_nil(email_address, reservation),
-         subject: "Canceled: #{reservation.to_weekday_and_time}",
+         subject: "Canceled: #{reservation.start_datetime_human}",
          content_type: 'multipart/mixed')
   end
 
@@ -41,7 +41,7 @@ class ReservationNotifier < ApplicationMailer
     mail(to: email_address,
          from: ENV['MAILER_SENDER'],
          bcc: bcc_or_nil(email_address, reservation),
-         subject: "Confirmed: #{reservation.to_weekday_and_time}",
+         subject: "Confirmed: #{reservation.start_datetime_human}",
          content_type: 'multipart/mixed')
   end
 
@@ -52,7 +52,7 @@ class ReservationNotifier < ApplicationMailer
     mail(to: email_address,
          from: ENV['MAILER_SENDER'],
          bcc: bcc_or_nil(email_address, reservation),
-         subject: "Need to Reschedule: #{reservation.to_weekday_and_time}",
+         subject: "Need to Reschedule: #{reservation.start_datetime_human}",
          content_type: 'multipart/mixed')
   end
 

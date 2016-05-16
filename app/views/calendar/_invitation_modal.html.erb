@@ -15,16 +15,22 @@ $('#timeSlotSubmitButton').on('click', function(e){
           <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
               <h4 id="modalTitle" class="modal-title"><%= @time_slot.event.title %></h4>
-              <h5 id="modalTime" class="modal-title"><%= @time_slot.event.to_weekday_and_time %></h5>
+              <h5 id="modalTime" class="modal-title"><%= @time_slot.event.start_datetime_human %></h5>
           </div>
           <div id="modalBody" class="modal-body">
-            <%= @time_slot.event.description %>
-            <dl>
-              <dt>With:</dt>
-              <dd><%= @time_slot.event.user.name %></dd>
-              <dt>Their phone number:</dt>
-              <dd><%= @time_slot.event.user.phone_number %></dd>
-            </dl>
+            <div id='modalDescription'>
+              <%= @time_slot.event.description %>
+            </div>
+            <div id='modalDetails'>
+              <dl class="dl-horizontal">
+                <dt>Duration:</dt>
+                <dd><%= @time_slot.duration / 60 %> minutes</dd>
+                <dt>With:</dt>
+                <dd><%= @time_slot.event.user.name %></dd>
+                <dt>Tel:</dt>
+                <dd><%= @time_slot.event.user.phone_number %></dd>
+              </dl>
+            </div>
           </div>
           <% unless current_user %>
             <div>Choose this time slot</div>

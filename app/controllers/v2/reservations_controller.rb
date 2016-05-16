@@ -44,7 +44,7 @@ class V2::ReservationsController < ApplicationController
   def create
     @reservation = V2::Reservation.new(reservation_params)
     if @reservation.save
-      flash[:notice] = "An interview has been booked for #{@reservation.time_slot.to_weekday_and_time}"
+      flash[:notice] = "An interview has been booked for #{@reservation.time_slot.start_datetime_human}"
       send_notifications(@reservation)
     else
       flash[:error] = "No time slot was selected, couldn't create the reservation"
@@ -76,7 +76,7 @@ class V2::ReservationsController < ApplicationController
     # can't confirma reservation in the past!
     render false && return unless @reservation.start_datetime > Time.current
     if @reservation.confirm && @reservation.save
-      flash[:notice] = "You are confirmed for #{@reservation.to_weekday_and_time}, with #{@reservation.user.name}."
+      flash[:notice] = "You are confirmed for #{@reservation.start_datetime_human}, with #{@reservation.user.name}."
     else
       flash[:alert] = 'Error'
     end

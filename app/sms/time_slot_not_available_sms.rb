@@ -34,7 +34,7 @@ class TimeSlotNotAvailableSms < ApplicationSms
       msg << ' would you so kind to select one of the possible times below,'
       msg << " by texting back its respective number?\n\n"
       available_slots.each_with_index do |slot, i|
-        msg << "'#{event.id}#{slot_id_to_char(i)}' for #{slot.to_time_and_weekday}\n"
+        msg << "'#{event.id}#{slot_id_to_char(i)}' for #{slot.start_datetime_human}\n"
       end
       msg << "Or visit https://#{ENV['PRODUCTION_SERVER']}/calendar/?token=#{to.token} to pick a time.\n"
       msg << "If none of these times work you can just ignore this message.\n"

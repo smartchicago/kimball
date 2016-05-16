@@ -28,15 +28,15 @@ module Calendarable
   end
 
   def to_time_and_weekday
-    "#{start_datetime.strftime('%H:%M')} - #{end_datetime.strftime('%H:%M')} #{start_datetime.strftime('%A %d')}"
+    "#{start_datetime.strftime('%R %p')} - #{end_datetime.strftime('%R %p')} #{start_datetime.strftime('%A %d')}"
   end
 
   def to_weekday_and_time
-    "#{start_datetime.strftime('%A %d')} #{start_datetime.strftime('%H:%M')} - #{end_datetime.strftime('%H:%M')}"
+    "#{start_datetime.strftime('%R %p')} #{start_datetime.strftime('%R %p')} - #{end_datetime.strftime('%H:%M')}"
   end
 
-  def start_time_human
-    "#{start_datetime.strftime('%R %p, %a %b')} #{start_datetime.strftime('%d').ordinalize}"
+  def start_datetime_human
+    "#{start_datetime.strftime('%R %p, %a %b')} #{start_datetime.strftime('%d').to_i.ordinalize}"
   end
 
   private

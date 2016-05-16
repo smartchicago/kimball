@@ -35,7 +35,7 @@ describe V2::SmsReservationsController do
       context 'with existing time slot option' do
         let(:selected_number) { 'a' }
         let(:body) { "#{event.id}#{selected_number}" }
-        let(:selected_time) { event.time_slots.first.to_weekday_and_time }
+        let(:selected_time) { event.time_slots.first.start_datetime_human }
 
         it 'reserves the time slot for this person' do
           subject
@@ -99,7 +99,7 @@ describe V2::SmsReservationsController do
                              time_slot: time_slot,
                              person: research_subject_2)
         }
-        let!(:selected_time) { time_slot.to_weekday_and_time }
+        let!(:selected_time) { time_slot.start_datetime_human }
 
         it 'does not create a new reservation' do
           reservation.save

@@ -19,7 +19,7 @@ class ReservationRescheduleSms < ApplicationSms
   private
 
     def selected_time
-      reservation.time_slot.to_weekday_and_time
+      reservation.time_slot.start_datetime_human
     end
 
     def duration

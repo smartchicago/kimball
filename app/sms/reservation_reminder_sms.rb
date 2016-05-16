@@ -22,7 +22,7 @@ class ReservationReminderSms < ApplicationSms
     def generate_res_msgs
       msg = "You have #{res_count} reservation#{res_count > 1 ? 's': ''} soon.\n"
       reservations.each do|r|
-        msg +=  "#{r.description} on #{r.to_weekday_and_time} for #{r.duration / 60} minutes with #{r.user.name} tel: #{r.user.phone_number} \n"
+        msg +=  "#{r.description} on #{r.start_datetime_human} for #{r.duration / 60} minutes with #{r.user.name} tel: #{r.user.phone_number} \n"
       end
       msg += "Reply 'Confirm' to confirm them all\n"
       msg += "Reply 'Cancel' to cancel them all\n"
