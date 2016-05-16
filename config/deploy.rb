@@ -12,7 +12,7 @@ end if File.exist?(File.dirname(__FILE__) + '/local_env.yml')
 
 # loading in defaults
 YAML.load(File.open(File.dirname(__FILE__) + '/sample.local_env.yml')).each do |key, value|
-  ENV[key.to_s] = value
+  ENV[key.to_s] = value unless ENV[key]
 end
 
 set :repository, ENV['GIT_REPOSITORY']
