@@ -19,6 +19,7 @@ class ReservationReminderSms < ApplicationSms
 
   private
 
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def generate_res_msgs
       msg = "You have #{res_count} reservation#{res_count > 1 ? 's': ''} soon.\n"
       reservations.each do|r|
@@ -29,8 +30,11 @@ class ReservationReminderSms < ApplicationSms
       msg += "Reply 'Cancel' to cancel them all\n"
       msg += "Reply 'Change' to request to reschedule\n"
       msg += "Reply 'Calendar' to see your schedule\n"
+      msg += "You can always check online here:\n "
+      msg += "#{calendar_url(token: to.token)}\n"
       msg += 'Thanks!'
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     def res_count
       @reservations.size
