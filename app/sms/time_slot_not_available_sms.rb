@@ -31,12 +31,12 @@ class TimeSlotNotAvailableSms < ApplicationSms
     msg = ''
     if available_slots.length >= 1
       msg << "If you'd like to still attend,"
-      msg << " please pick one of the remaining times below"
+      msg << ' please pick one of the remaining times below'
       msg << " by texting back its respective number?\n\n"
       available_slots.each_with_index do |slot, i|
         msg << "'#{event.id}#{slot_id_to_char(i)}' for #{slot.slot_time_human}\n"
       end
-      msg << "Or visit https://#{ENV['PRODUCTION_SERVER']}/calendar/?token=#{to.token} to pick a time.\n"
+      msg << "Or visit #{calendar_url(token: to.token)} to pick a time.\n"
       msg << "If none of these times work you can just ignore this message.\n"
     else
       msg << "There are no more available times for this event.\n"

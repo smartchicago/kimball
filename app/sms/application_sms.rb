@@ -1,5 +1,10 @@
+
 class ApplicationSms
   attr_reader :client, :application_number
+
+  include Rails.application.routes.url_helpers   # need to generate urls here.
+  host = ENV["#{Rails.env.upcase}_SERVER"].blank? ? 'localhost' : ENV["#{Rails.env.upcase}_SERVER"]
+  Rails.application.routes.default_url_options[:host] = host
 
   def initialize(*)
     @client = Twilio::REST::Client.new(

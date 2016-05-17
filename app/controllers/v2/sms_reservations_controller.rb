@@ -9,6 +9,9 @@ class V2::SmsReservationsController < ApplicationController
     save_twilio_message # see receive_text_controller
 
     send_error_notification && return unless person
+
+    # should do sms verification here if unverified
+
     # FIXME: this needs a refactor badly.
     if letters_and_numbers_only? # they are trying to accept!
       reservation = V2::Reservation.new(generate_reservation_params)
@@ -20,20 +23,20 @@ class V2::SmsReservationsController < ApplicationController
     elsif declined? # currently not used.
       send_decline_notifications(person, event)
     elsif confirm? # confirmation for the days reservations
-      if person.v2_reservations.for_today.size > 0
-        person.v2_reservations.for_today.each(&:confirm!)
+      if person.v2_reservations.for_today_and_tomorrow.size > 0
+        person.v2_reservations.for_today_and_tomorrow.each(&:confirm!)
       else
         ::ReservationReminderSms.new(to: person, reservations: person.v2_reservations.for_today).send
       end
     elsif cancel?
-      if person.v2_reservations.for_today.size > 0
-        person.v2_reservations.for_today.each(&:cancel!)
+      if person.v2_reservations.for_today_and_tomorrow.size > 0
+        person.v2_reservations.for_today_and_tomorrow.each(&:cancel!)
       else
         ::ReservationReminderSms.new(to: person, reservations: person.v2_reservations.for_today).send
       end
     elsif change?
-      if person.v2_reservations.for_today.size > 0
-        person.v2_reservations.for_today.each(&:reschedule!)
+      if person.v2_reservations.for_today_and_tomorrow.size > 0
+        person.v2_reservations.for_today_and_tomorrow.each(&:reschedule!)
       else
         ::ReservationReminderSms.new(to: person, reservations: person.v2_reservations.for_today).send
       end

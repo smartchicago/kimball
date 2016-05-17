@@ -13,7 +13,7 @@ class ReservationReminderSms < ApplicationSms
     client.messages.create(
       from: application_number,
       to:   to.phone_number,
-      body: generate_body
+      body: body
     )
   end
 
@@ -22,6 +22,7 @@ class ReservationReminderSms < ApplicationSms
     def generate_res_msgs
       msg = "You have #{res_count} reservation#{res_count > 1 ? 's': ''} soon.\n"
       reservations.each do|r|
+        next if r.end_datetime < Time.current # don't remind people of past events
         msg +=  "#{r.description} on #{r.start_datetime_human} for #{r.duration / 60} minutes with #{r.user.name} tel: #{r.user.phone_number} \n"
       end
       msg += "Reply 'Confirm' to confirm them all\n"
@@ -35,7 +36,7 @@ class ReservationReminderSms < ApplicationSms
       @reservations.size
     end
 
-    def generate_body
+    def body
       if @reservations.blank?
         %(You have no reservations for today or tomorrow! )
       else

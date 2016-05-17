@@ -9,9 +9,7 @@ module Calendarable
     e.dtstart       = Icalendar::Values::DateTime.new(start_datetime)
     e.dtend         = Icalendar::Values::DateTime.new(end_datetime)
     e.description   = cal_description
-    if defined? person
-      e.url  = "https://#{ENV['PRODUCTION_SERVER']}/people/#{person.id}"
-    end
+    e.url           = generate_url
     e.uid           = generate_ical_id
     add_alarm(e)
   end
@@ -52,6 +50,14 @@ module Calendarable
         return res
       else
         description
+      end
+    end
+
+    def generate_url
+      if defined? person
+        "https://#{ENV['PRODUCTION_SERVER']}/calendar/?token=#{person.token}&#{self.class.to_s.demodulize}_id=#{id}"
+      else
+        "https://#{ENV['PRODUCTION_SERVER']}/calendar/?#{self.class.to_s.demodulize}_id=#{id}"
       end
     end
 
