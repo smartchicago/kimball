@@ -32,6 +32,9 @@ class User < ActiveRecord::Base
 
   has_secure_token # for calendar feeds
 
+  # for sanity's sake
+  alias_attribute :email_address, :email
+
   def active_for_authentication?
     if super && approved?
       true

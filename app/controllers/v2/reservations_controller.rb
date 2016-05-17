@@ -155,17 +155,23 @@ class V2::ReservationsController < ApplicationController
       @visitor ||= @person ? @person : current_user
     end
 
+    # rubocop:disable Metrics/MethodLength
     def send_notifications(reservation)
-      ReservationNotifier.notify(
-        email_address: reservation.person.email_address,
-        reservation: reservation
-      ).deliver_later
-
+      if reservation.person.preferred_contact_method == 'EMAIL'
+        ReservationNotifier.notify(
+          email_address: reservation.person.email,
+          reservation: reservation
+        ).deliver_later
+      else
+        ::ReservationSms.new(to: reservation.person, reservation: reservation).send
+      end
+      # notify the user
       ReservationNotifier.notify(
         email_address: reservation.user.email_address,
         reservation: reservation
       ).deliver_later
     end
+    # rubocop:enable Metrics/MethodLength
 
     def event_params
       params.permit(:event_id)
