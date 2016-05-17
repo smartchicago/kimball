@@ -160,6 +160,11 @@ class V2::ReservationsController < ApplicationController
         email_address: reservation.person.email_address,
         reservation: reservation
       ).deliver_later
+
+      ReservationNotifier.notify(
+        email_address: reservation.user.email_address,
+        reservation: reservation
+      ).deliver_later
     end
 
     def event_params

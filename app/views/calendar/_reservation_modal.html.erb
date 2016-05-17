@@ -10,6 +10,18 @@
           <div id="resBody" class="modal-body">
             <p>A <%= @reservation.duration / 60 %> minute interview:</p>
             <p><%= @reservation.description %></p>
+            <% if current_user %>
+            <div id='modalDetails'>
+              <dl class="dl-horizontal">
+                <dt>With:</dt>
+                <dd><%= @reservation.person.full_name %></dd>
+                <dt>Tel:</dt>
+                <dd><%= @reservation.person.phone_number %></dd>
+                <dt>Email:</dt>
+                <dd><%= @reservation.person.email_address %></dd>
+              </dl>
+            </div>
+            <% end %>
           </div>
           <%= render partial: 'v2/reservations/actions', locals: {reservation: @reservation, visitor: @visitor} %>
           <div class="modal-footer">
