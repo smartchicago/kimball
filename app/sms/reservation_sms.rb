@@ -13,11 +13,15 @@ class ReservationSms < ApplicationSms
     client.messages.create(
       from: application_number,
       to:   to.phone_number,
-      body: "A #{duration} minute interview has been booked for #{selected_time}, with #{reservation.user.name}. \nTheir number is #{reservation.user.phone_number}\n. You'll get a reminder that morning."
+      body: body
     )
   end
 
   private
+
+    def body
+      "A #{duration} minute interview has been booked for:\n#{selected_time}\nWith: #{reservation.user.name}, \nTel: #{reservation.user.phone_number}\n.You'll get a reminder that morning."
+    end
 
     def selected_time
       reservation.time_slot.start_datetime_human

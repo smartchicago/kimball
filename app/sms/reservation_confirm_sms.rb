@@ -19,7 +19,7 @@ class ReservationConfirmSms < ApplicationSms
   private
 
     def selected_time
-    reservation.time_slot.start_datetime_human
+      reservation.time_slot.start_datetime_human
     end
 
     def duration
