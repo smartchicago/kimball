@@ -159,7 +159,7 @@ class V2::ReservationsController < ApplicationController
     def send_notifications(reservation)
       if reservation.person.preferred_contact_method == 'EMAIL'
         ReservationNotifier.notify(
-          email_address: reservation.person.email,
+          email_address: reservation.person.email_address,
           reservation: reservation
         ).deliver_later
       else

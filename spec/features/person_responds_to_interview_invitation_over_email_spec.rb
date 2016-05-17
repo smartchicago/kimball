@@ -14,6 +14,8 @@ feature 'Person responds to interview invitation over email' do
     @event_invitation = FactoryGirl.create(:event_invitation, buffer: 5)
     @event = @event_invitation.event
     @research_subject = @event_invitation.invitees.last
+    @research_subject.preferred_contact_method = 'EMAIL'
+    @research_subject.save
     # we need the link in our emails to be the capybara server!
     ActionMailer::Base.default_url_options = {
       host: Capybara.current_session.server.host,
