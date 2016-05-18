@@ -32,7 +32,7 @@ class EventInvitationSms < ApplicationSms
       end
       body << "Or visit #{calendar_url(token: to.token, event_id: @event.id)} to pick a time.\n"
       body << "If none of these times work, you can just ignore this.\n"
-      body << 'Thanks,\n'
+      body << "Thanks,\n"
       body << ENV['TEAM_NAME']
     end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
