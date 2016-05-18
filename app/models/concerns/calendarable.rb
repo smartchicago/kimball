@@ -34,7 +34,7 @@ module Calendarable
   end
 
   def start_datetime_human
-    "#{start_datetime.strftime('%l:%M %p, %a %b')} #{start_datetime.strftime('%d').to_i.ordinalize}"
+    "#{start_datetime.strftime('%l:%M%p, %a %b')} #{start_datetime.strftime('%d').to_i.ordinalize}"
   end
 
   def slot_time_human
