@@ -40,7 +40,7 @@ class V2::EventInvitationsController < ApplicationController
   end
 
   def index
-    @events = V2::EventInvitation.all.order('id DESC').page(params[:page])
+    @events = V2::EventInvitation.all.order(id: :desc).page(params[:page])
   end
 
   def show

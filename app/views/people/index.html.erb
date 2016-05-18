@@ -24,6 +24,7 @@
           <th>Verified?</th>
           <th>Signup date</th>
           <th>Preferred Contact Method</th>
+          <th>Invites | Reservations</th>
           <th>&nbsp;</th>
         </tr>
       </thead>
@@ -38,6 +39,9 @@
             <td><%= best_in_place person, :verified,as: :select, collection: {'YES'=>'YES','NO'=>'NO'} %></td>
             <td><%= person.signup_at ? person.signup_at.to_s(:long) : '' %></td>
             <td><%= best_in_place person, :preferred_contact_method, as: :select, collection: {'SMS'=>'SMS', 'EMAIL'=>'EMAIL'} %></td>
+            <td>
+            <%= V2::EventInvitation.joins(:invitees).where(invitation_invitees_join_table: {person_id: person.id}).size %> | <%= V2::Reservation.where(person_id: person.id).size %>
+            </td>
             <td>
               <%= render partial: 'add_remove_cart',locals: {person: person} %>
               <%= link_to t('.edit', :default => t('helpers.links.edit')),
