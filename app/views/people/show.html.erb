@@ -22,18 +22,27 @@
           <dd><% if @person.geography_id.present? %> <%= link_to @person.geography_id, search_index_path(adv: 1, geography_id: @person.geography_id ) %><% end %></dd>
 
           <dt>Primary device</dt>
-          <dd><%= link_to @person.primary_device_description, search_index_path(adv: 1, device_description: @person.primary_device_description ) %> <span class="muted">(<%= human_device_type_name @person.primary_device_id %>)</span></dd>
+          <dd><%= best_in_place @person,:primary_device_description %> <span class='muted'>
+          (<%= best_in_place @person, :primary_device_id, as: :select, collection:  Logan::Application.config.device_mappings.collect{|i| [i.last, i.first]}  %>)</span> </dd>
 
           <dt>Secondary device</dt>
-          <dd><% if @person.secondary_device_description.present? %> <%= link_to @person.secondary_device_description, search_index_path(adv: 1, device_description: @person.secondary_device_description ) %> <% end %><span class="muted">(<%= human_device_type_name @person.secondary_device_id %>)</span></dd>
+          <dd><%= best_in_place @person,:secondary_device_description %> <span class='muted'>
+          (<%= best_in_place @person, :secondary_device_id, as: :select, collection:  Logan::Application.config.device_mappings.collect{|i| [i.last, i.first]}  %>)</span> </dd>
 
           <dt>Primary connection method</dt>
-          <dd><%= human_connection_type_name @person.primary_connection_id %> <% if @person.primary_connection_description.present? %><%= ": " + @person.primary_connection_description %><% end %></dd>
+          <dd>
+            <%= best_in_place @person,:primary_connection_description %>
+            <span class='muted'>(<%= best_in_place @person, :primary_connection_id , as: :select, collection: Logan::Application.config.connection_mappings.collect{|i| [i.last,i.first.to_s.humanize]} %>)
+            </span>
+          </dd>
 
-          <% if @person.secondary_connection_id %>
           <dt>Secondary connection method</dt>
-          <dd><%= human_connection_type_name @person.secondary_connection_id %> <% if @person.secondary_connection_description.present? %><%= ": " + @person.secondary_connection_description %><% end %></dd>
-          <% end %>
+          <dd>
+            <%= best_in_place @person,:secondary_connection_description %>
+            <span class='muted'>(<%= best_in_place @person, :secondary_connection_id , as: :select, collection: Logan::Application.config.connection_mappings.collect{|i| [i.last,i.first.to_s.humanize]} %>)
+            </span>
+          </dd>
+
 
           <dt>Preferred participation method</dt>
           <dd><%= best_in_place @person, :participation_type, as: :select, collection: %w(in-person remote) %></dd>
