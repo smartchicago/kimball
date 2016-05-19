@@ -47,6 +47,7 @@ class Public::PeopleController < ApplicationController
     def d_params
       params.permit(:person_id, :token)
     end
+
     # rubocop:disable Metrics/MethodLength
     def person_params
       params.require(:person).permit(:first_name,

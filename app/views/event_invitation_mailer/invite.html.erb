@@ -8,5 +8,5 @@
 <p>Thanks!</p>
 <p><%= ENV['TEAM_NAME'] %></p>
 
-<p>If you'd like to be removed, just <%= link_to "click here to unsubscribe.",public_person_deactivate_url(id:@person.id,token:@person.token) %></p>
+<p>If you'd like to be removed, just <%= link_to "click here to unsubscribe.", public_person_deactivate_url(person_id: @person.id, token: @person.token) %></p>
 
