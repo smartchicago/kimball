@@ -20,6 +20,9 @@ class V2::SmsReservationsController < ApplicationController
       else
         resend_available_slots(person, event)
       end
+    elsif remove?
+      # do the remove people thing.
+      person.deactivate!
     elsif declined? # currently not used.
       send_decline_notifications(person, event)
     elsif confirm? # confirmation for the days reservations
@@ -133,6 +136,10 @@ class V2::SmsReservationsController < ApplicationController
 
     def calendar?
       message.downcase.include?('calendar')
+    end
+
+    def remove?
+      message.downcase.include?('remove')
     end
 
     def letters_and_numbers_only?

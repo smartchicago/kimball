@@ -7,6 +7,7 @@ class DashboardController < ApplicationController
     @recent_submissions = @submissions.size
     @top_five_wards     = Person.group(:geography_id).order('count_all DESC').limit(5).count
     @bottom_five_wards  = Person.group(:geography_id).order('count_all ASC').limit(5).count
+    @deactivated        = Person.unscoped.where(active:false).where('deactivated_at > ?',1.week.ago).size
   end
 
 end

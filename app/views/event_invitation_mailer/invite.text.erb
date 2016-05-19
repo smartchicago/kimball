@@ -8,3 +8,6 @@ Hello <%= @person.first_name %>,
 Thanks!,
 <%= ENV['TEAM_NAME'] %>
 
+Do be removed from this list, just click this link:
+public_person_deactivate_url(id:@person.id,token:@person.token)
+

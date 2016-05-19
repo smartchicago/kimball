@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160513181727) do
+ActiveRecord::Schema.define(version: 20160519202742) do
 
   create_table "applications", force: :cascade do |t|
     t.string   "name",         limit: 255
@@ -125,6 +125,9 @@ ActiveRecord::Schema.define(version: 20160513181727) do
     t.string   "verified",                         limit: 255
     t.string   "preferred_contact_method",         limit: 255
     t.string   "token",                            limit: 255
+    t.boolean  "active",                                       default: true
+    t.datetime "deactivated_at"
+    t.string   "deactivated_method",               limit: 255
   end
 
   create_table "programs", force: :cascade do |t|

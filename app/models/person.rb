@@ -36,7 +36,7 @@
 # FIXME: Refactor and re-enable cop
 # rubocop:disable ClassLength
 class Person < ActiveRecord::Base
-
+  default_scope { where(active: true) } # quick deactivations
   include Searchable
   include ExternalDataMappings
 
@@ -307,5 +307,11 @@ class Person < ActiveRecord::Base
     end
   end
 
+  def deactivate(method = nil)
+    self.active = false
+    self.deactivated_at = Time.current
+    self.deactivated_method = method if method
+    save!
+  end
 end
 # rubocop:enable ClassLength

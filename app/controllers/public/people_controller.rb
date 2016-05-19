@@ -32,8 +32,21 @@ class Public::PeopleController < ApplicationController
     end
   end
 
+  def deactivate
+    @person =Person.find_by(token: d_params[:token])
+
+    if @person && @person.id == d_params[:person_id].to_i
+      @person.deactivate('email')
+    else
+      redirect_to root_path
+    end
+  end
+
   private
 
+    def d_params
+      params.permit(:person_id, :token)
+    end
     # rubocop:disable Metrics/MethodLength
     def person_params
       params.require(:person).permit(:first_name,
@@ -46,6 +59,7 @@ class Public::PeopleController < ApplicationController
         :city,
         :state,
         :postal_code,
+        :token,
         :primary_device_id,
         :primary_device_description,
         :secondary_device_id,

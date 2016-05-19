@@ -29,5 +29,6 @@ class EventInvitationSms < ApplicationSms
         body << "'#{event.id}#{slot_id_to_char(i)}' for #{slot.start_datetime_human}\n"
       end
       body << "If none of these times work, just ignore this.\n"
+      body << "text 'remove me' to unsubscribe"
     end
 end
