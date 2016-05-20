@@ -21,6 +21,9 @@
           <dt>Ward</dt>
           <dd><% if @person.geography_id.present? %> <%= link_to @person.geography_id, search_index_path(adv: 1, geography_id: @person.geography_id ) %><% end %></dd>
 
+          <dt>Neighborhood</dt>
+          <dd><%= best_in_place @person, :neighborhood %></dd>
+
           <dt>Primary device</dt>
           <dd><%= best_in_place @person,:primary_device_description %> <span class='muted'>
           (<%= best_in_place @person, :primary_device_id, as: :select, collection:  Logan::Application.config.device_mappings.collect{|i| [i.last, i.first]}  %>)</span> </dd>

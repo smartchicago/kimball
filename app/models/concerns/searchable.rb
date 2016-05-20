@@ -31,6 +31,7 @@ module Searchable
         indexes :phone_number, index: :not_analyzed
         indexes :postal_code, index: :not_analyzed
         indexes :geography_id, index: :not_analyzed
+        indexes :neighborhood, index: :not_analyzed
         indexes :address_1 # FIXME: if we ever use address_2, this will not work
         indexes :city
         indexes :verified, analyzer: :snowball

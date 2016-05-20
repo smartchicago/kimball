@@ -7,7 +7,8 @@ Bundler.require(*Rails.groups(assets: %w(development test)))
 
 # this enables us to know who created a user or updated a user, I beleive.
 require './lib/with_user'
-
+# this does zip <-> neighborhood
+require './lib/neighborhood_mapping'
 module Logan
 
   class Application < Rails::Application

@@ -64,6 +64,7 @@ class Person < ActiveRecord::Base
 
   after_update  :sendToMailChimp
   after_create  :sendToMailChimp
+  after_create  :update_neighborhood
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -313,5 +314,14 @@ class Person < ActiveRecord::Base
     self.deactivated_method = method if method
     save!
   end
+
+  def update_neighborhood
+    n = zip_to_neighborhood(postal_code)
+    unless n.blank?
+      self.neighborhood = n
+      save
+    end
+  end
+
 end
 # rubocop:enable ClassLength

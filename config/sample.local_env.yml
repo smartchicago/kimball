@@ -20,6 +20,7 @@ STAGING_SERVER: "staging.example.com"
 STAGING_BRANCH: "devlopment"
 GIT_REPOSITORY: "git@github.com:example/example.git"
 TIME_ZONE: "Central Time (US & Canada)"
+NEIGHBORHOOD: 'CHICAGO'
 MAILER_SENDER: "hello@example.com"
 MAIL_ADMIN: "admin@example.com"
 SMTP_HOST: "smtp.mandrillapp.com"
