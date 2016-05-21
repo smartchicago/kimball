@@ -123,7 +123,7 @@ NYC_NEIGHBORHOODS = {
   'Mid-Island'                    => [10314] }.freeze
 
 def zip_to_neighborhood(zip)
-  res = select_neighborhood_mapping.select { |k, v| k if v.include?(zip) }
+  res = select_neighborhood_mapping.select { |k, v| k if v.include?(zip.to_i) }
   return res.keys[0] if res
 end
 
