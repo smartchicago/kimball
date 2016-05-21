@@ -29,7 +29,7 @@
         <%= text_field_tag :postal_code, params[:postal_code], class: "input" %>
 
         <label for="postal_code">Neighborhood</label>
-        <%= text_field_tag :neighborhood, params[:neighborhood], class: "input" %>
+        <%= text_field_tag :neighborhood, params[:neighborhood], class: "input"%>
 
         <label for="address">Phone Number</label>
         <%= text_field_tag :phone_number, params[:phone_number], class: 'input-large', placeholder: "11 digit number start with 1" %>
@@ -109,7 +109,7 @@
     </p>
     <table class="table table-striped">
       <% @results.each_with_index do |result, idx| %>
-      <% #result = result.person %>
+      <% next unless Person.find_by(id: result.id) %>
       <tr>
         <td class="span4">
           <strong><%= link_to "#{result.first_name} #{result.last_name}", person_path(:id => result.id) %></strong>
@@ -121,6 +121,7 @@
           Address: <%= search_result_field result.address_1, :address  %><br/>
           City: <%= search_result_field result.city, :city %>  ZIP: <%= search_result_field result.postal_code, :postal_code %><br/>
           Ward: <%= search_result_field result.geography_id, :geography_id %><br/>
+          Neighborhood: <%= search_result_field result.neighborhood, :neighborhood %><br/>
           Phone: <%= search_result_field number_to_phone(result.phone_number), :phone_number %><br/>
           Email: <%= search_result_field result.email_address, :email_address %><br/>
           Verified?: <%= search_result_field result.verified, :verified %>
