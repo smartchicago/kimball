@@ -5,13 +5,15 @@ require 'rails/all'
 # Assets should be precompiled for production (so we don't need the gems loaded then)
 Bundler.require(*Rails.groups(assets: %w(development test)))
 
-# this enables us to know who created a user or updated a user, I beleive.
-require './lib/with_user'
-# this does zip <-> neighborhood
-require './lib/neighborhood_mapping'
+
+
+
 module Logan
 
   class Application < Rails::Application
+
+    # this enables us to know who created a user or updated a user
+    require "#{config.root}/lib/extensions/with_user"
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

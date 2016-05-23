@@ -9,11 +9,8 @@ class ReservationRescheduleSms < ApplicationSms
     @reservation = reservation
   end
 
-  def send
-    client.messages.create(
-      from: application_number,
-      to:   to.phone_number,
-      body: "It looks like we'll need to reschedule the #{duration} minute interview for #{selected_time}.\n#{reservation.user.name} will get in touch with you soon.\nTheir number is #{reservation.user.phone_number}")
+  def body
+    "It looks like we'll need to reschedule the #{duration} minute interview for #{selected_time}.\n#{reservation.user.name} will get in touch with you soon.\nTheir number is #{reservation.user.phone_number}"
   end
 
   private

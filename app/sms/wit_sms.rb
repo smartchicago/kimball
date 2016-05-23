@@ -1,14 +1,15 @@
 # TODO: needs a spec. The spec for SmsReservationsController covers it,
 # but a unit test would make coverage more robust
-class InvalidOptionSms < ApplicationSms
-  attr_reader :to
+class WitSms < ApplicationSms
+  attr_reader :to, :body
 
-  def initialize(to:)
+  def initialize(to:, msg:)
     super
     @to = to
+    @msg = msg
   end
 
   def body
-    "Sorry, I didn't understand that! I'm just a computer..."
+    @msg
   end
 end

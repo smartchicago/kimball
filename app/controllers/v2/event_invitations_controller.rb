@@ -78,7 +78,8 @@ class V2::EventInvitationsController < ApplicationController
     end
 
     def send_sms(person, event)
-      ::EventInvitationSms.new(to: person, event: event).send
+      # we send a bunch at once, delay it. Plus this has extra logic
+      Delayed::Job.enqueue SendEventInvitationsSmsJob.new(person, event)
     end
 
     # TODO: add a nested :event

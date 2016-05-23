@@ -39,6 +39,7 @@ class Person < ActiveRecord::Base
   default_scope { where(active: true) } # quick deactivations
   include Searchable
   include ExternalDataMappings
+  include Neighborhoods
 
   phony_normalize :phone_number, default_country_code: 'US'
   phony_normalized_method :phone_number, default_country_code: 'US'
@@ -316,7 +317,7 @@ class Person < ActiveRecord::Base
   end
 
   def update_neighborhood
-    n = zip_to_neighborhood(postal_code)
+    n = Neighborhood.zip_to_neighborhood(postal_code)
     unless n.blank?
       self.neighborhood = n
       save

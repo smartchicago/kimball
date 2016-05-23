@@ -9,14 +9,6 @@ class TimeSlotNotAvailableSms < ApplicationSms
     @event = event
   end
 
-  def send
-    client.messages.create(
-      from: application_number,
-      to:   to.phone_number,
-      body: body
-    )
-  end
-
   def body
     body = "Sorry, that time is not longer available for: \n"
     body << "#{event.description}\n"

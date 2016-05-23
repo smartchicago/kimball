@@ -39,3 +39,5 @@ VERIFICATION_SMS_MESSAGE: 'Thank you for verifying your account. We will mail yo
 SIGNUP_EMAIL_MESSAGE: "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive an email from smarziano@cct.org with details."
 SIGNUP_SMS_MESSAGE: "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive a text from 773-747-6239 with more details."
 SIGNUP_ERROR_MESSAGE: "If you are having trouble email smarziano@cct.org or text '98765' and you will be contacted later."
+WIT_ACCESS_TOKEN: ''
+WIT_APP_ID: ''

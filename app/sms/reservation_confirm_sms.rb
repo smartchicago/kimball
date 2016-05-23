@@ -9,20 +9,15 @@ class ReservationConfirmSms < ApplicationSms
     @reservation = reservation
   end
 
-  def send
-    client.messages.create(
-      from: application_number,
-      to:   to.phone_number,
-      body: "You have confirmed a #{duration} minute interview for #{selected_time}, with #{reservation.user.name}. \nTheir number is #{reservation.user.phone_number}")
+  def body
+    "You have confirmed a #{duration} minute interview for #{selected_time}, with #{reservation.user.name}. \nTheir number is #{reservation.user.phone_number}"
   end
 
-  private
+  def selected_time
+    reservation.time_slot.start_datetime_human
+  end
 
-    def selected_time
-      reservation.time_slot.start_datetime_human
-    end
-
-    def duration
-      reservation.duration / 60
-    end
+  def duration
+    reservation.duration / 60
+  end
 end
