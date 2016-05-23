@@ -12,7 +12,8 @@
         <dl>
 
           <dt>Verified?</dt>
-          <dd><%= best_in_place @person, :verified, :as => :select, :collection => %w(Unverified Screened Verified-In-Person Verified) %></dd>
+          <!-- <dd><%= best_in_place @person, :verified, :as => :select, :collection => %w(Unverified Screened Verified-In-Person Verified) %></dd> -->
+          <dd><%= best_in_place @person, :verified %></dd>
 
           <dt>Address</dt>
           <dd><%= address_fields_to_sentence(@person) %></dd>
@@ -35,7 +36,8 @@
           <% end %>
 
           <dt>Preferred participation method</dt>
-          <dd><%= best_in_place @person, :participation_type, as: :select, :collection => %w(in-person remote) %></dd>
+          <dd><%= best_in_place @person, :participation_type %></dd>
+          <!-- <dd><%= best_in_place @person, :participation_type, as: :select, :collection => %w(in-person remote) %></dd> -->
         </dl>
       </div>
 
@@ -50,7 +52,8 @@
           <dd><%= mail_to @person.email_address %></dd>
 
           <dt>Preferred Contact Method</dt>
-          <dd><%= best_in_place @person, :preferred_contact_method, as: :select, collection: %w(SMS EMAIL) %></dd>
+          <!-- <dd><%= best_in_place @person, :preferred_contact_method, as: :select, collection: %w(SMS EMAIL) %></dd> -->
+          <dd><%= best_in_place @person, :preferred_contact_method %></dd>
 
           <dt>Voted in last election?</dt>
           <dd><%= @person.voted %></dd>
