@@ -224,6 +224,7 @@ GEM
     minitest (5.8.4)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
+    mock_redis (0.16.1)
     multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
@@ -307,6 +308,7 @@ GEM
     rb-fsevent (0.9.7)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
+    redis (3.3.0)
     ref (2.0.0)
     responders (2.1.1)
       railties (>= 4.2.0, < 5.1)
@@ -449,6 +451,7 @@ GEM
     will_paginate (3.1.0)
     will_paginate-bootstrap (0.2.5)
       will_paginate (>= 3.0.3)
+    wit (3.3.1)
     wuparty (1.2.6)
       httparty (>= 0.6.1)
       mime-types (~> 1.16)
@@ -497,6 +500,7 @@ DEPENDENCIES
   memory_profiler
   memory_test_fix
   mocha
+  mock_redis
   mysql2 (~> 0.3.18)
   newrelic_rpm
   phony_rails
@@ -507,6 +511,7 @@ DEPENDENCIES
   quiet_assets
   rack-mini-profiler
   rails (~> 4.2.0)
+  redis
   rspec-rails (~> 3.0)
   rspec-retry
   rubocop
@@ -533,7 +538,8 @@ DEPENDENCIES
   whenever
   will_paginate
   will_paginate-bootstrap (~> 0.2.5)
+  wit
   wuparty
 
 BUNDLED WITH
-   1.12.2
+   1.12.3

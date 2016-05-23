@@ -10,25 +10,12 @@ class EventInvitationSms < ApplicationSms
     @event = event
   end
 
-  def send
-    client.messages.create(
-      from: application_number,
-      to:   to.phone_number,
-      body: body
-    )
+  # TODO: Chunk this into 160 characters and send individualls
+  def body
+    body = "#{event.description}\n"
+    body << "If you're available for #{event.duration / 60} minutes"
+    body << ' during that time please'
+    body << " text back 'Yes'. If not, 'No'\n"
+    body << "You can text 'remove me' to unsubscribe"
   end
-
-  private
-
-    # TODO: Chunk this into 160 characters and send individualls
-    def body
-      body = "#{event.description}\n"
-      body << "If you're available please "
-      body << " text back the number and letter of the time?\n\n"
-      event.available_time_slots(to).each_with_index do |slot, i|
-        body << "'#{event.id}#{slot_id_to_char(i)}' for #{slot.start_datetime_human}\n"
-      end
-      body << "If none of these times work, just ignore this.\n"
-      body << "text 'remove me' to unsubscribe"
-    end
 end

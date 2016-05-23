@@ -7,7 +7,9 @@ gem 'rails', '~> 4.2.0'
 # must use this version of mysql2 for rails 4.0.0
 gem 'mysql2', '~> 0.3.18'
 
-gem 'validates_overlap'
+gem 'redis' # ephemeral storage. used for expiring wit.ai contexts
+
+gem 'validates_overlap' # to ensure we don't double book people
 
 gem 'mail', '2.6.3'
 
@@ -136,6 +138,9 @@ gem 'aasm'
 # cron jobs for backups and sending reminders
 gem 'whenever', require: false
 
+# natural language processing API
+gem 'wit'
+
 group :testing do
   # mock tests w/mocha
   gem 'mocha', require: false
@@ -162,6 +167,9 @@ group :testing do
 
   # webrick is slow, capybara will use puma instead
   gem 'puma'
+
+  # in memory redis for testing only
+  gem 'mock_redis'
 end
 
 group :development, :test do

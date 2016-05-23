@@ -93,11 +93,13 @@ class TwilioMessagesController < ApplicationController
     @twilio_message = TwilioMessage.new
   end
 
+  # this is the callback from twilio about the message and it's delivery
   # POST /twilio_messages/updatestatus
   def updatestatus
     this_message = TwilioMessage.find_by message_sid: params['MessageSid']
     this_message.status = params['MessageStatus']
     this_message.error_code = params['ErrorCode']
+    this_message.error_message = params['ErrorMessage']
     this_message.save
   end
 

@@ -9,14 +9,6 @@ class ReservationSms < ApplicationSms
     @reservation = reservation
   end
 
-  def send
-    client.messages.create(
-      from: application_number,
-      to:   to.phone_number,
-      body: body
-    )
-  end
-
   private
 
     def body
@@ -30,4 +22,5 @@ class ReservationSms < ApplicationSms
     def duration
       reservation.duration / 60
     end
+
 end

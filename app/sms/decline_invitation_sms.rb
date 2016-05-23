@@ -9,14 +9,6 @@ class DeclineInvitationSms < ApplicationSms
     @event = event
   end
 
-  def send
-    client.messages.create(
-      from: application_number,
-      to:   to.phone_number,
-      body: body
-    )
-  end
-
   private
 
     def body

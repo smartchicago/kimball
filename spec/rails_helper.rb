@@ -8,8 +8,11 @@ require 'database_cleaner'
 require 'support/helpers'
 require 'sms_spec'
 require 'timecop'
+require 'mock_redis'
 
 SmsSpec.driver = :'twilio-ruby'
+
+Redis.current = MockRedis.new # mocking out redis for our tests
 
 ActiveRecord::Migration.maintain_test_schema!
 
@@ -56,6 +59,7 @@ RSpec.configure do |config|
 
   config.before(:each) do
     DatabaseCleaner.strategy = :transaction
+    Redis.current.flushdb
   end
 
   config.before(:each) do

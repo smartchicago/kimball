@@ -41,6 +41,10 @@ module Calendarable
     "#{start_datetime.strftime('%l:%M%p')}-#{end_datetime.strftime('%l:%M%p, %a %b')} #{start_datetime.strftime('%d').to_i.ordinalize}"
   end
 
+  def bot_duration
+    "#{start_datetime.strftime('%A')} from #{start_datetime.strftime('%l:%M%p')} to #{end_datetime.strftime('%l:%M%p')}"
+  end
+
   private
 
     def cal_description
