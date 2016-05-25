@@ -13,9 +13,9 @@ class EventInvitationSms < ApplicationSms
   # TODO: Chunk this into 160 characters and send individualls
   def body
     body = "#{event.description}\n"
-    body << "If you're available for #{event.duration / 60} minutes"
-    body << ' during that time please'
-    body << " text back 'Yes'. If not, 'No'\n"
+    body << "If you're available for #{event.duration / 60} minutes at "
+    body << "#{event.slot_time_human} please"
+    body << " text back 'Yes'.\nIf not, 'No'\n"
     body << "You can text 'remove me' to unsubscribe"
   end
 end

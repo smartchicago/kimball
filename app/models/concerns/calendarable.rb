@@ -26,23 +26,23 @@ module Calendarable
   end
 
   def to_time_and_weekday
-    "#{start_datetime.strftime('%l:%M %p')} - #{end_datetime.strftime('%l:%M %p')} #{start_datetime.strftime('%A %d')}"
+    "#{start_datetime.strftime('%l:%M %p').lstrip} - #{end_datetime.strftime('%l:%M %p').lstrip} #{start_datetime.strftime('%a %d')}"
   end
 
   def to_weekday_and_time
-    "#{start_datetime.strftime('%l:%M %p')} #{start_datetime.strftime('%l:%M %p')} - #{end_datetime.strftime('%H:%M')}"
+    "#{start_datetime.strftime('%a %d')} #{start_datetime.strftime('%l:%M %p').lstrip} - #{end_datetime.strftime('%l:%M %p').lstrip}"
   end
 
   def start_datetime_human
-    "#{start_datetime.strftime('%l:%M%p, %a %b')} #{start_datetime.strftime('%d').to_i.ordinalize}"
+    "#{start_datetime.strftime('%l:%M%p, %a %b').lstrip} #{start_datetime.strftime('%d').to_i.ordinalize}"
   end
 
   def slot_time_human
-    "#{start_datetime.strftime('%l:%M%p')}-#{end_datetime.strftime('%l:%M%p, %a %b')} #{start_datetime.strftime('%d').to_i.ordinalize}"
+    "#{start_datetime.strftime('%l:%M%p').lstrip}-#{end_datetime.strftime('%l:%M%p, %a %b').lstrip} #{start_datetime.strftime('%d').to_i.ordinalize}"
   end
 
   def bot_duration
-    "#{start_datetime.strftime('%A')} from #{start_datetime.strftime('%l:%M%p')} to #{end_datetime.strftime('%l:%M%p')}"
+    "from #{start_datetime.strftime('%l:%M%p').lstrip} to #{end_datetime.strftime('%l:%M%p').lstrip}"
   end
 
   private

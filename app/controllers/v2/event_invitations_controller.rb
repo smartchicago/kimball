@@ -58,28 +58,27 @@ class V2::EventInvitationsController < ApplicationController
     end
 
     def send_notifications(event_invitation)
-      event = event_invitation.event
       event_invitation.invitees.each do |invitee|
         case invitee.preferred_contact_method.upcase
         when 'SMS'
-          send_sms(invitee, event)
+          send_sms(invitee, event_invitation)
         when 'EMAIL'
-          send_email(invitee, event)
+          send_email(invitee, event_invitation)
         end
       end
     end
 
-    def send_email(person, event)
+    def send_email(person, event_invitation)
       EventInvitationMailer.invite(
         email_address: person.email_address,
-        event:  event,
+        event:  event_invitation,
         person: person
       ).deliver_later
     end
 
-    def send_sms(person, event)
+    def send_sms(person, event_invitation)
       # we send a bunch at once, delay it. Plus this has extra logic
-      Delayed::Job.enqueue SendEventInvitationsSmsJob.new(person, event)
+      Delayed::Job.enqueue(SendEventInvitationsSmsJob.new(person, event_invitation))
     end
 
     # TODO: add a nested :event

@@ -13,6 +13,17 @@ logic for "attendable" state overlap checking:
 2) doesn't present as an option to user if person has booked a reservation for tim
 
 
+one of the ways to get a nice date from wit.ai:
+ curl \
+  -H 'Authorization: Bearer JJMZIZCG4ZIKI3WEWPJLZQ5VPDO3KXDC' \
+  'https://api.wit.ai/message?v=20160524&q=from%202pm%20to%204pm&context=%7B%22reference_time%22%3A%222016-05-28T14%3A00%3A41.573-04%3A00%22%7D'
+
+where:
+  context = Rack::Utils.escape({reference_time: DateTime}.to_json)
+  q = query string
+
+
+
 Conversation Management:
 
 Option 1

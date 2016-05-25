@@ -15,8 +15,7 @@ class V2::SmsReservationsController < ApplicationController
     if remove?
       # do the remove people thing.
       person.deactivate!
-    elsif declined? # currently not used.
-      #send_decline_notifications(person, event)
+      ::RemoveSms.new(to: person).send
     elsif confirm? # confirmation for the days reservations
       if person.v2_reservations.for_today_and_tomorrow.size > 0
         person.v2_reservations.for_today_and_tomorrow.each(&:confirm!)
@@ -43,9 +42,11 @@ class V2::SmsReservationsController < ApplicationController
       # we don't know what event_id we're talking about here
       send_error_notification && return if str_context.nil?
       context = JSON.parse(str_context)
-      new_context = ::WitClient.run_actions "#{person.id}_#{context['event_id']}", message, context
-      Redis.current.set("wit_context:#{person.id}", new_context.to_json)
-      Redis.current.expire("wit_context:#{person.id}", 3600)
+      puts "in sms_reservation_controller"
+      pp context
+      puts message
+      puts "!!!!!!!!!!!!!!!!!!!!!!!"
+      ::WitClient.run_actions "#{person.id}_#{context['event_id']}", message, context
     end
     render text: 'OK'
   end
@@ -88,12 +89,6 @@ class V2::SmsReservationsController < ApplicationController
 
     def resend_available_slots(person, event)
       ::TimeSlotNotAvailableSms.new(to: person, event: event).send
-    end
-
-    def declined?
-      # this is no longer in use. still might be handt though...
-      # up to 10k events.
-      message.downcase =~ /^\d{1,5}-decline?/
     end
 
     def confirm?
