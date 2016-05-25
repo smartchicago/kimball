@@ -19,31 +19,17 @@ class Public::PeopleController < ApplicationController
   end
 
   # POST /people
+  # rubocop:disable Metrics/MethodLength
   def create
     @person = ::Person.new(person_params)
     @person.signup_at = Time.current
-
 
     success_msg = 'Thanks! We will be in touch soon!'
     error_msg   = "Oops! Looks like something went wrong. Please get in touch with us at <a href='mailto:#{ENV['MAILER_SENDER']}?subject=Patterns sign up problem'>#{ENV['MAILER_SENDER']}</a> to figure it out!"
     if @person.save
       msg =  success_msg
-      unless params[:age_range].blank?
-        @tag = Tag.find_or_initialize_by(name: params[:age_range])
-        @tag.created_by ||= 1 # first user.
-        @tagging = Tagging.create(taggable_type: 'Person',
-                                  taggable_id: @person.id,
-                                  created_by: 1,
-                                  tag: @tag)
-      end
-      unless params[:referral].blank?
-        @tag = Tag.find_or_initialize_by(name: params[:referral])
-        @tag.created_by ||= 1 # first user.
-        @tagging = Tagging.create(taggable_type: 'Person',
-                                  taggable_id: @person.id,
-                                  created_by: 1,
-                                  tag: @tag)
-      end
+      add_tag(params[:age_range]) unless params[:age_range].blank?
+      add_tag(params[:referral]) unless params[:referral].blank?
     else
       msg = error_msg
     end
@@ -53,6 +39,7 @@ class Public::PeopleController < ApplicationController
       format.html { render action: 'create' }
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   def deactivate
     @person =Person.find_by(token: d_params[:token])
@@ -97,5 +84,14 @@ class Public::PeopleController < ApplicationController
 
     def allow_iframe
       response.headers.except! 'X-Frame-Options'
+    end
+
+    def add_tag(_tag)
+      tag = Tag.find_or_initialize_by(name: tag)
+      tag.created_by ||= 1 # first user.
+      Tagging.create(taggable_type: 'Person',
+                     taggable_id: @person.id,
+                     created_by: 1,
+                     tag: tag)
     end
 end
