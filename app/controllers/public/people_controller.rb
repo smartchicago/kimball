@@ -23,11 +23,33 @@ class Public::PeopleController < ApplicationController
     @person = ::Person.new(person_params)
     @person.signup_at = Time.current
 
+
     success_msg = 'Thanks! We will be in touch soon!'
     error_msg   = "Oops! Looks like something went wrong. Please get in touch with us at <a href='mailto:#{ENV['MAILER_SENDER']}?subject=Patterns sign up problem'>#{ENV['MAILER_SENDER']}</a> to figure it out!"
+    if @person.save
+      msg =  success_msg
+      unless params[:age_range].blank?
+        @tag = Tag.find_or_initialize_by(name: params[:age_range])
+        @tag.created_by ||= 1 # first user.
+        @tagging = Tagging.create(taggable_type: 'Person',
+                                  taggable_id: @person.id,
+                                  created_by: 1,
+                                  tag: @tag)
+      end
+      unless params[:referral].blank?
+        @tag = Tag.find_or_initialize_by(name: params[:referral])
+        @tag.created_by ||= 1 # first user.
+        @tagging = Tagging.create(taggable_type: 'Person',
+                                  taggable_id: @person.id,
+                                  created_by: 1,
+                                  tag: @tag)
+      end
+    else
+      msg = error_msg
+    end
 
     respond_to do |format|
-      @msg = @person.save ?  success_msg : error_msg
+      @msg = msg
       format.html { render action: 'create' }
     end
   end
