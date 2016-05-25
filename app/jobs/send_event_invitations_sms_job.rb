@@ -11,7 +11,7 @@ class SendEventInvitationsSmsJob < Struct.new(:to, :event)
   def enqueue(job)
     # job.delayed_reference_id   =
     # job.delayed_reference_type = ''
-    Rails.logger.info '[TwilioSender] job enqueued'
+    Rails.logger.info '[SendEventInvitationsSms] job enqueued'
     job.save!
   end
 
@@ -30,11 +30,14 @@ class SendEventInvitationsSmsJob < Struct.new(:to, :event)
 
     # context = Redis.current.get("wit_context:#{to.id}")
     # if context.nil?  && !time_requeue? # no context, free to send
-      # context is symbols here, but will be string keys after json.
-      context = { person_id: to.id, event_id: event.id, state: 'yes_no' }.to_json
-      Redis.current.set("wit_context:#{to.id}", context)
-      Redis.current.expire("wit_context:#{to.id}", 7200) # two hours
-      EventInvitationSms.new(to: to, event: event).send
+    # context is symbols here, but will be string keys after json.
+    context = { person_id: to.id,
+                event_id: event.id,
+                'reference_time' => event.start_datetime,
+                'reference_time_slot' =>  event.bot_duration }.to_json
+    Redis.current.set("wit_context:#{to.id}", context)
+    Redis.current.expire("wit_context:#{to.id}", 7200) # two hours
+    EventInvitationSms.new(to: to, event: event).send
     # elsif time_requeue?
     #   Delayed::Job.enqueue(SendEventInvitationsSmsJob.new(to, event), run_at: run_in_business_hours)
     # else # we have a context, wait till we time out.

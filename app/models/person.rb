@@ -317,7 +317,7 @@ class Person < ActiveRecord::Base
   end
 
   def update_neighborhood
-    n = Neighborhood.zip_to_neighborhood(postal_code)
+    n = zip_to_neighborhood(postal_code)
     unless n.blank?
       self.neighborhood = n
       save
