@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ModuleLength
 module Neighborhoods
 
   CHICAGO_NEIGHBORHOODS = {
@@ -148,5 +149,5 @@ module Neighborhoods
         NYC_NEIGHBORHOODS
       end
     end
-
 end
+# rubocop:enable Metrics/ModuleLength

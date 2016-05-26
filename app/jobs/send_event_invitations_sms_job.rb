@@ -27,7 +27,6 @@ class SendEventInvitationsSmsJob < Struct.new(:to, :event)
     #   yes: requeue for 8:30am
     #   no: set context with expire and send!
 
-
     # context = Redis.current.get("wit_context:#{to.id}")
     # if context.nil?  && !time_requeue? # no context, free to send
     # context is symbols here, but will be string keys after json.

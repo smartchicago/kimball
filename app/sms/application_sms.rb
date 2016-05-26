@@ -40,7 +40,7 @@ class ApplicationSms
       { from:       @application_number,
         to:         @to.phone_number,
         body:       body,
-        direction:  "outbound-api",
+        direction:  'outbound-api',
         date_sent:  Time.current,
         message_sid: res.sid,
         account_sid: res.account_sid,

@@ -42,10 +42,6 @@ class V2::SmsReservationsController < ApplicationController
       # we don't know what event_id we're talking about here
       send_error_notification && return if str_context.nil?
       context = JSON.parse(str_context)
-      puts "in sms_reservation_controller"
-      pp context
-      puts message
-      puts "!!!!!!!!!!!!!!!!!!!!!!!"
       ::WitClient.run_actions "#{person.id}_#{context['event_id']}", message, context
     end
     render text: 'OK'
