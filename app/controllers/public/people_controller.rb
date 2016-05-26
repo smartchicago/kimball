@@ -86,7 +86,7 @@ class Public::PeopleController < ApplicationController
       response.headers.except! 'X-Frame-Options'
     end
 
-    def add_tag(_tag)
+    def add_tag(tag)
       tag = Tag.find_or_initialize_by(name: tag)
       tag.created_by ||= 1 # first user.
       tag.save!
