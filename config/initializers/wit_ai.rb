@@ -129,7 +129,7 @@ actions = {
       if r && r.save
         duration = r.duration / 60
         selected_time = r.start_datetime_human
-        msg = "A #{duration} minute interview has been booked for:\n#{selected_time}\nWith: #{r.user.name}, \nTel: #{r.user.phone_number}\n.You'll get a reminder that morning."
+        msg = "A #{duration} minute conversation has been booked for:\n#{selected_time}\nWith: #{r.user.name}, \nTel: #{r.user.phone_number}\n.You'll get a reminder that morning."
       else
         pp r.errors
         msg = 'It appears there are no more times available. There will be more opportunities soon!'
@@ -222,9 +222,13 @@ def get_times(context, default_end)
       untill = default_end
     else # we have an interval
       from = Time.zone.parse(datetime['from']['value'])
-      # wit.ai uses the end of a duration. we want the start.
+
+      untill =  Time.zone.parse(datetime['to']['value'])
+      # wit.ai uses the end of a duration if grain = hour.
+      # we want the start.
       # for them 1pm to 5pm == 1pm untill 6pm, including the whole of 5pm
-      untill =  Time.zone.parse(datetime['to']['value']) - 1.hour
+      untill -= 1.hour if datetime['grain'] == 'hour'
+      end
     end
     res << { from: from, untill: untill, confidence: datetime['confidence'] }
   end
