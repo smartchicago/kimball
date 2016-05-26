@@ -228,7 +228,6 @@ def get_times(context, default_end)
       # we want the start.
       # for them 1pm to 5pm == 1pm untill 6pm, including the whole of 5pm
       untill -= 1.hour if datetime['grain'] == 'hour'
-      end
     end
     res << { from: from, untill: untill, confidence: datetime['confidence'] }
   end
