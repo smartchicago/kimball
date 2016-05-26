@@ -89,6 +89,7 @@ class Public::PeopleController < ApplicationController
     def add_tag(_tag)
       tag = Tag.find_or_initialize_by(name: tag)
       tag.created_by ||= 1 # first user.
+      tag.save!
       Tagging.create(taggable_type: 'Person',
                      taggable_id: @person.id,
                      created_by: 1,
