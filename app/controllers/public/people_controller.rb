@@ -45,7 +45,7 @@ class Public::PeopleController < ApplicationController
     @person =Person.find_by(token: d_params[:token])
 
     if @person && @person.id == d_params[:person_id].to_i
-      @person.deactivate('email')
+      @person.deactivate!('email')
     else
       redirect_to root_path
     end

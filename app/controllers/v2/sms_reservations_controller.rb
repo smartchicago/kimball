@@ -1,4 +1,5 @@
 # FIXME: Refactor
+# rubocop:disable ClassLength
 class V2::SmsReservationsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create]
   skip_before_action :authenticate_user!
@@ -11,10 +12,11 @@ class V2::SmsReservationsController < ApplicationController
 
     # should do sms verification here if unverified
 
-    # FIXME: this needs a refactor badly.
+    # FIXME: this if else bundle needs a refactor badly.
     if remove?
       # do the remove people thing.
-      person.deactivate!
+      person.deactivate!('sms')
+      person.save!
       ::RemoveSms.new(to: person).send
     elsif confirm? # confirmation for the days reservations
       if person.v2_reservations.for_today_and_tomorrow.size > 0
@@ -37,14 +39,17 @@ class V2::SmsReservationsController < ApplicationController
     elsif calendar?
       ::ReservationReminderSms.new(to: person, reservations: person.v2_reservations.for_today_and_tomorrow).send
     else
-      str_context = Redis.current.get("wit_context:#{person.id}")
 
+      # should be refactored into the person model.
+      str_context = Redis.current.get("wit_context:#{person.id}")
       # we don't know what event_id we're talking about here
       send_error_notification && return if str_context.nil?
       context = JSON.parse(str_context)
-      ::WitClient.run_actions "#{person.id}_#{context['event_id']}", message, context
+
+      ::WitClient.run_actions "#{person.id}_#{Rails.env}", message, context
     end
-    render text: 'OK'
+    # twilio wants an xml response.
+    render text: '<?xml version="1.0" encoding="UTF-8" ?><Response></Response>'
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
@@ -80,7 +85,7 @@ class V2::SmsReservationsController < ApplicationController
       phone_struct = Struct.new(:phone_number).new(sms_params[:From])
       ::InvalidOptionSms.new(to: phone_struct).send
 
-      render text: 'OK'
+      render text: '<?xml version="1.0" encoding="UTF-8" ?><Response></Response>'
     end
 
     def resend_available_slots(person, event)
@@ -104,7 +109,17 @@ class V2::SmsReservationsController < ApplicationController
     end
 
     def remove?
-      message.downcase.include?('remove')
+      # using a fancy twilio add on.
+      # 1 thousandth of a penny to not piss people off.
+      # https://www.twilio.com/marketplace/add-ons/mobilecommons-optout
+      if params['AddOns']
+        add_ons = JSON.parse(params['AddOns'])
+        mobile_commons = add_ons['results']['mobilecommons_optout'] || nil
+        if mobile_commons
+          return true if mobile_commons['result']['probability'] >= 0.85
+        end
+      end
+      false
     end
 
     def sms_params
@@ -125,3 +140,4 @@ class V2::SmsReservationsController < ApplicationController
       TwilioMessage.create(twilio_params)
     end
 end
+# rubocop:enable ClassLength

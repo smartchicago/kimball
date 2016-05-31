@@ -309,7 +309,7 @@ class Person < ActiveRecord::Base
     end
   end
 
-  def deactivate(method = nil)
+  def deactivate!(method = nil)
     self.active = false
     self.deactivated_at = Time.current
     self.deactivated_method = method if method

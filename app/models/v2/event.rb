@@ -50,30 +50,25 @@ class V2::Event < ActiveRecord::Base
   private
 
     def filter_reservations(arr_obj, slots)
-      arr_obj.each do |obj|
-        # obj.reload
-        slots = filter_obj_reservations(obj, slots)
-      end
-      slots
-    end
+      return [] if slots.blank?
 
-    def filter_obj_reservations(obj, slots)
-      unless slots.empty?
-        res = obj.v2_reservations.joins(:time_slot).
-              where('v2_time_slots.start_time >=?',
-                Time.current)
-
-        # TODO: refactor
-        # filtering out slots that overlap. Tricky.
-        slots = slots.select do |s|
-          res.any? { |r| not_overlap?(r, s) }
-        end unless res.empty?
+      res = arr_obj.map do |obj|
+        obj.v2_reservations.joins(:time_slot).
+          where('v2_time_slots.start_time >=?', Time.zone.now)
       end
-      slots
+      res.flatten!
+      slots.to_a.delete_if do |slot|
+        # if we find a reservation that overlaps!
+        !res.find { |r| overlap?(r, slot) }.blank?
+      end
     end
 
     def not_overlap?(one, other)
-      !((one.start_time - other.end_time) * (other.start_time - one.end_time) >= 0)
+      !overlap?(one, other)
+    end
+
+    def overlap?(one, other)
+      ((one.start_datetime - other.end_datetime) * (other.start_datetime - one.end_datetime) >= 0)
     end
 
     def build_slots

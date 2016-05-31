@@ -20,10 +20,15 @@ describe V2::SmsReservationsController do
 
   before do
     clear_messages
+    test_context = { person_id: research_subject.id,
+                event_id: event_invitation.id,
+                'reference_time' => event_invitation.start_datetime,
+                'reference_time_slot' =>  event_invitation.bot_duration }.to_json
+    Redis.current.set("wit_context:#{research_subject.id}", test_context)
   end
 
   after do
-    # Timecop.return
+    Redis.current.del("wit_context:#{research_subject.id}")
   end
 
   describe 'POST #create' do
@@ -32,16 +37,18 @@ describe V2::SmsReservationsController do
 
       subject { post :create, message }
 
-      context 'with existing time slot option' do
-        let(:selected_number) { 'a' }
-        let(:body) { "#{event.id}#{selected_number}" }
+      context 'responds yes to invtiation' do
+        let(:body) { 'yes' }
         let(:selected_time) { event.time_slots.first.start_datetime_human }
 
-        it 'reserves the time slot for this person' do
+        it 'responds with yes' do
           subject
-          expect(event.time_slots.first.reservation).to_not be_nil
+          open_last_text_message_for research_subject.phone_number
+          expect(current_text_message.body).to have_text('Ok, what time is good for you?')
         end
-
+      end
+      context 'responds with no to invitation' do
+        let(:body) { 'no' }
         it 'sends out a confirmation sms for this person' do
           subject
           open_last_text_message_for research_subject.phone_number

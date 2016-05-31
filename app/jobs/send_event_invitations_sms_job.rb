@@ -9,8 +9,6 @@
 class SendEventInvitationsSmsJob < Struct.new(:to, :event)
 
   def enqueue(job)
-    # job.delayed_reference_id   =
-    # job.delayed_reference_type = ''
     Rails.logger.info '[SendEventInvitationsSms] job enqueued'
     job.save!
   end
@@ -19,6 +17,8 @@ class SendEventInvitationsSmsJob < Struct.new(:to, :event)
     1
   end
 
+  # FIXME: Refactor and Enable Cops!
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def perform
     # step 1: check to see if we already have a context for the person
     #   yes: get ttl and re-enque for after ttl
@@ -27,25 +27,34 @@ class SendEventInvitationsSmsJob < Struct.new(:to, :event)
     #   yes: requeue for 8:30am
     #   no: set context with expire and send!
 
-    # context = Redis.current.get("wit_context:#{to.id}")
-    # if context.nil?  && !time_requeue? # no context, free to send
-    # context is symbols here, but will be string keys after json.
-    context = { person_id: to.id,
-                event_id: event.id,
-                'reference_time' => event.start_datetime,
-                'reference_time_slot' =>  event.bot_duration }.to_json
-    Redis.current.set("wit_context:#{to.id}", context)
-    Redis.current.expire("wit_context:#{to.id}", 7200) # two hours
-    EventInvitationSms.new(to: to, event: event).send
-    # elsif time_requeue?
-    #   Delayed::Job.enqueue(SendEventInvitationsSmsJob.new(to, event), run_at: run_in_business_hours)
-    # else # we have a context, wait till we time out.
-    #   ttl = Redis.current.ttl("wit_context:#{to.id}") # ttl is in seconds
-    #   requeue_at = Time.current + ttl.seconds
-    #   Delayed::Job.enqueue(SendEventInvitationsSmsJob.new(to, event), run_at: requeue_at)
-    # end
+
+    lock = Redis.current.get("event_lock:#{to.id}")
+    if lock.nil?  && !time_requeue? # no lock, not too late
+      Rails.logger.info 'not locked!'
+      # context is symbols here, but will be string keys after json.
+      context_str = Redis.current.get("wit_context:#{to.id}")
+      context = context_str.nil? ? {} : JSON.parse(context_str)
+      context[:person_id] = to.id
+      context[:event_id] = event.id
+      context['reference_time'] = event.start_datetime
+      context['reference_time_slot'] = event.bot_duration
+      Redis.current.set("wit_context:#{to.id}", context.to_json)
+
+      # this is where we lock. the invitation to this event.
+      Redis.current.setex("event_lock:#{to.id}", 7200, event.id)
+
+      EventInvitationSms.new(to: to, event: event).send
+    elsif time_requeue?
+      Rails.logger.info 'after business hours'
+      Delayed::Job.enqueue(SendEventInvitationsSmsJob.new(to, event), run_at: run_in_business_hours)
+    else # person is locked, wait till the lock times out.
+      ttl = Redis.current.ttl("event_lock:#{to.id}") # ttl is in seconds
+      Rails.logger.info "puts locked for #{ttl}"
+      Delayed::Job.enqueue(SendEventInvitationsSmsJob.new(to, event), run_at: ttl.seconds.from_now)
+    end
     sleep(1) # twilio rate limiting.
   end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   def before(job)
   end
