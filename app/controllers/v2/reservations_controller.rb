@@ -61,10 +61,11 @@ class V2::ReservationsController < ApplicationController
   # no authorization here. yet.
 
   def index
-    @reservations = V2::Reservation.page(params[:page])
+    @reservations = V2::Reservation.order(id: :desc).page(params[:page])
   end
 
   def show
+    visitor
     @comment = Comment.new commentable: @reservation
   end
 

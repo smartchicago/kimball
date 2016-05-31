@@ -29,7 +29,7 @@ class SendEventInvitationsSmsJob < Struct.new(:to, :event)
 
 
     lock = Redis.current.get("event_lock:#{to.id}")
-    if lock.nil?  && !time_requeue? # no lock, not too late
+    if lock.nil? # && !time_requeue? # no lock, not too late
       Rails.logger.info 'not locked!'
       # context is symbols here, but will be string keys after json.
       context_str = Redis.current.get("wit_context:#{to.id}")

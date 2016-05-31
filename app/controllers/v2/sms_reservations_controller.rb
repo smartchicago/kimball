@@ -9,7 +9,7 @@ class V2::SmsReservationsController < ApplicationController
     save_twilio_message # see receive_text_controller
 
     send_error_notification && return unless person
-
+    Rails.logger.info "#{person.full_name}: #{message}"
     # should do sms verification here if unverified
 
     # FIXME: this if else bundle needs a refactor badly.

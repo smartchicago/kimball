@@ -10,6 +10,7 @@ actions = {
     puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     person = Person.find_by(id: context['person_id'])
     ::WitSms.new(to: person, msg: msg).send
+    context
   end,
   merge: lambda do |_session_id, context, entities, _msg|
     # this is where all the work happens. I get it now.
@@ -20,57 +21,60 @@ actions = {
     # needs to be a state machine. for sure.
 
     context.merge!(entities) # how we know what happened
-
-    puts "before merge"
+    puts "after entities merge"
     pp context
     puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
     # handle initial yes or no
 
     # # when the person sends an unintelligible date
     if context['want_interview'] && context['datetime'].nil?
       puts "want an interview, but no date"
       # they may have previously sent a good date.
-      context.delete('date_is_valid') if context['date_is_valid']
+      context.delete('date_is_valid')
       context['date_is_invalid'] = true
     end
 
     if context['want_interview'].nil? && context['yes_no'] && context['reference_time_slot']
-      puts "first 'yes or no'"
+      puts "first 'yes or no' for whatever it's worth"
       case context['yes_no'][0]['value']
       when 'yes'
+        puts "we have a yes! in first yes_no"
         context.delete('refuse_interview')
         context['want_interview'] = true
       when 'no'
+        puts "we have a no.... in first yes_no"
         context['refuse_interview'] = true
       end
-      context.delete('yes_no') # start afresh
+      # context.delete('yes_no')
     end
 
     # handle confirming date
     if context['date_is_valid'] && context['yes_no']
       puts "confirming date yes_no"
 
-      context.delete('reference_time_slot')
-      context.delete('want_interview')
-      context.delete('human_date')
-      context.delete('date_is_valid')
+      # context.delete('reference_time_slot')
+      # context.delete('want_interview')
+      # context.delete('human_date')
+      # context.delete('date_is_valid')
       case context['yes_no'][0]['value']
       when 'yes'
         context.delete('date_not_confirmed') # might be second attempt
         context['date_confirmed'] = true
       when 'no'
         context.delete('datetime')
+        context.delete('date_is_valid')
         context.delete('date_confirmed') # not possible, I think.
         context['date_not_confirmed'] = true
       end
-      context.delete('yes_no') # start afresh, maybe?
+      # context.delete('yes_no') # start afresh, maybe?
     end
 
     # case when we have a valid date
     if context['datetime'] # should we check it's an interval?
       puts "we have a datetime!"
-      context.delete('reference_time_slot')
-      context.delete('want_interview')
+      # context.delete('reference_time_slot')
+      # context.delete('want_interview')
       context.delete('date_is_invalid')
       context.delete('date_not_confirmed')
       context['date_is_valid'] = true
@@ -86,6 +90,7 @@ actions = {
         context.delete('event_id')
         context.delete('want_interview') # can decline at any time
         context['decline'] = true
+        context['refuse_interview'] = true
       end
       context.delete('command') # start afresh
     end
@@ -256,14 +261,17 @@ def get_times(context, default_end)
       untill = default_end
     else # we have an interval
       from = Time.zone.parse(datetime['from']['value'])
-
-      untill =  Time.zone.parse(datetime['to']['value'])
-      # wit.ai uses the end of a duration if grain = hour.
-      # we want the start.
-      # for them 1pm to 5pm == 1pm untill 6pm, including the whole of 5pm
-      untill -= 1.hour if datetime['to']['grain'] == 'hour'
-      untill -= 1.minute if datetime['to']['grain'] == 'minute'
+      # intervals sometimes don't end!
+      untill = datetime['to']['value'].blank? ? default_end : Time.zone.parse(datetime['to']['value'])
     end
+    # wit.ai uses the end of a duration if grain = hour.
+       # we want the start.
+       # for them 1pm to 5pm == 1pm untill 6pm, including the whole of 5pm
+    if datetime['to']
+       untill -= 1.hour if datetime['to']['grain'] == 'hour'
+       untill -= 1.minute if datetime['to']['grain'] == 'minute'
+    end
+
     res << { from: from, untill: untill, confidence: datetime['confidence'] }
   end
   res # not yet ready to deal with multiple time windows
