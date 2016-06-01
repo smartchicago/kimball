@@ -22,7 +22,7 @@
           <th>Email address</th>
           <th>Phone number</th>
           <th><%= sortable 'verified','Verified?'%></th>
-          <th>Signup date</th>
+          <th><%= sortable 'created_at', 'Signup date' %></th>
           <th>Preferred Contact Method</th>
           <th><%= sortable 'tag_count_cache', 'Tag Count' %></th>
           <th>Invites</th>
@@ -39,7 +39,7 @@
             <td><%= best_in_place person, :email_address %></td>
             <td><%= best_in_place person, :phone_number %></td>
             <td><%= best_in_place person, :verified, as: :select, collection: @verified_types.map{|p| [p,p]} %></td>
-            <td><%= person.signup_at ? person.signup_at.to_s(:long) : '' %></td>
+            <td><%= person.created_at.to_s(:long) %></td>
             <td><%= best_in_place person, :preferred_contact_method,
                                           as: :select,
                                           collection: { 'SMS'=>'SMS',
