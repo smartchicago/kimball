@@ -10,6 +10,14 @@ GIT
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.1.0)
 
+GIT
+  remote: https://github.com/cromulus/emoji
+  revision: ec5786e86877b707c82c6a4fa30aa86b93ebfac6
+  branch: add_replace_unicode_moji_with_name
+  specs:
+    emoji (1.0.5)
+      json
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -478,6 +486,7 @@ DEPENDENCIES
   database_cleaner
   delayed_job_active_record
   devise
+  emoji!
   factory_girl_rails
   faker
   flamegraph

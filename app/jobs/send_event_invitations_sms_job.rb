@@ -27,7 +27,6 @@ class SendEventInvitationsSmsJob < Struct.new(:to, :event)
     #   yes: requeue for 8:30am
     #   no: set context with expire and send!
 
-
     lock = Redis.current.get("event_lock:#{to.id}")
     if lock.nil? # && !time_requeue? # no lock, not too late
       Rails.logger.info 'not locked!'

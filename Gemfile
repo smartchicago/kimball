@@ -141,6 +141,8 @@ gem 'whenever', require: false
 # natural language processing API
 gem 'wit'
 
+# handling emoji!
+gem 'emoji', git: 'https://github.com/cromulus/emoji', branch: 'add_replace_unicode_moji_with_name'
 group :testing do
   # mock tests w/mocha
   gem 'mocha', require: false

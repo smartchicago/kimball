@@ -30,12 +30,12 @@ class Tagging < ActiveRecord::Base
 
     # increments the right classifiable counter for the right taxonomy
     def increment_counter
-      self.taggable_type.constantize.increment_counter("tag_count_cache", self.taggable_id)
+      taggable_type.constantize.increment_counter('tag_count_cache', taggable_id)
     end
 
     # decrements the right classifiable counter for the right taxonomy
     def decrement_counter
-      self.taggable_type.constantize.decrement_counter("tag_count_cache", self.taggable_id)
+      taggable_type.constantize.decrement_counter('tag_count_cache', taggable_id)
     end
 
 end

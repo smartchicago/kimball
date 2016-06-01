@@ -56,7 +56,8 @@ class V2::SmsReservationsController < ApplicationController
   private
 
     def message
-      sms_params[:Body]
+      str = sms_params[:Body].force_encoding('utf-8').encode
+      Emoji.replace_unicode_moji_with_name(str)
     end
 
     def person
