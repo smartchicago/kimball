@@ -13,7 +13,7 @@
         <dl>
 
           <dt>Verified?</dt>
-          <dd><%= best_in_place @person, :verified %></dd>
+          <dd><%= best_in_place @person, :verified, as: :select, collection: %w(YES NO).map{|v| [v,v]} %></dd>
 
           <dt>Address</dt>
           <dd><%= address_fields_to_sentence(@person) %></dd>
