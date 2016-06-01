@@ -39,7 +39,7 @@
             <td><%= best_in_place person, :email_address %></td>
             <td><%= best_in_place person, :phone_number %></td>
             <td><%= best_in_place person, :verified, as: :select, collection: @verified_types.map{|p| [p,p]} %></td>
-            <td><%= person.created_at.to_s(:long) %></td>
+            <td><%= person.created_at.to_s(:short) %></td>
             <td><%= best_in_place person, :preferred_contact_method,
                                           as: :select,
                                           collection: { 'SMS'=>'SMS',
