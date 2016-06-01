@@ -128,8 +128,8 @@ $(document).on('ready page:load', function () {
           msg(target);
       },
       swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
-        if (direction == 'left') { $('#calendar').fullCalendar('prev'); }
-        if (direction == 'right') { $('#calendar').fullCalendar('next'); }
+        if (direction == 'right') { $('#calendar').fullCalendar('prev'); }
+        if (direction == 'left') { $('#calendar').fullCalendar('next'); }
       },
       threshold:50,
       fingers:'all',
