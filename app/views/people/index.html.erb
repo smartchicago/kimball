@@ -21,11 +21,12 @@
           <th>Ward</th>
           <th>Email address</th>
           <th>Phone number</th>
-          <th>Verified?</th>
+          <th><%= sortable 'verified','Verified?'%></th>
           <th>Signup date</th>
           <th>Preferred Contact Method</th>
-          <th>Tag Count</th>
-          <th>Invites | Reservations</th>
+          <th><%= sortable 'tag_count_cache', 'Tag Count' %></th>
+          <th>Invites</th>
+          <th>Reservations</th>
           <th>&nbsp;</th>
         </tr>
       </thead>
@@ -48,7 +49,10 @@
             <%= person.tag_count %>
             </td>
             <td>
-            <%= V2::EventInvitation.joins(:invitees).where(invitation_invitees_join_table: {person_id: person.id}).size %> | <%= V2::Reservation.where(person_id: person.id).size %>
+              <%= V2::EventInvitation.joins(:invitees).where(invitation_invitees_join_table: {person_id: person.id}).size %>
+            </td>
+            <td>
+              <%= V2::Reservation.where(person_id: person.id).size %>
             </td>
 
             <td>

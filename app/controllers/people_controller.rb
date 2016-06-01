@@ -41,6 +41,7 @@ class PeopleController < ApplicationController
 
   skip_before_action :authenticate_user!, if: :should_skip_janky_auth?
   skip_before_action :verify_authenticity_token, only: [:create, :create_sms]
+  helper_method :sort_column, :sort_direction
 
   # GET /people
   # GET /people.json
@@ -241,6 +242,14 @@ class PeopleController < ApplicationController
       # don't attempt authentication on reqs from wufoo
       (params[:action] == 'create' || params[:action] == 'create_sms') && params['HandshakeKey'].present?
       # params[:action] == 'create_sms' && params['HandshakeKey'].present?
+    end
+
+    def sort_column
+      Person.column_names.include?(params[:sort]) ? params[:sort] : "name"
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
     end
 
 end

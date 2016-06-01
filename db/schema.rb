@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160520195430) do
+ActiveRecord::Schema.define(version: 20160601145130) do
 
   create_table "applications", force: :cascade do |t|
     t.string   "name",         limit: 255
@@ -129,6 +129,7 @@ ActiveRecord::Schema.define(version: 20160520195430) do
     t.datetime "deactivated_at"
     t.string   "deactivated_method",               limit: 255
     t.string   "neighborhood",                     limit: 255
+    t.integer  "tag_count_cache",                  limit: 4,   default: 0
   end
 
   create_table "programs", force: :cascade do |t|
