@@ -120,6 +120,10 @@ class Person < ActiveRecord::Base
     tags.collect(&:name)
   end
 
+  def tag_count
+    tags.size
+  end
+
   def submission_values
     submissions.collect(&:submission_values)
   end
