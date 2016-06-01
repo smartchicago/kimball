@@ -13,7 +13,7 @@
         <dl>
 
           <dt>Verified?</dt>
-          <dd><%= best_in_place @person, :verified, as: :select, collection: %w(Unverified Screened Verified-In-Person Verified) %></dd>
+          <dd><%= best_in_place @person, :verified %></dd>
 
           <dt>Address</dt>
           <dd><%= address_fields_to_sentence(@person) %></dd>
