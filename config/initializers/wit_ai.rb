@@ -5,45 +5,45 @@ require 'wit'
 actions = {
   say: lambda do |_session_id, context, msg|
     # this is where we text.
-    puts "in say"
-    pp context
-    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    Rails.logger.info "in say"
+    Rails.logger.info context
+    Rails.logger.info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     person = Person.find_by(id: context['person_id'])
     ::WitSms.new(to: person, msg: msg).send
     context
   end,
   merge: lambda do |_session_id, context, entities, _msg|
-    # this is where all the work happens. I get it now.
+    # this is where all the work haRails.logger.infoens. I get it now.
     # wit relies on us to know what contexts and entites result in
     # entirely new contexts and entities.
 
     # this whole thing is such a hack
     # needs to be a state machine. for sure.
 
-    context.merge!(entities) # how we know what happened
-    puts "after entities merge"
-    pp context
-    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    context.merge!(entities) # how we know what haRails.logger.infoened
+    Rails.logger.info "after entities merge"
+    Rails.logger.info context
+    Rails.logger.info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 
     # handle initial yes or no
 
     # # when the person sends an unintelligible date
     if context['want_interview'] && context['datetime'].nil?
-      puts "want an interview, but no date"
+      # Rails.logger.info "want an interview, but no date"
       # they may have previously sent a good date.
       context.delete('date_is_valid')
       context['date_is_invalid'] = true
     end
 
     if context['want_interview'].nil? && context['yes_no'] && context['reference_time_slot']
-      puts "first 'yes or no' for whatever it's worth"
+      Rails.logger.info "first 'yes or no'"
       case context['yes_no'][0]['value']
       when 'yes'
-        puts "we have a yes! in first yes_no"
+        Rails.logger.info "we have a yes! in first yes_no"
         context.delete('refuse_interview')
         context['want_interview'] = true
       when 'no'
-        puts "we have a no.... in first yes_no"
+        Rails.logger.info "we have a no.... in first yes_no"
         context['refuse_interview'] = true
       end
       # context.delete('yes_no')
@@ -51,7 +51,7 @@ actions = {
 
     # handle confirming date
     if context['date_is_valid'] && context['yes_no']
-      puts "confirming date yes_no"
+      Rails.logger.info "confirming date yes_no"
 
       # context.delete('reference_time_slot')
       # context.delete('want_interview')
@@ -59,7 +59,7 @@ actions = {
       # context.delete('date_is_valid')
       case context['yes_no'][0]['value']
       when 'yes'
-        context.delete('date_not_confirmed') # might be second attempt
+        # context.delete('date_not_confirmed') # might be second attempt
         context['date_confirmed'] = true
       when 'no'
         context.delete('datetime')
@@ -72,7 +72,7 @@ actions = {
 
     # case when we have a valid date
     if context['datetime'] # should we check it's an interval?
-      puts "we have a datetime!"
+      Rails.logger.info "we have a datetime!"
       # context.delete('reference_time_slot')
       # context.delete('want_interview')
       context.delete('date_is_invalid')
@@ -112,9 +112,9 @@ actions = {
 
     # context gets set in merge
     Redis.current.set("wit_context:#{context['person_id']}", context.to_json)
-    puts "after merge"
-    pp context
-    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    Rails.logger.info "after merge"
+    Rails.logger.info context
+    Rails.logger.info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 
     return context
   end,
@@ -123,9 +123,9 @@ actions = {
   end,
   get_event: lambda do |_session_id, context|
     # session ID and context will have event id in it.
-    puts "in get_event"
-    pp context
-    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    # Rails.logger.info "in get_event"
+    # Rails.logger.info context
+    # Rails.logger.info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     ei = V2::EventInvitation.find_by(id: context['event_id'])
 
     context.merge!({ 'reference_time' => ei.start_datetime,
@@ -133,9 +133,9 @@ actions = {
   end,
   reserve_slot: lambda do |_session_id, context|
     # datetime is the time the person chose.
-    puts "in reserve slot"
-    pp context
-    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    Rails.logger.info "in reserve slot"
+    Rails.logger.info context
+    Rails.logger.info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     ei = V2::EventInvitation.find_by(id: context['event_id'])
     person = Person.find_by(id: context['person_id'])
 
@@ -157,8 +157,8 @@ actions = {
         selected_time = r.start_datetime_human
         msg = "A #{duration} minute conversation has been booked for:\n#{selected_time}\nWith: #{r.user.name}, \nTel: #{r.user.phone_number}\n.You'll get a reminder that morning."
       else
-        pp r.errors if r
-        msg = 'It appears there are no more times available. There will be more opportunities soon!'
+        Rails.logger.info r.errors if r
+        msg = 'It aRails.logger.infoears there are no more times available. There will be more oRails.logger.infoortunities soon!'
       end
 
 
@@ -195,9 +195,9 @@ actions = {
     context
   end,
   decline_invitation: lambda do |_session_id, context|
-    puts "in decline"
-    pp context
-    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    Rails.logger.info "in decline"
+    Rails.logger.info context
+    Rails.logger.info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     # cleanup our context
 
     context.delete('want_interview')
@@ -216,13 +216,13 @@ actions = {
   end,
   date_to_human: lambda do |_session_id, context|
 
-    puts "in date_to_human"
-    pp context
-    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    Rails.logger.info "in date_to_human"
+    Rails.logger.info context
+    Rails.logger.info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     ei = V2::EventInvitation.find_by(id: context['event_id'])
     times = get_times(context,ei.end_datetime)
     if times
-      puts 'we have times!'
+      Rails.logger.info 'we have times!'
       human_arr = []
       # handling multiple times
       times.each do |time|
@@ -232,7 +232,7 @@ actions = {
       context.delete('date_is_invalid')
       context.merge!({ 'human_date' => human_date, 'date_is_valid'=> true })
     else
-      puts "why didn't we get times here?"
+      Rails.logger.info "why didn't we get times here?"
       context.delete('human_date')
       context.delete('date_is_valid')
       context['date_is_invalid'] = true
