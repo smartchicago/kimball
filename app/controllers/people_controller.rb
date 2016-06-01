@@ -45,6 +45,7 @@ class PeopleController < ApplicationController
   # GET /people
   # GET /people.json
   def index
+    @verified_types = Person.uniq.pluck(:verified).select(&:present?)
     @people = Person.paginate(page: params[:page]).order('signup_at DESC')
   end
 
