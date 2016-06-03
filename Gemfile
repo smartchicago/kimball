@@ -120,6 +120,9 @@ gem 'best_in_place', '~> 3.0.1'
 
 gem 'jquery-validation-rails'
 
+# storing money with money-rails
+gem 'money-rails'
+
 group :testing do
   # mock tests w/mocha
   gem 'mocha', :require => false
