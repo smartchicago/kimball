@@ -1,0 +1,41 @@
+<%= form_for(@gift_card) do |f| %>
+  <% if @gift_card.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@gift_card.errors.count, "error") %> prohibited this gift_card from being saved:</h2>
+
+      <ul>
+      <% @gift_card.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :last_four %><br>
+    <%= f.number_field :last_four %>
+  </div>
+  <div class="field">
+    <%= f.label :expiration_date %><br>
+    <%= f.date_select :expiration_date %>
+  </div>
+  <div class="field">
+    <%= f.label :person_id %><br>
+    <%= f.number_field :person_id %>
+  </div>
+  <div class="field">
+    <%= f.label :notes %><br>
+    <%= f.text_field :notes %>
+  </div>
+  <div class="field">
+    <%= f.label :created_by %><br>
+    <%= f.number_field :created_by %>
+  </div>
+  <div class="field">
+    <%= f.label :reason %><br>
+    <%= f.number_field :reason %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,4 +1,5 @@
 Logan::Application.routes.draw do
+  resources :gift_cards
   resources :mailchimp_updates
   namespace :public do
     resources :people, only: [:new, :create]
