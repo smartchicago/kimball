@@ -14,5 +14,6 @@ class GiftCard < ActiveRecord::Base
   belongs_to :giftable, polymorphic: true, touch: true
   validates_presence_of :amount
   validates_presence_of :reason
+  validates :last_four, length: { is: 4 }
 
 end
