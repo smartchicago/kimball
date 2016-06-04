@@ -52,9 +52,9 @@ ActiveRecord::Schema.define(version: 20160603234534) do
     t.string   "delayed_reference_type", limit: 255
   end
 
-  add_index "delayed_jobs", ["delayed_reference_type"], name: "delayed_jobs_delayed_reference_type", using: :btree
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
-  add_index "delayed_jobs", ["queue"], name: "delayed_jobs_queue", using: :btree
+  add_index "delayed_jobs", ["delayed_reference_type"], name: "delayed_jobs_delayed_reference_type"
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+  add_index "delayed_jobs", ["queue"], name: "delayed_jobs_queue"
 
   create_table "events", force: :cascade do |t|
     t.string   "name",           limit: 255
@@ -72,21 +72,21 @@ ActiveRecord::Schema.define(version: 20160603234534) do
   end
 
   create_table "gift_cards", force: :cascade do |t|
-    t.integer  "last_four",       limit: 4
+    t.integer  "last_four"
     t.date     "expiration_date"
-    t.integer  "person_id",       limit: 4
-    t.string   "notes",           limit: 255
-    t.integer  "created_by",      limit: 4
-    t.integer  "reason",          limit: 4
-    t.integer  "amount_cents",    limit: 4,   default: 0,     null: false
-    t.string   "amount_currency", limit: 255, default: "USD", null: false
-    t.integer  "giftable_id",     limit: 4
-    t.string   "giftable_type",   limit: 255
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.integer  "person_id"
+    t.string   "notes"
+    t.integer  "created_by"
+    t.integer  "reason"
+    t.integer  "amount_cents",    default: 0,     null: false
+    t.string   "amount_currency", default: "USD", null: false
+    t.integer  "giftable_id"
+    t.string   "giftable_type"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
   end
 
-  add_index "gift_cards", ["giftable_type", "giftable_id"], name: "index_gift_cards_on_giftable_type_and_giftable_id", using: :btree
+  add_index "gift_cards", ["giftable_type", "giftable_id"], name: "index_gift_cards_on_giftable_type_and_giftable_id"
 
   create_table "mailchimp_exports", force: :cascade do |t|
     t.string   "name",       limit: 255

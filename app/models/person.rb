@@ -45,6 +45,8 @@ class Person < ActiveRecord::Base
   has_many :comments, as: :commentable, dependent: :destroy
   has_many :submissions, dependent: :destroy
 
+  has_many :gift_cards
+
   has_many :reservations, dependent: :destroy
   has_many :events, through: :reservations
 
