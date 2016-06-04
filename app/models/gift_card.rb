@@ -11,4 +11,8 @@ class GiftCard < ActiveRecord::Base
     other: 5
   }
 
+  belongs_to :giftable, polymorphic: true, touch: true
+  validates_presence_of :amount
+  validates_presence_of :reason
+
 end

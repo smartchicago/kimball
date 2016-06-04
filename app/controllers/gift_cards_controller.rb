@@ -69,6 +69,6 @@ class GiftCardsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def gift_card_params
-      params.require(:gift_card).permit(:last_four, :expiration_date, :person_id, :notes, :created_by, :reason)
+      params.require(:gift_card).permit(:last_four, :expiration_date, :person_id, :notes, :created_by, :reason, :amount, :giftable_id, :giftable_type)
     end
 end

@@ -3,11 +3,11 @@ require 'rails_helper'
 RSpec.describe "gift_cards/edit", type: :view do
   before(:each) do
     @gift_card = assign(:gift_card, GiftCard.create!(
-      :last_four => 1,
+      :last_four => 1234,
       :person_id => 1,
       :notes => "MyString",
       :created_by => 1,
-      :reason => 1
+      :reason => "signup"
     ))
   end
 
