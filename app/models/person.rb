@@ -84,6 +84,15 @@ class Person < ActiveRecord::Base
 
   self.per_page = 15
 
+  def signup_gc_sent
+    signup_cards = self.gift_cards.where(reason: 1)
+    if signup_cards.length > 0
+      return true
+    end
+    return false
+  end
+
+
   WUFOO_FIELD_MAPPING = {
     'Field1'   => :first_name,
     'Field2'   => :last_name,

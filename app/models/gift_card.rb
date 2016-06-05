@@ -1,4 +1,5 @@
 class GiftCard < ActiveRecord::Base
+  include GiftableMethods
 
   monetize :amount_cents
 
@@ -15,5 +16,7 @@ class GiftCard < ActiveRecord::Base
   validates_presence_of :amount
   validates_presence_of :reason
   validates :last_four, length: { is: 4 }
+
+  # Need to add validation to limit 1 signup per person
 
 end
