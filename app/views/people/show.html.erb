@@ -127,6 +127,22 @@
   </div>
 </div>
 
+<div class="row">
+  <div class="span12">
+    <h3>Gift Cards</h3>
+    <%= form_for([@person, @gift_card], remote: true) do |form| %>
+      <%= form.hidden_field :person_id, :value => @person.id %>
+      <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" } %>
+      <%= form.text_field :last_four, :placeholder => "Card Number Last 4 Digits"  %>
+      <%= form.text_field :amount, :placeholder => "Amount" %>
+      <%= form.date_select :expiration_date %>
+
+      <%= form.submit 'Add Gift Card', :class => "btn" %>
+    <% end %>
+  </div>
+
+</div>
+
 
 <div class="row">
   <div class="span12">
