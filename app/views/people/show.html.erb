@@ -129,7 +129,7 @@
 
 <div class="row">
   <div class="span12">
-    <h3>Gift Cards</h3>
+    <h3>Add New Gift Card</h3>
     <%= form_for([@person, @gift_card], remote: true) do |form| %>
       <%= form.hidden_field :person_id, :value => @person.id %>
       <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" } %>
@@ -139,6 +139,31 @@
 
       <%= form.submit 'Add Gift Card', :class => "btn" %>
     <% end %>
+  </div>
+  <div class="span12">
+    <% if @person.gift_cards.any? %>
+    <h3>Gift Cards</h3>
+    <table class="table">
+      <tr>
+        <th>Reason</th>
+        <th>Association</th>
+        <th>Card Number</th>
+        <th>Expiration Date</th>
+        <th>Amount</th>
+      </tr>
+      <% for gift_card in @person.gift_cards %>
+      <tr>
+        <td><%= gift_card.reason %></td>
+        <td><%= gift_card.giftable_id %></td>
+        <td><%= gift_card.last_four %></td>
+        <td><%= gift_card.expiration_date %></td>
+        <td><%= gift_card.amount %></td>
+      </tr>
+      <% end %>
+    </table>
+  <% else %>
+  <!-- no form submissions. FIXME: null state? -->
+  <% end %>
   </div>
 
 </div>
