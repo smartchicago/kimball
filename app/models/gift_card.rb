@@ -1,5 +1,4 @@
 class GiftCard < ActiveRecord::Base
-  include GiftableMethods
 
   monetize :amount_cents
 
