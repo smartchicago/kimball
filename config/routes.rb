@@ -64,6 +64,7 @@ Logan::Application.routes.draw do
       post 'create_sms'
     end
     resources :comments
+    resources :gift_cards
   end
   # post "people/create_sms"
 
