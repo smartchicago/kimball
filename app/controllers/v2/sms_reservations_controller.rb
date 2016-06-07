@@ -45,8 +45,8 @@ class V2::SmsReservationsController < ApplicationController
       # we don't know what event_id we're talking about here
       send_error_notification && return if str_context.nil?
       context = JSON.parse(str_context)
-
-      ::WitClient.run_actions "#{person.id}_#{Rails.env}", message, context
+      event_id = Redis.current.get("event_lock:#{person.id}") || Date.today.to_s
+      ::WitClient.run_actions "#{person.id}_#{event_id}_#{Rails.env}", message, context
     end
     # twilio wants an xml response.
     render text: '<?xml version="1.0" encoding="UTF-8" ?><Response></Response>'
