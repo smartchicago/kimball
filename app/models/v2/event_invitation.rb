@@ -18,7 +18,7 @@
 
 class V2::EventInvitation < ActiveRecord::Base
   self.table_name = 'v2_event_invitations'
-
+  has_paper_trail
   include Calendarable
 
   belongs_to :event, class_name: '::V2::Event', foreign_key: :v2_event_id

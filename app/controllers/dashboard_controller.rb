@@ -1,7 +1,7 @@
 class DashboardController < ApplicationController
 
   def index
-    @people             = Person.order('created_at DESC').where('signup_at > :startdate AND verified LIKE :verify', { startdate: 1.week.ago, verify: '%Verified%' })
+    @people             = Person.order('created_at DESC').where('signup_at > :startdate AND verified LIKE :verify AND active = true', { startdate: 1.week.ago, verify: '%Verified%' })
     @submissions        = Submission.order('created_at DESC').where('created_at > ?', 1.week.ago)
     @recent_signups     = @people.size
     @recent_submissions = @submissions.size

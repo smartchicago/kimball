@@ -12,7 +12,7 @@
 #
 
 class Tagging < ActiveRecord::Base
-
+  has_paper_trail
   belongs_to :tag, counter_cache: true
   belongs_to :taggable, polymorphic: true, touch: true
   after_destroy :destroy_orphaned_tag

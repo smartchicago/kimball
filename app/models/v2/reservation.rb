@@ -16,6 +16,7 @@
 # rubocop:disable ClassLength
 class V2::Reservation < ActiveRecord::Base
   self.table_name = 'v2_reservations'
+  has_paper_trail
 
   include AASM
   include Calendarable

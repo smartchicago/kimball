@@ -9,6 +9,7 @@ class V2::SmsReservationsController < ApplicationController
     save_twilio_message # see receive_text_controller
 
     send_error_notification && return unless person
+    PaperTrail.whodunnit = person # auditing
     Rails.logger.info "#{person.full_name}: #{message}"
     # should do sms verification here if unverified
 
@@ -45,7 +46,7 @@ class V2::SmsReservationsController < ApplicationController
       # we don't know what event_id we're talking about here
       send_error_notification && return if str_context.nil?
       context = JSON.parse(str_context)
-      event_id = Redis.current.get("event_lock:#{person.id}") || Date.today.to_s
+      event_id = Redis.current.get("event_lock:#{person.id}") || Time.zone.today.to_s
       ::WitClient.run_actions "#{person.id}_#{event_id}_#{Rails.env}", message, context
     end
     # twilio wants an xml response.

@@ -48,7 +48,6 @@
       <label for="preferred contact method">Preferred Contact Method</label>
       <%= select_tag :preferred_contact_method,
         options_for_select([["All", '*'],["Email", 'EMAIL'], ["SMS", 'SMS']], include_blank: true, selected: params[:preferred_contact_method]) , :class => "input" %>
-
     </div>
 
     <div class="span5">

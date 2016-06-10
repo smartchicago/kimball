@@ -16,7 +16,7 @@
 #
 
 class Submission < ActiveRecord::Base
-
+  has_paper_trail
   validates_presence_of :person, :raw_content
   belongs_to :person
 

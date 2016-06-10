@@ -124,6 +124,8 @@ class CalendarController < ApplicationController
     # both types can visit the page. they have the same interface
     def visitor
       @visitor ||= @person ? @person : current_user
+      PaperTrail.whodunnit = @visitor
+      @visitor
     end
 
     def allowed_params

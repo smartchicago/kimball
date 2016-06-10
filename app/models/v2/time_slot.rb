@@ -10,6 +10,7 @@
 
 class V2::TimeSlot < ActiveRecord::Base
   self.table_name = 'v2_time_slots'
+  has_paper_trail
 
   include Calendarable
   belongs_to :event, class_name: '::V2::Event'

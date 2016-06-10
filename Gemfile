@@ -143,6 +143,11 @@ gem 'wit'
 
 # handling emoji!
 gem 'emoji', git: 'https://github.com/cromulus/emoji', branch: 'add_replace_unicode_moji_with_name'
+
+# auditing.
+gem 'paper_trail'
+gem 'paper_trail-globalid'
+
 group :testing do
   # mock tests w/mocha
   gem 'mocha', require: false

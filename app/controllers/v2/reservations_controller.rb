@@ -154,6 +154,8 @@ class V2::ReservationsController < ApplicationController
 
     def visitor
       @visitor ||= @person ? @person : current_user
+      PaperTrail.whodunnit = @visitor
+      @visitor
     end
 
     # rubocop:disable Metrics/MethodLength

@@ -12,6 +12,7 @@ class SearchController < ApplicationController
     # no pagination for CSV export
     per_page = request.format.to_s.eql?('text/csv') ? 10000 : Person.per_page
     @results = if index_params[:q]
+                 index_params[:q][:active] = true # only active users
                  Person.search index_params[:q], per_page: per_page, page: (index_params[:page] || 1)
                elsif index_params[:adv]
                  Person.complex_search(index_params, per_page) # FIXME: more elegant solution for returning all records

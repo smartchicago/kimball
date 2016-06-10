@@ -11,6 +11,8 @@ class ApplicationController < ActionController::Base
   # before_action :authenticate_user!, unless: request.format == :json
   # before_action :user_needed, if: request.format == :json
 
+  before_action :set_paper_trail_whodunnit
+
   def user_needed
     unless current_user
       render json: { 'error' => 'authentication error' }, status: 401

@@ -36,7 +36,7 @@
 # FIXME: Refactor and re-enable cop
 # rubocop:disable ClassLength
 class Person < ActiveRecord::Base
-  default_scope { where(active: true) } # quick deactivations
+  has_paper_trail
   include Searchable
   include ExternalDataMappings
   include Neighborhoods

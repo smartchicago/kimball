@@ -35,6 +35,7 @@ module Searchable
         indexes :address_1 # FIXME: if we ever use address_2, this will not work
         indexes :city
         indexes :verified, analyzer: :snowball
+        indexes :active
 
         # device types
         indexes :primary_device_type_name, analyzer: :snowball
@@ -86,6 +87,7 @@ module Searchable
 
       params.delete(:adv)
       params.delete(:page)
+      params[:active] = true
 
       params[:phone_number].delete!('^0-9') unless params[:phone_number].blank?
 
