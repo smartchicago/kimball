@@ -27,7 +27,7 @@ class SubmissionsController < ApplicationController
 
   # GET /submission/1/edit
   def edit
-     @submission = Submission.find(params[:id])
+    @submission = Submission.find(params[:id])
   end
 
   # PATCH/PUT /submission/1
@@ -70,17 +70,17 @@ class SubmissionsController < ApplicationController
         @submission.form_type = form_type.downcase
       rescue
         # Otherwise set form type as unknown
-        @submission.form_type = "unknown"
+        @submission.form_type = 'unknown'
       end
 
       # Parse the email, and add the associated person
       person_identifier = @submission.form_email_or_phone_number
       this_person = nil
       if person_identifier.present?
-        this_person = Person.where('lower(email_address) = ?', person_identifier.downcase).last      
+        this_person = Person.where('lower(email_address) = ?', person_identifier.downcase).last
         if this_person.blank?
           test_number = PhonyRails.normalize_number(person_identifier)
-          this_person = Person.where('phone_number = ?', test_number).last  
+          this_person = Person.where('phone_number = ?', test_number).last
         end
       end
       @submission.person = this_person
@@ -95,7 +95,7 @@ class SubmissionsController < ApplicationController
 
     else
       @submission = Submission.new(
-        raw_content:       "",
+        raw_content:       '',
         entry_id:          params['submission']['entry_id'],
         form_id:          params['submission']['form_id'],
         person_id:         params['submission']['person_id']
@@ -131,7 +131,7 @@ class SubmissionsController < ApplicationController
   # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize
 
   def index
-    @submissionsUnmatched = Submission.order('created_at DESC').where('person_id is ?', nil)
+    @submissions_unmatched = Submission.order('created_at DESC').where('person_id is ?', nil)
     @submissions = Submission.paginate(page: params[:page]).order('created_at DESC').includes(:person)
   end
 

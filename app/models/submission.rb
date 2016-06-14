@@ -67,7 +67,7 @@ class Submission < ActiveRecord::Base
     JSON.parse(field_structure)['Fields'].each do |field|
       return field_value(field['ID']) if field['Title'] == 'Email'
     end
-    return nil
+    nil
   end
 
   def form_email_or_phone_number
@@ -77,7 +77,7 @@ class Submission < ActiveRecord::Base
         return field_value(field['ID'])
       end
     end
-    return nil
+    nil
   end
 
   def form_type_field
@@ -87,7 +87,7 @@ class Submission < ActiveRecord::Base
         return field_value(field['ID'])
       end
     end
-    return nil
+    nil
   end
 
   def submission_values
