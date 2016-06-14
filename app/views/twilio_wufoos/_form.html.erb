@@ -17,7 +17,7 @@
   </div>
   <div class="field">
     <%= f.label :form_type %><br>
-    <%= f.text_field :form_type %>
+    <%= f.select(:form_type, Submission.form_types.keys.map {|form_type| [form_type.titleize,form_type]}) %>
   </div>
   <div class="field">
     <%= f.label :wufoo_formid %><br>

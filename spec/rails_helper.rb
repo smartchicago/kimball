@@ -14,6 +14,10 @@ SmsSpec.driver = :'twilio-ruby'
 
 Redis.current = MockRedis.new # mocking out redis for our tests
 
+require 'devise'
+require 'support/controller_macros'
+
+
 ActiveRecord::Migration.maintain_test_schema!
 
 Shoulda::Matchers.configure do |config|
@@ -39,6 +43,9 @@ RSpec.configure do |config|
   config.include SmsSpec::Matchers
 
   config.fixture_path = "#{::Rails.root}/test/fixtures"
+
+  config.include Devise::TestHelpers, :type => :controller
+  config.extend ControllerMacros, :type => :controller
 
   config.use_transactional_fixtures = false
 

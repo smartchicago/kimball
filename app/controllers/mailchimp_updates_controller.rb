@@ -21,7 +21,7 @@ class MailchimpUpdatesController < ApplicationController
   # GET /mailchimp_updates
   # GET /mailchimp_updates.json
   def index
-    @mailchimp_updates = MailchimpUpdate.latest.page(params[:page])
+    @mailchimp_updates = MailchimpUpdate.order('fired_at DESC').paginate(page: params[:page])
   end
 
   # GET /mailchimp_updates/1
@@ -60,6 +60,9 @@ class MailchimpUpdatesController < ApplicationController
           format.html { render action: 'new' }
           format.json { render json: @mailchimp_update.errors, status: :unprocessable_entity }
         end
+      else
+        Rails.logger.warn("MailchimpUpdatesController#create: Received new update with bad secret key.")
+        head '400'
       end
     else
       Rails.logger.warn('MailchimpUpdatesController#create: Received new update with bad secret key.')

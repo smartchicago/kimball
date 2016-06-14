@@ -124,7 +124,7 @@ class ReceiveTextController < ApplicationController
       message = 'I did not understand that. Please re-type your keyword.'
       session['counter'] -= 1
 
-    elsif sms_count < (session['form_length'] - 1)
+    elsif sms_count < (session['form_length'] - 2)
       @form = wufoo.form(session['formid'])
       fields = @form.flattened_fields
       id_to_store = fields[sms_count - 1]['ID']
@@ -160,11 +160,12 @@ class ReceiveTextController < ApplicationController
         session['contact'] = 'TEXT' if params['Body'].upcase.strip == 'TEXT'
       end
 
-    elsif sms_count == (session['form_length'] - 1)
+    elsif sms_count == (session['form_length'] - 2)
       @form = wufoo.form(session['formid'])
       fields = @form.flattened_fields
       session['fieldanswers'][fields[sms_count - 1]['ID']] = message_body
       session['fieldanswers'][fields[sms_count]['ID']] = session['phone_number']
+      session['fieldanswers'][fields[sms_count + 1]['ID']] = session['form_type']
       @form.submit(session['fieldanswers'])
       if session['form_type'] == 'signup'
         message = ENV['SIGNUP_SMS_MESSAGE']

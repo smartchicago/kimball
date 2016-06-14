@@ -13,7 +13,7 @@
         <dl>
 
           <dt>Verified?</dt>
-          <dd><%= best_in_place @person, :verified, as: :select, collection: %w(YES NO).map{|v| [v,v]} %></dd>
+          <dd><%= best_in_place @person, :verified %></dd>
 
           <dt>Address</dt>
           <dd><%= address_fields_to_sentence(@person) %></dd>
@@ -48,6 +48,7 @@
 
 
           <dt>Preferred participation method</dt>
+<<<<<<< HEAD
           <dd><%= best_in_place @person, :participation_type, as: :select, collection: %w(in-person remote) %></dd>
           <dt>Interviews</dt>
           <dd><%= link_to "Calendar", calendar_path(token: @person.token) %></dd>
@@ -60,6 +61,7 @@
           <dd><%= @person.v2_reservations.attended.size %></dd>
           <dt>Cancel</dt>
           <dd><%= @person.v2_reservations.cancelled.size %> </dd>
+          <dd><%= best_in_place @person, :participation_type %></dd>
         </dl>
       </div>
 
@@ -74,8 +76,8 @@
           <dd><%= best_in_place @person, :email_address %></dd>
 
           <dt>Preferred Contact Method</dt>
-          <dd><%= best_in_place @person, :preferred_contact_method, as: :select, collection: [['SMS','SMS'], ['EMAIL','EMAIL']] %></dd>
 
+          <dd><%= best_in_place @person, :preferred_contact_method, as: :select, collection: [['SMS','SMS'], ['EMAIL','EMAIL']] %></dd>
           <dt>Voted in last election?</dt>
           <dd><%= best_in_place @person, :voted, as: :select, :collection => %w(YES NO) %></dd>
 
@@ -161,7 +163,7 @@
       <% for submission in @person.submissions %>
       <a id="submission-<%= submission.id %>"></a>
       <tr>
-        <td><strong><%= submission.form_name %></strong><br/><span title="<%= submission.created_at %>"><%= time_ago_in_words submission.created_at %> ago</span><br/><span class="" style="font-size:small; color:#ccc; font-style:italic"><%= submission.ip_addr %></span></td>
+        <td><strong><%= submission.form_name %></strong><br/>Form Type: <%= submission.form_type %><br/><span title="<%= submission.created_at %>"><%= time_ago_in_words submission.created_at %> ago</span><br/><span class="" style="font-size:small; color:#ccc; font-style:italic"><%= submission.ip_addr %></span></td>
         <td>
           <table class="table table-striped">
             <% for field_id,field_desc in submission.fields do %>
