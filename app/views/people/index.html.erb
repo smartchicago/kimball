@@ -1,7 +1,13 @@
 <%- model_class = Person -%>
 <div class="row page-header">
-  <div class="span12">
+  <div class="span10">
     <h1><%=t '.title', :default => "People" %></h1>
+  </div>
+  <div class='span1'>
+   <%= link_to 'all', {}, :class => 'btn btn-mini' %>
+  </div>
+  <div class='span1'>
+   <%= link_to 'not verified', params.merge({not_verified:true}), :class => 'btn btn-mini' %>
   </div>
 </div>
 
@@ -32,7 +38,7 @@
       </thead>
       <tbody>
         <% @people.each do |person| %>
-          <tr>
+          <tr id='person-<%= person.id %>'>
             <td><%= link_to "#{person.first_name} #{person.last_name}", person_path(person) %></td>
             <td><%= address_fields_to_sentence(person) %></td>
             <td><%= best_in_place person, :geography_id %></td>
@@ -62,6 +68,12 @@
               <%= link_to t('.destroy', :default => t('helpers.links.destroy')),
                           person_path(person),
                           :method => :delete,
+                          :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                          :class => 'btn btn-mini btn-danger' %>
+                <%= link_to 'deactivate',
+                          deactivate_people_path(person),
+                          remote: true,
+                          method: :post,
                           :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                           :class => 'btn btn-mini btn-danger' %>
             </td>

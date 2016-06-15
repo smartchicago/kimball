@@ -123,6 +123,7 @@ Logan::Application.routes.draw do
   resources :people do
     collection do
       post 'create_sms'
+      post ':person_id/deactivate', action: :deactivate, as: :deactivate
     end
     resources :comments
   end

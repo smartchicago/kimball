@@ -46,8 +46,13 @@ class PeopleController < ApplicationController
   # GET /people
   # GET /people.json
   def index
+
     @verified_types = Person.uniq.pluck(:verified).select(&:present?)
-    @people = Person.paginate(page: params[:page]).order(sort_column + ' ' + sort_direction).where(active: true)
+    unless params[:not_verified]
+      @people = Person.paginate(page: params[:page]).order(sort_column + ' ' + sort_direction).where(active: true)
+    else
+      @people = Person.paginate(page: params[:page]).order(sort_column + ' ' + sort_direction).where(verified: ["NO",nil]).where(active: true)
+    end
   end
 
   # GET /people/1
@@ -67,6 +72,17 @@ class PeopleController < ApplicationController
 
   # GET /people/1/edit
   def edit
+  end
+
+  # POST /people/:person_id/deactivate
+  def deactivate
+    @person = Person.find_by_id params[:person_id]
+    @person.deactivate!('admin_interface')
+    flash[:notice] = "#{@person.full_name} deactivated"
+    respond_to do |format|
+      format.js { render text: "$('#person-#{@person.id}').remove()" }
+      format.html { redirect_to people_path }
+    end
   end
 
   # FIXME: Refactor and re-enable cop

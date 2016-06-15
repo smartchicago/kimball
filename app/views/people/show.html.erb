@@ -193,5 +193,10 @@
                 :method => 'delete',
                 :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                 :class => 'btn btn-danger' %>
+    <%= link_to 'deactivate',
+              deactivate_people_path(@person),
+              method: :post,
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
   </div>
 </div>
