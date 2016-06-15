@@ -5,7 +5,7 @@
 <table>
   <thead>
     <tr>
-      <th>Last four</th>
+      <th>Gift Card Number</th>
       <th>Expiration date</th>
       <th>Person</th>
       <th>Notes</th>
@@ -18,7 +18,7 @@
   <tbody>
     <% @gift_cards.each do |gift_card| %>
       <tr>
-        <td><%= gift_card.last_four %></td>
+        <td><%= gift_card.gift_card_number %></td>
         <td><%= gift_card.expiration_date %></td>
         <td><%= gift_card.person_id %></td>
         <td><%= gift_card.notes %></td>

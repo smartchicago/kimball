@@ -133,9 +133,9 @@
     <%= form_for([@person, @gift_card], remote: true) do |form| %>
       <%= form.hidden_field :person_id, :value => @person.id %>
       <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" } %>
-      <%= form.text_field :last_four, :placeholder => "Card Number Last 4 Digits"  %>
+      <%= form.text_field :gift_card_number, :placeholder => "Card Number"  %>
       <%= form.text_field :amount, :placeholder => "Amount" %>
-      <%= form.date_select :expiration_date %>
+      <%= form.text_field :expiration_date, :placeholder => "MM/YYYY" %>
 
       <%= form.submit 'Add Gift Card', :class => "btn" %>
     <% end %>
