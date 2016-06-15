@@ -52,9 +52,9 @@ ActiveRecord::Schema.define(version: 20160610185732) do
     t.string   "delayed_reference_type", limit: 255
   end
 
-  add_index "delayed_jobs", ["delayed_reference_type"], name: "delayed_jobs_delayed_reference_type"
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
-  add_index "delayed_jobs", ["queue"], name: "delayed_jobs_queue"
+  add_index "delayed_jobs", ["delayed_reference_type"], name: "delayed_jobs_delayed_reference_type", using: :btree
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  add_index "delayed_jobs", ["queue"], name: "delayed_jobs_queue", using: :btree
 
   create_table "events", force: :cascade do |t|
     t.string   "name",           limit: 255
@@ -286,6 +286,6 @@ ActiveRecord::Schema.define(version: 20160610185732) do
     t.text     "object_changes", limit: 4294967295
   end
 
-  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
 end
