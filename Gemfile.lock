@@ -139,6 +139,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.10.0)
       faraday (>= 0.7.4, < 0.10)
+    fast_blank (1.0.0)
     fast_stack (0.1.0)
       rake
       rake-compiler
@@ -497,6 +498,7 @@ DEPENDENCIES
   emoji!
   factory_girl_rails
   faker
+  fast_blank
   flamegraph
   gibbon (~> 2.2.3)
   gsm_encoder
@@ -561,4 +563,4 @@ DEPENDENCIES
   wuparty
 
 BUNDLED WITH
-   1.12.4
+   1.12.5

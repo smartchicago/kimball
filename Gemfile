@@ -148,6 +148,9 @@ gem 'emoji', git: 'https://github.com/cromulus/emoji', branch: 'add_replace_unic
 gem 'paper_trail'
 gem 'paper_trail-globalid'
 
+gem 'fast_blank' # blank? rewritten in c
+# gem 'faster_path' # soon!
+
 group :testing do
   # mock tests w/mocha
   gem 'mocha', require: false
