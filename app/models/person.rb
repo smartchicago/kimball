@@ -36,6 +36,8 @@
 # rubocop:disable ClassLength
 class Person < ActiveRecord::Base
 
+  #scope :signup_card_needed, -> { where (self.no_signup_card)}
+
   include Searchable
   include ExternalDataMappings
 
@@ -92,6 +94,17 @@ class Person < ActiveRecord::Base
     return false
   end
 
+  def no_signup_card
+    signup_cards = self.gift_cards.where(reason: 1)
+    if signup_cards.length > 0
+      return false
+    end
+    return self
+  end
+
+  def self.signup_cards_needed
+
+  end
 
   WUFOO_FIELD_MAPPING = {
     'Field1'   => :first_name,
@@ -285,6 +298,8 @@ class Person < ActiveRecord::Base
   def full_name
     [first_name, last_name].join(' ')
   end
+
+  
 
 end
 # rubocop:enable ClassLength

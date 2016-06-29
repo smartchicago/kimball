@@ -1,5 +1,41 @@
 <p id="notice"><%= notice %></p>
 
+<h1>Recent sign-ups who need gift cards</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Person ID</th>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Card Number</th>
+      <th>Expiration Date</th>
+      <th>Mailed?</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+  <%= form_tag gift_cards_path do %>
+  <% @new_gift_cards.each do |new_gift_card| %>
+    <tr>
+    <%= fields_for 'gift_cards[]', new_gift_card do |form| %>
+      <th><%= form.text_field :person_id %></th>
+      <th>Name</th>
+      <th>Address</th>
+      <th><%= form.text_field :gift_card_number, :placeholder => "Card Number"  %></th>
+      <th><%= form.text_field :expiration_date, :placeholder => "MM/YYYY" %></th>
+      </tr>
+      <%= form.hidden_field :amount, :value => "5.00" %>
+      <%= form.hidden_field :reason, :value => "signup" %>
+    <% end %>
+  <% end %>
+  <% end %>
+
+
+  </tbody>
+</table>
+
+
 <h1>Listing Gift Cards</h1>
 
 <table>

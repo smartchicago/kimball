@@ -30,7 +30,8 @@ RSpec.describe GiftCardsController, type: :controller do
   let(:valid_attributes) {
     {
       amount: "5.00",
-      reason: "signup"
+      reason: "signup",
+      expiration_date: "05/2020"
     }
   }
 
