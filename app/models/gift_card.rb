@@ -12,6 +12,8 @@ class GiftCard < ActiveRecord::Base
   }
 
   belongs_to :giftable, polymorphic: true, touch: true
+  belongs_to :person
+  belongs_to :user
   validates_presence_of :amount
   validates_presence_of :reason
   validates_format_of :expiration_date, with: /\A(0|1)([0-9])\/(2[0-9]{3})\z/i

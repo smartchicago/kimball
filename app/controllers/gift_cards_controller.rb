@@ -7,12 +7,12 @@ class GiftCardsController < ApplicationController
     @gift_cards = GiftCard.all
     #@recent_signups = Person.order('created_at DESC').where('signup_at > :startdate AND verified LIKE :verify', { startdate: 1.year.ago, verify: '%Verified%' })
     @recent_signups = Person.order('created_at DESC')
-    #@signup_card_needed = 
+    #@signup_card_needed =
     @new_gift_cards = []
     @recent_signups.length.times do
       @new_gift_cards << GiftCard.new
     end
-    
+
   end
 
   # GET /gift_cards/1
@@ -37,6 +37,7 @@ class GiftCardsController < ApplicationController
       if @gift_card.with_user(current_user).save
         format.js   {}
         format.json
+        format.html {}
       else
         format.html { render action: 'edit' }
         format.json { render json: @gift_card.errors, status: :unprocessable_entity }
