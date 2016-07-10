@@ -108,6 +108,12 @@ RSpec.describe GiftCardsController, type: :controller do
         post :create, {:gift_card => invalid_attributes}
         expect(response).to render_template("new")
       end
+
+      it 'does not create a second signup giftcard' do
+        post :create, {:gift_card => valid_attributes}
+        post :create, {:gift_card => valid_attributes}
+        expect(response).to render_template("new")
+        expect(GiftCard.count).to eq(1)
     end
   end
 

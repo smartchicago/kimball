@@ -39,6 +39,7 @@ class GiftCardsController < ApplicationController
         format.json
         format.html {}
       else
+        format.js { render text: "alert('#{@gift_card.errors.messages}');" }
         format.html { render action: 'edit' }
         format.json { render json: @gift_card.errors, status: :unprocessable_entity }
         #format.js { render text: "alert('Oh no! There was a problem saving the gift card')" }

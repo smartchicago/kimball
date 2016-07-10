@@ -130,7 +130,7 @@
 <div class="row">
   <div class="span12">
     <h3>Add New Gift Card</h3>
-    <%= form_for([@person, @gift_card]) do |form| %>
+    <%= form_for([@person, @gift_card], remote: true) do |form| %>
       <% if @gift_card.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@gift_card.errors.count, "error") %> prohibited this gift_card from being saved:</h2>
