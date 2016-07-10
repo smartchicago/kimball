@@ -5,9 +5,7 @@ class GiftCardsController < ApplicationController
   # GET /gift_cards.json
   def index
     @gift_cards = GiftCard.all
-    #@recent_signups = Person.order('created_at DESC').where('signup_at > :startdate AND verified LIKE :verify', { startdate: 1.year.ago, verify: '%Verified%' })
-    @recent_signups = Person.order('created_at DESC')
-    #@signup_card_needed =
+    @recent_signups = Person.no_signup_card
     @new_gift_cards = []
     @recent_signups.length.times do
       @new_gift_cards << GiftCard.new
