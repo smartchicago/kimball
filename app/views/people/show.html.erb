@@ -149,6 +149,48 @@
   </div>
 </div>
 
+<div class="row">
+  <div class="span12">
+    <h3>Add New Gift Card</h3>
+    <%= form_for([@person, @gift_card], remote: true) do |form| %>
+      <% if @gift_card.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@gift_card.errors.count, "error") %> prohibited this gift_card from being saved:</h2>
+
+      <ul>
+      <% @gift_card.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+      <%= form.hidden_field :person_id, :value => @person.id %>
+      <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" } %>
+      <%= form.text_field :gift_card_number, :placeholder => "Card Number"  %>
+      <%= form.text_field :amount, :placeholder => "Amount" %>
+      <%= form.text_field :expiration_date, :placeholder => "MM/YYYY" %>
+
+      <%= form.submit 'Add Gift Card', :class => "btn" %>
+    <% end %>
+  </div>
+  <div class="span12">
+    <h3>Gift Cards</h3>
+    <table class="table">
+      <tr>
+        <th>Reason</th>
+        <th>Association</th>
+        <th>Card Number</th>
+        <th>Expiration Date</th>
+        <th>Amount</th>
+      </tr>
+      <tbody id="gift_cards">
+        <%= render partial: 'gift_cards/gift_card', collection: @person.gift_cards.order("created_at DESC") %>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
 
 <div class="row">
   <div class="span12">

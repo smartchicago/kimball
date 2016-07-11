@@ -126,6 +126,7 @@ gem 'best_in_place', '~> 3.0.1'
 # validation for new persons on the public page.
 gem 'jquery-validation-rails'
 
+
 # for automatically populating tags
 gem 'twitter-typeahead-rails'
 
@@ -150,6 +151,9 @@ gem 'paper_trail-globalid'
 
 gem 'fast_blank' # blank? rewritten in c
 # gem 'faster_path' # soon!
+
+# storing money with money-rails
+gem 'money-rails'
 
 group :testing do
   # mock tests w/mocha

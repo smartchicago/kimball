@@ -1,4 +1,5 @@
 Logan::Application.routes.draw do
+  resources :gift_cards
   resources :mailchimp_updates
   namespace :public do
     resources :people, only: [:new, :create, :deactivate] do
@@ -126,6 +127,7 @@ Logan::Application.routes.draw do
       post ':person_id/deactivate', action: :deactivate, as: :deactivate
     end
     resources :comments
+    resources :gift_cards
   end
   # post "people/create_sms"
 

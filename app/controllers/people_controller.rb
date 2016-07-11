@@ -59,6 +59,7 @@ class PeopleController < ApplicationController
   # GET /people/1.json
   def show
     @comment = Comment.new commentable: @person
+    @gift_card = GiftCard.new
     @reservation = Reservation.new person: @person
     @tagging = Tagging.new taggable: @person
     @outgoingmessages = TwilioMessage.where(to: @person.normalized_phone_number).where.not(wufoo_formid: nil)

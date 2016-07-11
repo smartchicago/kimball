@@ -37,6 +37,7 @@
 # rubocop:disable ClassLength
 class Person < ActiveRecord::Base
   has_paper_trail
+
   include Searchable
   include ExternalDataMappings
   include Neighborhoods
@@ -46,6 +47,8 @@ class Person < ActiveRecord::Base
 
   has_many :comments, as: :commentable, dependent: :destroy
   has_many :submissions, dependent: :destroy
+
+  has_many :gift_cards
 
   has_many :reservations, dependent: :destroy
   has_many :events, through: :reservations
@@ -91,7 +94,31 @@ class Person < ActiveRecord::Base
     unless: proc { |person| person.phone_number.present? }
   validates :email_address, email: true, allow_blank: true, uniqueness: true
 
+  scope :no_signup_card, -> { where('id NOT IN (SELECT DISTINCT(person_id) FROM gift_cards where gift_cards.reason = 1)') }
+
+
+
   self.per_page = 15
+
+  def signup_gc_sent
+    signup_cards = self.gift_cards.where(reason: 1)
+    if signup_cards.length > 0
+      return true
+    end
+    return false
+  end
+
+  def no_signup_card
+    signup_cards = self.gift_cards.where(reason: 1)
+    if signup_cards.length > 0
+      return false
+    end
+    return self
+  end
+
+  def self.signup_cards_needed
+
+  end
 
   WUFOO_FIELD_MAPPING = {
     'Field1'   => :first_name,
@@ -193,23 +220,23 @@ class Person < ActiveRecord::Base
 
             gibbon = Gibbon::Request.new
             mailchimpSend = gibbon.lists(Logan::Application.config.cut_group_mailchimp_list_id).members(Digest::MD5.hexdigest(email_address.downcase)).upsert(
-              body: { email_address: email_address.downcase,
-                      status: 'subscribed',
-                      merge_fields: { FNAME: first_name || '',
-                                      LNAME: last_name || '',
-                                      MMERGE3: geography_id || '',
-                                      MMERGE4: postal_code || '',
-                                      MMERGE5: participation_type || '',
-                                      MMERGE6: voted || '',
-                                      MMERGE7: called_311 || '',
-                                      MMERGE8: primary_device_description || '',
-                                      MMERGE9: secondary_device_id || '',
-                                      MMERGE10: secondary_device_description || '',
-                                      MMERGE11: primary_connection_id || '',
-                                      MMERGE12: primary_connection_description || '',
-                                      MMERGE13: primary_device_id || '',
-                                      MMERGE14: preferred_contact_method || '' }
-               })
+                body: {email_address: email_address.downcase,
+                 status: "subscribed",
+                 merge_fields: { FNAME: first_name || "",
+                        LNAME: last_name || "",
+                        MMERGE3: geography_id || "",
+                        MMERGE4: postal_code || "",
+                        MMERGE5: participation_type || "",
+                        MMERGE6: voted || "",
+                        MMERGE7: called_311 || "",
+                        MMERGE8: primary_device_description || "",
+                        MMERGE9: secondary_device_id || "",
+                        MMERGE10: secondary_device_description || "",
+                        MMERGE11: primary_connection_id || "",
+                        MMERGE12: primary_connection_description || "",
+                        MMERGE13: primary_device_id || "",
+                        MMERGE14: preferred_contact_method || "" }
+                 })
 
             Rails.logger.info("[People->sendToMailChimp] Sent #{id} to Mailchimp: #{mailchimpSend}")
           rescue Gibbon::MailChimpError => e
