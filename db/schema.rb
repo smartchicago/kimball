@@ -71,15 +71,6 @@ ActiveRecord::Schema.define(version: 20160710235225) do
     t.integer  "updated_by",     limit: 4
   end
 
-<<<<<<< HEAD
-  create_table "invitation_invitees_join_table", force: :cascade do |t|
-    t.integer  "person_id",           limit: 4
-    t.integer  "event_invitation_id", limit: 4
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-  end
-
-=======
   create_table "gift_cards", force: :cascade do |t|
     t.integer  "gift_card_number", limit: 4
     t.string   "expiration_date",  limit: 255
@@ -98,7 +89,13 @@ ActiveRecord::Schema.define(version: 20160710235225) do
   add_index "gift_cards", ["giftable_type", "giftable_id"], name: "index_gift_cards_on_giftable_type_and_giftable_id", using: :btree
   add_index "gift_cards", ["reason"], name: "gift_reason_index", using: :btree
 
->>>>>>> bill_giftcards
+  create_table "invitation_invitees_join_table", force: :cascade do |t|
+    t.integer  "person_id",           limit: 4
+    t.integer  "event_invitation_id", limit: 4
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
   create_table "mailchimp_exports", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.text     "body",       limit: 65535

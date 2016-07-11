@@ -143,6 +143,8 @@ GEM
     fast_stack (0.1.0)
       rake
       rake-compiler
+    faster_path (0.1.8)
+      ffi (~> 1.9)
     ffi (1.9.10)
     flamegraph (0.1.0)
       fast_stack
@@ -510,6 +512,7 @@ DEPENDENCIES
   factory_girl_rails
   faker
   fast_blank
+  faster_path
   flamegraph
   gibbon (~> 2.2.3)
   gsm_encoder
@@ -530,7 +533,7 @@ DEPENDENCIES
   memory_profiler
   memory_test_fix
   mocha
-  mock-redis
+  mock_redis
   money-rails
   mysql2 (~> 0.3.18)
   newrelic_rpm
