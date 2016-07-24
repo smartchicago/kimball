@@ -5,14 +5,12 @@ class GiftCardsController < ApplicationController
   # GET /gift_cards.json
   def index
     @gift_cards = GiftCard.all
-    #@recent_signups = Person.order('created_at DESC').where('signup_at > :startdate AND verified LIKE :verify', { startdate: 1.year.ago, verify: '%Verified%' })
-    @recent_signups = Person.order('created_at DESC')
-    #@signup_card_needed = 
+    @recent_signups = Person.no_signup_card
     @new_gift_cards = []
     @recent_signups.length.times do
       @new_gift_cards << GiftCard.new
     end
-    
+
   end
 
   # GET /gift_cards/1
@@ -37,7 +35,9 @@ class GiftCardsController < ApplicationController
       if @gift_card.with_user(current_user).save
         format.js   {}
         format.json
+        format.html {}
       else
+        format.js { render text: "alert('#{@gift_card.errors.messages}');" }
         format.html { render action: 'edit' }
         format.json { render json: @gift_card.errors, status: :unprocessable_entity }
         #format.js { render text: "alert('Oh no! There was a problem saving the gift card')" }

@@ -85,6 +85,10 @@ class Person < ActiveRecord::Base
     unless: proc { |person| person.phone_number.present? }
   #validates :email_address, email: true, allow_blank: true, uniqueness: true
 
+  scope :no_signup_card, -> { where('id NOT IN (SELECT DISTINCT(person_id) FROM gift_cards where gift_cards.reason = 1)') }
+
+
+
   self.per_page = 15
 
   
@@ -202,7 +206,7 @@ scope :signup_card_needed, lambda { self.joins(:gift_cards).where("gift_cards.re
 
             gibbon = Gibbon::Request.new
             mailchimpSend = gibbon.lists(Logan::Application.config.cut_group_mailchimp_list_id).members(Digest::MD5.hexdigest(email_address.downcase)).upsert(
-                body: {email_address: email_address.downcase, 
+                body: {email_address: email_address.downcase,
                  status: "subscribed",
                  merge_fields: { FNAME: first_name || "",
                         LNAME: last_name || "",
@@ -303,7 +307,7 @@ scope :signup_card_needed, lambda { self.joins(:gift_cards).where("gift_cards.re
     [first_name, last_name].join(' ')
   end
 
-  
+
 
 end
 # rubocop:enable ClassLength

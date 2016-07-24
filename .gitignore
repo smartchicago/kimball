@@ -30,3 +30,4 @@
 .vagrant
 
 Procfile
+.DS_Store
