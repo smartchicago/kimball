@@ -48,6 +48,7 @@ class Person < ActiveRecord::Base
   has_many :submissions, dependent: :destroy
 
   has_many :gift_cards
+  accepts_nested_attributes_for :gift_cards
 
   has_many :reservations, dependent: :destroy
   has_many :events, through: :reservations
@@ -85,6 +86,9 @@ class Person < ActiveRecord::Base
   #validates :email_address, email: true, allow_blank: true, uniqueness: true
 
   self.per_page = 15
+
+  
+scope :signup_card_needed, lambda { self.joins(:gift_cards).where("gift_cards.reason !=1") }
 
   def signup_gc_sent
     signup_cards = self.gift_cards.where(reason: 1)
