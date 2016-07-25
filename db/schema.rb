@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160710235225) do
+ActiveRecord::Schema.define(version: 20160725123349) do
 
   create_table "applications", force: :cascade do |t|
     t.string   "name",         limit: 255
@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(version: 20160710235225) do
   end
 
   create_table "gift_cards", force: :cascade do |t|
-    t.integer  "gift_card_number", limit: 4
+    t.integer  "gift_card_number", limit: 8
     t.string   "expiration_date",  limit: 255
     t.integer  "person_id",        limit: 4
     t.string   "notes",            limit: 255
