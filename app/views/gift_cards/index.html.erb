@@ -7,7 +7,8 @@
       <th>Address</th>
       <th>Card Number</th>
       <th>Expiration Date</th>
-      <th>Create?</th>
+      <th>Amount</th>
+      <th>Mailed?</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -30,8 +31,9 @@
             <td><%= address_fields_to_sentence(@recent_signups[index]) %></td>
             <td id="new-cardnumber-<%= @recent_signups[index].id %>"><%= form.text_field :gift_card_number, :placeholder => "Card Number"  %></td>
             <td id="new-expirationdate-<%= @recent_signups[index].id %>"><%= form.text_field :expiration_date, :placeholder => "MM/YYYY" %></td>
+            <td><%= form.text_field :amount, :value => "5.00", :readonly => true, :class => "span1" %></td>
             <%= form.hidden_field :reason, value: "signup" %>
-            <%= form.hidden_field :amount, value: "5.00" %>
+            
             <td id="new-submit-<%= @recent_signups[index].id %>"><%= form.submit 'Add Gift Card', :class => "btn" %></td>
         <% end %>
       </tr>
@@ -45,24 +47,30 @@
 <table class="table table-striped">
   <thead>
     <tr>
+      <th>Gift Card ID</th>
       <th>Person ID</th>
       <th>Name</th>
       <th>Reason</th>
+      <th>Giftable ID</th>
       <th>Card Number</th>
       <th>Expiration Date</th>
+      <th>Amount</th>
       <th>Edit?</th>
       <th colspan="3"></th>
     </tr>
   </thead>
-
+  
   <tbody id="gift_cards">
     <% @gift_cards.each do |gift_card| %>
       <tr>
+        <td><%= gift_card.id %></td>
         <td><%= gift_card.person_id %></td>
         <td><%= gift_card.person.full_name %></td>
         <td><%= gift_card.reason %></td>
+        <td><%= gift_card.giftable_id %></td>
         <td><%= gift_card.gift_card_number %></td>
         <td><%= gift_card.expiration_date %></td>
+        <td><%= gift_card.amount %></td>
         <td><%= link_to 'Show', gift_card %></td>
         <td><%= link_to 'Edit', edit_gift_card_path(gift_card) %></td>
         <td><%= link_to 'Destroy', gift_card, method: :delete, data: { confirm: 'Are you sure?' } %></td>

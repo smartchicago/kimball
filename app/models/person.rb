@@ -112,9 +112,6 @@ scope :signup_card_needed, lambda { self.joins(:gift_cards).where("gift_cards.re
     return self
   end
 
-  def self.signup_cards_needed
-
-  end
 
   WUFOO_FIELD_MAPPING = {
     'Field1'   => :first_name,

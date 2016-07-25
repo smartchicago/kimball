@@ -153,14 +153,19 @@
   </div>
   <div class="span12">
     <h3>Gift Cards</h3>
-    <table class="table">
+    <table class="table table-striped">
       <tr>
+        <th>Gift Card ID</th>
+        <th>Person ID</th>
+        <th>Name</th>
         <th>Reason</th>
-        <th>Association</th>
+        <th>Giftable ID</th>
         <th>Card Number</th>
         <th>Expiration Date</th>
         <th>Amount</th>
+        <th colspan="3"></th>
       </tr>
+
       <tbody id="gift_cards">
         <%= render partial: 'gift_cards/gift_card', collection: @person.gift_cards.order("created_at DESC") %>
       </tbody>
