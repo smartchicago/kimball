@@ -4,7 +4,7 @@ class GiftCardsController < ApplicationController
   # GET /gift_cards
   # GET /gift_cards.json
   def index
-    @gift_cards = GiftCard.all
+    @gift_cards = GiftCard.includes(:person).all
     @recent_signups = Person.no_signup_card
     @new_gift_cards = []
     @recent_signups.length.times do

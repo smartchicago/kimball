@@ -1,2 +1,5 @@
 $("<%= escape_javascript(render partial: 'gift_cards/gift_card', locals: { gift_card: @gift_card } ) %>").prependTo("#gift_cards");
+$('td#new-submit-<%= @gift_card.person_id %>').html("Created!");
+$('td#new-cardnumber-<%= @gift_card.person_id %>').html('<%= @gift_card.gift_card_number %>');
+$('td#new-expirationdate-<%= @gift_card.person_id %>').html('<%= @gift_card.expiration_date %>');
 $("#gift_card_content").val("");

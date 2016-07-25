@@ -1,8 +1,5 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Recent sign-ups who need gift cards</h1>
-
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Person ID</th>
@@ -10,56 +7,62 @@
       <th>Address</th>
       <th>Card Number</th>
       <th>Expiration Date</th>
-      <th>Mailed?</th>
+      <th>Create?</th>
       <th colspan="3"></th>
     </tr>
   </thead>
   <tbody>
-  <%= form_tag gift_cards_path do %>
-  <% @new_gift_cards.each do |new_gift_card| %>
-    <tr>
-    <%= fields_for 'gift_cards[]', new_gift_card do |form| %>
-      <th><%= form.text_field :person_id %></th>
-      <th>Name</th>
-      <th>Address</th>
-      <th><%= form.text_field :gift_card_number, :placeholder => "Card Number"  %></th>
-      <th><%= form.text_field :expiration_date, :placeholder => "MM/YYYY" %></th>
+    <% @new_gift_cards.each_with_index do |gift_card, index| %>
+      <tr>
+        <%= form_for([@recent_signups[index], gift_card], remote: true) do |form| %>
+            <% if gift_card.errors.any? %>
+              <div id="error_explanation">
+                <h2><%= pluralize(gift_card.errors.count, "error") %> prohibited this gift_card from being saved:</h2>
+                <ul>
+                <% gift_card.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+                </ul>
+              </div>
+            <% end %>
+            <td><%= form.text_field :person_id, :value => @recent_signups[index].id, :readonly => true, :class => "span1" %></td>
+            <td><%= @recent_signups[index].full_name %></td>
+            <td><%= address_fields_to_sentence(@recent_signups[index]) %></td>
+            <td id="new-cardnumber-<%= @recent_signups[index].id %>"><%= form.text_field :gift_card_number, :placeholder => "Card Number"  %></td>
+            <td id="new-expirationdate-<%= @recent_signups[index].id %>"><%= form.text_field :expiration_date, :placeholder => "MM/YYYY" %></td>
+            <%= form.hidden_field :reason, value: "signup" %>
+            <%= form.hidden_field :amount, value: "5.00" %>
+            <td id="new-submit-<%= @recent_signups[index].id %>"><%= form.submit 'Add Gift Card', :class => "btn" %></td>
+        <% end %>
       </tr>
-      <%= form.hidden_field :amount, :value => "5.00" %>
-      <%= form.hidden_field :reason, :value => "signup" %>
     <% end %>
-  <% end %>
-  <% end %>
-
-
   </tbody>
 </table>
 
 
 <h1>Listing Gift Cards</h1>
 
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
-      <th>Gift Card Number</th>
-      <th>Expiration date</th>
-      <th>Person</th>
-      <th>Notes</th>
-      <th>Created by</th>
+      <th>Person ID</th>
+      <th>Name</th>
       <th>Reason</th>
+      <th>Card Number</th>
+      <th>Expiration Date</th>
+      <th>Edit?</th>
       <th colspan="3"></th>
     </tr>
   </thead>
 
-  <tbody>
+  <tbody id="gift_cards">
     <% @gift_cards.each do |gift_card| %>
       <tr>
+        <td><%= gift_card.person_id %></td>
+        <td><%= gift_card.person.full_name %></td>
+        <td><%= gift_card.reason %></td>
         <td><%= gift_card.gift_card_number %></td>
         <td><%= gift_card.expiration_date %></td>
-        <td><%= gift_card.person_id %></td>
-        <td><%= gift_card.notes %></td>
-        <td><%= gift_card.created_by %></td>
-        <td><%= gift_card.reason %></td>
         <td><%= link_to 'Show', gift_card %></td>
         <td><%= link_to 'Edit', edit_gift_card_path(gift_card) %></td>
         <td><%= link_to 'Destroy', gift_card, method: :delete, data: { confirm: 'Are you sure?' } %></td>
