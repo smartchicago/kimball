@@ -3,6 +3,7 @@
   <thead>
     <tr>
       <th>Person ID</th>
+      <th>Verified</th>
       <th>Name</th>
       <th>Address</th>
       <th>Card Number</th>
@@ -27,6 +28,7 @@
               </div>
             <% end %>
             <td><%= form.text_field :person_id, :value => @recent_signups[index].id, :readonly => true, :class => "span1" %></td>
+            <td><%= @recent_signups[index].verified %></td>
             <td><%= @recent_signups[index].full_name %></td>
             <td><%= address_fields_to_sentence(@recent_signups[index]) %></td>
             <td id="new-cardnumber-<%= @recent_signups[index].id %>"><%= form.text_field :gift_card_number, :placeholder => "Card Number"  %></td>
@@ -59,7 +61,7 @@
       <th colspan="3"></th>
     </tr>
   </thead>
-  
+
   <tbody id="gift_cards">
     <% @gift_cards.each do |gift_card| %>
       <tr>
