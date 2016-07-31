@@ -146,7 +146,7 @@
       <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" } %>
       <%= form.text_field :gift_card_number, :placeholder => "Card Number"  %>
       <%= form.text_field :amount, :placeholder => "Amount" %>
-      <%= form.text_field :expiration_date, :placeholder => "MM/YYYY" %>
+      <%= form.text_field :expiration_date, :placeholder => "MM/YY" %>
 
       <%= form.submit 'Add Gift Card', :class => "btn" %>
     <% end %>
