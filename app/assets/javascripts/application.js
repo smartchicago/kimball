@@ -20,6 +20,7 @@
 //= require jquery.validate
 //= require jquery.validate.additional-methods
 //= require_tree .
+//= require maskedinput
 
 $(document).ready(function() {
   /* Activating Best In Place */

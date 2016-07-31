@@ -32,7 +32,7 @@
             <td><%= @recent_signups[index].full_name %></td>
             <td><%= address_fields_to_sentence(@recent_signups[index]) %></td>
             <td id="new-cardnumber-<%= @recent_signups[index].id %>"><%= form.text_field :gift_card_number, :placeholder => "Card Number"  %></td>
-            <td id="new-expirationdate-<%= @recent_signups[index].id %>"><%= form.text_field :expiration_date, :placeholder => "MM/YYYY" %></td>
+            <td id="new-expirationdate-<%= @recent_signups[index].id %>"><%= form.text_field :expiration_date, :placeholder => "MM/YY" %></td>
             <td><%= form.text_field :amount, :value => "5.00", :readonly => true, :class => "span1" %></td>
             <%= form.hidden_field :reason, value: "signup" %>
             

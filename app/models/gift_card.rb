@@ -17,7 +17,7 @@ class GiftCard < ActiveRecord::Base
   validates_presence_of :amount
   validates_presence_of :reason
 
-  validates_format_of :expiration_date, with: /\A(0|1)([0-9])\/(2[0-9]{3})\z/i
+  validates_format_of :expiration_date, with: /\A(0|1)([0-9])\/([0-9]{2})\z/i
 
   validates_uniqueness_of :gift_card_number
   validates_uniqueness_of :reason, scope: :person_id, if: "reason == 'signup'"

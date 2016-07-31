@@ -123,6 +123,9 @@ gem 'jquery-validation-rails'
 # storing money with money-rails
 gem 'money-rails'
 
+# masked inputs
+gem 'maskedinput-rails'
+
 group :testing do
   # mock tests w/mocha
   gem 'mocha', :require => false
