@@ -1,3 +1,5 @@
+require 'csv'
+
 class GiftCardsController < ApplicationController
   before_action :set_gift_card, only: [:show, :edit, :update, :destroy]
 
@@ -9,6 +11,44 @@ class GiftCardsController < ApplicationController
     @new_gift_cards = []
     @recent_signups.length.times do
       @new_gift_cards << GiftCard.new
+    end
+
+    respond_to do |format|
+      format.html {}
+      format.csv { render text: @gift_cards.to_csv }
+      # format.csv do
+      #   fields = Person.column_names
+      #   fields.push("tags")
+      #   output = CSV.generate do |csv|
+      #     # Generate the headers
+      #     csv << fields.map(&:titleize)
+
+      #     # Some fields need a helper method
+      #     human_devices = %w( primary_device_id secondary_device_id )
+      #     human_connections = %w( primary_connection_id secondary_connection_id )
+
+      #     # Write the results
+      #     @results.each do |person|
+      #       csv << fields.map do |f|
+      #         field_value = person[f]
+      #         if human_devices.include? f
+      #           human_device_type_name(field_value)
+      #         elsif human_connections.include? f
+      #           human_connection_type_name(field_value)
+      #         elsif f == "tags"
+      #           if person.tag_values.blank?
+      #             ""
+      #           else
+      #             person.tag_values.join('|')
+      #           end
+      #         else
+      #           field_value
+      #         end
+      #       end
+      #     end
+      #   end
+      #   send_data output
+      # end
     end
 
   end

@@ -1,3 +1,5 @@
+require 'csv'
+
 class GiftCard < ActiveRecord::Base
 
   monetize :amount_cents
@@ -40,4 +42,12 @@ class GiftCard < ActiveRecord::Base
     end  # exception handling
   end  # batch_create
 
+  def self.to_csv
+    CSV.generate do |csv|
+      csv << column_names
+      all.each do |gift_card|
+        csv << gift_card.attributes.values_at(*column_names)
+      end
+    end
+  end
 end
