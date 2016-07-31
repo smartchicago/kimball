@@ -35,7 +35,7 @@ class GiftCardsController < ApplicationController
       if @gift_card.with_user(current_user).save
         format.js   {}
         format.json
-        format.html {}
+        format.html { redirect_to @gift_card, notice: 'Gift Card was successfully created.'  }
       else
         format.js { render text: "alert('#{@gift_card.errors.messages}');" }
         format.html { render action: 'edit' }
