@@ -72,15 +72,14 @@ class GiftCardsController < ApplicationController
   def create
     @gift_card = GiftCard.new(gift_card_params)
     respond_to do |format|
-      if @gift_card.with_user(current_user).save
-        format.js   {}
-        format.json
+      if @create_result = @gift_card.with_user(current_user).save
+        format.js {}
+        format.json {}
         format.html { redirect_to @gift_card, notice: 'Gift Card was successfully created.'  }
       else
-        format.js { render text: "alert('#{@gift_card.errors.messages}');" }
+        format.js {}
         format.html { render action: 'edit' }
         format.json { render json: @gift_card.errors, status: :unprocessable_entity }
-        #format.js { render text: "alert('Oh no! There was a problem saving the gift card')" }
       end
     end
 
