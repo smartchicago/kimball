@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.2.4'
+ruby '2.2.5'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.0'
 
@@ -10,6 +10,8 @@ gem 'mysql2'
 gem 'redis' # ephemeral storage. used for expiring wit.ai contexts
 
 gem 'validates_overlap' # to ensure we don't double book people
+
+gem 'rails_12factor'
 
 gem 'mail', '2.6.3'
 
