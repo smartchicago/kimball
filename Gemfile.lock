@@ -143,8 +143,6 @@ GEM
     fast_stack (0.1.0)
       rake
       rake-compiler
-    faster_path (0.1.8)
-      ffi (~> 1.9)
     ffi (1.9.10)
     flamegraph (0.1.0)
       fast_stack
@@ -225,9 +223,6 @@ GEM
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     memory_profiler (0.9.6)
-    memory_test_fix (1.3.0)
-      activerecord (>= 4.0.0, < 4.99.0)
-      railties (>= 4.0.0, < 4.99.0)
     metaclass (0.0.4)
     method_source (0.8.2)
     mime-types (1.25.1)
@@ -403,7 +398,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sqlite3 (1.3.11)
     stackprof (0.2.7)
     term-ansicolor (1.3.2)
       tins (~> 1.0)
@@ -512,7 +506,6 @@ DEPENDENCIES
   factory_girl_rails
   faker
   fast_blank
-  faster_path
   flamegraph
   gibbon (~> 2.2.3)
   gsm_encoder
@@ -526,12 +519,10 @@ DEPENDENCIES
   holder_rails
   icalendar
   jbuilder (~> 1.0.1)
-  jdbc-sqlite3
   jquery-rails
   jquery-validation-rails
   mail (= 2.6.3)
   memory_profiler
-  memory_test_fix
   mocha
   mock_redis
   money-rails
@@ -556,7 +547,6 @@ DEPENDENCIES
   sass-rails
   shoulda-matchers (~> 3.1.1)
   sms-spec
-  sqlite3
   stackprof
   therubyracer
   timecop

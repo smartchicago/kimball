@@ -150,7 +150,7 @@ gem 'paper_trail'
 gem 'paper_trail-globalid'
 
 gem 'fast_blank' # blank? rewritten in c
-gem 'faster_path' # soon! path, rewitted in rust. requires rust compiler
+#gem 'faster_path' # soon! path, rewitted in rust. requires rust compiler
 
 # storing money with money-rails
 gem 'money-rails'
@@ -159,11 +159,11 @@ group :testing do
   # mock tests w/mocha
   gem 'mocha', require: false
 
-  gem 'sqlite3', platform: [:ruby, :mswin, :mingw]
+  #gem 'sqlite3', platform: [:ruby, :mswin, :mingw]
 
   # for JRuby
-  gem 'jdbc-sqlite3', platform: :jruby
-  gem 'memory_test_fix' # in memory DB, for the speedy
+  #gem 'jdbc-sqlite3', platform: :jruby
+  #gem 'memory_test_fix' # in memory DB, for the speedy
 
   # generate fake data w/faker: http://rubydoc.info/github/stympy/faker/master/frames
   gem 'faker'
