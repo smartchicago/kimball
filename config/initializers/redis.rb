@@ -1,5 +1,4 @@
-if ENV['REDIS_URL'].nil?
-
+if ENV['REDIS_URL'].blank?
   Redis.current = Redis.new(:host => 'localhost', :port => 6379)
 else
   Redis.current = Redis.new(url: ENV['REDIS_URL'])
