@@ -5,7 +5,7 @@ gem 'rails', '~> 4.2.0'
 
 # gem 'pg' # soooooon!
 # must use this version of mysql2 for rails 4.0.0
-gem 'mysql2', '~> 0.3.18'
+gem 'mysql2'
 
 gem 'redis' # ephemeral storage. used for expiring wit.ai contexts
 
@@ -163,7 +163,7 @@ group :testing do
 
   # for JRuby
   #gem 'jdbc-sqlite3', platform: :jruby
-  #gem 'memory_test_fix' # in memory DB, for the speedy
+  gem 'memory_test_fix' # in memory DB, for the speedy
 
   # generate fake data w/faker: http://rubydoc.info/github/stympy/faker/master/frames
   gem 'faker'
