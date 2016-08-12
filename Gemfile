@@ -1,15 +1,17 @@
 source 'https://rubygems.org'
-
+ruby '2.2.5'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.0'
 
 # gem 'pg' # soooooon!
 # must use this version of mysql2 for rails 4.0.0
-gem 'mysql2', '~> 0.3.18'
+gem 'mysql2'
 
 gem 'redis' # ephemeral storage. used for expiring wit.ai contexts
 
 gem 'validates_overlap' # to ensure we don't double book people
+
+gem 'rails_12factor'
 
 gem 'mail', '2.6.3'
 
@@ -159,10 +161,10 @@ group :testing do
   # mock tests w/mocha
   gem 'mocha', require: false
 
-  gem 'sqlite3', platform: [:ruby, :mswin, :mingw]
+  #gem 'sqlite3', platform: [:ruby, :mswin, :mingw]
 
   # for JRuby
-  gem 'jdbc-sqlite3', platform: :jruby
+  #gem 'jdbc-sqlite3', platform: :jruby
   gem 'memory_test_fix' # in memory DB, for the speedy
 
   # generate fake data w/faker: http://rubydoc.info/github/stympy/faker/master/frames

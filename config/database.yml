@@ -24,7 +24,10 @@ test:
 
 staging:
   adapter: mysql2
-  database: staging
+  database: <%= ENV['MYSQL_DATABASE'] %>
+  host: <%= ENV['MYSQL_HOST'] %>
+  username: <%= ENV['MYSQL_USER'] %>
+  password: <%= ENV['MYSQL_PWD'] %>
   pool: 5
   timeout: 5000
 
