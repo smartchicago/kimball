@@ -118,9 +118,11 @@
     <tr>
         <th>Campaign Name</th>
     </tr>
-    <% for message in @outgoingmessages %>
+    <% @twilio_wufoo_forms.each do |form| %>
       <tr>
-      <td><%= TwilioWufoo.where(id: message.wufoo_formid).last.name %></td>
+        <td>
+          <%= form.name %>
+        </td>
       </tr>
     <% end %>
     </table>

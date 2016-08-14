@@ -21,7 +21,8 @@ class PeopleController < ApplicationController
     @reservation = Reservation.new person: @person
     @tagging = Tagging.new taggable: @person
     @outgoingmessages = TwilioMessage.where(to: @person.normalized_phone_number).where.not(wufoo_formid: nil)
-    @outgoingmessages = @outgoingmessages.to_a.uniq { |p| p.wufoo_formid }
+    @twilio_wufoo_formids = @outgoingmessages.pluck(:wufoo_formid).uniq
+    @twilio_wufoo_forms = TwilioWufoo.where(id: @twilio_wufoo_formids)
   end
 
   # GET /people/new
