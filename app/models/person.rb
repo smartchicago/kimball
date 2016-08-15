@@ -88,13 +88,9 @@ class Person < ActiveRecord::Base
   #validates :email_address, email: true, allow_blank: true, uniqueness: true
 
   scope :no_signup_card, -> { where('id NOT IN (SELECT DISTINCT(person_id) FROM gift_cards where gift_cards.reason = 1)') }
-
-
+  scope :signup_card_needed, lambda { self.joins(:gift_cards).where("gift_cards.reason !=1") }
 
   self.per_page = 15
-
-  
-scope :signup_card_needed, lambda { self.joins(:gift_cards).where("gift_cards.reason !=1") }
 
   def signup_gc_sent
     signup_cards = self.gift_cards.where(reason: 1)
@@ -103,15 +99,6 @@ scope :signup_card_needed, lambda { self.joins(:gift_cards).where("gift_cards.re
     end
     return false
   end
-
-  def no_signup_card
-    signup_cards = self.gift_cards.where(reason: 1)
-    if signup_cards.length > 0
-      return false
-    end
-    return self
-  end
-
 
   WUFOO_FIELD_MAPPING = {
     'Field1'   => :first_name,
