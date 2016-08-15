@@ -45,7 +45,7 @@ class GiftCard < ActiveRecord::Base
   def self.to_csv
     CSV.generate do |csv|
       #csv << column_names
-      csv_column_names =  ['id', 'gift_card_number', 'expiration_date', 'reason']
+      csv_column_names =  ['id', 'batch_id', 'gift_card_number', 'expiration_date', 'reason']
       csv << csv_column_names
       all.each do |gift_card|
         csv << gift_card.attributes.values_at(*csv_column_names)
