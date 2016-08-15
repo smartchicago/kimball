@@ -58,6 +58,7 @@
       <th>Card Number</th>
       <th>Expiration Date</th>
       <th>Amount</th>
+      <th>Created On</th>
       <th>Edit?</th>
       <th colspan="3"></th>
     </tr>
@@ -73,7 +74,8 @@
         <td><%= gift_card.giftable_id %></td>
         <td><%= gift_card.gift_card_number %></td>
         <td><%= gift_card.expiration_date %></td>
-        <td><%= gift_card.amount %></td>
+        <td><%= humanized_money_with_symbol gift_card.amount %></td>
+        <td><%= gift_card.created_at.strftime('%m/%d/%Y') %></td>
         <td><%= link_to 'Show', gift_card %></td>
         <td><%= link_to 'Edit', edit_gift_card_path(gift_card) %></td>
         <td><%= link_to 'Destroy', gift_card, method: :delete, data: { confirm: 'Are you sure?' } %></td>
