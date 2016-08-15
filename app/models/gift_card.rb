@@ -21,8 +21,8 @@ class GiftCard < ActiveRecord::Base
 
   validates_format_of :expiration_date, with: /\A(0|1)([0-9])\/([0-9]{2})\z/i
 
-  validates_uniqueness_of :gift_card_number
-  validates_format_of :gift_card_number, with: /\A([0-9]){4}-([0-9]){4}-([0-9]){4}-([0-9]){4}\z/i
+  validates_uniqueness_of :gift_card_number, :scope => :batch_id
+  validates_format_of :gift_card_number, with: /\A([0-9]){5}\z/i
   validates_uniqueness_of :reason, scope: :person_id, if: "reason == 'signup'"
   # Need to add validation to limit 1 signup per person
 
@@ -44,9 +44,11 @@ class GiftCard < ActiveRecord::Base
 
   def self.to_csv
     CSV.generate do |csv|
-      csv << column_names
+      #csv << column_names
+      csv_column_names =  ['id', 'gift_card_number', 'expiration_date', 'reason']
+      csv << csv_column_names
       all.each do |gift_card|
-        csv << gift_card.attributes.values_at(*column_names)
+        csv << gift_card.attributes.values_at(*csv_column_names)
       end
     end
   end

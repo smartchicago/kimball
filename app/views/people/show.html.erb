@@ -147,6 +147,7 @@
       <% end %>
       <%= form.hidden_field :person_id, :value => @person.id %>
       <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" } %>
+      <%= form.text_field :batch_id, :placeholder => "Batch ID"  %>
       <%= form.text_field :gift_card_number, :placeholder => "Card Number"  %>
       <%= form.text_field :amount, :placeholder => "Amount" %>
       <%= form.text_field :expiration_date, :placeholder => "MM/YY" %>
@@ -163,6 +164,7 @@
         <th>Name</th>
         <th>Reason</th>
         <th>Giftable ID</th>
+        <th>Batch</th>
         <th>Card Number</th>
         <th>Expiration Date</th>
         <th>Amount</th>
