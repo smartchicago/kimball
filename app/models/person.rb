@@ -101,7 +101,8 @@ class Person < ActiveRecord::Base
   end
 
   def gift_card_total
-    total = self.gift_cards.sum(:amount_cents).to_money
+    total = self.gift_cards.sum(:amount_cents)
+    total = Money.new(total, "USD")
   end
 
   WUFOO_FIELD_MAPPING = {
