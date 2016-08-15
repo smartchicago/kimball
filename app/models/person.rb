@@ -100,6 +100,10 @@ class Person < ActiveRecord::Base
     return false
   end
 
+  def gift_card_total
+    total = self.gift_cards.sum(:amount_cents).to_money
+  end
+
   WUFOO_FIELD_MAPPING = {
     'Field1'   => :first_name,
     'Field2'   => :last_name,
