@@ -21,7 +21,11 @@ class GiftCard < ActiveRecord::Base
 
   validates_format_of :expiration_date, with: /\A(0|1)([0-9])\/([0-9]{2})\z/i
 
-  validates_uniqueness_of :gift_card_number, :scope => :batch_id
+  validates_length_of :proxy_id, is: 4, unless: proc { |c| c.proxyid.blank? }
+  validates_numericality_of :proxy_id, unless: proc { |c| c.proxyid.blank? }
+
+  validates_uniqueness_of :gift_card_number, scope: :batch_id
+
   validates_format_of :gift_card_number, with: /\A([0-9]){5}\z/i
   validates_uniqueness_of :reason, scope: :person_id, if: "reason == 'signup'"
   # Need to add validation to limit 1 signup per person

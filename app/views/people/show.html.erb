@@ -146,11 +146,12 @@
         </div>
       <% end %>
       <%= form.hidden_field :person_id, :value => @person.id %>
-      <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" } %>
-      <%= form.text_field :batch_id, :placeholder => "Batch ID"  %>
-      <%= form.text_field :gift_card_number, :placeholder => "Card Number"  %>
-      <%= form.text_field :amount, :placeholder => "Amount" %>
-      <%= form.text_field :expiration_date, :placeholder => "MM/YY" %>
+      <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" }, class: 'input-small' %>
+      <%= form.text_field :proxy_id, placeholder: "ProxyID",class: 'input-mini'  %>
+      <%= form.text_field :batch_id, placeholder: "BatchID",class: 'input-mini'  %>
+      <%= form.text_field :gift_card_number, placeholder: "Card Number"  %>
+      <%= form.text_field :amount, placeholder: "Amount",class: 'input-mini' %>
+      <%= form.text_field :expiration_date, placeholder: "MM/YY", class: 'input-mini' %>
 
       <%= form.submit 'Add Gift Card', :class => "btn" %>
     <% end %>
