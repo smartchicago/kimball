@@ -12,7 +12,7 @@
 #  created_at      :datetime
 #  updated_at      :datetime
 #  form_id         :string(255)
-#  form_type       :integer
+#  form_type       :integer          default(0)
 #
 
 require 'test_helper'

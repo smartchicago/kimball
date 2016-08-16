@@ -20,6 +20,7 @@
 #  approved               :boolean          default(FALSE), not null
 #  name                   :string(255)
 #  token                  :string(255)
+#  phone_number           :string(255)
 #
 
 require 'faker'

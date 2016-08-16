@@ -34,7 +34,7 @@ RSpec.describe GiftCardsController, type: :controller do
       expiration_date: "05/20",
       proxy_id:'4321',
       batch_id: '4321',
-      gift_card_number: '12345'
+      last_four: '12345'
     }
   }
 
@@ -117,70 +117,70 @@ RSpec.describe GiftCardsController, type: :controller do
         post :create, {:gift_card => valid_attributes}
         expect(response).to render_template("new")
         expect(GiftCard.count).to eq(1)
+      end
     end
-  end
 
-  describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        {
-          expiration_date: "05/20",
-          proxy_id:'4321',
-          batch_id: '4321',
-          gift_card_number: '12345'
-          reason: "test",
-          amount: "15.00"
+    describe "PUT #update" do
+      context "with valid params" do
+        let(:new_attributes) {
+          {
+            expiration_date: "05/20",
+            proxy_id:'4321',
+            batch_id: '4321',
+            last_four: '12345',
+            reason: "test",
+            amount: "15.00"
+          }
         }
-      }
 
-      it "updates the requested gift_card" do
-        gift_card = GiftCard.create! valid_attributes
-        put :update, {:id => gift_card.to_param, :gift_card => new_attributes}
-        gift_card.reload
-        expect(gift_card.amount).to have_content "15.00"
+        it "updates the requested gift_card" do
+          gift_card = GiftCard.create! valid_attributes
+          put :update, {:id => gift_card.to_param, :gift_card => new_attributes}
+          gift_card.reload
+          expect(gift_card.amount).to have_content "15.00"
+        end
+
+        it "assigns the requested gift_card as @gift_card" do
+          gift_card = GiftCard.create! valid_attributes
+          put :update, {:id => gift_card.to_param, :gift_card => valid_attributes}
+          expect(assigns(:gift_card)).to eq(gift_card)
+        end
+
+        it "redirects to the gift_card" do
+          gift_card = GiftCard.create! valid_attributes
+          put :update, {:id => gift_card.to_param, :gift_card => valid_attributes}
+          expect(response).to redirect_to(gift_card)
+        end
       end
 
-      it "assigns the requested gift_card as @gift_card" do
-        gift_card = GiftCard.create! valid_attributes
-        put :update, {:id => gift_card.to_param, :gift_card => valid_attributes}
-        expect(assigns(:gift_card)).to eq(gift_card)
-      end
+      context "with invalid params" do
+        it "assigns the gift_card as @gift_card" do
+          gift_card = GiftCard.create! valid_attributes
+          put :update, {:id => gift_card.to_param, :gift_card => invalid_attributes}
+          expect(assigns(:gift_card)).to eq(gift_card)
+        end
 
-      it "redirects to the gift_card" do
-        gift_card = GiftCard.create! valid_attributes
-        put :update, {:id => gift_card.to_param, :gift_card => valid_attributes}
-        expect(response).to redirect_to(gift_card)
+        it "re-renders the 'edit' template" do
+          gift_card = GiftCard.create! valid_attributes
+          put :update, {:id => gift_card.to_param, :gift_card => invalid_attributes}
+          expect(response).to render_template("edit")
+        end
       end
     end
 
-    context "with invalid params" do
-      it "assigns the gift_card as @gift_card" do
+    describe "DELETE #destroy" do
+      it "destroys the requested gift_card" do
         gift_card = GiftCard.create! valid_attributes
-        put :update, {:id => gift_card.to_param, :gift_card => invalid_attributes}
-        expect(assigns(:gift_card)).to eq(gift_card)
+        expect {
+          delete :destroy, {:id => gift_card.to_param}
+        }.to change(GiftCard, :count).by(-1)
       end
 
-      it "re-renders the 'edit' template" do
+      it "redirects to the gift_cards list" do
         gift_card = GiftCard.create! valid_attributes
-        put :update, {:id => gift_card.to_param, :gift_card => invalid_attributes}
-        expect(response).to render_template("edit")
-      end
-    end
-  end
-
-  describe "DELETE #destroy" do
-    it "destroys the requested gift_card" do
-      gift_card = GiftCard.create! valid_attributes
-      expect {
         delete :destroy, {:id => gift_card.to_param}
-      }.to change(GiftCard, :count).by(-1)
-    end
-
-    it "redirects to the gift_cards list" do
-      gift_card = GiftCard.create! valid_attributes
-      delete :destroy, {:id => gift_card.to_param}
-      expect(response).to redirect_to(gift_cards_url)
+        expect(response).to redirect_to(gift_cards_url)
+      end
     end
   end
-
 end

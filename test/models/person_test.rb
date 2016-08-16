@@ -31,6 +31,11 @@
 #  verified                         :string(255)
 #  preferred_contact_method         :string(255)
 #  token                            :string(255)
+#  active                           :boolean          default(TRUE)
+#  deactivated_at                   :datetime
+#  deactivated_method               :string(255)
+#  neighborhood                     :string(255)
+#  tag_count_cache                  :integer          default(0)
 #
 
 require 'test_helper'

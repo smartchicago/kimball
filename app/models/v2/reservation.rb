@@ -10,6 +10,7 @@
 #  user_id             :integer
 #  event_id            :integer
 #  event_invitation_id :integer
+#  aasm_state          :string(255)
 #
 
 # FIXME: Refactor and re-enable cop
