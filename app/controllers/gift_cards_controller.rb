@@ -73,6 +73,7 @@ class GiftCardsController < ApplicationController
     @gift_card = GiftCard.new(gift_card_params)
     respond_to do |format|
       if @create_result = @gift_card.with_user(current_user).save
+        @total = @gift_card.person.gift_card_total
         format.js {}
         format.json {}
         format.html { redirect_to @gift_card, notice: 'Gift Card was successfully created.'  }
