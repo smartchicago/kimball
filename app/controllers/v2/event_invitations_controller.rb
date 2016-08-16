@@ -92,6 +92,7 @@ class V2::EventInvitationsController < ApplicationController
         :end_time,
         :buffer,
         :title,
-        :user_id).merge(user_id: current_user.id)
+        :user_id
+      ).merge(user_id: current_user.id)
     end
 end

@@ -112,7 +112,8 @@ def receive_invitation_email_and_click_reservation_link
   EventInvitationMailer.invite(
     email_address: @research_subject.email_address,
     event: @event,
-    person: @research_subject).deliver_now
+    person: @research_subject
+  ).deliver_now
 
   open_email(@research_subject.email_address)
   current_email.click_link 'Please click to setup a time for your interview'

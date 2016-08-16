@@ -32,26 +32,26 @@ class GiftCard < ActiveRecord::Base
 
   def self.batch_create(post_content)
     # begin exception handling
-    begin
-      # begin a transaction on the gift card model
-      GiftCard.transaction do
-        # for each gift card record in the passed json
-        JSON.parse(post_content).each do |gift_card_hash|
-          # create a new gift card
-          GiftCard.create!(gift_card_hash)
-        end # json.parse
-      end # transaction
-    rescue
-      Rails.logger("There was a problem.")
-    end  # exception handling
+
+    # begin a transaction on the gift card model
+    GiftCard.transaction do
+      # for each gift card record in the passed json
+      JSON.parse(post_content).each do |gift_card_hash|
+        # create a new gift card
+        GiftCard.create!(gift_card_hash)
+      end # json.parse
+    end # transaction
+  rescue
+    Rails.logger('There was a problem.')
+    # exception handling
   end  # batch_create
 
   def self.to_csv
     CSV.generate do |csv|
-      #csv << column_names
-      csv_column_names =  ['id', 'batch_id', 'gift_card_number', 'expiration_date', 'reason']
+      # csv << column_names
+      csv_column_names =  %w(id batch_id gift_card_number expiration_date reason)
       csv << csv_column_names
-      all.each do |gift_card|
+      all.find_each do |gift_card|
         csv << gift_card.attributes.values_at(*csv_column_names)
       end
     end

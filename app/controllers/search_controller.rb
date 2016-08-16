@@ -31,8 +31,8 @@ class SearchController < ApplicationController
           csv << fields.map(&:titleize)
 
           # Some fields need a helper method
-          human_devices = %w( primary_device_id secondary_device_id )
-          human_connections = %w( primary_connection_id secondary_connection_id )
+          human_devices = %w(primary_device_id secondary_device_id)
+          human_connections = %w(primary_connection_id secondary_connection_id)
 
           # Write the results
           @results.each do |person|

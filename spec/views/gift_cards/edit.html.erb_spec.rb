@@ -1,30 +1,29 @@
 require 'rails_helper'
 
-RSpec.describe "gift_cards/edit", type: :view do
+RSpec.describe 'gift_cards/edit', type: :view do
   before(:each) do
     @gift_card = assign(:gift_card, GiftCard.create!(
-      :last_four => 1234,
-      :person_id => 1,
-      :notes => "MyString",
-      :created_by => 1,
-      :reason => "signup"
+                                      last_four: 1234,
+                                      person_id: 1,
+                                      notes: 'MyString',
+                                      created_by: 1,
+                                      reason: 'signup'
     ))
   end
 
-  it "renders the edit gift_card form" do
+  it 'renders the edit gift_card form' do
     render
 
-    assert_select "form[action=?][method=?]", gift_card_path(@gift_card), "post" do
+    assert_select 'form[action=?][method=?]', gift_card_path(@gift_card), 'post' do
+      assert_select 'input#gift_card_last_four[name=?]', 'gift_card[last_four]'
 
-      assert_select "input#gift_card_last_four[name=?]", "gift_card[last_four]"
+      assert_select 'input#gift_card_person_id[name=?]', 'gift_card[person_id]'
 
-      assert_select "input#gift_card_person_id[name=?]", "gift_card[person_id]"
+      assert_select 'input#gift_card_notes[name=?]', 'gift_card[notes]'
 
-      assert_select "input#gift_card_notes[name=?]", "gift_card[notes]"
+      assert_select 'input#gift_card_created_by[name=?]', 'gift_card[created_by]'
 
-      assert_select "input#gift_card_created_by[name=?]", "gift_card[created_by]"
-
-      assert_select "input#gift_card_reason[name=?]", "gift_card[reason]"
+      assert_select 'input#gift_card_reason[name=?]', 'gift_card[reason]'
     end
   end
 end

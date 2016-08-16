@@ -25,7 +25,7 @@ class Tagging < ActiveRecord::Base
   private
 
     def destroy_orphaned_tag
-      tag.destroy if Tagging.where(tag_id: tag.id).size == 0
+      tag.destroy if Tagging.where(tag_id: tag.id).size.zero?
     end
 
     # increments the right classifiable counter for the right taxonomy

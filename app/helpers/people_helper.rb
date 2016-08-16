@@ -42,7 +42,7 @@ module PeopleHelper
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Style/RescueEnsureAlignment
   def human_device_type_name(device_id)
-    ; Logan::Application.config.device_mappings.rassoc(device_id)[0].to_s; rescue; 'Unknown/No selection'
+    Logan::Application.config.device_mappings.rassoc(device_id)[0].to_s; rescue; 'Unknown/No selection'
   end
   # rubocop:enable Style/RescueEnsureAlignment
 
@@ -51,8 +51,7 @@ module PeopleHelper
                  home_broadband: 'Home broadband (cable, DSL)',
                  other: 'Other',
                  public_computer: 'Public computer',
-                 public_wifi: 'Public wifi'
-    }
+                 public_wifi: 'Public wifi' }
 
     begin; mappings[Logan::Application.config.connection_mappings.rassoc(connection_id)[0]]; rescue; 'Unknown/No selection'; end
   end
@@ -80,8 +79,8 @@ module PeopleHelper
                                   MMERGE11: person.primary_connection_id,
                                   MMERGE12: person.primary_connection_description,
                                   MMERGE13: person.primary_device_id,
-                                  MMERGE14: person.preferred_contact_method }
-                 })
+                                  MMERGE14: person.preferred_contact_method } }
+        )
 
       rescue Gibbon::MailChimpError => e
         Rails.logger.fatal("[People_Helper->sendToMailChimp] fatal error sending #{person.id} to Mailchimp: #{e.message}")

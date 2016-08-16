@@ -188,7 +188,8 @@ class V2::ReservationsController < ApplicationController
         :event_invitation_id,
         :user_id,
         :aasm_event,
-        :aasm_state)
+        :aasm_state
+      )
     end
 
     def update_params
@@ -200,7 +201,8 @@ class V2::ReservationsController < ApplicationController
         :event_invitation_id,
         :user_id,
         :aasm_event,
-        :aasm_state)
+        :aasm_state
+      )
     end
 
     def person_params

@@ -125,7 +125,8 @@ module Neighborhoods
     'Port Richmond'                 => [10302, 10303, 10310],
     'South Shore'                   => [10306, 10307, 10308, 10309, 10312],
     'Stapleton and St. George'      => [10301, 10304, 10305],
-    'Mid-Island'                    => [10314] }.freeze
+    'Mid-Island'                    => [10314]
+  }.freeze
 
   def zip_to_neighborhood(zip)
     res = select_neighborhood_mapping.select { |k, v| k if v.include?(zip.to_i) }

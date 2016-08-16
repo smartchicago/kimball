@@ -50,7 +50,6 @@ class GiftCardsController < ApplicationController
       #   send_data output
       # end
     end
-
   end
 
   # GET /gift_cards/1
@@ -120,6 +119,7 @@ class GiftCardsController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_gift_card
       @gift_card = GiftCard.find(params[:id])

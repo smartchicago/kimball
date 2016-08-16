@@ -12,7 +12,7 @@ class ReservationReminderSms < ApplicationSms
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def generate_res_msgs
     msg = "You have #{res_count} reservation#{res_count > 1 ? 's': ''} soon.\n"
-    reservations.each do|r|
+    reservations.each do |r|
       next if r.end_datetime < Time.current # don't remind people of past events
       msg +=  "#{r.description} on #{r.start_datetime_human} for #{r.duration / 60} minutes with #{r.user.name} tel: #{r.user.phone_number} \n"
     end

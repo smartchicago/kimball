@@ -46,13 +46,12 @@ class PeopleController < ApplicationController
   # GET /people
   # GET /people.json
   def index
-
     @verified_types = Person.uniq.pluck(:verified).select(&:present?)
-    unless params[:not_verified]
-      @people = Person.paginate(page: params[:page]).order(sort_column + ' ' + sort_direction).where(active: true)
-    else
-      @people = Person.paginate(page: params[:page]).order(sort_column + ' ' + sort_direction).where(verified: ["NO",nil]).where(active: true)
-    end
+    @people = if params[:not_verified]
+                Person.paginate(page: params[:page]).order(sort_column + ' ' + sort_direction).where(verified: ['NO', nil]).where(active: true)
+              else
+                Person.paginate(page: params[:page]).order(sort_column + ' ' + sort_direction).where(active: true)
+              end
   end
 
   # GET /people/1
@@ -65,7 +64,6 @@ class PeopleController < ApplicationController
     @outgoingmessages = TwilioMessage.where(to: @person.normalized_phone_number).where.not(wufoo_formid: nil)
     @twilio_wufoo_formids = @outgoingmessages.pluck(:wufoo_formid).uniq
     @twilio_wufoo_forms = TwilioWufoo.where(id: @twilio_wufoo_formids)
-
   end
 
   # GET /people/new
@@ -110,7 +108,7 @@ class PeopleController < ApplicationController
       new_person.postal_code = params['Field271'].strip
       new_person.phone_number = params['Field281'].strip
 
-      if params['Field279'].strip.upcase != 'SKIP'
+      unless params['Field279'].strip.casecmp('SKIP').zero?
         new_person.email_address = params['Field279'].strip
       end
       # new_person.save
@@ -187,7 +185,7 @@ class PeopleController < ApplicationController
           from: ENV['TWILIO_SIGNUP_VERIFICATION_NUMBER'],
           to: @person.normalized_phone_number,
           body: @twilio_message.body
-        # status_callback: request.base_url + "/twilio_messages/#{@twilio_message.id}/updatestatus"
+          # status_callback: request.base_url + "/twilio_messages/#{@twilio_message.id}/updatestatus"
         )
         @twilio_message.message_sid = @message.sid
       rescue Twilio::REST::RequestError => e
@@ -255,13 +253,12 @@ class PeopleController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def person_params
       params.require(:person).permit(:first_name, :last_name, :verified, :email_address,
-          :address_1, :address_2, :city, :state, :postal_code, :geography_id, :primary_device_id,
-          :primary_device_description, :secondary_device_id, :secondary_device_description,
-          :primary_connection_id, :primary_connection_description, :secondary_connection_id,
-          :secondary_connection_description, :phone_number, :participation_type,
-          :preferred_contact_method,
-          :gift_cards_attributes => [:gift_card_number, :expiration_date, :person_id, :notes, :created_by, :reason, :amount, :giftable_id, :giftable_type]
-          )
+        :address_1, :address_2, :city, :state, :postal_code, :geography_id, :primary_device_id,
+        :primary_device_description, :secondary_device_id, :secondary_device_description,
+        :primary_connection_id, :primary_connection_description, :secondary_connection_id,
+        :secondary_connection_description, :phone_number, :participation_type,
+        :preferred_contact_method,
+        gift_cards_attributes: [:gift_card_number, :expiration_date, :person_id, :notes, :created_by, :reason, :amount, :giftable_id, :giftable_type])
     end
 
     def should_skip_janky_auth?

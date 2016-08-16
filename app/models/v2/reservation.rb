@@ -57,7 +57,7 @@ class V2::Reservation < ActiveRecord::Base
     overlap: {
       query_options: { includes: [:time_slot] },
       scope: 'user_id',
-      exclude_edges: %w( v2_time_slots.start_time v2_time_slots.end_time ),
+      exclude_edges: %w(v2_time_slots.start_time v2_time_slots.end_time),
       message_title:  'Sorry!',
       message_content: 'This time is no longer available.'
     }
@@ -67,7 +67,7 @@ class V2::Reservation < ActiveRecord::Base
     overlap: {
       query_options: { includes: :time_slot },
       scope: 'person_id',
-      exclude_edges: %w( v2_time_slots.start_time v2_time_slots.end_time ),
+      exclude_edges: %w(v2_time_slots.start_time v2_time_slots.end_time),
       message_title:  'Sorry!',
       message_content: 'This time is no longer available.'
     }

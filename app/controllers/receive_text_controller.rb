@@ -111,7 +111,7 @@ class ReceiveTextController < ApplicationController
       session['form_length'] = 0
       session['form_type'] ||= ''
       session['end_message'] ||= ''
-    elsif @twiliowufoo && session['counter'] == 0
+    elsif @twiliowufoo && session['counter'].zero?
       session['formid'] = @twiliowufoo.wufoo_formid
       @form = wufoo.form(@twiliowufoo.wufoo_formid)
       fields = @form.flattened_fields
@@ -120,7 +120,7 @@ class ReceiveTextController < ApplicationController
       message = to_gsm0338(message)
       session['form_type'] = @twiliowufoo.form_type
       session['end_message'] = @twiliowufoo.end_message
-    elsif !@twiliowufoo && session['counter'] == 0
+    elsif !@twiliowufoo && session['counter'].zero?
       message = 'I did not understand that. Please re-type your keyword.'
       session['counter'] -= 1
 
@@ -141,7 +141,7 @@ class ReceiveTextController < ApplicationController
       elsif fields[session['counter'] - 1]['Title'].include? 'A)'
         # if !( params["Body"].strip.upcase == "A")
         if !(params['Body'].strip.upcase =~ /A|B|C|D|E/)
-          if session['errorcount'] == 0
+          if session['errorcount'].zero?
             message = 'Please type only the letter of your answer. Thank you!'
             session['counter'] -= 1
             session['errorcount'] += 1
@@ -171,7 +171,7 @@ class ReceiveTextController < ApplicationController
         message = ENV['SIGNUP_SMS_MESSAGE']
         message = ENV['SIGNUP_EMAIL_MESSAGE'] if session['contact'] == 'EMAIL'
       else
-        message = if session['end_message'].length > 0
+        message = if !session['end_message'].empty?
                     to_gsm0338(session['end_message'])
                   else
                     'Thank you. You have completed the form.'

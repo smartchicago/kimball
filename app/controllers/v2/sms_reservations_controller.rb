@@ -20,19 +20,19 @@ class V2::SmsReservationsController < ApplicationController
       person.save!
       ::RemoveSms.new(to: person).send
     elsif confirm? # confirmation for the days reservations
-      if person.v2_reservations.for_today_and_tomorrow.size > 0
+      if !person.v2_reservations.for_today_and_tomorrow.empty?
         person.v2_reservations.for_today_and_tomorrow.each(&:confirm!)
       else
         ::ReservationReminderSms.new(to: person, reservations: person.v2_reservations.for_today).send
       end
     elsif cancel?
-      if person.v2_reservations.for_today_and_tomorrow.size > 0
+      if !person.v2_reservations.for_today_and_tomorrow.empty?
         person.v2_reservations.for_today_and_tomorrow.each(&:cancel!)
       else
         ::ReservationReminderSms.new(to: person, reservations: person.v2_reservations.for_today).send
       end
     elsif change?
-      if person.v2_reservations.for_today_and_tomorrow.size > 0
+      if !person.v2_reservations.for_today_and_tomorrow.empty?
         person.v2_reservations.for_today_and_tomorrow.each(&:reschedule!)
       else
         ::ReservationReminderSms.new(to: person, reservations: person.v2_reservations.for_today).send

@@ -46,7 +46,7 @@ class CalendarController < ApplicationController
                where('date BETWEEN ? AND ?', cal_params[:start], cal_params[:end]).
                map(&:event).compact
       slots = []
-      events.each do|e|
+      events.each do |e|
         if visitor.class.to_s == 'Person'
           e.available_time_slots(visitor).each { |ts| slots.push ts }
         else

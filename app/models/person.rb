@@ -52,7 +52,6 @@ class Person < ActiveRecord::Base
   accepts_nested_attributes_for :gift_cards, reject_if: :all_blank
   attr_accessor :gift_cards_attributes
 
-
   has_many :reservations, dependent: :destroy
   has_many :events, through: :reservations
 
@@ -98,21 +97,19 @@ class Person < ActiveRecord::Base
   validates :email_address, email: true, allow_blank: true, uniqueness: true
 
   scope :no_signup_card, -> { where('id NOT IN (SELECT DISTINCT(person_id) FROM gift_cards where gift_cards.reason = 1)') }
-  scope :signup_card_needed, lambda { self.joins(:gift_cards).where("gift_cards.reason !=1") }
+  scope :signup_card_needed, -> { joins(:gift_cards).where('gift_cards.reason !=1') }
 
   self.per_page = 15
 
   def signup_gc_sent
-    signup_cards = self.gift_cards.where(reason: 1)
-    if signup_cards.length > 0
-      return true
-    end
-    return false
+    signup_cards = gift_cards.where(reason: 1)
+    return true unless signup_cards.empty?
+    false
   end
 
   def gift_card_total
-    total = self.gift_cards.sum(:amount_cents)
-    total = Money.new(total, "USD")
+    total = gift_cards.sum(:amount_cents)
+    total = Money.new(total, 'USD')
   end
 
   WUFOO_FIELD_MAPPING = {
@@ -215,23 +212,23 @@ class Person < ActiveRecord::Base
 
             gibbon = Gibbon::Request.new
             mailchimpSend = gibbon.lists(Logan::Application.config.cut_group_mailchimp_list_id).members(Digest::MD5.hexdigest(email_address.downcase)).upsert(
-                body: {email_address: email_address.downcase,
-                 status: "subscribed",
-                 merge_fields: { FNAME: first_name || "",
-                        LNAME: last_name || "",
-                        MMERGE3: geography_id || "",
-                        MMERGE4: postal_code || "",
-                        MMERGE5: participation_type || "",
-                        MMERGE6: voted || "",
-                        MMERGE7: called_311 || "",
-                        MMERGE8: primary_device_description || "",
-                        MMERGE9: secondary_device_id || "",
-                        MMERGE10: secondary_device_description || "",
-                        MMERGE11: primary_connection_id || "",
-                        MMERGE12: primary_connection_description || "",
-                        MMERGE13: primary_device_id || "",
-                        MMERGE14: preferred_contact_method || "" }
-                 })
+              body: { email_address: email_address.downcase,
+                      status: 'subscribed',
+                      merge_fields: { FNAME: first_name || '',
+                                      LNAME: last_name || '',
+                                      MMERGE3: geography_id || '',
+                                      MMERGE4: postal_code || '',
+                                      MMERGE5: participation_type || '',
+                                      MMERGE6: voted || '',
+                                      MMERGE7: called_311 || '',
+                                      MMERGE8: primary_device_description || '',
+                                      MMERGE9: secondary_device_id || '',
+                                      MMERGE10: secondary_device_description || '',
+                                      MMERGE11: primary_connection_id || '',
+                                      MMERGE12: primary_connection_description || '',
+                                      MMERGE13: primary_device_id || '',
+                                      MMERGE14: preferred_contact_method || '' } }
+            )
 
             Rails.logger.info("[People->sendToMailChimp] Sent #{id} to Mailchimp: #{mailchimpSend}")
           rescue Gibbon::MailChimpError => e
@@ -323,7 +320,7 @@ class Person < ActiveRecord::Base
   end
 
   def send_reservation_reminder
-    return if v2_reservations.for_today_and_tomorrow.size == 0
+    return if v2_reservations.for_today_and_tomorrow.size.zero?
     case preferred_contact_method.upcase
     when 'SMS'
       ::ReservationReminderSms.new(to: self, reservations: v2_reservations.for_today_and_tomorrow).send
