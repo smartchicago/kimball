@@ -160,14 +160,14 @@ gem 'money-rails'
 # masked inputs
 gem 'maskedinput-rails'
 
-group :testing do
+group :test do
   # mock tests w/mocha
   gem 'mocha', require: false
 
-  #gem 'sqlite3', platform: [:ruby, :mswin, :mingw]
+  gem 'sqlite3', platform: [:ruby, :mswin, :mingw]
 
   # for JRuby
-  #gem 'jdbc-sqlite3', platform: :jruby
+  gem 'jdbc-sqlite3', platform: :jruby
   gem 'memory_test_fix' # in memory DB, for the speedy
 
   # generate fake data w/faker: http://rubydoc.info/github/stympy/faker/master/frames
