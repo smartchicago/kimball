@@ -3,10 +3,9 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-
 Logan::Application.load_tasks
 
-unless Rails.env == 'production'
+if Rails.env != 'production'
   require 'coveralls/rake/task'
   Coveralls::RakeTask.new
   task test_with_coveralls: [:spec, :features, 'coveralls:push']
