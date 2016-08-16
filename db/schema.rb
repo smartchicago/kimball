@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160710235225) do
+ActiveRecord::Schema.define(version: 20160816094658) do
 
   create_table "applications", force: :cascade do |t|
     t.string   "name",         limit: 255
@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(version: 20160710235225) do
   end
 
   create_table "gift_cards", force: :cascade do |t|
-    t.integer  "gift_card_number", limit: 4
+    t.string   "gift_card_number", limit: 255
     t.string   "expiration_date",  limit: 255
     t.integer  "person_id",        limit: 4
     t.string   "notes",            limit: 255
@@ -84,6 +84,8 @@ ActiveRecord::Schema.define(version: 20160710235225) do
     t.string   "giftable_type",    limit: 255
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
+    t.string   "batch_id",         limit: 255
+    t.integer  "proxy_id",         limit: 4
   end
 
   add_index "gift_cards", ["giftable_type", "giftable_id"], name: "index_gift_cards_on_giftable_type_and_giftable_id", using: :btree

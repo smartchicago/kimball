@@ -42,5 +42,5 @@ $(document).on('ready page:load', function () {
     $(searchSelector).typeahead('val',datum.name);
     $('#tag-typeahead').submit();
   });
-
+  $("#gift_card_expiration_date").mask("99/99",{placeholder:"MM/YY"});
 });

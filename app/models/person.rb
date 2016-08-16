@@ -49,6 +49,9 @@ class Person < ActiveRecord::Base
   has_many :submissions, dependent: :destroy
 
   has_many :gift_cards
+  accepts_nested_attributes_for :gift_cards, reject_if: :all_blank
+  attr_accessor :gift_cards_attributes
+
 
   has_many :reservations, dependent: :destroy
   has_many :events, through: :reservations
@@ -95,8 +98,7 @@ class Person < ActiveRecord::Base
   validates :email_address, email: true, allow_blank: true, uniqueness: true
 
   scope :no_signup_card, -> { where('id NOT IN (SELECT DISTINCT(person_id) FROM gift_cards where gift_cards.reason = 1)') }
-
-
+  scope :signup_card_needed, lambda { self.joins(:gift_cards).where("gift_cards.reason !=1") }
 
   self.per_page = 15
 
@@ -108,16 +110,9 @@ class Person < ActiveRecord::Base
     return false
   end
 
-  def no_signup_card
-    signup_cards = self.gift_cards.where(reason: 1)
-    if signup_cards.length > 0
-      return false
-    end
-    return self
-  end
-
-  def self.signup_cards_needed
-
+  def gift_card_total
+    total = self.gift_cards.sum(:amount_cents)
+    total = Money.new(total, "USD")
   end
 
   WUFOO_FIELD_MAPPING = {

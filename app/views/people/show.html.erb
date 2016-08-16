@@ -140,9 +140,11 @@
     <tr>
         <th>Campaign Name</th>
     </tr>
-    <% for message in @outgoingmessages %>
+    <% @twilio_wufoo_forms.each do |form| %>
       <tr>
-      <td><%= TwilioWufoo.where(id: message.wufoo_formid).last.name %></td>
+        <td>
+          <%= form.name %>
+        </td>
       </tr>
     <% end %>
     </table>
@@ -152,37 +154,47 @@
 <div class="row">
   <div class="span12">
     <h3>Add New Gift Card</h3>
+    <div id="error-div"></div>
     <%= form_for([@person, @gift_card], remote: true) do |form| %>
       <% if @gift_card.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@gift_card.errors.count, "error") %> prohibited this gift_card from being saved:</h2>
+        <div id="error_explanation">
+          <h2><%= pluralize(@gift_card.errors.count, "error") %> prohibited this gift_card from being saved:</h2>
 
-      <ul>
-      <% @gift_card.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+          <ul>
+          <% @gift_card.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
       <% end %>
-      </ul>
-    </div>
-  <% end %>
       <%= form.hidden_field :person_id, :value => @person.id %>
-      <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" } %>
-      <%= form.text_field :gift_card_number, :placeholder => "Card Number"  %>
-      <%= form.text_field :amount, :placeholder => "Amount" %>
-      <%= form.text_field :expiration_date, :placeholder => "MM/YYYY" %>
+      <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" }, class: 'input-small' %>
+      <%= form.text_field :proxy_id, placeholder: "ProxyID",class: 'input-mini'  %>
+      <%= form.text_field :batch_id, placeholder: "BatchID",class: 'input-mini'  %>
+      <%= form.text_field :gift_card_number, placeholder: "Card Number"  %>
+      <%= form.text_field :amount, placeholder: "Amount",class: 'input-mini' %>
+      <%= form.text_field :expiration_date, placeholder: "MM/YY", class: 'input-mini' %>
 
       <%= form.submit 'Add Gift Card', :class => "btn" %>
     <% end %>
   </div>
   <div class="span12">
-    <h3>Gift Cards</h3>
-    <table class="table">
+    <h3>Gift Cards - Total: <span id='gift_card_total'><%= humanized_money_with_symbol @person.gift_card_total %></span></h3>
+    <table class="table table-striped">
       <tr>
+        <th>Gift Card ID</th>
+        <th>Person ID</th>
+        <th>Name</th>
         <th>Reason</th>
-        <th>Association</th>
+        <th>Giftable ID</th>
+        <th>Batch</th>
         <th>Card Number</th>
         <th>Expiration Date</th>
         <th>Amount</th>
+        <th>Created On</th>
+        <th colspan="3"></th>
       </tr>
+
       <tbody id="gift_cards">
         <%= render partial: 'gift_cards/gift_card', collection: @person.gift_cards.order("created_at DESC") %>
       </tbody>

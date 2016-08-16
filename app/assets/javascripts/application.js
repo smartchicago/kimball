@@ -26,6 +26,7 @@
 //= require fullcalendar/fullcalendar.min
 //= require jquery-touchswipe/jquery.touchSwipe.min
 //= require_tree .
+//= require maskedinput
 
 $(document).on('ready page:load',function() {
   FastClick.attach(document.body);

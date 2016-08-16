@@ -1,14 +1,54 @@
+require 'csv'
+
 class GiftCardsController < ApplicationController
   before_action :set_gift_card, only: [:show, :edit, :update, :destroy]
 
   # GET /gift_cards
   # GET /gift_cards.json
   def index
-    @gift_cards = GiftCard.all
-    @recent_signups = Person.no_signup_card
+    @gift_cards = GiftCard.includes(:person).all
+    @recent_signups = Person.no_signup_card.where('signup_at > :startdate', { startdate: 3.months.ago }).order('signup_at DESC')
     @new_gift_cards = []
     @recent_signups.length.times do
       @new_gift_cards << GiftCard.new
+    end
+
+    respond_to do |format|
+      format.html {}
+      format.csv { render text: @gift_cards.to_csv }
+      # format.csv do
+      #   fields = Person.column_names
+      #   fields.push("tags")
+      #   output = CSV.generate do |csv|
+      #     # Generate the headers
+      #     csv << fields.map(&:titleize)
+
+      #     # Some fields need a helper method
+      #     human_devices = %w( primary_device_id secondary_device_id )
+      #     human_connections = %w( primary_connection_id secondary_connection_id )
+
+      #     # Write the results
+      #     @results.each do |person|
+      #       csv << fields.map do |f|
+      #         field_value = person[f]
+      #         if human_devices.include? f
+      #           human_device_type_name(field_value)
+      #         elsif human_connections.include? f
+      #           human_connection_type_name(field_value)
+      #         elsif f == "tags"
+      #           if person.tag_values.blank?
+      #             ""
+      #           else
+      #             person.tag_values.join('|')
+      #           end
+      #         else
+      #           field_value
+      #         end
+      #       end
+      #     end
+      #   end
+      #   send_data output
+      # end
     end
 
   end
@@ -32,15 +72,15 @@ class GiftCardsController < ApplicationController
   def create
     @gift_card = GiftCard.new(gift_card_params)
     respond_to do |format|
-      if @gift_card.with_user(current_user).save
-        format.js   {}
-        format.json
-        format.html {}
+      if @create_result = @gift_card.with_user(current_user).save
+        @total = @gift_card.person.gift_card_total
+        format.js {}
+        format.json {}
+        format.html { redirect_to @gift_card, notice: 'Gift Card was successfully created.'  }
       else
-        format.js { render text: "alert('#{@gift_card.errors.messages}');" }
+        format.js {}
         format.html { render action: 'edit' }
         format.json { render json: @gift_card.errors, status: :unprocessable_entity }
-        #format.js { render text: "alert('Oh no! There was a problem saving the gift card')" }
       end
     end
 
@@ -87,6 +127,6 @@ class GiftCardsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def gift_card_params
-      params.require(:gift_card).permit(:gift_card_number, :expiration_date, :person_id, :notes, :created_by, :reason, :amount, :giftable_id, :giftable_type)
+      params.require(:gift_card).permit(:gift_card_number, :batch_id, :expiration_date, :person_id, :notes, :proxy_id, :created_by, :reason, :amount, :giftable_id, :giftable_type)
     end
 end
