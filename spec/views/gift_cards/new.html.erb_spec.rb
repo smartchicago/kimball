@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'gift_cards/new', type: :view do
   before(:each) do
     assign(:gift_card, GiftCard.new(
-                         last_four: 1,
+                         gift_card_number: 12345,
                          person_id: 1,
                          notes: 'MyString',
                          created_by: 1,
