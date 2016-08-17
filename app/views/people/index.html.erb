@@ -1,13 +1,24 @@
 <%- model_class = Person -%>
 <div class="row page-header">
-  <div class="span10">
+  <div class="span2">
     <h1><%=t '.title', :default => "People" %></h1>
   </div>
-  <div class='span1'>
-   <%= link_to 'all', {}, :class => 'btn btn-mini' %>
+  <div class='span2'>
+   <label for="tags">Tags</label>
+      <%= form_tag '/people', method: :get %>
+      <%= text_field_tag :tags,
+                            params[:tags],
+                            class: 'tokenfield input-small span4',
+                            id:'tag-field',
+                            data: { search_url: '/taggings/search?q=%QUERY',
+                                    submit_id: 'tag-field',
+                                    submit_on_tag: true,
+                                    pre_populate: @tags
+                                  }
+                          %>
   </div>
-  <div class='span1'>
-   <%= link_to 'not verified', params.merge({not_verified:true}), :class => 'btn btn-mini' %>
+  <div class="span3">
+    <%= submit_tag "Search", :name => nil, :class => "btn btn-primary pull-right" %>
   </div>
 </div>
 

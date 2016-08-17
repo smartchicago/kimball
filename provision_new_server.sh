@@ -106,8 +106,8 @@ EOL
   curl -sSL https://get.rvm.io | bash -s stable
   echo 'rvm_trust_rvmrcs_flag=1' >> ~/.rvmrc
   source /home/logan/.rvm/scripts/rvm
-  rvm install 2.2.4
-  rvm use 2.2.4@`echo $RAILS_ENV` --create
+  rvm install 2.2.5
+  rvm use 2.2.5@`echo $RAILS_ENV` --create
   rvm @global do gem install backup bundler rake whenever
   ln -s /var/www/logan-`echo $RAILS_ENV`/current `echo $RAILS_ENV`
   exit # back to root.
