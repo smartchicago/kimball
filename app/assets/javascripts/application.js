@@ -16,7 +16,6 @@
 //= require best_in_place
 //= require twitter/bootstrap
 //= require twitter/typeahead.min
-//= require turbolinks
 //= require holder
 //= require datepicker/bootstrap-datepicker.min
 //= require tokenfield/bootstrap-tokenfield.js
