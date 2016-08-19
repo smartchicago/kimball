@@ -6,8 +6,8 @@ class GiftCardsController < ApplicationController
   # GET /gift_cards
   # GET /gift_cards.json
   def index
-    @gift_cards = GiftCard.includes(:person).all
-    @recent_signups = Person.no_signup_card.where('signup_at > :startdate', { startdate: 3.months.ago }).order('signup_at DESC')
+    @gift_cards = GiftCard.paginate(page: params[:page]).includes(:person).all
+    @recent_signups = Person.paginate(page: params[:page]).no_signup_card.where('signup_at > :startdate', { startdate: 3.months.ago }).order('signup_at DESC')
     @new_gift_cards = []
     @recent_signups.length.times do
       @new_gift_cards << GiftCard.new

@@ -1,3 +1,4 @@
+<%= will_paginate @recent_signups, :renderer => BootstrapPagination::Rails %>
 <h1>Recent sign-ups who need gift cards</h1>
 <div id="error-div"></div>
 <table class="table table-striped">
@@ -68,7 +69,7 @@
 
 
 <h1>Listing Gift Cards</h1>
-
+<%= will_paginate @gift_cards, :renderer => BootstrapPagination::Rails %>
 <table class="table table-striped">
   <thead>
     <tr>
