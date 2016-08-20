@@ -89,5 +89,5 @@
 </table>
 
 <br>
-<%= link_to "Save this list as CSV", gift_cards_path(params.merge(:format => :csv)), :class => "btn"  %>
+<%= link_to "Save this list as CSV", gift_cards_path(format: 'csv'), :class => "btn"  %>
 <%= link_to 'New Gift card', new_gift_card_path %>

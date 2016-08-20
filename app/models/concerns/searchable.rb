@@ -96,6 +96,7 @@ module Searchable
             must { string "first_name:#{params[:first_name]}" } if params[:first_name].present?
             must { string "last_name:#{params[:last_name]}" } if params[:last_name].present?
             must { string "email_address:(#{params[:email_address]})" } if params[:email_address].present?
+            must { string "phone_number:(#{params[:phone_number]})" } if params[:phone_number].present?
             must { string "postal_code:(#{params[:postal_code]})" } if params[:postal_code].present?
             must { string "verified:(#{params[:verified]})" } if params[:verified].present?
             must { string "primary_device_description:#{params[:device_description]} OR secondary_device_description:#{params[:device_description]}" } if params[:device_description].present?

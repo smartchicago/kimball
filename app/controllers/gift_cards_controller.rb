@@ -15,7 +15,9 @@ class GiftCardsController < ApplicationController
 
     respond_to do |format|
       format.html {}
-      format.csv { render text: @gift_cards.to_csv }
+      #format.csv { render text: @gift_cards.export_csv }
+      format.csv { send_data @gift_cards.export_csv,  filename: "GiftCards-#{Date.today}.csv" }
+
       # format.csv do
       #   fields = Person.column_names
       #   fields.push("tags")

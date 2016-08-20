@@ -42,13 +42,14 @@ class GiftCard < ActiveRecord::Base
     end  # exception handling
   end  # batch_create
 
-  def self.to_csv
+  def self.export_csv
     CSV.generate do |csv|
-      #csv << column_names
-      csv_column_names =  ['id', 'batch_id', 'gift_card_number', 'expiration_date', 'reason']
+      csv_column_names =  ['ID', 'Batch ID', 'Gift Card Number', 'Expiration Date', 'Reason', 'Name', 'Address', 'Phone Number', 'Email']
       csv << csv_column_names
       all.each do |gift_card|
-        csv << gift_card.attributes.values_at(*csv_column_names)
+        this_person = gift_card.person
+        row_items = [gift_card.id, gift_card.batch_id, gift_card.gift_card_number,  gift_card.expiration_date, gift_card.reason, this_person.full_name || "", this_person.address_fields_to_sentence || "", this_person.phone_number || "", this_person.email_address || ""]
+        csv << row_items
       end
     end
   end

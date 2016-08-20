@@ -298,6 +298,10 @@ class Person < ActiveRecord::Base
     [first_name, last_name].join(' ')
   end
 
+  def address_fields_to_sentence
+    [address_1, address_2, city, state, postal_code].reject(&:blank?).join(', ')
+  end
+
 
 
 end
