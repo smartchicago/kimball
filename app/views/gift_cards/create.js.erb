@@ -8,6 +8,14 @@
   $('td#new-expirationdate-<%= @gift_card.person_id %>').html('<%= @gift_card.expiration_date %>');
   $("#gift_card_content").val("");
   $('#error-div').html("");
+  // Updates for Person page
+  $('#gift-card-total').html('Gift Cards - Total: <%= humanized_money_with_symbol @gift_card.person.gift_card_total %>');
+  $('#new-batchid').val('');
+  $('#new-cardnumber').val('');
+  $('#new-amount').val('');
+  $('#new-reason').val('');
+  $('#new-expirationdate').val('');
+  
 <% else %>
   $('#error-div').html("");
   $("<%= escape_javascript(render partial: 'gift_cards/gift_card_error', locals: { gift_card: @gift_card } ) %>").prependTo("#error-div");

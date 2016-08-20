@@ -146,17 +146,17 @@
         </div>
       <% end %>
       <%= form.hidden_field :person_id, :value => @person.id %>
-      <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" } %>
-      <%= form.text_field :batch_id, :placeholder => "Batch ID"  %>
-      <%= form.text_field :gift_card_number, :placeholder => "Card Number"  %>
-      <%= form.text_field :amount, :placeholder => "Amount" %>
-      <%= form.text_field :expiration_date, :placeholder => "MM/YY" %>
+      <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" }, :id => "new-reason" %>
+      <%= form.text_field :batch_id, :placeholder => "Batch ID", :id => "new-batchid"  %>
+      <%= form.text_field :gift_card_number, :placeholder => "Card Number", :id => "new-cardnumber" %>
+      <%= form.text_field :amount, :placeholder => "Amount", :id => "new-amount" %>
+      <%= form.text_field :expiration_date, :placeholder => "MM/YY", :id => "new-expirationdate" %>
 
       <%= form.submit 'Add Gift Card', :class => "btn" %>
     <% end %>
   </div>
   <div class="span12">
-    <h3>Gift Cards - Total: <%= humanized_money_with_symbol @person.gift_card_total %></h3>
+    <h3 id="gift-card-total">Gift Cards - Total: <%= humanized_money_with_symbol @person.gift_card_total %></h3>
     <table class="table table-striped">
       <tr>
         <th>Gift Card ID</th>
