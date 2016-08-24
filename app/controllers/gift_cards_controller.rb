@@ -9,6 +9,13 @@ class GiftCardsController < ApplicationController
     @gift_cards = GiftCard.includes(:person).all
     @recent_signups = Person.no_signup_card.where('signup_at > :startdate', { startdate: 3.months.ago }).order('signup_at DESC')
     @new_gift_cards = []
+    @email_duplicates = []
+    @phone_duplicates = []
+    @recent_signups.each do |signup|
+      @email_duplicates << Person.where(email_address: signup.email_address).where.not(id: signup.id).order('signup_at DESC')
+      @phone_duplicates << Person.where(phone_number: signup.phone_number).where.not(id: signup.id).order('signup_at DESC')
+
+    end
     @recent_signups.length.times do
       @new_gift_cards << GiftCard.new
     end

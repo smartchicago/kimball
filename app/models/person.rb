@@ -132,6 +132,7 @@ class Person < ActiveRecord::Base
     tags.collect(&:name)
   end
 
+
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Rails/TimeZone
   #
@@ -264,7 +265,7 @@ class Person < ActiveRecord::Base
     # new_person.city  = "Chicago" With update we ask for city
     new_person.state = 'Illinois'
 
-    new_person.signup_at = Time.now
+    new_person.signup_at = params['DateCreated']
 
     new_person
   end

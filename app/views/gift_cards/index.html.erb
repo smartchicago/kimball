@@ -42,6 +42,17 @@
             <td id="new-submit-<%= @recent_signups[index].id %>"><%= form.submit 'Add Gift Card', :class => "btn" %></td>
         <% end %>
       </tr>
+      <tr>
+        <tr><th>Email Duplicates:</th></tr>
+        <% @email_duplicates.each do |duplicate| %>
+          <% if duplicate.present? %>
+            <tr>
+            <td>ID: <%= duplicate[index].id %></td>
+            <td><%= duplicate[index].full_name %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tr>
     <% end %>
   </tbody>
 </table>
