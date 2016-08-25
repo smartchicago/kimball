@@ -1,5 +1,5 @@
 require 'csv'
-
+# rubocop:disable ClassLength
 class SearchController < ApplicationController
 
   include PeopleHelper
@@ -11,27 +11,28 @@ class SearchController < ApplicationController
   def index
     # no pagination for CSV export
     per_page = request.format.to_s.eql?('text/csv') ? 10000 : Person.per_page
-
-    @results = if params[:q]
-                 Person.search params[:q], per_page: per_page, page: (params[:page] || 1)
-               elsif params[:adv]
-                 Person.complex_search(params, per_page) # FIXME: more elegant solution for returning all records
+    @results = if index_params[:q]
+                 Person.search index_params[:q], per_page: per_page, page: (index_params[:page] || 1)
+               elsif index_params[:adv]
+                 Person.complex_search(index_params, per_page) # FIXME: more elegant solution for returning all records
                else
                  []
                end
+    @tags = index_params[:tags].blank? ? '[]' : Tag.where(name: index_params[:tags].split(',').map(&:strip)).to_json(methods: [:value, :label, :type])
 
     respond_to do |format|
+      format.json { @results.map { |r| r['type'] = 'person' }.to_json }
       format.html {}
       format.csv do
         fields = Person.column_names
-        fields.push("tags")
+        fields.push('tags')
         output = CSV.generate do |csv|
           # Generate the headers
           csv << fields.map(&:titleize)
 
           # Some fields need a helper method
-          human_devices = %w( primary_device_id secondary_device_id )
-          human_connections = %w( primary_connection_id secondary_connection_id )
+          human_devices = %w(primary_device_id secondary_device_id)
+          human_connections = %w(primary_connection_id secondary_connection_id)
 
           # Write the results
           @results.each do |person|
@@ -41,9 +42,9 @@ class SearchController < ApplicationController
                 human_device_type_name(field_value)
               elsif human_connections.include? f
                 human_connection_type_name(field_value)
-              elsif f == "tags"
+              elsif f == 'tags'
                 if person.tag_values.blank?
-                  ""
+                  ''
                 else
                   person.tag_values.join('|')
                 end
@@ -110,4 +111,33 @@ class SearchController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Style/MethodName, Style/VariableName
 
+  private
+
+    # lotta params...
+    # rubocop:disable Metrics/MethodLength,
+    def index_params
+      params.permit(:q,
+        :adv,
+        :active,
+        :first_name,
+        :last_name,
+        :email_address,
+        :postal_code,
+        :phone_number,
+        :verified,
+        :device_description,
+        :connection_description,
+        :device_id_type,
+        :connection_id_type,
+        :geography_id,
+        :event_id,
+        :address,
+        :city,
+        :submissions,
+        :tags,
+        :preferred_contact_method,
+        :page)
+    end
+  # rubocop:enable Metrics/MethodLength
 end
+# rubocop:enable ClassLength

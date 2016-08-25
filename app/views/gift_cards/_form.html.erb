@@ -13,15 +13,19 @@
 
   <div class="field">
     <%= f.label :batch_id %><br>
-    <%= f.text_field :batch_id %>
+    <%= f.text_field :batch_id, class: 'input-mini', placeholder: '4321' %>
+  </div>
+  <div class="field">
+    <%= f.label :proxy_id %><br>
+    <%= f.text_field :proxy_id, class: 'input-mini' %>
   </div>
   <div class="field">
     <%= f.label :gift_card_number %><br>
-    <%= f.text_field :gift_card_number %>
+    <%= f.text_field :gift_card_number, class: 'input-mini', placeholder: '4321' %>
   </div>
   <div class="field">
     <%= f.label :expiration_date %><br>
-    <%= f.text_field :expiration_date %>
+    <%= f.text_field :expiration_date,class: 'input-mini' %>
   </div>
   <div class="field">
     <%= f.label :person_id %><br>

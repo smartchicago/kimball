@@ -1,7 +1,7 @@
 <div class="row">
   <div class="span12">
     <h2>Unmatched Form Submissions</h2>
-    
+
     <table class="table table-striped">
      <thead>
       <tr>
@@ -12,7 +12,7 @@
       	<th>Submitted at</th>
       </tr>
       </thead>
-      <% for submission in @submissionsUnmatched do %>
+      <% for submission in @submissions_unmatched do %>
       <tr>
       	<td>
       		<%= link_to t('.edit', :default => t("helpers.links.edit")),
@@ -39,7 +39,7 @@
 <div class="row">
   <div class="span12">
     <h3>All Form Submissions</h3>
-    
+
     <table class="table table-striped">
      <thead>
       <tr>
@@ -65,7 +65,7 @@
  			UnMatched
 		  <% end %>
       	</td>
-      
+
       <td><%= submission.created_at.to_s(:long) %></td>
       </tr>
       <% end %>

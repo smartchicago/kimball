@@ -1,14 +1,19 @@
 require 'bundler/capistrano'
 require 'capistrano/ext/multistage'
+require 'whenever/capistrano'
 require 'rvm/capistrano'
 require 'rvm/capistrano/gem_install_uninstall'
 
-#loading environment variables so we can all use the same deployment
+# loading environment variables so we can all use the same deployment
 YAML.load(File.open(File.dirname(__FILE__) + '/local_env.yml')).each do |key, value|
   ENV[key.to_s] = value
   puts ENV[key.to_s]
 end if File.exist?(File.dirname(__FILE__) + '/local_env.yml')
 
+# loading in defaults
+YAML.load(File.open(File.dirname(__FILE__) + '/sample.local_env.yml')).each do |key, value|
+  ENV[key.to_s] = value unless ENV[key]
+end
 
 set :repository, ENV['GIT_REPOSITORY']
 
@@ -37,7 +42,9 @@ set :ssh_options, { forward_agent: true }
 
 before  'deploy:finalize_update', "deploy:create_shared_directories", 'deploy:link_db_config', 'deploy:link_env_var'
 # before  'deploy:finalize_update', 'deploy:link_db_config', 'deploy:link_env_var'
-after   'deploy:finalize_update', 'deploy:create_binstubs', 'deploy:generate_delayed_job'
+
+after   'deploy:finalize_update', 'deploy:create_binstubs', 'deploy:migrate', 'deploy:generate_delayed_job','deploy:reload_nginx'
+
 
 namespace :deploy do
   task :start do
@@ -59,6 +66,10 @@ namespace :deploy do
     run "mkdir -p #{deploy_to}/shared/assets"
     run "mkdir -p #{deploy_to}/releases"
     run "mkdir -p #{shared_path}/log"
+    run "mkdir -p #{shared_path}/tmp"
+    run "mkdir -p #{shared_path}/assets"
+    run "mkdir -p #{shared_path}/bundle"
+    run "mkdir -p #{shared_path}/cached-copy"
   end
 
   task :link_db_config do
@@ -69,6 +80,11 @@ namespace :deploy do
   task :link_env_var do
     # pull in database.yml on server
     run "rm -f #{release_path}/config/local_env.yml && ln -s #{deploy_to}/shared/local_env.yml #{release_path}/config/local_env.yml"
+  end
+
+  task :reload_nginx do
+    # i don't like this sudo here.
+    run "sudo service nginx restart"
   end
 
   # https://github.com/capistrano/capistrano/issues/362#issuecomment-14158487

@@ -2,6 +2,7 @@
 
 <div class="page-header">
 <h1><%= @person.full_name %></h1>
+<%= render partial: 'add_remove_cart',locals: { person: @person } %>
 </div>
 
 <div class="row">
@@ -12,7 +13,6 @@
         <dl>
 
           <dt>Verified?</dt>
-          <!-- <dd><%= best_in_place @person, :verified, :as => :select, :collection => %w(Unverified Screened Verified-In-Person Verified) %></dd> -->
           <dd><%= best_in_place @person, :verified %></dd>
 
           <dt>Address</dt>
@@ -21,23 +21,46 @@
           <dt>Ward</dt>
           <dd><% if @person.geography_id.present? %> <%= link_to @person.geography_id, search_index_path(adv: 1, geography_id: @person.geography_id ) %><% end %></dd>
 
+          <dt>Neighborhood</dt>
+          <dd><%= best_in_place @person, :neighborhood %></dd>
+
           <dt>Primary device</dt>
-          <dd><%= link_to @person.primary_device_description, search_index_path(adv: 1, device_description: @person.primary_device_description ) %> <span class="muted">(<%= human_device_type_name @person.primary_device_id %>)</span></dd>
+          <dd><%= best_in_place @person,:primary_device_description %> <span class='muted'>
+          (<%= best_in_place @person, :primary_device_id, as: :select, collection:  Logan::Application.config.device_mappings.collect{|i| [i.last, i.first]}  %>)</span> </dd>
 
           <dt>Secondary device</dt>
-          <dd><% if @person.secondary_device_description.present? %> <%= link_to @person.secondary_device_description, search_index_path(adv: 1, device_description: @person.secondary_device_description ) %> <% end %><span class="muted">(<%= human_device_type_name @person.secondary_device_id %>)</span></dd>
+          <dd><%= best_in_place @person,:secondary_device_description %> <span class='muted'>
+          (<%= best_in_place @person, :secondary_device_id, as: :select, collection:  Logan::Application.config.device_mappings.collect{|i| [i.last, i.first]}  %>)</span> </dd>
 
           <dt>Primary connection method</dt>
-          <dd><%= human_connection_type_name @person.primary_connection_id %> <% if @person.primary_connection_description.present? %><%= ": " + @person.primary_connection_description %><% end %></dd>
+          <dd>
+            <%= best_in_place @person,:primary_connection_description %>
+            <span class='muted'>(<%= best_in_place @person, :primary_connection_id , as: :select, collection: Logan::Application.config.connection_mappings.collect{|i| [i.last,i.first.to_s.humanize]} %>)
+            </span>
+          </dd>
 
-          <% if @person.secondary_connection_id %>
           <dt>Secondary connection method</dt>
-          <dd><%= human_connection_type_name @person.secondary_connection_id %> <% if @person.secondary_connection_description.present? %><%= ": " + @person.secondary_connection_description %><% end %></dd>
-          <% end %>
+          <dd>
+            <%= best_in_place @person,:secondary_connection_description %>
+            <span class='muted'>(<%= best_in_place @person, :secondary_connection_id , as: :select, collection: Logan::Application.config.connection_mappings.collect{|i| [i.last,i.first.to_s.humanize]} %>)
+            </span>
+          </dd>
+
 
           <dt>Preferred participation method</dt>
+          <dd><%= best_in_place @person, :participation_type, as: :select, collection: %w(in-person remote) %></dd>
+          <dt>Interviews</dt>
+          <dd><%= link_to "Calendar", calendar_path(token: @person.token) %></dd>
+          <dt>Invitations</dt>
+          <dd><%= @person.event_invitations.size %></dd>
+
+          <dt>Reserved</dt>
+          <dd><%=@person.v2_reservations.size %></dd>
+          <dt>Attended</dt>
+          <dd><%= @person.v2_reservations.attended.size %></dd>
+          <dt>Cancel</dt>
+          <dd><%= @person.v2_reservations.cancelled.size %> </dd>
           <dd><%= best_in_place @person, :participation_type %></dd>
-          <!-- <dd><%= best_in_place @person, :participation_type, as: :select, :collection => %w(in-person remote) %></dd> -->
         </dl>
       </div>
 
@@ -46,20 +69,19 @@
 
         <dl>
           <dt>Phone</dt>
-          <dd><%= number_to_phone @person.phone_number %></dd>
+          <dd><%= best_in_place @person, :phone_number, display_with: :number_to_phone %></dd>
 
           <dt>Email</dt>
-          <dd><%= mail_to @person.email_address %></dd>
+          <dd><%= best_in_place @person, :email_address %></dd>
 
           <dt>Preferred Contact Method</dt>
-          <!-- <dd><%= best_in_place @person, :preferred_contact_method, as: :select, collection: %w(SMS EMAIL) %></dd> -->
-          <dd><%= best_in_place @person, :preferred_contact_method %></dd>
 
+          <dd><%= best_in_place @person, :preferred_contact_method, as: :select, collection: [['SMS','SMS'], ['EMAIL','EMAIL']] %></dd>
           <dt>Voted in last election?</dt>
-          <dd><%= @person.voted %></dd>
+          <dd><%= best_in_place @person, :voted, as: :select, :collection => %w(YES NO) %></dd>
 
           <dt>Ever called 311?</dt>
-          <dd><%= @person.called_311 %></dd>
+          <dd><%= best_in_place @person, :called_311, as: :select, :collection => %w(YES NO) %></dd>
 
           <dt>Facebook</dt>
           <dd>link to facebook</dd>
@@ -76,12 +98,12 @@
       <div class="span6">
         <h3>Tags</h3>
         <ul id="tag-list">
-          <%= render partial: 'taggings/tagging', collection: @person.taggings %>
+        <%= render partial: 'taggings/tagging', collection: @person.taggings %>
         </ul>
         <%= form_for(@tagging, remote: true, html: { class: "form-inline" }) do |form| %>
           <%= form.hidden_field :taggable_type, value: "Person" %>
           <%= form.hidden_field :taggable_id, value: @person.id %>
-          <%= form.text_field :name, class: "input span2", placeholder: "new tag", data: { provide: 'typeahead', source: Tag.most_popular(25).collect{|tag| tag.name } }, autocomplete: 'off' %>
+          <%= form.text_field :name, id: 'tag-typeahead', class: "input span2 tag-typehead", placeholder: "new tag", autocomplete: 'off' %>
           <%= form.submit "Add", class: "btn span1" %>
         <% end %>
       </div>
@@ -91,7 +113,7 @@
   <div class="span6">
     <h3>Location</h3>
     <a href="https://maps.google.com?q=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>" target="_blank" title="View in Google Maps"><img src="https://maps.googleapis.com/maps/api/staticmap?markers=|<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;zoom=14&amp;size=570x200&amp;sensor=false"></a>
-    <img src="https://maps.googleapis.com/maps/api/streetview?size=570x200&amp;location=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;sensor=false">
+    <!-- <img src="https://maps.googleapis.com/maps/api/streetview?size=570x200&amp;location=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;sensor=false"> -->
   </div>
 </div>
 
@@ -146,17 +168,17 @@
         </div>
       <% end %>
       <%= form.hidden_field :person_id, :value => @person.id %>
-      <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" }, :id => "new-reason" %>
-      <%= form.text_field :batch_id, :placeholder => "Batch ID", :id => "new-batchid"  %>
-      <%= form.text_field :gift_card_number, :placeholder => "Card Number", :id => "new-cardnumber" %>
-      <%= form.text_field :amount, :placeholder => "Amount", :id => "new-amount" %>
-      <%= form.text_field :expiration_date, :placeholder => "MM/YY", :id => "new-expirationdate" %>
-
+      <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" }, class: 'input-small', id: "new-reason" %>
+      <%= form.text_field :proxy_id, placeholder: "ProxyID",class: 'input-mini', id: "new-proxyid" %>
+      <%= form.text_field :batch_id, placeholder: "BatchID",class: 'input-mini', id: "new-batchid" %>
+      <%= form.text_field :gift_card_number, placeholder: "Card Number", id: "new-cardnumber" %>
+      <%= form.text_field :amount, placeholder: "Amount",class: 'input-mini', id: "new-amount" %>
+      <%= form.text_field :expiration_date, placeholder: "MM/YY", class: 'input-mini', id: "new-expirationdate" %>
       <%= form.submit 'Add Gift Card', :class => "btn" %>
     <% end %>
   </div>
   <div class="span12">
-    <h3 id="gift-card-total">Gift Cards - Total: <%= humanized_money_with_symbol @person.gift_card_total %></h3>
+    <h3>Gift Cards - Total: <span id='gift_card_total'><%= humanized_money_with_symbol @person.gift_card_total %></span></h3>
     <table class="table table-striped">
       <tr>
         <th>Gift Card ID</th>
@@ -224,5 +246,10 @@
                 :method => 'delete',
                 :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                 :class => 'btn btn-danger' %>
+    <%= link_to 'deactivate',
+              deactivate_people_path(@person),
+              method: :post,
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
   </div>
 </div>

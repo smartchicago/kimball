@@ -1,3 +1,30 @@
+# == Schema Information
+#
+# Table name: twilio_messages
+#
+#  id                 :integer          not null, primary key
+#  message_sid        :string(255)
+#  date_created       :datetime
+#  date_updated       :datetime
+#  date_sent          :datetime
+#  account_sid        :string(255)
+#  from               :string(255)
+#  to                 :string(255)
+#  body               :string(255)
+#  status             :string(255)
+#  error_code         :string(255)
+#  error_message      :string(255)
+#  direction          :string(255)
+#  from_city          :string(255)
+#  from_state         :string(255)
+#  from_zip           :string(255)
+#  wufoo_formid       :string(255)
+#  conversation_count :integer
+#  signup_verify      :string(255)
+#  created_at         :datetime
+#  updated_at         :datetime
+#
+
 require 'twilio-ruby'
 require 'csv'
 
@@ -66,11 +93,13 @@ class TwilioMessagesController < ApplicationController
     @twilio_message = TwilioMessage.new
   end
 
+  # this is the callback from twilio about the message and it's delivery
   # POST /twilio_messages/updatestatus
   def updatestatus
     this_message = TwilioMessage.find_by message_sid: params['MessageSid']
     this_message.status = params['MessageStatus']
     this_message.error_code = params['ErrorCode']
+    this_message.error_message = params['ErrorMessage']
     this_message.save
   end
 

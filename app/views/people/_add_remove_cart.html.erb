@@ -1,0 +1,18 @@
+<!-- event invitation scheduling handling. -->
+<%
+  in_cart = session[:cart].blank? || !session[:cart].include?(person.id)
+  add_class = in_cart ? '' : 'hide'
+  delete_class = in_cart ? 'hide' : ''
+%>
+  <!-- <%= in_cart %> -->
+              <%= link_to t('.schedule', default: "add to invite"),
+                          add_cart_path(person_id: person.id),
+                          class: "btn btn-mini #{add_class}",
+                          id: "#{person.id}-cart-add",
+                          remote: true %>
+
+              <%= link_to t('.schedule', default: "remove from invite"),
+                          delete_cart_path(person_id: person.id),
+                          id: "#{person.id}-cart-delete",
+                          class:"btn btn-mini #{delete_class}",
+                          remote: true %>

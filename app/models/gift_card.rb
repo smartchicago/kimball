@@ -1,7 +1,28 @@
+# == Schema Information
+#
+# Table name: gift_cards
+#
+#  id               :integer          not null, primary key
+#  gift_card_number :string(255)
+#  expiration_date  :string(255)
+#  person_id        :integer
+#  notes            :string(255)
+#  created_by       :integer
+#  reason           :integer
+#  amount_cents     :integer          default(0), not null
+#  amount_currency  :string(255)      default("USD"), not null
+#  giftable_id      :integer
+#  giftable_type    :string(255)
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  batch_id         :string(255)
+#  proxy_id         :integer
+#
+
 require 'csv'
 
 class GiftCard < ActiveRecord::Base
-
+  page 20
   monetize :amount_cents
 
   enum reason: {
@@ -19,27 +40,31 @@ class GiftCard < ActiveRecord::Base
   validates_presence_of :amount
   validates_presence_of :reason
 
-  validates_format_of :expiration_date, with: /\A(0|1)([0-9])\/([0-9]{2})\z/i
+  validates_format_of :expiration_date, with: /\A(0|1)([0-9])\/([0-9]{2})\z/i ,unless: proc { |c| c.expiration_date.blank? }
 
-  validates_uniqueness_of :gift_card_number, :scope => :batch_id
-  validates_format_of :gift_card_number, with: /\A([0-9]){5}\z/i
+  validates_length_of :proxy_id, is: 4, unless: proc { |c| c.proxy_id.blank? }
+  validates_numericality_of :proxy_id, unless: proc { |c| c.proxy_id.blank? }
+
+  validates_uniqueness_of :gift_card_number, scope: :batch_id
+
+  validates_format_of :gift_card_number, with: /\A([0-9]){4,5}\z/i
   validates_uniqueness_of :reason, scope: :person_id, if: "reason == 'signup'"
   # Need to add validation to limit 1 signup per person
 
   def self.batch_create(post_content)
     # begin exception handling
-    begin
-      # begin a transaction on the gift card model
-      GiftCard.transaction do
-        # for each gift card record in the passed json
-        JSON.parse(post_content).each do |gift_card_hash|
-          # create a new gift card
-          GiftCard.create!(gift_card_hash)
-        end # json.parse
-      end # transaction
-    rescue
-      Rails.logger("There was a problem.")
-    end  # exception handling
+
+    # begin a transaction on the gift card model
+    GiftCard.transaction do
+      # for each gift card record in the passed json
+      JSON.parse(post_content).each do |gift_card_hash|
+        # create a new gift card
+        GiftCard.create!(gift_card_hash)
+      end # json.parse
+    end # transaction
+  rescue
+    Rails.logger('There was a problem.')
+    # exception handling
   end  # batch_create
 
   def self.export_csv

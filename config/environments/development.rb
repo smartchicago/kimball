@@ -2,7 +2,7 @@ Logan::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   Bullet.enable = true
-  Bullet.alert = true
+  Bullet.alert = false
   Bullet.bullet_logger = true
   # base url for emails
   config.action_mailer.default_url_options = { host: 'localhost:8080' }
@@ -14,6 +14,8 @@ Logan::Application.configure do
 
   # Do not eager load code on boot.
   config.eager_load = false
+
+  config.web_console.whitelisted_ips = '192.168.0.0/16'
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
@@ -32,13 +34,6 @@ Logan::Application.configure do
   # Debug mode disables concatenation and preprocessing of assets.
   config.assets.debug = true
 
-  # config file
-  config.before_configuration do
-    env_file = File.join(Rails.root, 'config', 'local_env.yml')
-    YAML.load(File.open(env_file)).each do |key, value|
-      ENV[key.to_s] = value
-    end if File.exist?(env_file)
-  end
   config.middleware.use Rack::TwilioWebhookAuthentication, ENV['TWILIO_AUTH_TOKEN'], '/receive_text/index'
 
   # Asset digests allow you to set far-future HTTP expiration dates on all assets,

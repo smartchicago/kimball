@@ -1,3 +1,38 @@
+# == Schema Information
+#
+# Table name: people
+#
+#  id                               :integer          not null, primary key
+#  first_name                       :string(255)
+#  last_name                        :string(255)
+#  email_address                    :string(255)
+#  address_1                        :string(255)
+#  address_2                        :string(255)
+#  city                             :string(255)
+#  state                            :string(255)
+#  postal_code                      :string(255)
+#  geography_id                     :integer
+#  primary_device_id                :integer
+#  primary_device_description       :string(255)
+#  secondary_device_id              :integer
+#  secondary_device_description     :string(255)
+#  primary_connection_id            :integer
+#  primary_connection_description   :string(255)
+#  phone_number                     :string(255)
+#  participation_type               :string(255)
+#  created_at                       :datetime
+#  updated_at                       :datetime
+#  signup_ip                        :string(255)
+#  signup_at                        :datetime
+#  voted                            :string(255)
+#  called_311                       :string(255)
+#  secondary_connection_id          :integer
+#  secondary_connection_description :string(255)
+#  verified                         :string(255)
+#  preferred_contact_method         :string(255)
+#  token                            :string(255)
+#
+
 # FIXME: Refactor and re-enable cop
 # rubocop:disable ClassLength
 class PeopleController < ApplicationController
@@ -6,11 +41,21 @@ class PeopleController < ApplicationController
 
   skip_before_action :authenticate_user!, if: :should_skip_janky_auth?
   skip_before_action :verify_authenticity_token, only: [:create, :create_sms]
+  helper_method :sort_column, :sort_direction
 
   # GET /people
   # GET /people.json
   def index
-    @people = Person.paginate(page: params[:page]).order('signup_at DESC')
+
+    @verified_types = Person.uniq.pluck(:verified).select(&:present?)
+    @people = if params[:tags].blank? || params[:tags] == ""
+                Person.paginate(page: params[:page]).order(sort_column + ' ' + sort_direction).where(active: true)
+              else
+                tag_names =  params[:tags].split(',').map(&:strip)
+                tags = Tag.where(name:tag_names)
+                Person.paginate(page: params[:page]).order(sort_column + ' ' + sort_direction).where(active: true).includes(:tags).where(tags: {id: tags.pluck(:id)})
+              end
+    @tags = params[:tags].blank? ? '[]' : Tag.where(name: params[:tags].split(',').map(&:strip)).to_json(methods: [:value, :label, :type])
   end
 
   # GET /people/1
@@ -35,6 +80,17 @@ class PeopleController < ApplicationController
   def edit
   end
 
+  # POST /people/:person_id/deactivate
+  def deactivate
+    @person = Person.find_by_id params[:person_id]
+    @person.deactivate!('admin_interface')
+    flash[:notice] = "#{@person.full_name} deactivated"
+    respond_to do |format|
+      format.js { render text: "$('#person-#{@person.id}').remove()" }
+      format.html { redirect_to people_path }
+    end
+  end
+
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize,  Metrics/MethodLength, Rails/TimeZone
   #
@@ -57,7 +113,7 @@ class PeopleController < ApplicationController
       new_person.postal_code = params['Field271'].strip
       new_person.phone_number = params['Field281'].strip
 
-      if params['Field279'].strip.upcase != 'SKIP'
+      unless params['Field279'].strip.casecmp('SKIP').zero?
         new_person.email_address = params['Field279'].strip
       end
       # new_person.save
@@ -134,7 +190,7 @@ class PeopleController < ApplicationController
           from: ENV['TWILIO_SIGNUP_VERIFICATION_NUMBER'],
           to: @person.normalized_phone_number,
           body: @twilio_message.body
-        # status_callback: request.base_url + "/twilio_messages/#{@twilio_message.id}/updatestatus"
+          # status_callback: request.base_url + "/twilio_messages/#{@twilio_message.id}/updatestatus"
         )
         @twilio_message.message_sid = @message.sid
       rescue Twilio::REST::RequestError => e
@@ -201,20 +257,28 @@ class PeopleController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def person_params
-      params.require(:person).permit(:first_name, :last_name, :verified, :email_address, 
-          :address_1, :address_2, :city, :state, :postal_code, :geography_id, :primary_device_id, 
-          :primary_device_description, :secondary_device_id, :secondary_device_description, 
-          :primary_connection_id, :primary_connection_description, :secondary_connection_id, 
-          :secondary_connection_description, :phone_number, :participation_type, 
-          :preferred_contact_method, 
-          :gift_cards_attributes => [:gift_card_number, :expiration_date, :person_id, :notes, :created_by, :reason, :amount, :giftable_id, :giftable_type]
-          )
+      params.require(:person).permit(:first_name, :last_name, :verified, :email_address,
+        :address_1, :address_2, :city, :state, :postal_code, :geography_id, :primary_device_id,
+        :primary_device_description, :secondary_device_id, :secondary_device_description,
+        :primary_connection_id, :primary_connection_description, :secondary_connection_id,
+        :secondary_connection_description, :phone_number, :participation_type,
+        :preferred_contact_method,
+        gift_cards_attributes: [:gift_card_number, :expiration_date, :person_id, :notes, :created_by, :reason, :amount, :giftable_id, :giftable_type])
     end
 
     def should_skip_janky_auth?
       # don't attempt authentication on reqs from wufoo
       (params[:action] == 'create' || params[:action] == 'create_sms') && params['HandshakeKey'].present?
       # params[:action] == 'create_sms' && params['HandshakeKey'].present?
+    end
+
+    def sort_column
+      res = Person.column_names.include?(params[:sort]) ? params[:sort] : 'id'
+      "people.#{res}"
+    end
+
+    def sort_direction
+      %w(asc desc).include?(params[:direction]) ? params[:direction] : 'desc'
     end
 
 end

@@ -6,8 +6,8 @@ class GiftCardsController < ApplicationController
   # GET /gift_cards
   # GET /gift_cards.json
   def index
-    @gift_cards = GiftCard.includes(:person).all
-    @recent_signups = Person.no_signup_card.where('signup_at > :startdate', { startdate: 3.months.ago }).order('signup_at DESC')
+    @gift_cards = GiftCard.paginate(page: params[:page]).includes(:person).all
+    @recent_signups = Person.paginate(page: params[:page]).no_signup_card.where('signup_at > :startdate', { startdate: 3.months.ago }).order('signup_at DESC')
     @new_gift_cards = []
     @email_duplicates = []
     @phone_duplicates = []
@@ -59,7 +59,6 @@ class GiftCardsController < ApplicationController
       #   send_data output
       # end
     end
-
   end
 
   # GET /gift_cards/1
@@ -82,6 +81,7 @@ class GiftCardsController < ApplicationController
     @gift_card = GiftCard.new(gift_card_params)
     respond_to do |format|
       if @create_result = @gift_card.with_user(current_user).save
+        @total = @gift_card.person.blank? ? @gift_card.amount : @gift_card.person.gift_card_total
         format.js {}
         format.json {}
         format.html { redirect_to @gift_card, notice: 'Gift Card was successfully created.'  }
@@ -128,6 +128,7 @@ class GiftCardsController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_gift_card
       @gift_card = GiftCard.find(params[:id])
@@ -135,6 +136,6 @@ class GiftCardsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def gift_card_params
-      params.require(:gift_card).permit(:gift_card_number, :batch_id, :expiration_date, :person_id, :notes, :created_by, :reason, :amount, :giftable_id, :giftable_type)
+      params.require(:gift_card).permit(:gift_card_number, :batch_id, :expiration_date, :person_id, :notes, :proxy_id, :created_by, :reason, :amount, :giftable_id, :giftable_type)
     end
 end

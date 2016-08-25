@@ -1,3 +1,4 @@
+<%= will_paginate @recent_signups, :renderer => BootstrapPagination::Rails %>
 <h1>Recent sign-ups who need gift cards</h1>
 <div id="error-div"></div>
 <table class="table table-striped">
@@ -8,6 +9,7 @@
       <th>Name</th>
       <th>Address</th>
       <th>Batch</th>
+      <th>ProxyID</th>
       <th>Card Number</th>
       <th>Expiration Date</th>
       <th>Amount</th>
@@ -29,16 +31,35 @@
                 </ul>
               </div>
             <% end %>
-            <td><%= form.text_field :person_id, :value => @recent_signups[index].id, :readonly => true, :class => "span1" %></td>
-            <td><%= @recent_signups[index].verified %></td>
-            <td><%= @recent_signups[index].full_name %></td>
-            <td><%= address_fields_to_sentence(@recent_signups[index]) %></td>
-            <td id="new-batchid-<%= @recent_signups[index].id %>"><%= form.text_field :batch_id, :placeholder => "Batch ID"  %></td>
-            <td id="new-cardnumber-<%= @recent_signups[index].id %>"><%= form.text_field :gift_card_number, :placeholder => "Card Number"  %></td>
-            <td id="new-expirationdate-<%= @recent_signups[index].id %>"><%= form.text_field :expiration_date, :placeholder => "MM/YY" %></td>
-            <td><%= form.text_field :amount, :value => "5.00", :readonly => true, :class => "span1" %></td>
+            <td>
+              <%= form.text_field :person_id, :value => @recent_signups[index].id, :readonly => true, :class => "span1" %>
+            </td>
+            <td>
+              <%= @recent_signups[index].verified %>
+            </td>
+            <td>
+              <%= @recent_signups[index].full_name %>
+            </td>
+            <td>
+              <%= address_fields_to_sentence(@recent_signups[index]) %>
+            </td>
+            <td id="new-batchid-<%= @recent_signups[index].id %>">
+              <%= form.text_field :batch_id, class: 'input-small', :placeholder => "Batch ID"  %>
+            </td>
+            <td id="new-batchid-<%= @recent_signups[index].id %>">
+              <%= form.text_field :proxy_id,class: 'input-mini', :placeholder => "Proxy ID"  %>
+            </td>
+            <td id="new-cardnumber-<%= @recent_signups[index].id %>">
+              <%= form.text_field :gift_card_number,class: 'input-small', :placeholder => "Card Number"  %>
+            </td>
+            <td id="new-expirationdate-<%= @recent_signups[index].id %>">
+              <%= form.text_field :expiration_date, class: 'input-mini',:placeholder => "MM/YY" %>
+            </td>
+            <td>
+              <%= form.text_field :amount, :value => "5.00", :readonly => true, :class => "span1" %>
+              </td>
             <%= form.hidden_field :reason, value: "signup" %>
-            
+
             <td id="new-submit-<%= @recent_signups[index].id %>"><%= form.submit 'Add Gift Card', :class => "btn" %></td>
         <% end %>
       </tr>
@@ -59,7 +80,7 @@
 
 
 <h1>Listing Gift Cards</h1>
-
+<%= will_paginate @gift_cards, :renderer => BootstrapPagination::Rails %>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -69,6 +90,7 @@
       <th>Reason</th>
       <th>Giftable ID</th>
       <th>Batch</th>
+      <th>Proxy ID</th>
       <th>Card Number</th>
       <th>Expiration Date</th>
       <th>Amount</th>
@@ -87,6 +109,7 @@
         <td><%= gift_card.reason %></td>
         <td><%= gift_card.giftable_id %></td>
         <td><%= gift_card.batch_id %></td>
+        <td><%= gift_card.proxy_id %></td>
         <td><%= gift_card.gift_card_number %></td>
         <td><%= gift_card.expiration_date %></td>
         <td><%= humanized_money_with_symbol gift_card.amount %></td>

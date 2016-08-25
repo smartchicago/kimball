@@ -6,6 +6,7 @@
   $('td#new-batchid-<%= @gift_card.person_id %>').html('<%= @gift_card.batch_id %>');
   $('td#new-cardnumber-<%= @gift_card.person_id %>').html('<%= @gift_card.gift_card_number %>');
   $('td#new-expirationdate-<%= @gift_card.person_id %>').html('<%= @gift_card.expiration_date %>');
+  $('#gift_card_total').html("<%= humanized_money_with_symbol @total %>");
   $("#gift_card_content").val("");
   $('#error-div').html("");
   // Updates for Person page

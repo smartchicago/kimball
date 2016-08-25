@@ -3,7 +3,7 @@
 # Table name: comments
 #
 #  id               :integer          not null, primary key
-#  content          :text
+#  content          :text(65535)
 #  user_id          :integer
 #  commentable_type :string(255)
 #  commentable_id   :integer
@@ -13,7 +13,7 @@
 #
 
 class Comment < ActiveRecord::Base
-
+  has_paper_trail
   validates_presence_of :content
   belongs_to :commentable, polymorphic: true, touch: true
 end

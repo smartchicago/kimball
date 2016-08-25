@@ -30,4 +30,12 @@
 .vagrant
 
 Procfile
-.DS_Store
+
+# weird mac files.
+.DS_STORE
+
+# simplecov
+/coverage
+
+# screenshots
+screenshot*

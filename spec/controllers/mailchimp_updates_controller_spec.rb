@@ -29,136 +29,133 @@ RSpec.describe MailchimpUpdatesController, type: :controller do
   # This should return the minimal set of attributes required to create a valid
   # MailchimpUpdate. As you add validations to MailchimpUpdate, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { email: Faker::Internet.email, update_type: 'unsubscribe', fired_at: "2016-03-30 13:01:21" } }
+  let(:valid_attributes) { { email: Faker::Internet.email, update_type: 'unsubscribe', fired_at: '2016-03-30 13:01:21' } }
 
-  let(:invalid_attributes) { { email: "bad-email@example.com", update_type: 'none', fired_at: "2016-03-30 13:01:21" } }
+  let(:invalid_attributes) { { email: 'bad-email@example.com', update_type: 'none', fired_at: '2016-03-30 13:01:21' } }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # MailchimpUpdatesController. Be sure to keep this updated too.
-  #let(:valid_session) { controller.stub!(:signed_in?).and_return(true) }
+  # let(:valid_session) { controller.stub!(:signed_in?).and_return(true) }
 
-  describe "GET #index" do
-    it "assigns all mailchimp_updates as @mailchimp_updates" do
+  describe 'GET #index' do
+    it 'assigns all mailchimp_updates as @mailchimp_updates' do
       mailchimp_update = MailchimpUpdate.create! valid_attributes
       get :index, {}
       expect(assigns(:mailchimp_updates)).to eq([mailchimp_update])
     end
   end
 
-  describe "GET #show" do
-    it "assigns the requested mailchimp_update as @mailchimp_update" do
+  describe 'GET #show' do
+    it 'assigns the requested mailchimp_update as @mailchimp_update' do
       mailchimp_update = MailchimpUpdate.create! valid_attributes
-      get :show, {:id => mailchimp_update.to_param}
+      get :show, { id: mailchimp_update.to_param }
       expect(assigns(:mailchimp_update)).to eq(mailchimp_update)
     end
   end
 
-  describe "GET #new" do
-    it "assigns a new mailchimp_update as @mailchimp_update" do
+  describe 'GET #new' do
+    it 'assigns a new mailchimp_update as @mailchimp_update' do
       get :new, {}
       expect(assigns(:mailchimp_update)).to be_a_new(MailchimpUpdate)
     end
   end
 
-  describe "GET #edit" do
-    it "assigns the requested mailchimp_update as @mailchimp_update" do
+  describe 'GET #edit' do
+    it 'assigns the requested mailchimp_update as @mailchimp_update' do
       mailchimp_update = MailchimpUpdate.create! valid_attributes
-      get :edit, {:id => mailchimp_update.to_param}
+      get :edit, { id: mailchimp_update.to_param }
       expect(assigns(:mailchimp_update)).to eq(mailchimp_update)
     end
   end
 
-  describe "POST #create" do
-    context "with valid params" do
-      it "creates a new MailchimpUpdate" do
+  describe 'POST #create' do
+    context 'with valid params' do
+      it 'creates a new MailchimpUpdate' do
         expect {
-          post :create, mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'], data: {email: Faker::Internet.email}, :mailchimp_update => valid_attributes}.to change(MailchimpUpdate, :count).by(1)
-
+          post :create, mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'], data: { email: Faker::Internet.email }, mailchimp_update: valid_attributes
+        }.to change(MailchimpUpdate, :count).by(1)
       end
 
-      it "assigns a newly created mailchimp_update as @mailchimp_update" do
-        post :create, mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'], data: {email: Faker::Internet.email}, :mailchimp_update => valid_attributes
+      it 'assigns a newly created mailchimp_update as @mailchimp_update' do
+        post :create, mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'], data: { email: Faker::Internet.email }, mailchimp_update: valid_attributes
         expect(assigns(:mailchimp_update)).to be_a(MailchimpUpdate)
         expect(assigns(:mailchimp_update)).to be_persisted
       end
 
-      it "redirects to the created mailchimp_update" do
-        post :create, mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'], data: {email: Faker::Internet.email}, :mailchimp_update => valid_attributes
+      it 'redirects to the created mailchimp_update' do
+        post :create, mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'], data: { email: Faker::Internet.email }, mailchimp_update: valid_attributes
         expect(response).to redirect_to(MailchimpUpdate.last)
       end
     end
 
-    context "with invalid params" do
-
-      it "assigns a newly created but unsaved mailchimp_update as @mailchimp_update" do
-        skip("Will fix invalid tests later")
-        post :create, mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'], data: {email: Faker::Internet.email}, :mailchimp_update => invalid_attributes
+    context 'with invalid params' do
+      it 'assigns a newly created but unsaved mailchimp_update as @mailchimp_update' do
+        skip('Will fix invalid tests later')
+        post :create, mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'], data: { email: Faker::Internet.email }, mailchimp_update: invalid_attributes
         expect(assigns(:mailchimp_update)).to be_a_new(MailchimpUpdate)
       end
 
       it "re-renders the 'new' template" do
-        skip("Will fix invalid tests later")
-        post :create, mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'], data: {email: Faker::Internet.email}, :mailchimp_update => invalid_attributes
-        expect(response).to render_template("new")
+        skip('Will fix invalid tests later')
+        post :create, mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'], data: { email: Faker::Internet.email }, mailchimp_update: invalid_attributes
+        expect(response).to render_template('new')
       end
     end
   end
 
-  describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes)  { { email: Faker::Internet.email, update_type: 'subscribe', fired_at: "2016-03-30 13:01:21" } }
+  describe 'PUT #update' do
+    context 'with valid params' do
+      let(:new_attributes)  { { email: Faker::Internet.email, update_type: 'subscribe', fired_at: '2016-03-30 13:01:21' } }
 
-
-      it "updates the requested mailchimp_update" do
+      it 'updates the requested mailchimp_update' do
         mailchimp_update = MailchimpUpdate.create! valid_attributes
-        put :update, {:id => mailchimp_update.to_param, :mailchimp_update => new_attributes}
+        put :update, { id: mailchimp_update.to_param, mailchimp_update: new_attributes }
         mailchimp_update.reload
-        skip("Add assertions for updated state")
+        skip('Add assertions for updated state')
       end
 
-      it "assigns the requested mailchimp_update as @mailchimp_update" do
+      it 'assigns the requested mailchimp_update as @mailchimp_update' do
         mailchimp_update = MailchimpUpdate.create! valid_attributes
-        put :update, {:id => mailchimp_update.to_param, :mailchimp_update => valid_attributes}
+        put :update, { id: mailchimp_update.to_param, mailchimp_update: valid_attributes }
         expect(assigns(:mailchimp_update)).to eq(mailchimp_update)
       end
 
-      it "redirects to the mailchimp_update" do
+      it 'redirects to the mailchimp_update' do
         mailchimp_update = MailchimpUpdate.create! valid_attributes
-        put :update, {:id => mailchimp_update.to_param, :mailchimp_update => valid_attributes}
+        put :update, { id: mailchimp_update.to_param, mailchimp_update: valid_attributes }
         expect(response).to redirect_to(mailchimp_update)
       end
     end
 
-    context "with invalid params" do
-      it "assigns the mailchimp_update as @mailchimp_update" do
+    context 'with invalid params' do
+      it 'assigns the mailchimp_update as @mailchimp_update' do
         mailchimp_update = MailchimpUpdate.create! valid_attributes
-        put :update, {:id => mailchimp_update.to_param, :mailchimp_update => invalid_attributes}
+        put :update, { id: mailchimp_update.to_param, mailchimp_update: invalid_attributes }
         expect(assigns(:mailchimp_update)).to eq(mailchimp_update)
       end
 
       it "re-renders the 'edit' template" do
-        skip("Will fix invalid tests later")
+        skip('Will fix invalid tests later')
         mailchimp_update = MailchimpUpdate.create! valid_attributes
-        put :update, {:id => mailchimp_update.to_param, :mailchimp_update => invalid_attributes}
-        expect(response).to render_template("edit")
+        put :update, { id: mailchimp_update.to_param, mailchimp_update: invalid_attributes }
+        expect(response).to render_template('edit')
       end
     end
   end
 
-  describe "DELETE #destroy" do
-    it "destroys the requested mailchimp_update" do
+  describe 'DELETE #destroy' do
+    it 'destroys the requested mailchimp_update' do
       mailchimp_update = MailchimpUpdate.create! valid_attributes
       expect {
-        delete :destroy, {:id => mailchimp_update.to_param}
+        delete :destroy, { id: mailchimp_update.to_param }
       }.to change(MailchimpUpdate, :count).by(-1)
     end
 
-    it "redirects to the mailchimp_updates list" do
+    it 'redirects to the mailchimp_updates list' do
       mailchimp_update = MailchimpUpdate.create! valid_attributes
-      delete :destroy, {:id => mailchimp_update.to_param}
+      delete :destroy, { id: mailchimp_update.to_param }
       expect(response).to redirect_to(mailchimp_updates_url)
     end
   end
-
 end

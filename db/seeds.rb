@@ -16,7 +16,9 @@ Person.create(
   primary_connection_id: 1,
   primary_connection_description:'cable internet',
   phone_number: '312-555-9090',
-  participation_type: 'in-person'
+  participation_type: 'in-person',
+  preferred_contact_method: 'EMAIL',
+  token: 'thisismytoken'
 )
 
 Person.create(
@@ -35,12 +37,16 @@ Person.create(
   primary_connection_id: 1,
   primary_connection_description:'cable internet',
   phone_number: '312-555-8888',
-  participation_type: 'remote'
+  participation_type: 'remote',
+  preferred_contact_method: 'SMS',
+  token: 'thisismytoken'
 )
 
 User.create(
   email: 'cutgroup@example.com',
   password: 'foobar123',
   password_confirmation: 'foobar123',
-  approved: true
+  approved: true,
+  name: 'Joe User',
+  phone_number: '555-555-5555'
 )

@@ -8,10 +8,10 @@ module GsmHelper
     # Replace bad characters with GSM allowed ones
     map =
       {
-        "“" => '"',
-        "”" => '"',
-        "—" => '-',
-        "’" => "'",
+        '“' => '"',
+        '”' => '"',
+        '—' => '-',
+        '’' => "'",
         '$' => '$'
       }
     re = Regexp.new(map.keys.map { |x| Regexp.escape(x) }.join('|'))

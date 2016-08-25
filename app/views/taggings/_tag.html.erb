@@ -1,3 +1,3 @@
 <li id="tag-<%= tag.id %>">
-  <%= link_to tag.name, search_index_path(:adv => 1, :tags => tag.name.split(',')) %>
+  <%= link_to tag.name, search_index_path(:adv => 1, :tags => tag.name) %>
 </li>

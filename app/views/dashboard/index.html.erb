@@ -1,7 +1,7 @@
 <div class="row">
   <div class="span4">
     <h3>Recent signups</h3>
-    <%= render partial: 'person', collection: @people %>    
+    <%= render partial: 'person', collection: @people %>
   </div>
   <div class="span4">
     <h3>Recent unmatched submissions</h3>
@@ -11,23 +11,24 @@
   <div class="span4">
     <div class="well">
       <h3><%= pluralize @recent_signups, 'signup' %> <% if @recent_submissions > 0 %>and <%= pluralize @recent_submissions, 'form submission' %><% end %> in the last week.</h3>
-      
+
       <h4>Top five wards</h4>
       <table class="table table-striped">
         <tr><th>Ward</th><th>Signups</th></tr>
         <% for ward,cnt in @top_five_wards do %><tr><td><%= ward %></td><td><%= link_to cnt, search_index_path(:adv => 1, :geography_id => ward) %></td></tr><% end %>
-      </table>      
+      </table>
 
       <h4>Bottom five wards</h4>
       <table class="table table-striped">
         <tr><th>Ward</th><th>Signups</th></tr>
         <% for ward,cnt in @bottom_five_wards do %><tr><td><%= ward %></td><td><%= link_to cnt, search_index_path(:adv => 1, :geography_id => ward) %></td></tr><% end %>
-      </table>      
-      
+      </table>
+      <h4>Last Week's Deactivation Count:</h4>
+      <h3><%= @deactivated %></h3>
       <h4>Most popular tags</h4>
       <ul id="tag-list">
         <%= render partial: 'taggings/tag', collection: Tag.most_popular(10) %>
-        
+
       </ul>
     </div>
   </div>

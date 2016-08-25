@@ -2,7 +2,7 @@
   <div class="span6">
     <%= form_for(@submission) do |f| %>
       <fieldset>
-        <legend>Submission</legend>        
+        <legend>Submission</legend>
         <% if @submission.errors.any? %>
           <div id="error_explanation" class="alert alert-error">
             <ul>
@@ -16,22 +16,22 @@
         <%= f.label "Person ID (Number)" %>
         <%= f.text_field :person_id, class: 'span2' %>
 
-        <%= f.label "Wufoo Form ID" %>
-        <%= f.select :form_id, Logan::Application.config.wufoo.forms.collect{|i| [i.id, i.id] } , :class => 'span6', :include_blank => true %>
+        <%= f.label 'Wufoo Form ID' %>
+        <%= f.select :form_id, TwilioWufoo.wufoo_form_ids, class: 'span6', include_blank: true %>
 
-        <%= f.label "Wufoo Form Entry ID Number" %>
+        <%= f.label 'Wufoo Form Entry ID Number' %>
         <%= f.text_field :entry_id, class: 'span2' %>
 
         <%= f.label :form_type %>
         <%= f.select(:form_type, Submission.form_types.keys.map {|form_type| [form_type.titleize,form_type]}) %>
 
         <div class="form-actions">
-          <%= f.submit 'Save', class: "btn btn-primary" %>
-          <%= link_to 'Cancel', :back, class: "btn" %>
+          <%= f.submit 'Save', class: 'btn btn-primary' %>
+          <%= link_to 'Cancel', :back, class: 'btn' %>
         </div>
-        
+
       </fieldset>
-    <% end %>    
+    <% end %>
   </div>
   <div class="span6">
     <p class="well">This form can be used to add a submission from Wufoo and join it with an existing Person.</p>

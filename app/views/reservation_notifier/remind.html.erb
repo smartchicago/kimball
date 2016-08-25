@@ -1,0 +1,29 @@
+<p>Hi <% @reservations.first.person.first_name %>,</p>
+<p><%= @reservations.size %> interview<%= @reservations.size > 1 ? 's have' : ' has' %> been booked for you today.</p>
+
+<% @reservations.each do |r| %>
+   %{<div class='reservation'>
+      <p><%= r.description %> on <%= r.to_weekday_and_time %> for <%= r.duration / 60 %> minutes \n with <%= r.user.name %> tel: <%= r.user.phone_number %>"</p>
+        <p>click to confirm, cancel or ask to reschedule below.</p>
+        <ul>
+          <li>
+            <%= link_to "Confirm", confirm_v2_reservations_url(id:r.id,token:r.person.token) %>
+
+          </li>
+          <li>
+            <%= link_to "Cancel", cancel_v2_reservations_url(id:r.id,token:r.person.token) %>
+          </li>
+          <li>
+            <%= link_to "Change", change_v2_reservations_url(id:r.id,token:r.person.token) %>
+          </li>
+        </ul>
+      </div>  %>
+<% end %>
+
+<p>
+You can always check your schedule here: <%=link_to "Calendar",calendar_url(token: @reservations.first.person.token) %>
+</p>
+
+<p>Thanks!,</p>
+<p><%= ENV['TEAM_NAME'] %></p>
+

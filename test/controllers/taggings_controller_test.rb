@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: taggings
+#
+#  id            :integer          not null, primary key
+#  taggable_type :string(255)
+#  taggable_id   :integer
+#  created_by    :integer
+#  created_at    :datetime
+#  updated_at    :datetime
+#  tag_id        :integer
+#
+
 require 'test_helper'
 
 class TaggingsControllerTest < ActionController::TestCase

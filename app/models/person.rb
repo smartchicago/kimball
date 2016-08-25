@@ -30,16 +30,22 @@
 #  secondary_connection_description :string(255)
 #  verified                         :string(255)
 #  preferred_contact_method         :string(255)
+#  token                            :string(255)
+#  active                           :boolean          default(TRUE)
+#  deactivated_at                   :datetime
+#  deactivated_method               :string(255)
+#  neighborhood                     :string(255)
+#  tag_count_cache                  :integer          default(0)
 #
 
 # FIXME: Refactor and re-enable cop
 # rubocop:disable ClassLength
 class Person < ActiveRecord::Base
-
-  #scope :signup_card_needed, -> { where (self.no_signup_card)}
+  has_paper_trail
 
   include Searchable
   include ExternalDataMappings
+  include Neighborhoods
 
   phony_normalize :phone_number, default_country_code: 'US'
   phony_normalized_method :phone_number, default_country_code: 'US'
@@ -51,17 +57,25 @@ class Person < ActiveRecord::Base
   accepts_nested_attributes_for :gift_cards, reject_if: :all_blank
   attr_accessor :gift_cards_attributes
 
-
   has_many :reservations, dependent: :destroy
   has_many :events, through: :reservations
 
   has_many :tags, through: :taggings
   has_many :taggings, as: :taggable
 
-  has_secure_token
+  # we don't really need a join model, exceptionally HABTM is more appropriate
+  # rubocop:disable Rails/HasAndBelongsToMany
+  has_and_belongs_to_many :event_invitations, class_name: '::V2::EventInvitation', join_table: :invitation_invitees_join_table
+  # rubocop:enable Rails/HasAndBelongsToMany
+
+  has_many :v2_reservations, class_name: '::V2::Reservation'
+  has_many :v2_events, through: :event_invitations, foreign_key: 'v2_event_id', source: :event
+
+  has_secure_token :token
 
   after_update  :sendToMailChimp
   after_create  :sendToMailChimp
+  after_create  :update_neighborhood
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -81,28 +95,26 @@ class Person < ActiveRecord::Base
 
   validates :phone_number, presence: true, length: { in: 9..15 },
     unless: proc { |person| person.email_address.present? }
-  #validates :phone_number, allow_blank: true, uniqueness: true
+  validates :phone_number, allow_blank: true, uniqueness: true
 
   validates :email_address, presence: true,
     unless: proc { |person| person.phone_number.present? }
-  #validates :email_address, email: true, allow_blank: true, uniqueness: true
+  validates :email_address, email: true, allow_blank: true, uniqueness: true
 
   scope :no_signup_card, -> { where('id NOT IN (SELECT DISTINCT(person_id) FROM gift_cards where gift_cards.reason = 1)') }
-  scope :signup_card_needed, lambda { self.joins(:gift_cards).where("gift_cards.reason !=1") }
+  scope :signup_card_needed, -> { joins(:gift_cards).where('gift_cards.reason !=1') }
 
   self.per_page = 15
 
   def signup_gc_sent
-    signup_cards = self.gift_cards.where(reason: 1)
-    if signup_cards.length > 0
-      return true
-    end
-    return false
+    signup_cards = gift_cards.where(reason: 1)
+    return true unless signup_cards.empty?
+    false
   end
 
   def gift_card_total
-    total = self.gift_cards.sum(:amount_cents)
-    total = Money.new(total, "USD")
+    total = gift_cards.sum(:amount_cents)
+    total = Money.new(total, 'USD')
   end
 
   WUFOO_FIELD_MAPPING = {
@@ -132,6 +144,13 @@ class Person < ActiveRecord::Base
     tags.collect(&:name)
   end
 
+  def tag_count
+    tags.size
+  end
+
+  def submission_values
+    submissions.collect(&:submission_values)
+  end
 
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Rails/TimeZone
@@ -188,7 +207,7 @@ class Person < ActiveRecord::Base
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Rails/TimeZone
 
   # FIXME: Refactor and re-enable cop
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Style/MethodName, Metrics/BlockNesting, Style/VariableName
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Style/MethodName, Metrics/BlockNesting, Style/VariableName, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   #
   def sendToMailChimp
     if email_address.present?
@@ -198,23 +217,23 @@ class Person < ActiveRecord::Base
 
             gibbon = Gibbon::Request.new
             mailchimpSend = gibbon.lists(Logan::Application.config.cut_group_mailchimp_list_id).members(Digest::MD5.hexdigest(email_address.downcase)).upsert(
-                body: {email_address: email_address.downcase,
-                 status: "subscribed",
-                 merge_fields: { FNAME: first_name || "",
-                        LNAME: last_name || "",
-                        MMERGE3: geography_id || "",
-                        MMERGE4: postal_code || "",
-                        MMERGE5: participation_type || "",
-                        MMERGE6: voted || "",
-                        MMERGE7: called_311 || "",
-                        MMERGE8: primary_device_description || "",
-                        MMERGE9: secondary_device_id || "",
-                        MMERGE10: secondary_device_description || "",
-                        MMERGE11: primary_connection_id || "",
-                        MMERGE12: primary_connection_description || "",
-                        MMERGE13: primary_device_id || "",
-                        MMERGE14: preferred_contact_method || "" }
-                 })
+              body: { email_address: email_address.downcase,
+                      status: 'subscribed',
+                      merge_fields: { FNAME: first_name || '',
+                                      LNAME: last_name || '',
+                                      MMERGE3: geography_id || '',
+                                      MMERGE4: postal_code || '',
+                                      MMERGE5: participation_type || '',
+                                      MMERGE6: voted || '',
+                                      MMERGE7: called_311 || '',
+                                      MMERGE8: primary_device_description || '',
+                                      MMERGE9: secondary_device_id || '',
+                                      MMERGE10: secondary_device_description || '',
+                                      MMERGE11: primary_connection_id || '',
+                                      MMERGE12: primary_connection_description || '',
+                                      MMERGE13: primary_device_id || '',
+                                      MMERGE14: preferred_contact_method || '' } }
+            )
 
             Rails.logger.info("[People->sendToMailChimp] Sent #{id} to Mailchimp: #{mailchimpSend}")
           rescue Gibbon::MailChimpError => e
@@ -224,7 +243,7 @@ class Person < ActiveRecord::Base
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Style/MethodName, Metrics/BlockNesting, Style/VariableName
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Style/MethodName, Metrics/BlockNesting, Style/VariableName, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Rails/TimeZone, Metrics/PerceivedComplexity
@@ -303,7 +322,39 @@ class Person < ActiveRecord::Base
     [address_1, address_2, city, state, postal_code].reject(&:blank?).join(', ')
   end
 
+  def self.send_all_reminders
+    # this is where reservation_reminders
+    # called by whenever in /config/schedule.rb
+    Person.all.find_each(&:send_reservation_reminder)
+  end
 
+  def send_reservation_reminder
+    return if v2_reservations.for_today_and_tomorrow.size.zero?
+    case preferred_contact_method.upcase
+    when 'SMS'
+      ::ReservationReminderSms.new(to: self, reservations: v2_reservations.for_today_and_tomorrow).send
+    when 'EMAIL'
+      ReservationNotifier.remind(
+        reservations:  v2_reservations.for_today_and_tomorrow.to_a,
+        email_address: email_address
+      ).deliver_later
+    end
+  end
+
+  def deactivate!(method = nil)
+    self.active = false
+    self.deactivated_at = Time.current
+    self.deactivated_method = method if method
+    save!
+  end
+
+  def update_neighborhood
+    n = zip_to_neighborhood(postal_code)
+    unless n.blank?
+      self.neighborhood = n
+      save
+    end
+  end
 
 end
 # rubocop:enable ClassLength

@@ -1,0 +1,42 @@
+<%= render :partial => 'layouts/v2_event_menu' %>
+<h1>Listing reservations</h1>
+<div class="row">
+  <div class="span12">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Person</th>
+          <th>Event</th>
+          <th>Status</th>
+          <th>Created by</th>
+          <th>Time Slot</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @reservations.each do |reservation| %>
+          <tr>
+            <td><%= reservation.person.full_name %></td>
+            <td><%= reservation.event.title %></td>
+            <td><%= reservation.aasm_state %></td>
+            <td><%= reservation.user.name %></td>
+            <td><%= reservation.time_slot.to_weekday_and_time %></td>
+            <td><%= link_to 'Show', reservation %></td>
+            <!-- <td><%= link_to 'Edit', edit_reservation_path(reservation) %></td> -->
+            <td><%= link_to 'Destroy', reservation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<br>
+
+<div class="row">
+  <div class="span12" style="text-align:center">
+    <%= will_paginate @reservations, :renderer => BootstrapPagination::Rails %>
+  </div>
+</div>
