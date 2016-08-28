@@ -34,7 +34,7 @@ RSpec.describe GiftCardsController, type: :controller do
       expiration_date: "05/20",
       proxy_id:'4321',
       batch_id: '4321',
-      gift_card_number: '12345'
+      gift_card_number: '99998'
     }
   }
 

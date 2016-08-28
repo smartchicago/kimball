@@ -21,8 +21,8 @@
 
 FactoryGirl.define do
   factory :gift_card do
-    last_four 1
-    expiration_date '2016-06-03'
+    gift_card_number 99999
+    expiration_date '05/20'
     person_id 1
     notes 'MyString'
     created_by 1
