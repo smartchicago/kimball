@@ -8,7 +8,7 @@
   Twilio-Wufoo Connection? <%= select_tag :twiliowufoo_campaign, 
               options_for_select([[nil, nil]] + TwilioWufoo.all.order(:name).collect{|twiliowufoo| [twiliowufoo.name, twiliowufoo.id]}, selected: params[:twiliowufoo_campaign]), 
               :class => "input" %><br />
-  Upload a comma seperated csv. The phone numbers must be in a field called 'phone_number': <%= file_field_tag "file" %><br>
+  Upload a comma seperated csv. The phone numbers must be in a field called 'phone_number': <%= file_field_tag "file", accept: 'text/csv' %><br>
   <%= submit_tag "Upload Numbers", id: "submitData" , class: "btn btn-primary", data: { confirm: 'These messages will be added to the queue and sent as soon as possible. Are you sure you want to send these?' } %>
   
 <% end %>
