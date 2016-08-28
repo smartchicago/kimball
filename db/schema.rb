@@ -52,9 +52,9 @@ ActiveRecord::Schema.define(version: 20160816094658) do
     t.string   "delayed_reference_type", limit: 255
   end
 
-  add_index "delayed_jobs", ["delayed_reference_type"], name: "delayed_jobs_delayed_reference_type", using: :btree
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
-  add_index "delayed_jobs", ["queue"], name: "delayed_jobs_queue", using: :btree
+  add_index "delayed_jobs", ["delayed_reference_type"], name: "delayed_jobs_delayed_reference_type"
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+  add_index "delayed_jobs", ["queue"], name: "delayed_jobs_queue"
 
   create_table "events", force: :cascade do |t|
     t.string   "name",           limit: 255
@@ -88,8 +88,8 @@ ActiveRecord::Schema.define(version: 20160816094658) do
     t.integer  "proxy_id",         limit: 4
   end
 
-  add_index "gift_cards", ["giftable_type", "giftable_id"], name: "index_gift_cards_on_giftable_type_and_giftable_id", using: :btree
-  add_index "gift_cards", ["reason"], name: "gift_reason_index", using: :btree
+  add_index "gift_cards", ["giftable_type", "giftable_id"], name: "index_gift_cards_on_giftable_type_and_giftable_id"
+  add_index "gift_cards", ["reason"], name: "gift_reason_index"
 
   create_table "invitation_invitees_join_table", force: :cascade do |t|
     t.integer  "person_id",           limit: 4
@@ -273,7 +273,7 @@ ActiveRecord::Schema.define(version: 20160816094658) do
   end
 
   create_table "v2_events", force: :cascade do |t|
-    t.integer  "user_id",     limit: 4
+    t.integer  "user_id",    limit: 4
     t.string   "description", limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -306,6 +306,6 @@ ActiveRecord::Schema.define(version: 20160816094658) do
     t.text     "object_changes", limit: 4294967295
   end
 
-  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
+  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
 
 end
