@@ -2,12 +2,12 @@ Kimball
 =====
 [![Coverage Status](https://coveralls.io/repos/github/BlueRidgeLabs/kimball/badge.svg?branch=development)](https://coveralls.io/github/BlueRidgeLabs/kimball?branch=development)[![Build Status](https://travis-ci.org/BlueRidgeLabs/kimball.svg?branch=development)](https://travis-ci.org/BlueRidgeLabs/kimball)[![Code Climate](https://codeclimate.com/github/BlueRidgeLabs/kimball/badges/gpa.svg)](https://codeclimate.com/github/BlueRidgeLabs/kimball)
 
-Kimball is an application to manage people that are involved with the Smart Chicago CUT Group.
+Kimball is an application to manage people that are involved with the Smart Chicago CUTGroup.
 
 Features
 --------
 
-Kimball is a customer relationship management application at its heart. Kimball tracks people that have signed up to participate with the CUT Group, their involvement in events and CUT Group programs.
+Kimball is a customer relationship management application at its heart. Kimball tracks people that have signed up to participate with the CUTGroup, their involvement in events and CUTGroup programs.
 
 Setup
 -----
