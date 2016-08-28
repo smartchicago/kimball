@@ -180,7 +180,7 @@ Contributors
 * Chris Gansen (cgansen@gmail.com)
 * Dan O'Neil (doneil@cct.org)
 * Bill Cromie (bill@robinhood.org)
-* Josh Karlov (jkalov@cct.org)
+* Josh Kalov (jkalov@cct.org)
 
 License
 -------
