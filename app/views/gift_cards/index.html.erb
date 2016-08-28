@@ -80,6 +80,21 @@
 
 
 <h1>Listing Gift Cards</h1>
+ <div class='span12'>
+   
+      <%= form_tag '/gift_cards', method: :get, class: 'form-inline' %>
+      Filter: 
+      <label for="gift_card_number">Gift Card Number</label>
+      <%= text_field_tag :gift_card_number, params[:gift_card_number], class: 'input-mini', id:'gift_card_number-field' %>
+      <label for="batch_id">Batch ID</label>
+      <%= text_field_tag :batch_id,
+                            params[:batch_id],
+                            class: 'input-mini',
+                            id:'batch_id-field'
+                          %>
+      <%= submit_tag "Search", :name => nil, :class => "btn btn-primary" %>
+      <%= link_to "Clear Search", gift_cards_path, :class => "btn"  %>
+  </div>
 <%= will_paginate @gift_cards, :renderer => BootstrapPagination::Rails %>
 <table class="table table-striped">
   <thead>
@@ -105,7 +120,7 @@
       <tr>
         <td><%= gift_card.id %></td>
         <td><%= gift_card.person_id %></td>
-        <td><%= gift_card.person.full_name %></td>
+        <td><%= link_to "#{gift_card.person.full_name}", person_path(gift_card.person) %></td>
         <td><%= gift_card.reason %></td>
         <td><%= gift_card.giftable_id %></td>
         <td><%= gift_card.batch_id %></td>

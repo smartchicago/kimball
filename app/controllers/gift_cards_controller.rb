@@ -6,7 +6,16 @@ class GiftCardsController < ApplicationController
   # GET /gift_cards
   # GET /gift_cards.json
   def index
-    @gift_cards = GiftCard.paginate(page: params[:page]).includes(:person).all
+    #@gift_cards = GiftCard.paginate(page: params[:page]).includes(:person).all
+    query = {}
+    if params[:gift_card_number].present?
+      query['gift_card_number'] = params[:gift_card_number]
+    end
+    if params[:batch_id].present?
+      query['batch_id'] = params[:batch_id]
+    end
+    @gift_cards = GiftCard.paginate(page: params[:page]).includes(:person).where(query)
+    #@gift_cards = GiftCard.paginate(page: params[:page]).includes(:person).all
     @recent_signups = Person.paginate(page: params[:page]).no_signup_card.where('signup_at > :startdate', { startdate: 3.months.ago }).order('signup_at DESC')
     @new_gift_cards = []
     @email_duplicates = []
