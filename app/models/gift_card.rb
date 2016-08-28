@@ -69,11 +69,11 @@ class GiftCard < ActiveRecord::Base
 
   def self.export_csv
     CSV.generate do |csv|
-      csv_column_names =  ['ID', 'Batch ID', 'Gift Card Number', 'Expiration Date', 'Reason', 'Name', 'Address', 'Phone Number', 'Email']
+      csv_column_names =  ['Gift Card ID', 'Batch ID', 'Gift Card Number', 'Expiration Date', 'Reason', 'Person ID', 'Name', 'Address', 'Phone Number', 'Email']
       csv << csv_column_names
       all.each do |gift_card|
         this_person = gift_card.person
-        row_items = [gift_card.id, gift_card.batch_id, gift_card.gift_card_number,  gift_card.expiration_date, gift_card.reason, this_person.full_name || "", this_person.address_fields_to_sentence || "", this_person.phone_number || "", this_person.email_address || ""]
+        row_items = [gift_card.id, gift_card.batch_id, gift_card.gift_card_number,  gift_card.expiration_date, gift_card.reason, this_person.id || "", this_person.full_name || "", this_person.address_fields_to_sentence || "", this_person.phone_number || "", this_person.email_address || ""]
         csv << row_items
       end
     end
