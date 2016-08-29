@@ -31,7 +31,7 @@
                 </ul>
               </div>
             <% end %>
-            <td>
+            <td rowspan=2>
               <%= form.text_field :person_id, :value => @recent_signups[index].id, :readonly => true, :class => "span1" %>
             </td>
             <td>
@@ -64,15 +64,12 @@
         <% end %>
       </tr>
       <tr>
-        <tr><th>Email Duplicates:</th></tr>
-        <% @email_duplicates.each do |duplicate| %>
-          <% if duplicate.present? %>
-            <tr>
-            <td>ID: <%= duplicate[index].id %></td>
-            <td><%= duplicate[index].full_name %></td>
-            </tr>
+        <td colspan=6>
+          <% @recent_signups[index].possible_duplicates.each do |key, val| %>
+            Possible Duplicate ID #<%= link_to "#{key} #{val['person'].full_name}", person_path(val['person']) %> Matching on <%= val['match_count'] %> variables: <%= val['matches_on'].to_sentence %>
+            <br />
           <% end %>
-        <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

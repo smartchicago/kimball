@@ -95,11 +95,11 @@ class Person < ActiveRecord::Base
 
   validates :phone_number, presence: true, length: { in: 9..15 },
     unless: proc { |person| person.email_address.present? }
-  validates :phone_number, allow_blank: true, uniqueness: true
+  # validates :phone_number, allow_blank: true, uniqueness: true
 
   validates :email_address, presence: true,
     unless: proc { |person| person.phone_number.present? }
-  validates :email_address, email: true, allow_blank: true, uniqueness: true
+  # validates :email_address, email: true, allow_blank: true, uniqueness: true
 
   scope :no_signup_card, -> { where('id NOT IN (SELECT DISTINCT(person_id) FROM gift_cards where gift_cards.reason = 1)') }
   scope :signup_card_needed, -> { joins(:gift_cards).where('gift_cards.reason !=1') }
@@ -354,6 +354,60 @@ class Person < ActiveRecord::Base
       self.neighborhood = n
       save
     end
+  end
+
+  # Compare to other records in the database to find possible duplicates.
+  def possible_duplicates
+    @duplicates = {}
+    last_name_duplicates = Person.where(last_name: last_name).where.not(id: id)
+    last_name_duplicates.each do |duplicate|
+      duplicate_hash = {}
+      duplicate_hash['person'] = duplicate
+      duplicate_hash['match_count'] = 1
+      duplicate_hash['last_name_match'] = true
+      duplicate_hash['matches_on'] = ["Last Name"]
+      @duplicates[duplicate.id] = duplicate_hash
+    end
+    email_address_duplicates = Person.where(email_address: email_address).where.not(id: id)
+    email_address_duplicates.each do |duplicate|
+      if @duplicates.has_key? duplicate.id
+        @duplicates[duplicate.id]['match_count'] += 1
+        @duplicates[duplicate.id]['matches_on'].push("Email Address")
+      else
+        @duplicates[duplicate.id] = {}
+        @duplicates[duplicate.id]['person'] = duplicate
+        @duplicates[duplicate.id]['match_count'] = 1
+        @duplicates[duplicate.id]['matches_on'] = ["Email Address"]
+      end
+      @duplicates[duplicate.id]['email_address_match'] = true
+    end
+    phone_number_duplicates = Person.where(phone_number: phone_number).where.not(id: id)
+    phone_number_duplicates.each do |duplicate|
+      if @duplicates.has_key? duplicate.id
+        @duplicates[duplicate.id]['match_count'] += 1
+        @duplicates[duplicate.id]['matches_on'].push("Phone Number")
+      else
+        @duplicates[duplicate.id] = {}
+        @duplicates[duplicate.id]['person'] = duplicate
+        @duplicates[duplicate.id]['match_count'] = 1
+        @duplicates[duplicate.id]['matches_on'] = ["Phone Number"]
+      end
+      @duplicates[duplicate.id]['phone_number_match'] = true
+    end
+    address_1_duplicates = Person.where(address_1: address_1).where.not(id: id)
+    address_1_duplicates.each do |duplicate|
+      if @duplicates.has_key? duplicate.id
+        @duplicates[duplicate.id]['match_count'] += 1
+        @duplicates[duplicate.id]['matches_on'].push("Address_1")
+      else
+        @duplicates[duplicate.id] = {}
+        @duplicates[duplicate.id]['person'] = duplicate
+        @duplicates[duplicate.id]['match_count'] = 1
+        @duplicates[duplicate.id]['matches_on'] = ["Address_1"]
+      end
+      @duplicates[duplicate.id]['address_1_match'] = true
+    end
+    return @duplicates
   end
 
 end

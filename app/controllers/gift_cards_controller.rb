@@ -16,15 +16,9 @@ class GiftCardsController < ApplicationController
     end
     @gift_cards = GiftCard.paginate(page: params[:page]).includes(:person).where(query)
     #@gift_cards = GiftCard.paginate(page: params[:page]).includes(:person).all
-    @recent_signups = Person.paginate(page: params[:page]).no_signup_card.where('signup_at > :startdate', { startdate: 3.months.ago }).order('signup_at DESC')
+    @recent_signups = Person.no_signup_card.paginate(page: params[:page]).where('signup_at > :startdate', { startdate: 3.months.ago }).order('signup_at DESC')
     @new_gift_cards = []
-    @email_duplicates = []
-    @phone_duplicates = []
-    @recent_signups.each do |signup|
-      @email_duplicates << Person.where(email_address: signup.email_address).where.not(id: signup.id).order('signup_at DESC')
-      @phone_duplicates << Person.where(phone_number: signup.phone_number).where.not(id: signup.id).order('signup_at DESC')
-
-    end
+    # end
     @recent_signups.length.times do
       @new_gift_cards << GiftCard.new
     end
