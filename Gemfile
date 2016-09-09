@@ -15,6 +15,9 @@ gem 'rails_12factor'
 
 gem 'mail', '2.6.3'
 
+gem 'ransack', github: 'activerecord-hackery/ransack'
+
+
 group :development do
   # gem 'capistrano'
   # mainline cap is busted w/r/t Rails 4. Try this fork instead.

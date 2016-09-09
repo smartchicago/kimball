@@ -1,0 +1,175 @@
+<p id="notice"><%= @success %></p>
+<p id="error"><%= @error %></p>
+
+
+<div class="page-header">
+  <h1><%=t '.title', :default => "Search Results - Ransack Testing" %></h1>
+</div>
+
+<div class="row">
+  <div class="span12" style="text-align:right">
+    <!-- Search SQL = <%= @results.to_sql %> -->
+    <!-- <span data-toggle="collapse" data-target="#advanced-search">Show advanced search</span> -->
+  </div>
+</div>
+<%= search_form_for @q, url: 'index_ransack', method: :get do |f| %>
+  <div class="span3">
+
+    <%= f.label :first_name_cont %>
+    <%= f.search_field :first_name_cont %>
+
+    <%= f.label :last_name_cont %>
+    <%= f.search_field :last_name_cont %>
+
+    <%= f.label :full_name_cont %>
+    <%= f.search_field :full_name_cont %>
+
+    <%= f.label :email_address_start %>
+    <%= f.search_field :email_address_start %>
+
+    <%= f.label :phone_number_cont %>
+    <%= f.search_field :phone_number_cont %>
+
+    <%= f.label :address_1_cont %>
+    <%= f.search_field :address_1_cont %>
+  </div>
+
+  <div class="span3">
+    <%= f.label :primary_device_id_or_secondary_device_id_in %>
+    <%= f.select :primary_device_id_or_secondary_device_id_in, [[human_device_type_name(0),0],[ human_device_type_name(1),1], [human_device_type_name(2),2], [ human_device_type_name(3),  3]], {include_blank: true}, {:multiple => true,  :class => "multiple", :size => '4' } %>
+
+    <%= f.label :primary_connection_id_or_secondary_connection_id_in %>
+    <%= f.select :primary_connection_id_or_secondary_connection_id_in, [[human_connection_type_name(0),0],[ human_connection_type_name(1),1], [human_connection_type_name(4),4], [ human_connection_type_name(3),  3], [human_connection_type_name(2), 2]], {include_blank: true}, {:multiple => true,  :class => "multiple", :size => '5' } %>
+
+    <%= f.label :preferred_contact_method_cont %>
+    <%= f.select :preferred_contact_method_cont, [["Email", 'EMAIL'], ["SMS", 'SMS']], {include_blank: true}, {:class => "input" } %>
+  </div>
+  <div class="span5">
+    <%= f.label :primary_device_description_or_secondary_device_description_cont %>
+    <%= f.search_field :primary_device_description_or_secondary_device_description_cont %>
+
+    <%= f.label :primary_connection_description_or_secondary_connection_description_cont %>
+    <%= f.search_field :primary_connection_description_or_secondary_connection_description_cont %>
+   
+    <%= f.label :tags_id_eq_all %>
+    <%= f.collection_select :tags_id_eq_all, @tag_list, :id, :name, {include_blank: true}, { multiple: true, size: @tag_list.count + 1 } %>
+
+    <%= f.label :gift_cards_gift_card_number_cont %>
+    <%= f.search_field :gift_cards_gift_card_number_cont %>
+    <br>
+    <%= f.submit 'Search', class: "btn btn-primary" %>
+    <%= link_to 'Clear Search', request.path, class:"btn" %>
+  </div>
+<% end %>
+
+<div class="span12">
+Search Parameters:
+  <% if params[:q] %> 
+    <%- params[:q].each do |param_key, param_value| %>
+      <% if param_value.present? and param_value != [""] %>
+        <%= param_key %>: "<%= param_value %>"  
+      <% end %>
+    <% end -%>
+  <% else %>
+    None
+  <% end %>
+</div>
+
+<% if @results.any? %>
+<div class="row">
+  <div class="span12">
+
+    <p class="pull-right">
+      Showing <%= @results.size %> <%= 'result'.pluralize(@results) %><% if @results.size > @results.size -%> of <%= @results.size %> total<% end -%>
+    </p>
+    <table class="table table-striped">
+      <% @results.each_with_index do |result, idx| %>
+      <% next unless Person.find_by(id: result.id) %>
+      <tr>
+        <td class="span4">
+          <strong><%= link_to "#{result.first_name} #{result.last_name}", person_path(:id => result.id) %></strong>
+          <%= render partial: 'people/add_remove_cart',locals: {person: Person.find_by(id: result.id)} %>
+          <br/><br/>
+           Tags: <% if !(result.tag_values.blank?) %><%= search_result_field result.tag_values, :tags %><% end %>
+        </td>
+        <td class="span4">
+          Address: <%= search_result_field result.address_1, :address  %><br/>
+          City: <%= search_result_field result.city, :city %>  ZIP: <%= search_result_field result.postal_code, :postal_code %><br/>
+          Ward: <%= search_result_field result.geography_id, :geography_id %><br/>
+          Neighborhood: <%= search_result_field result.neighborhood, :neighborhood %><br/>
+          Phone: <%= search_result_field number_to_phone(result.phone_number), :phone_number %><br/>
+          Email: <%= search_result_field result.email_address, :email_address %><br/>
+          Verified?: <%= search_result_field result.verified, :verified %>
+
+        </td>
+        <td class="span4">
+          Primary Device: <%= search_result_field result.primary_device_description, :device_description %> (<%= search_result_field human_device_type_name(result.primary_device_id), :device_id_type %>)<br>
+          Secondary Device: <%= search_result_field result.secondary_device_description, :device_description %> (<%= search_result_field human_device_type_name(result.secondary_device_id), :device_id_type %>)<br>
+          Primary Connection: <%= search_result_field human_connection_type_name(result.primary_connection_id), :connection_id %> <%= search_result_field result.primary_connection_description, :connection_description %><br>
+          <% if result.secondary_connection_description.present? %>Secondary Connection: <%= search_result_field result.secondary_connection_description, :connection_description %><% end %><br>
+          Preferred Contact Method: <%= search_result_field result.preferred_contact_method, :preferred_contact_method %>
+          
+        </td>
+      </tr>
+      <% end %>
+    </table>
+
+  </div>
+</div>
+
+<div class="row">
+  <div class="offset4 span8"><%= will_paginate @results, :renderer => BootstrapPagination::Rails %></div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <%= link_to "Save this list as CSV", search_index_ransack_path(params.merge(format: 'csv')), :class => "btn"  %>
+    <span>
+    <%= link_to "Export this list to MailChimp", "#", :class => "btn", :id => "export-to-mailchimp-form-toggle" %>
+    </span>
+    <span><%= link_to "Send text messages to this list", "#", :class => "btn", :id => "export-to-twilio-form-toggle" %></span>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <div id="export-to-mailchimp-form" style="display:none">
+      <%= form_tag search_export_path, remote: true, class: "form-inline" %>
+        <%= text_field_tag :segment_name, '', class: "input-xlarge", placeholder: "enter a name for this list (segment)" %>
+        <% if params[:q] %> 
+          <%- params[:q].each do |param_key, param_value| %>
+            <%= hidden_field_tag "q[#{param_key}]", param_value %>
+          <% end -%>
+        <% end %>
+        <%= submit_tag "Export", class: "btn btn-primary", data: {disable_with: "Exporting ..."} %>
+      </form>
+    </div>
+  </div>
+  <div class="span12">
+    <div id="export-to-twilio-form" style="display:none">
+      <%= form_tag search_exportTwilio_path, remote: true, class: "form-inline" %>
+        <% if params[:q] %> 
+          <%- params[:q].each do |param_key, param_value| %>
+            <%= hidden_field_tag "q[#{param_key}]", param_value %>
+          <% end -%>
+        <% end %>
+        <%= text_area_tag :message1, '', class: "input-xlarge", placeholder: "Enter a message to send (required)", required: true %><br />
+        <%= text_area_tag :message2, '', class: "input-xlarge", placeholder: "Enter a 2nd message to send. (Optional)" %>
+        <br />
+        Twilio-Wufoo Connection? <%= select_tag :twiliowufoo_campaign,
+              options_for_select([[nil, nil]] + TwilioWufoo.all.order(:name).collect{|twiliowufoo| [twiliowufoo.name, twiliowufoo.id]}, selected: params[:twiliowufoo_campaign]),
+              :class => "input" %>
+        <%= submit_tag "Send messages through Twilio", class: "btn btn-primary", data: { confirm: 'These messages will be added to the queue and sent as soon as possible. Are you sure you want to send these?' } %>
+      </form>
+    </div>
+  </div>
+</div>
+<% else %>
+
+<div class="row">
+  <div class="span12" style="margin-top: 30px;">
+    <p>There are no CUTGroup members that match your search.</p>
+  </div>
+</div>
+<% end %>
+

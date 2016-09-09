@@ -106,6 +106,14 @@ class Person < ActiveRecord::Base
 
   self.per_page = 15
 
+  ransacker :full_name, formatter: proc { |v| v.mb_chars.downcase.to_s } do |parent|
+    Arel::Nodes::NamedFunction.new('lower',
+    [ Arel::Nodes::NamedFunction.new('concat_ws',
+    [ Arel::Nodes.build_quoted(' '), parent.table[:first_name], parent.table[:last_name] ]) ]
+    )
+   end
+  ransack_alias :nav_bar_search, :full_name_or_email_address_or_phone_number
+
   def signup_gc_sent
     signup_cards = gift_cards.where(reason: 1)
     return true unless signup_cards.empty?
@@ -366,7 +374,7 @@ class Person < ActiveRecord::Base
         duplicate_hash['person'] = duplicate
         duplicate_hash['match_count'] = 1
         duplicate_hash['last_name_match'] = true
-        duplicate_hash['matches_on'] = ["Last Name"]
+        duplicate_hash['matches_on'] = ['Last Name']
         @duplicates[duplicate.id] = duplicate_hash
       end
     end
@@ -375,12 +383,12 @@ class Person < ActiveRecord::Base
       email_address_duplicates.each do |duplicate|
         if @duplicates.has_key? duplicate.id
           @duplicates[duplicate.id]['match_count'] += 1
-          @duplicates[duplicate.id]['matches_on'].push("Email Address")
+          @duplicates[duplicate.id]['matches_on'].push('Email Address')
         else
           @duplicates[duplicate.id] = {}
           @duplicates[duplicate.id]['person'] = duplicate
           @duplicates[duplicate.id]['match_count'] = 1
-          @duplicates[duplicate.id]['matches_on'] = ["Email Address"]
+          @duplicates[duplicate.id]['matches_on'] = ['Email Address']
         end
         @duplicates[duplicate.id]['email_address_match'] = true
       end
@@ -390,12 +398,12 @@ class Person < ActiveRecord::Base
       phone_number_duplicates.each do |duplicate|
         if @duplicates.has_key? duplicate.id
           @duplicates[duplicate.id]['match_count'] += 1
-          @duplicates[duplicate.id]['matches_on'].push("Phone Number")
+          @duplicates[duplicate.id]['matches_on'].push('Phone Number')
         else
           @duplicates[duplicate.id] = {}
           @duplicates[duplicate.id]['person'] = duplicate
           @duplicates[duplicate.id]['match_count'] = 1
-          @duplicates[duplicate.id]['matches_on'] = ["Phone Number"]
+          @duplicates[duplicate.id]['matches_on'] = ['Phone Number']
         end
         @duplicates[duplicate.id]['phone_number_match'] = true
       end
@@ -405,12 +413,12 @@ class Person < ActiveRecord::Base
       address_1_duplicates.each do |duplicate|
         if @duplicates.has_key? duplicate.id
           @duplicates[duplicate.id]['match_count'] += 1
-          @duplicates[duplicate.id]['matches_on'].push("Address_1")
+          @duplicates[duplicate.id]['matches_on'].push('Address_1')
         else
           @duplicates[duplicate.id] = {}
           @duplicates[duplicate.id]['person'] = duplicate
           @duplicates[duplicate.id]['match_count'] = 1
-          @duplicates[duplicate.id]['matches_on'] = ["Address_1"]
+          @duplicates[duplicate.id]['matches_on'] = ['Address_1']
         end
         @duplicates[duplicate.id]['address_1_match'] = true
       end

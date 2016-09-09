@@ -58,15 +58,98 @@ class SearchController < ApplicationController
       end
     end
   end
+
+  def index_ransack
+    @q = Person.ransack(params[:q])
+    @results = @q.result.includes(:tags).page(params[:page])
+    @tags = params[:tags_id_eq_any].blank? ? '[]' : Tag.where(name: params[:tags_id_eq_any].split(',').map(&:strip)).to_json(methods: [:value, :label, :type])
+    @tag_list = Tag.all
+    @mailchimp_result = "Mailchimp export not attempted with this search"
+
+    respond_to do |format|
+      format.json { @results.map { |r| r['type'] = 'person' }.to_json }
+      format.html do
+        if params[:segment_name].present?
+          list_name = params.delete(:segment_name)
+          @q = Person.ransack(params[:q])
+          @results_mailchimp = @q.result.includes(:tags)
+          @mce = MailchimpExport.new(name: list_name, recipients: @results_mailchimp.collect(&:email_address), created_by: current_user.id)
+          if @mce.with_user(current_user).save
+            Rails.logger.info("[SearchController#export] Sent #{@mce.recipients.size} email addresses to a static segment named #{@mce.name}")
+            #render text: "failed to send event to mailchimp: #{@mce.errors.inspect}"
+            @success = "Sent #{@mce.recipients.size} email addresses to a static segment named #{@mce.name}"
+            flash[:success] = "Successfully sent to mailchimp: #{@mce.errors.inspect}"
+          else
+            Rails.logger.error("[SearchController#export] failed to send event to mailchimp: #{@mce.errors.inspect}")
+            #render text: "failed to send event to mailchimp: #{@mce.errors.inspect}"
+            @error = "failed to send search to mailchimp: #{@mce.errors.inspect}"
+            flash[:failure] = "failed to send search to mailchimp: #{@mce.errors.inspect}"
+          end
+        end
+      end
+      format.csv do
+        fields = Person.column_names
+        fields.push('tags')
+        output = CSV.generate do |csv|
+          # Generate the headers
+          csv << fields.map(&:titleize)
+
+          # Some fields need a helper method
+          human_devices = %w(primary_device_id secondary_device_id)
+          human_connections = %w(primary_connection_id secondary_connection_id)
+
+          # Write the results
+          @results.each do |person|
+            csv << fields.map do |f|
+              field_value = person[f]
+              if human_devices.include? f
+                human_device_type_name(field_value)
+              elsif human_connections.include? f
+                human_connection_type_name(field_value)
+              elsif f == 'tags'
+                if person.tag_values.blank?
+                  ''
+                else
+                  person.tag_values.join('|')
+                end
+              else
+                field_value
+              end
+            end
+          end
+        end
+        send_data output,  filename: "Search-#{Time.zone.today}.csv"
+      end
+    end
+  end
+
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   #
+  def export_ransack
+    list_name = params.delete(:segment_name)
+    @q = Person.ransack(params[:q])
+    @results = @q.result.includes(:tags)
+    @mce = MailchimpExport.new(name: list_name, recipients: @results.collect(&:email_address), created_by: current_user.id)
+    if @mce.with_user(current_user).save
+      Rails.logger.info("[SearchController#export] Sent #{@mce.recipients.size} email addresses to a static segment named #{@mce.name}")
+      respond_to do |format|
+        format.js {}
+      end
+    else
+      Rails.logger.error("[SearchController#export] failed to send event to mailchimp: #{@mce.errors.inspect}")
+      format.all { render text: "failed to send event to mailchimp: #{@mce.errors.inspect}", status: 400 }
+    end
+  end
+
   def export
     # send all results to a new static segment in mailchimp
-    list_name = params.delete(:name)
-    @people = Person.complex_search(params, 10000)
+    list_name = params.delete(:segment_name)
+    @q = Person.ransack(params[:q])
+    @people = @q.result.includes(:tags)
+    #@people = Person.complex_search(params, 10000)
     @mce = MailchimpExport.new(name: list_name, recipients: @people.collect(&:email_address), created_by: current_user.id)
 
     if @mce.with_user(current_user).save
@@ -92,7 +175,9 @@ class SearchController < ApplicationController
     message2 = to_gsm0338(message2) if message2.present?
     messages = Array[message1, message2]
     smsCampaign = params.delete(:twiliowufoo_campaign)
-    @people = Person.complex_search(params, 10000)
+    @q = Person.ransack(params[:q])
+    @people = @q.result.includes(:tags)
+    #@people = Person.complex_search(params, 10000)
     # people_count = @people.length
     Rails.logger.info("[SearchController#exportTwilio] people #{@people}")
     phone_numbers = @people.collect(&:phone_number)
