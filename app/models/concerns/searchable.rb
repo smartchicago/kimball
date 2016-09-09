@@ -9,7 +9,7 @@ module Searchable
     include Tire::Model::Callbacks
 
     # update index if a comment is added
-    after_touch { tire.update_index }
+    # after_touch { tire.update_index }
 
     # namespace indices
     index_name "person-#{Rails.env}"

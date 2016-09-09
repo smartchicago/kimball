@@ -43,7 +43,7 @@
 class Person < ActiveRecord::Base
   has_paper_trail
 
-  include Searchable
+  # include Searchable
   include ExternalDataMappings
   include Neighborhoods
 
