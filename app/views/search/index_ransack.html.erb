@@ -78,9 +78,8 @@ Search Parameters:
 <% if @results.any? %>
 <div class="row">
   <div class="span12">
-
     <p class="pull-right">
-      Showing <%= @results.size %> <%= 'result'.pluralize(@results) %><% if @results.size > @results.size -%> of <%= @results.size %> total<% end -%>
+      Showing <%= @results.size %> <%= 'result'.pluralize(@results) %> of <%= @results.count %> total
     </p>
     <table class="table table-striped">
       <% @results.each_with_index do |result, idx| %>
