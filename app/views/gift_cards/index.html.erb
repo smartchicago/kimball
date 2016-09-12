@@ -78,19 +78,17 @@
 
 <h1>Listing Gift Cards</h1>
  <div class='span12'>
-   
-      <%= form_tag '/gift_cards', method: :get, class: 'form-inline' %>
-      Filter: 
-      <label for="gift_card_number">Gift Card Number</label>
-      <%= text_field_tag :gift_card_number, params[:gift_card_number], class: 'input-mini', id:'gift_card_number-field' %>
-      <label for="batch_id">Batch ID</label>
-      <%= text_field_tag :batch_id,
-                            params[:batch_id],
-                            class: 'input-mini',
-                            id:'batch_id-field'
-                          %>
-      <%= submit_tag "Search", :name => nil, :class => "btn btn-primary" %>
-      <%= link_to "Clear Search", gift_cards_path, :class => "btn"  %>
+
+  <%= search_form_for @q_giftcards, url: gift_cards_path, method: :get, class: 'form-inline' do |f| %>
+    <%= f.label :gift_card_number_cont %>
+    <%= f.search_field :gift_card_number_cont, class: 'input-mini' %>
+    <%= f.label :created_at_gteq %>
+    <%= f.text_field :created_at_gteq, class: 'text_field input-small', id: 'datepicker_start', placeholder: 'yyyy-mm-dd' %>
+    <%= f.label :created_at_lteq %>
+    <%= f.text_field :created_at_lteq, class: 'text_field input-small', id: 'datepicker_end', placeholder: 'yyyy-mm-dd'  %>
+    <%= f.submit 'Search', class: "btn btn-primary" %>
+    <%= link_to 'Clear Search', request.path, class:"btn" %>
+  <% end %>
   </div>
 <%= will_paginate @gift_cards, :renderer => BootstrapPagination::Rails %>
 <table class="table table-striped">
@@ -135,5 +133,5 @@
 </table>
 
 <br>
-<%= link_to "Save this list as CSV", gift_cards_path(format: 'csv'), :class => "btn"  %>
+<%= link_to "Save this list as CSV", gift_cards_path(params.merge(format: 'csv')), :class => "btn"  %>
 <%= link_to 'New Gift card', new_gift_card_path %>

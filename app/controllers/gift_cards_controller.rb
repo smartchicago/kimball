@@ -6,61 +6,20 @@ class GiftCardsController < ApplicationController
   # GET /gift_cards
   # GET /gift_cards.json
   def index
-    #@gift_cards = GiftCard.paginate(page: params[:page]).includes(:person).all
-    query = {}
-    if params[:gift_card_number].present?
-      query['gift_card_number'] = params[:gift_card_number]
-    end
-    if params[:batch_id].present?
-      query['batch_id'] = params[:batch_id]
-    end
-    @gift_cards = GiftCard.paginate(page: params[:page]).includes(:person).where(query)
-    #@gift_cards = GiftCard.paginate(page: params[:page]).includes(:person).all
-    @recent_signups = Person.no_signup_card.paginate(page: params[:page]).where('signup_at > :startdate', { startdate: 3.months.ago }).order('signup_at DESC')
-    @new_gift_cards = []
-    # end
-    @recent_signups.length.times do
-      @new_gift_cards << GiftCard.new
-    end
-
+    @q_giftcards = GiftCard.ransack(params[:q])
     respond_to do |format|
-      format.html {}
-      #format.csv { render text: @gift_cards.export_csv }
-      format.csv { send_data @gift_cards.export_csv,  filename: "GiftCards-#{Date.today}.csv" }
-
-      # format.csv do
-      #   fields = Person.column_names
-      #   fields.push("tags")
-      #   output = CSV.generate do |csv|
-      #     # Generate the headers
-      #     csv << fields.map(&:titleize)
-
-      #     # Some fields need a helper method
-      #     human_devices = %w( primary_device_id secondary_device_id )
-      #     human_connections = %w( primary_connection_id secondary_connection_id )
-
-      #     # Write the results
-      #     @results.each do |person|
-      #       csv << fields.map do |f|
-      #         field_value = person[f]
-      #         if human_devices.include? f
-      #           human_device_type_name(field_value)
-      #         elsif human_connections.include? f
-      #           human_connection_type_name(field_value)
-      #         elsif f == "tags"
-      #           if person.tag_values.blank?
-      #             ""
-      #           else
-      #             person.tag_values.join('|')
-      #           end
-      #         else
-      #           field_value
-      #         end
-      #       end
-      #     end
-      #   end
-      #   send_data output
-      # end
+      format.html do
+        @gift_cards = @q_giftcards.result.includes(:person).page(params[:page])
+        @recent_signups = Person.no_signup_card.paginate(page: params[:page]).where('signup_at > :startdate', { startdate: 3.months.ago }).order('signup_at DESC')
+        @new_gift_cards = []
+        @recent_signups.length.times do
+          @new_gift_cards << GiftCard.new
+        end
+      end
+      format.csv do
+        @gift_cards = @q_giftcards.result.includes(:person)
+        send_data @gift_cards.export_csv,  filename: "GiftCards-#{Date.today}.csv"
+      end
     end
   end
 

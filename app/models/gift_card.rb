@@ -49,6 +49,10 @@ class GiftCard < ActiveRecord::Base
 
   validates_format_of :gift_card_number, with: /\A([0-9]){4,5}\z/i
   validates_uniqueness_of :reason, scope: :person_id, if: "reason == 'signup'"
+
+  ransacker :created_at, type: :date do
+    Arel.sql('date(created_at)')
+  end
   # Need to add validation to limit 1 signup per person
 
   def self.batch_create(post_content)
