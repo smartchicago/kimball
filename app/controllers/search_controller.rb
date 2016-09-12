@@ -64,7 +64,7 @@ class SearchController < ApplicationController
     @results = @q.result.includes(:tags).page(params[:page])
     @tags = params[:tags_id_eq_any].blank? ? '[]' : Tag.where(name: params[:tags_id_eq_any].split(',').map(&:strip)).to_json(methods: [:value, :label, :type])
     @tag_list = Tag.all
-    @mailchimp_result = "Mailchimp export not attempted with this search"
+    @mailchimp_result = 'Mailchimp export not attempted with this search'
 
     respond_to do |format|
       format.json { @results.map { |r| r['type'] = 'person' }.to_json }
