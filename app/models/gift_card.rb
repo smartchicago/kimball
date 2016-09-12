@@ -45,6 +45,7 @@ class GiftCard < ActiveRecord::Base
   validates_length_of :proxy_id, is: 4, unless: proc { |c| c.proxy_id.blank? }
   validates_numericality_of :proxy_id, unless: proc { |c| c.proxy_id.blank? }
 
+  validates_presence_of :batch_id
   validates_uniqueness_of :gift_card_number, scope: :batch_id
 
   validates_format_of :gift_card_number, with: /\A([0-9]){4,5}\z/i
