@@ -55,7 +55,7 @@ class SendTwilioMessagesJob < Struct.new(:messages, :phone_numbers, :smsCampaign
 
             # Create and send an SMS message
             @message = client.account.messages.create(
-              from: ENV['TWILIO_SMS_SIGNUP_NUMBER'],
+              from: ENV['TWILIO_SURVEY_NUMBER'],
               to: phone_number,
               body: message
             )
