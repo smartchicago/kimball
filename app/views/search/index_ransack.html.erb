@@ -1,7 +1,6 @@
 <p id="notice"><%= @success %></p>
 <p id="error"><%= @error %></p>
 
-
 <div class="page-header">
   <h1><%=t '.title', :default => "Search Results - Ransack Testing" %></h1>
 </div>
@@ -24,8 +23,8 @@
     <%= f.label :full_name_cont %>
     <%= f.search_field :full_name_cont %>
 
-    <%= f.label :email_address_start %>
-    <%= f.search_field :email_address_start %>
+    <%= f.label :email_address_cont %>
+    <%= f.search_field :email_address_cont %>
 
     <%= f.label :phone_number_cont %>
     <%= f.search_field :phone_number_cont %>
