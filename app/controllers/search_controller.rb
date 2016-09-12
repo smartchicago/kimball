@@ -88,6 +88,7 @@ class SearchController < ApplicationController
         end
       end
       format.csv do
+        @results = @q.result.includes(:tags)
         fields = Person.column_names
         fields.push('tags')
         output = CSV.generate do |csv|
