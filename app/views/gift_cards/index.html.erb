@@ -49,8 +49,9 @@
             <td id="new-batchid-<%= @recent_signups[index].id %>">
               <%= form.text_field :proxy_id,class: 'input-mini', :placeholder => "Proxy ID"  %>
             </td>
-            <td id="new-cardnumber-<%= @recent_signups[index].id %>">
-              <%= form.text_field :gift_card_number,class: 'input-small', :placeholder => "****-****-***#-####"  %>
+            <td id="new-cardnumber-<%= @recent_signups[index].id %>" class='input-prepend'>
+              <span class='add-on'>****-****-***</span>
+              <%= form.text_field :gift_card_number,class: 'input-small', :placeholder => "#####"  %>
             </td>
             <td id="new-expirationdate-<%= @recent_signups[index].id %>">
               <%= form.text_field :expiration_date, class: 'input-mini',:placeholder => "MM/YY" %>

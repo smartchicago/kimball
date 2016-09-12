@@ -19,9 +19,10 @@
     <%= f.label :proxy_id %><br>
     <%= f.text_field :proxy_id, class: 'input-mini' %>
   </div>
-  <div class="field">
+  <div class='field input-prepend'>
     <%= f.label :gift_card_number %><br>
-    <%= f.text_field :gift_card_number, class: 'input-mini', placeholder: '4321' %>
+    <span class='add-on'>****-****-***</span>
+    <%= f.text_field :gift_card_number, placeholder: "#####", class: 'input-small', id: "new-cardnumber" %>
   </div>
   <div class="field">
     <%= f.label :expiration_date %><br>

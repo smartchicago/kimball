@@ -171,7 +171,10 @@
       <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" }, class: 'input-small', id: "new-reason" %>
       <%= form.text_field :proxy_id, placeholder: "ProxyID",class: 'input-mini', id: "new-proxyid" %>
       <%= form.text_field :batch_id, placeholder: "BatchID",class: 'input-mini', id: "new-batchid" %>
-      <%= form.text_field :gift_card_number, placeholder: "****-****-***#-####", id: "new-cardnumber" %>
+      <div class='input-prepend'>
+        <span class='add-on'>****-****-***</span>
+        <%= form.text_field :gift_card_number, placeholder: "#####", class: 'input-small', id: "new-cardnumber" %>
+      </div>
       <%= form.text_field :amount, placeholder: "Amount",class: 'input-mini', id: "new-amount" %>
       <%= form.text_field :expiration_date, placeholder: "MM/YY", class: 'input-mini', id: "new-expirationdate" %>
       <%= form.submit 'Add Gift Card', :class => "btn" %>
