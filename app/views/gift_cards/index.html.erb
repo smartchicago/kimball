@@ -83,9 +83,9 @@
   <%= search_form_for @q_giftcards, url: gift_cards_path, method: :get, class: 'form-inline' do |f| %>
     <%= f.label :gift_card_number_cont %>
     <%= f.search_field :gift_card_number_cont, class: 'input-mini' %>
-    <%= f.label :created_at_date_gteq %>
+    <label for='created_at_date_gteq'>Created on or after</label>
     <%= f.text_field :created_at_date_gteq, class: 'text_field input-small', id: 'datepicker_start', placeholder: 'yyyy-mm-dd' %>
-    <%= f.label :created_at_date_lteq %>
+    <label for='created_at_date_lteq'>Created on or before</label>
     <%= f.text_field :created_at_date_lteq, class: 'text_field input-small', id: 'datepicker_end', placeholder: 'yyyy-mm-dd'  %>
     <%= f.submit 'Search', class: "btn btn-primary" %>
     <%= link_to 'Clear Search', request.path, class:"btn" %>
