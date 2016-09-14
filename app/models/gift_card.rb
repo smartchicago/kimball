@@ -52,8 +52,12 @@ class GiftCard < ActiveRecord::Base
   validates_uniqueness_of :reason, scope: :person_id, if: "reason == 'signup'"
 
   ransacker :created_at, type: :date do
-    Arel.sql('date(created_at)')
+    Arel.sql('date(created_at.utc)')
   end
+
+  # ransacker :created_at_two do |parent|
+  #   Arel::Nodes::SqlLiteral.new("date(convert_tz(orders.created_at, 'UTC', 'EST'))")
+  # end
   # Need to add validation to limit 1 signup per person
 
   def self.batch_create(post_content)
