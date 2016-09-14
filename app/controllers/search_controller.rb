@@ -64,6 +64,8 @@ class SearchController < ApplicationController
     @results = @q.result.includes(:tags).page(params[:page])
     @tags = params[:tags_id_eq_any].blank? ? '[]' : Tag.where(name: params[:tags_id_eq_any].split(',').map(&:strip)).to_json(methods: [:value, :label, :type])
     @tag_list = Tag.all
+    @participation_list = Person.uniq.pluck(:participation_type) # Need to better define these
+    @verified_list = Person.uniq.pluck(:verified)
     @mailchimp_result = 'Mailchimp export not attempted with this search'
 
     respond_to do |format|
@@ -107,6 +109,8 @@ class SearchController < ApplicationController
                 human_device_type_name(field_value)
               elsif human_connections.include? f
                 human_connection_type_name(field_value)
+              elsif f == 'phone_number'
+                field_value.phony_formatted(format: :national, spaces: '-')
               elsif f == 'tags'
                 if person.tag_values.blank?
                   ''

@@ -2,7 +2,7 @@
 <p id="error"><%= @error %></p>
 
 <div class="page-header">
-  <h1><%=t '.title', :default => "Search Results - Ransack Testing" %></h1>
+  <h1><%=t '.title', :default => "Search Results - Ransack" %></h1>
 </div>
 
 <div class="row">
@@ -13,13 +13,6 @@
 </div>
 <%= search_form_for @q, url: 'index_ransack', method: :get do |f| %>
   <div class="span3">
-
-    <%= f.label :first_name_cont %>
-    <%= f.search_field :first_name_cont %>
-
-    <%= f.label :last_name_cont %>
-    <%= f.search_field :last_name_cont %>
-
     <%= f.label :full_name_cont %>
     <%= f.search_field :full_name_cont %>
 
@@ -31,30 +24,48 @@
 
     <%= f.label :address_1_cont %>
     <%= f.search_field :address_1_cont %>
-  </div>
 
-  <div class="span3">
-    <%= f.label :primary_device_id_or_secondary_device_id_in %>
-    <%= f.select :primary_device_id_or_secondary_device_id_in, [[human_device_type_name(0),0],[ human_device_type_name(1),1], [human_device_type_name(2),2], [ human_device_type_name(3),  3]], {include_blank: true}, {:multiple => true,  :class => "multiple", :size => '4' } %>
+    <%= f.label :postal_code_start %>
+    <%= f.search_field :postal_code_start %>
 
-    <%= f.label :primary_connection_id_or_secondary_connection_id_in %>
-    <%= f.select :primary_connection_id_or_secondary_connection_id_in, [[human_connection_type_name(0),0],[ human_connection_type_name(1),1], [human_connection_type_name(4),4], [ human_connection_type_name(3),  3], [human_connection_type_name(2), 2]], {include_blank: true}, {:multiple => true,  :class => "multiple", :size => '5' } %>
+    <%= f.label :postal_code_not_start %>
+    <%= f.search_field :postal_code_not_start %>
 
     <%= f.label :preferred_contact_method_cont %>
     <%= f.select :preferred_contact_method_cont, [["Email", 'EMAIL'], ["SMS", 'SMS']], {include_blank: true}, {:class => "input" } %>
   </div>
-  <div class="span5">
-    <%= f.label :primary_device_description_or_secondary_device_description_cont %>
-    <%= f.search_field :primary_device_description_or_secondary_device_description_cont %>
 
-    <%= f.label :primary_connection_description_or_secondary_connection_description_cont %>
-    <%= f.search_field :primary_connection_description_or_secondary_connection_description_cont %>
-   
+  <div class="span3">
+    <%= f.label :primary_device_id_in %>
+    <%= f.select :primary_device_id_in, [[human_device_type_name(0),0],[ human_device_type_name(1),1], [human_device_type_name(2),2], [ human_device_type_name(3),  3]], {include_blank: true}, {:multiple => true,  :class => "multiple", :size => '4' } %>
+
+    <%= f.label :primary_device_description_cont %>
+    <%= f.search_field :primary_device_description_cont %>
+
+    <%= f.label :primary_connection_id_in %>
+    <%= f.select :primary_connection_id_in, [[human_connection_type_name(0),0],[ human_connection_type_name(1),1], [human_connection_type_name(4),4], [ human_connection_type_name(3),  3], [human_connection_type_name(2), 2]], {include_blank: true}, {:multiple => true,  :class => "multiple", :size => '5' } %>
+
+    <%= f.label :primary_connection_description_cont %>
+    <%= f.search_field :primary_connection_description_cont %>
+  </div>
+  <div class="span5">
     <%= f.label :tags_id_eq_all %>
     <%= f.collection_select :tags_id_eq_all, @tag_list, :id, :name, {include_blank: true}, { multiple: true, size: @tag_list.count + 1 } %>
 
-    <%= f.label :gift_cards_gift_card_number_cont %>
+    <%= f.label :participation_type_eq_any %>
+    <%= f.select :participation_type_eq_any, @participation_list, {include_blank: true}, { multiple: true, size: @participation_list.count + 1 } %>
+
+    <label for='gift_cards_gift_card_number_cont'>Gift card number contains</label>
     <%= f.search_field :gift_cards_gift_card_number_cont %>
+    <label for='additional'>&nbsp;</label>
+    <span data-toggle="collapse" data-target="#additional-options"  class="btn btn-default">Click to Show Additional Options</span>
+      <div class="collapse" id="additional-options">
+        <%= f.label :verified_eq_any %>
+        <%= f.select :verified_eq_any, @verified_list, {include_blank: true}, { multiple: true, size: @verified_list.count + 1 } %>
+
+        <%= f.label :submissions_raw_content_cont %>
+        <%= f.search_field :submissions_raw_content_cont %>
+      </div>
     <br>
     <%= f.submit 'Search', class: "btn btn-primary" %>
     <%= link_to 'Clear Search', request.path, class:"btn" %>
@@ -93,9 +104,8 @@ Search Parameters:
         <td class="span4">
           Address: <%= search_result_field result.address_1, :address  %><br/>
           City: <%= search_result_field result.city, :city %>  ZIP: <%= search_result_field result.postal_code, :postal_code %><br/>
-          Ward: <%= search_result_field result.geography_id, :geography_id %><br/>
           Neighborhood: <%= search_result_field result.neighborhood, :neighborhood %><br/>
-          Phone: <%= search_result_field number_to_phone(result.phone_number), :phone_number %><br/>
+          Phone: <%= search_result_field result.phone_number.phony_formatted(format: :national, spaces: '-'), :phone_number %><br/>
           Email: <%= search_result_field result.email_address, :email_address %><br/>
           Verified?: <%= search_result_field result.verified, :verified %>
 
