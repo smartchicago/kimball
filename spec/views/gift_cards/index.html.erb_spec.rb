@@ -10,7 +10,7 @@ RSpec.describe 'gift_cards/index', type: :view do
                notes: 'Notes',
                created_by: 3,
                reason: 'signup',
-               expiration_date: "11/22"
+               expiration_date: '11/22'
              ),
              GiftCard.create!(
                gift_card_number: 12346,
@@ -19,7 +19,7 @@ RSpec.describe 'gift_cards/index', type: :view do
                notes: 'Notes',
                created_by: 3,
                reason: 'interview',
-               expiration_date: "11/22"
+               expiration_date: '11/22'
              )
            ])
   end

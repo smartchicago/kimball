@@ -9,7 +9,7 @@ RSpec.describe 'gift_cards/edit', type: :view do
                                       notes: 'MyString',
                                       created_by: 1,
                                       reason: 1,
-                                      expiration_date: "11/22"
+                                      expiration_date: '11/22'
     ))
   end
 
