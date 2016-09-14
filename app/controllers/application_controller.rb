@@ -12,8 +12,7 @@ class ApplicationController < ActionController::Base
   # before_action :user_needed, if: request.format == :json
 
   before_action :set_paper_trail_whodunnit
-
-  before_filter :set_global_search_variable
+  before_action :set_global_search_variable
 
   def set_global_search_variable
     @q = Person.ransack(params[:q])

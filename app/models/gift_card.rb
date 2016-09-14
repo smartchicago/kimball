@@ -40,7 +40,7 @@ class GiftCard < ActiveRecord::Base
   validates_presence_of :amount
   validates_presence_of :reason
 
-  validates_format_of :expiration_date, with: /\A(0|1)([0-9])\/([0-9]{2})\z/i ,unless: proc { |c| c.expiration_date.blank? }
+  validates_format_of :expiration_date, with: /\A(0|1)([0-9])\/([0-9]{2})\z/i, unless: proc { |c| c.expiration_date.blank? }
 
   validates_length_of :proxy_id, is: 4, unless: proc { |c| c.proxy_id.blank? }
   validates_numericality_of :proxy_id, unless: proc { |c| c.proxy_id.blank? }
@@ -77,9 +77,9 @@ class GiftCard < ActiveRecord::Base
     CSV.generate do |csv|
       csv_column_names =  ['Gift Card ID', 'Batch ID', 'Gift Card Number', 'Expiration Date', 'Reason', 'Person ID', 'Name', 'Address', 'Phone Number', 'Email']
       csv << csv_column_names
-      all.each do |gift_card|
+      all.find_each do |gift_card|
         this_person = gift_card.person
-        row_items = [gift_card.id, gift_card.batch_id, gift_card.gift_card_number,  gift_card.expiration_date, gift_card.reason.titleize, this_person.id || "", this_person.full_name || "", this_person.address_fields_to_sentence || ""]
+        row_items = [gift_card.id, gift_card.batch_id, gift_card.gift_card_number,  gift_card.expiration_date, gift_card.reason.titleize, this_person.id || '', this_person.full_name || '', this_person.address_fields_to_sentence || '']
         if this_person.phone_number.present?
           row_items.push(this_person.phone_number.phony_formatted(format: :national, spaces: '-'))
         else

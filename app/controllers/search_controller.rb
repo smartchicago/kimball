@@ -78,12 +78,10 @@ class SearchController < ApplicationController
           @mce = MailchimpExport.new(name: list_name, recipients: @results_mailchimp.collect(&:email_address), created_by: current_user.id)
           if @mce.with_user(current_user).save
             Rails.logger.info("[SearchController#export] Sent #{@mce.recipients.size} email addresses to a static segment named #{@mce.name}")
-            #render text: "failed to send event to mailchimp: #{@mce.errors.inspect}"
             @success = "Sent #{@mce.recipients.size} email addresses to a static segment named #{@mce.name}"
             flash[:success] = "Successfully sent to mailchimp: #{@mce.errors.inspect}"
           else
             Rails.logger.error("[SearchController#export] failed to send event to mailchimp: #{@mce.errors.inspect}")
-            #render text: "failed to send event to mailchimp: #{@mce.errors.inspect}"
             @error = "failed to send search to mailchimp: #{@mce.errors.inspect}"
             flash[:failure] = "failed to send search to mailchimp: #{@mce.errors.inspect}"
           end
@@ -158,7 +156,6 @@ class SearchController < ApplicationController
     list_name = params.delete(:segment_name)
     @q = Person.ransack(params[:q])
     @people = @q.result.includes(:tags)
-    #@people = Person.complex_search(params, 10000)
     @mce = MailchimpExport.new(name: list_name, recipients: @people.collect(&:email_address), created_by: current_user.id)
 
     if @mce.with_user(current_user).save
@@ -186,8 +183,6 @@ class SearchController < ApplicationController
     smsCampaign = params.delete(:twiliowufoo_campaign)
     @q = Person.ransack(params[:q])
     @people = @q.result.includes(:tags)
-    #@people = Person.complex_search(params, 10000)
-    # people_count = @people.length
     Rails.logger.info("[SearchController#exportTwilio] people #{@people}")
     phone_numbers = @people.collect(&:phone_number)
     Rails.logger.info("[SearchController#exportTwilio] people #{phone_numbers}")

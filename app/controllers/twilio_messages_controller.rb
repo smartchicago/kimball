@@ -60,11 +60,10 @@ class TwilioMessagesController < ApplicationController
     smsCampaign = params.delete(:twiliowufoo_campaign)
     infile = params[:file].read
     contentType = params[:file].content_type
-    statusMessage = ''
 
     if contentType == 'text/csv'
       CSV.parse(infile, headers: true, header_converters: :downcase) do |row|
-        if row['phone_number'].present? 
+        if row['phone_number'].present?
           # @person << row
           Rails.logger.info("[TwilioMessagesController#sendmessages] #{row}")
           phone_numbers.push(row['phone_number'])
@@ -82,13 +81,13 @@ class TwilioMessagesController < ApplicationController
         flash[:success] = "Sent Messages: #{messages} to Phone Numbers: #{phone_numbers}"
       else
         Rails.logger.error('[TwilioMessagesController#sendmessages] failed to send text messages')
-        flash[:error] = "Failed to send messages."
+        flash[:error] = 'Failed to send messages.'
       end
     else
-      flash[:error] = "Please upload a CSV instead."
+      flash[:error] = 'Please upload a CSV instead.'
     end
     respond_to do |format|
-        format.html { redirect_to '/twilio_messages/sendmessages' }
+      format.html { redirect_to '/twilio_messages/sendmessages' }
     end
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Style/VariableName

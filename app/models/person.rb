@@ -108,10 +108,9 @@ class Person < ActiveRecord::Base
 
   ransacker :full_name, formatter: proc { |v| v.mb_chars.downcase.to_s } do |parent|
     Arel::Nodes::NamedFunction.new('lower',
-    [ Arel::Nodes::NamedFunction.new('concat_ws',
-    [ Arel::Nodes.build_quoted(' '), parent.table[:first_name], parent.table[:last_name] ]) ]
-    )
-   end
+      [Arel::Nodes::NamedFunction.new('concat_ws',
+        [Arel::Nodes.build_quoted(' '), parent.table[:first_name], parent.table[:last_name]])])
+  end
   ransack_alias :nav_bar_search, :full_name_or_email_address_or_phone_number
 
   def signup_gc_sent
@@ -122,7 +121,7 @@ class Person < ActiveRecord::Base
 
   def gift_card_total
     total = gift_cards.sum(:amount_cents)
-    total = Money.new(total, 'USD')
+    Money.new(total, 'USD')
   end
 
   WUFOO_FIELD_MAPPING = {
@@ -381,7 +380,7 @@ class Person < ActiveRecord::Base
     if email_address.present?
       email_address_duplicates = Person.where(email_address: email_address).where.not(id: id)
       email_address_duplicates.each do |duplicate|
-        if @duplicates.has_key? duplicate.id
+        if @duplicates.key? duplicate.id
           @duplicates[duplicate.id]['match_count'] += 1
           @duplicates[duplicate.id]['matches_on'].push('Email Address')
         else
@@ -396,7 +395,7 @@ class Person < ActiveRecord::Base
     if phone_number.present?
       phone_number_duplicates = Person.where(phone_number: phone_number).where.not(id: id)
       phone_number_duplicates.each do |duplicate|
-        if @duplicates.has_key? duplicate.id
+        if @duplicates.key? duplicate.id
           @duplicates[duplicate.id]['match_count'] += 1
           @duplicates[duplicate.id]['matches_on'].push('Phone Number')
         else
@@ -411,7 +410,7 @@ class Person < ActiveRecord::Base
     if address_1.present?
       address_1_duplicates = Person.where(address_1: address_1).where.not(id: id)
       address_1_duplicates.each do |duplicate|
-        if @duplicates.has_key? duplicate.id
+        if @duplicates.key? duplicate.id
           @duplicates[duplicate.id]['match_count'] += 1
           @duplicates[duplicate.id]['matches_on'].push('Address_1')
         else
@@ -423,7 +422,7 @@ class Person < ActiveRecord::Base
         @duplicates[duplicate.id]['address_1_match'] = true
       end
     end
-    return @duplicates
+    @duplicates
   end
 
 end

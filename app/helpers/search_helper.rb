@@ -30,25 +30,12 @@ module SearchHelper
   end
 
   def person_column_fields
-    %i(id first_name last_name email created updated).freeze
+    %i(id first_name last_name email_address created updated).freeze
   end
 
   def results_limit
     # max number of search results to display
     10
-  end
-
-  def post_title_length
-    # max number of characters in posts titles to display
-    14
-  end
-
-  def post_title_header_labels
-    %w(1 2 3).freeze
-  end
-
-  def user_posts_and_comments
-    %w(posts comments).freeze
   end
 
   def condition_fields
@@ -72,43 +59,6 @@ module SearchHelper
 
   def display_query_sql(people)
     tag.p('SQL:') + tag.code(people.to_sql)
-  end
-
-  def display_results_header(count)
-    if count > results_limit
-      "Your first #{results_limit} results out of #{count} total"
-    else
-      "Your #{pluralize(count, 'result')}"
-    end
-  end
-
-  def display_sort_column_headers(search)
-    person_column_headers.reduce(String.new) do |string, field|
-      string << (tag.th sort_link(search, field, {}, method: action))
-    end +
-    post_title_header_labels.reduce(String.new) do |str, i|
-      str << (tag.th "Post #{i} title")
-    end
-  end
-
-  def display_search_results(objects)
-    objects.limit(results_limit).reduce(String.new) do |string, object|
-      string << (tag.tr display_search_results_row(object))
-    end
-  end
-
-  def display_search_results_row(object)
-    user_column_fields.reduce(String.new) do |string, field|
-      string << (tag.td object.send(field))
-    end.html_safe +
-    display_user_posts(object.posts)
-  end
-
-  def display_user_posts(posts)
-    posts.reduce(String.new) do |string, post|
-      string << (tag.td truncate(post.title, length: post_title_length))
-    end
-    .html_safe
   end
 
 end

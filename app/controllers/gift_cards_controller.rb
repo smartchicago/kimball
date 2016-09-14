@@ -18,7 +18,7 @@ class GiftCardsController < ApplicationController
       end
       format.csv do
         @gift_cards = @q_giftcards.result.includes(:person)
-        send_data @gift_cards.export_csv,  filename: "GiftCards-#{Date.today}.csv"
+        send_data @gift_cards.export_csv,  filename: "GiftCards-#{Time.zone.today}.csv"
       end
     end
   end
@@ -42,7 +42,7 @@ class GiftCardsController < ApplicationController
   def create
     @gift_card = GiftCard.new(gift_card_params)
     respond_to do |format|
-      if @create_result = @gift_card.with_user(current_user).save
+      if @create_result == @gift_card.with_user(current_user).save
         @total = @gift_card.person.blank? ? @gift_card.amount : @gift_card.person.gift_card_total
         format.js {}
         format.json {}
