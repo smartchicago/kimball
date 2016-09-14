@@ -26,11 +26,11 @@ class GiftCard < ActiveRecord::Base
   monetize :amount_cents
 
   enum reason: {
-    # unknown: 0,
+    unknown: 0,
     signup: 1,
     test: 2,
     referral: 3,
-    # interview: 4,
+    interview: 4,
     other: 5
   }
 
@@ -51,13 +51,10 @@ class GiftCard < ActiveRecord::Base
   validates_format_of :gift_card_number, with: /\A([0-9]){4,5}\z/i
   validates_uniqueness_of :reason, scope: :person_id, if: "reason == 'signup'"
 
-  ransacker :created_at, type: :date do
-    Arel.sql('date(created_at.utc)')
-  end
-
-  # ransacker :created_at_two do |parent|
-  #   Arel::Nodes::SqlLiteral.new("date(convert_tz(orders.created_at, 'UTC', 'EST'))")
+  # ransacker :created_at, type: :date do
+  #   Arel.sql('date(created_at)')
   # end
+
   # Need to add validation to limit 1 signup per person
 
   def self.batch_create(post_content)
