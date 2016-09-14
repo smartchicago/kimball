@@ -168,7 +168,8 @@
         </div>
       <% end %>
       <%= form.hidden_field :person_id, :value => @person.id %>
-      <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" }, class: 'input-small', id: "new-reason" %>
+      <%= form.select :reason, GiftCard.reasons.keys.map(&:titleize).to_a, { :prompt => "Reason" }, class: 'input-small', id: "new-reason" %>
+      <%= form.text_field :notes, placeholder: 'Notes', class: 'input-medium', id: 'new-notes' %>
       <%= form.text_field :proxy_id, placeholder: "ProxyID",class: 'input-mini', id: "new-proxyid" %>
       <%= form.text_field :batch_id, placeholder: "BatchID",class: 'input-mini', id: "new-batchid" %>
       <div class='input-prepend'>

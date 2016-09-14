@@ -43,4 +43,15 @@ $(document).on('ready page:load', function () {
     $('#tag-typeahead').submit();
   });
   $("#gift_card_expiration_date").mask("99/99",{placeholder:"MM/YY"});
+  $('#new-notes').hide();
+    
+  $('#new-reason').change(function () {
+    console.log("new-reason change");
+    if ($('#new-reason option:selected').text() == "Other"){
+      console.log("new-reason other");
+      $('#new-notes').show();
+    } else {
+      $('#new-notes').hide();
+    }
+  }); 
 });
