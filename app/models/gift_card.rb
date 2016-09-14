@@ -79,7 +79,13 @@ class GiftCard < ActiveRecord::Base
       csv << csv_column_names
       all.each do |gift_card|
         this_person = gift_card.person
-        row_items = [gift_card.id, gift_card.batch_id, gift_card.gift_card_number,  gift_card.expiration_date, gift_card.reason.titleize, this_person.id || "", this_person.full_name || "", this_person.address_fields_to_sentence || "", this_person.phone_number.phony_formatted(format: :national, spaces: '-') || "", this_person.email_address || ""]
+        row_items = [gift_card.id, gift_card.batch_id, gift_card.gift_card_number,  gift_card.expiration_date, gift_card.reason.titleize, this_person.id || "", this_person.full_name || "", this_person.address_fields_to_sentence || ""]
+        if this_person.phone_number.present?
+          row_items.push(this_person.phone_number.phony_formatted(format: :national, spaces: '-'))
+        else
+          row_items.push('')
+        end
+        row_items.push(this_person.email_address)
         csv << row_items
       end
     end

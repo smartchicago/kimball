@@ -110,7 +110,11 @@ class SearchController < ApplicationController
               elsif human_connections.include? f
                 human_connection_type_name(field_value)
               elsif f == 'phone_number'
-                field_value.phony_formatted(format: :national, spaces: '-')
+                if field_value.present?
+                  field_value.phony_formatted(format: :national, spaces: '-')
+                else
+                  ''
+                end
               elsif f == 'tags'
                 if person.tag_values.blank?
                   ''

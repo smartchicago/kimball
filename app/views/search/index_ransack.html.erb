@@ -52,8 +52,8 @@
     <%= f.label :tags_id_eq_all %>
     <%= f.collection_select :tags_id_eq_all, @tag_list, :id, :name, {include_blank: true}, { multiple: true, size: @tag_list.count + 1 } %>
 
-    <%= f.label :participation_type_eq_any %>
-    <%= f.select :participation_type_eq_any, @participation_list, {include_blank: true}, { multiple: true, size: @participation_list.count + 1 } %>
+    <%= f.label :participation_type_in %>
+    <%= f.select :participation_type_in, @participation_list, {include_blank: true}, { multiple: true, size: @participation_list.count + 1 } %>
 
     <label for='gift_cards_gift_card_number_cont'>Gift card number contains</label>
     <%= f.search_field :gift_cards_gift_card_number_cont %>
@@ -105,7 +105,7 @@ Search Parameters:
           Address: <%= search_result_field result.address_1, :address  %><br/>
           City: <%= search_result_field result.city, :city %>  ZIP: <%= search_result_field result.postal_code, :postal_code %><br/>
           Neighborhood: <%= search_result_field result.neighborhood, :neighborhood %><br/>
-          Phone: <%= search_result_field result.phone_number.phony_formatted(format: :national, spaces: '-'), :phone_number %><br/>
+          Phone: <% if (result.phone_number.present?) %><%= search_result_field result.phone_number.phony_formatted(format: :national, spaces: '-') , :phone_number %><% else %> <%= search_result_field result.phone_number, :phone_number %><% end %><br/>
           Email: <%= search_result_field result.email_address, :email_address %><br/>
           Verified?: <%= search_result_field result.verified, :verified %>
 
