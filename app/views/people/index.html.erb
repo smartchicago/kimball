@@ -41,9 +41,11 @@
           <th><%= sortable 'verified','Verified?'%></th>
           <th><%= sortable 'created_at', 'Signup date' %></th>
           <th>Preferred Contact Method</th>
-          <th><%= sortable 'tag_count_cache', 'Tag Count' %></th>
-          <th>Invites</th>
-          <th>Reservations</th>
+          <% if ENV['BLUE_RIDGE'].present? %>
+            <th><%= sortable 'tag_count_cache', 'Tag Count' %></th>
+            <th>Invites</th>
+            <th>Reservations</th>
+          <% end %>
           <th>&nbsp;</th>
         </tr>
       </thead>
@@ -62,18 +64,22 @@
                                           collection: { 'SMS'=>'SMS',
                                                         'EMAIL'=>'EMAIL'} %>
             </td>
-            <td>
-            <%= person.tag_count %>
-            </td>
-            <td>
-              <%= V2::EventInvitation.joins(:invitees).where(invitation_invitees_join_table: {person_id: person.id}).size %>
-            </td>
-            <td>
-              <%= V2::Reservation.where(person_id: person.id).size %>
-            </td>
+            <% if ENV['BLUE_RIDGE'].present? %>
+              <td>
+              <%= person.tag_count %>
+              </td>
+              <td>
+                <%= V2::EventInvitation.joins(:invitees).where(invitation_invitees_join_table: {person_id: person.id}).size %>
+              </td>
+              <td>
+                <%= V2::Reservation.where(person_id: person.id).size %>
+              </td>
+            <% end %>
 
             <td>
+              <% if ENV['BLUE_RIDGE'].present? %>
               <%= render partial: 'add_remove_cart',locals: {person: person} %>
+              <% end %>
               <%= link_to t('.edit', :default => t('helpers.links.edit')),
                           edit_person_path(person), :class => 'btn btn-mini' %>
               <%= link_to t('.destroy', :default => t('helpers.links.destroy')),
