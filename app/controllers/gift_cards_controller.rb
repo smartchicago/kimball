@@ -10,7 +10,11 @@ class GiftCardsController < ApplicationController
     respond_to do |format|
       format.html do
         @gift_cards = @q_giftcards.result.includes(:person).page(params[:page])
-        @recent_signups = Person.no_signup_card.paginate(page: params[:page]).where('signup_at > :startdate', { startdate: 3.months.ago }).order('signup_at DESC')
+        # @recent_signups = Person.no_signup_card.paginate(page: params[:page]).where('signup_at > :startdate', { startdate: 3.months.ago }).order('signup_at DESC')
+        @q_recent_signups = Person.no_signup_card.ransack(params[:q_signups], search_key: :q_signups)
+        # @q_recent_signups.no_signup_card
+        @q_recent_signups.created_at_date_gteq = 3.weeks.ago.strftime('%Y-%m-%d') unless params[:q_signups]
+        @recent_signups = @q_recent_signups.result.page(params[:page])
         @new_gift_cards = []
         @recent_signups.length.times do
           @new_gift_cards << GiftCard.new
