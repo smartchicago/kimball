@@ -46,16 +46,16 @@ class SendTwilioMessagesJob < Struct.new(:messages, :phone_numbers, :smsCampaign
             @outgoing = TwilioMessage.new
             @outgoing.to = phone_number.gsub('+1', '').delete('-')
             @outgoing.body = message
-            @outgoing.from = ENV['TWILIO_NUMBER'].gsub('+1', '').delete('-')
+            @outgoing.from = ENV['TWILIO_SURVEY_NUMBER'].gsub('+1', '').delete('-')
             @outgoing.wufoo_formid = smsCampaign
-            # @incoming.direction = "incoming-twiml"
+            @outgoint.direction = 'outgoing-survey'
             @outgoing.save
 
             phone_number = '+1' + phone_number.strip.gsub('+1', '').delete('-')
 
             # Create and send an SMS message
             @message = client.account.messages.create(
-              from: ENV['TWILIO_SMS_SIGNUP_NUMBER'],
+              from: ENV['TWILIO_SURVEY_NUMBER'],
               to: phone_number,
               body: message
             )
@@ -68,7 +68,7 @@ class SendTwilioMessagesJob < Struct.new(:messages, :phone_numbers, :smsCampaign
             Rails.logger.warn("[Twilio][SendTwilioMessagesJob] had a problem. Full error: #{@outgoing.error_message}")
           end
         end
-        sleep(1)
+        sleep(1) # for twilio rate limiting, I presume.
       end
     end
   end

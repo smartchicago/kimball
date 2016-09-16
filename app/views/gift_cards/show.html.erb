@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Gift Card Number:</strong>
+  <%= @gift_card.gift_card_number %>
+</p>
+
+<p>
+  <strong>Expiration date:</strong>
+  <%= @gift_card.expiration_date %>
+</p>
+
+<p>
+  <strong>Person:</strong>
+  <%= @gift_card.person_id %>
+</p>
+
+<p>
+  <strong>Notes:</strong>
+  <%= @gift_card.notes %>
+</p>
+
+<p>
+  <strong>Created by:</strong>
+  <%= @gift_card.created_by %>
+</p>
+
+<p>
+  <strong>Reason:</strong>
+  <%= @gift_card.reason %>
+</p>
+
+<%= link_to 'Edit', edit_gift_card_path(@gift_card) %> |
+<%= link_to 'Back', gift_cards_path %>

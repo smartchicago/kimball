@@ -1,0 +1,21 @@
+Hi <% @reservations.first.person.first_name %>,
+
+<%= @reservations.size %> interview<%= @reservations.size > 1 ? 's have' : ' has' %> been booked for you today.
+
+<% @reservations.each do |r| %>
+<%= r.description %> on <%=r.to_weekday_and_time %> for <%= r.duration / 60 %>minutes \n with <%= r.user.name %> tel: <%= r.user.phone_number %>
+To cancel, confirm, or reschedule with the person, click the link below:
+
+<%= link_to "Confirm", remote_confirm_v2_reservations_url(id:r.id,token:r.person.token) %>
+
+<%= link_to "Cancel", remote_cancel_v2_reservations_url(id:r.id,token:r.person.token) %>
+
+<%= link_to "Change", remote_change_v2_reservations_url(id:r.id,token:r.person.token) %>
+
+<% end %>
+
+You can always check your schedule here: <%= calendar_url(token: @reservations.first.person.token) %>
+
+Thanks!,
+<%= ENV['TEAM_NAME'] %>
+

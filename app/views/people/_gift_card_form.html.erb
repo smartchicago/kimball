@@ -1,0 +1,42 @@
+<%= form_for @gift_card, remote: true do |f| %>
+  <% if @f.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@f.errors.count, "error") %> prohibited this gift_card from being saved:</h2>
+
+      <ul>
+      <% @f.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class='field input-prepend'>
+    <%= f.label :gift_card_number %><br>
+    <span class='add-on'>****-****-***</span>
+    <%= f.text_field :gift_card_number, placeholder: "#####", class: 'input-small', id: "new-cardnumber" %>
+  </div>
+  <div class="field">
+    <%= f.label :expiration_date %><br>
+    <%= f.text_field :expiration_date,class: 'input-mini' %>
+  </div>
+  <div class="field">
+    <%= f.label :person_id %><br>
+    <%= f.number_field :person_id,class: 'input-mini' %>
+  </div>
+  <div class="field">
+    <%= f.label :notes %><br>
+    <%= f.text_field :notes %>
+  </div>
+  <div class="field">
+    <%= f.label :created_by %><br>
+    <%= f.number_field :created_by %>
+  </div>
+  <div class="field">
+    <%= f.label :reason %><br>
+    <%= f.number_field :reason %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

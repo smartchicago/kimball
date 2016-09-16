@@ -1,0 +1,5 @@
+
+<%= tag.table do %>
+  <%= tag.thead display_sort_column_headers(@search), escape_attributes: false %>
+  <%= tag.tbody display_search_results(@people), escape_attributes: false %>
+<% end %>

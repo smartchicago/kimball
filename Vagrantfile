@@ -12,7 +12,7 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = 'ubuntu/trusty64'
 
   # config.vm.network "forwarded_port", guest: 80, host: 3000
 
@@ -23,7 +23,7 @@ Vagrant.configure(2) do |config|
     config.cache.scope = :box
     config.cache.enable :generic
 
-    if !Gem.win_platform?
+    unless Gem.win_platform?
       # passwordless nfs
       # https://gist.github.com/cromulus/5044b9558319769aaf0b
       config.cache.synced_folder_opts = {
@@ -33,7 +33,7 @@ Vagrant.configure(2) do |config|
     end
   else
     puts "please run 'vagrant plugin install vagrant-cachier'"
-    puts "It will make vagrant substantially faster"
+    puts 'It will make vagrant substantially faster'
   end
 
   if Vagrant.has_plugin?('vagrant-hostmanager')
@@ -52,7 +52,7 @@ Vagrant.configure(2) do |config|
     config.hostmanager.manage_host = true
   else
     puts "run 'vagrant plugin install vagrant-hostmanager'"
-    puts "It will help you find your dev environment!"
+    puts 'It will help you find your dev environment!'
   end
 
   # Provider-specific configuration so you can fine-tune various
@@ -60,13 +60,13 @@ Vagrant.configure(2) do |config|
   # Example for VirtualBox:
   #
 
-  config.vm.provider "virtualbox" do |vb, override|
-  # Don't display the VirtualBox GUI when booting the machine
+  config.vm.provider 'virtualbox' do |vb, override|
+    # Don't display the VirtualBox GUI when booting the machine
     vb.gui = false
 
-  # linked clones, they are speedy
+    # linked clones, they are speedy
     vb.linked_clone = true if Vagrant::VERSION =~ /^1.8/
-  # Customize the amount of memory on the VM:
+    # Customize the amount of memory on the VM:
     vb.memory = '2048'
     vb.cpus = '2'
 
@@ -74,7 +74,7 @@ Vagrant.configure(2) do |config|
     # https://gist.github.com/cromulus/5044b9558319769aaf0b
     # also this one: https://gist.github.com/GUI/2864683
     override.vm.synced_folder '.', '/vagrant', type: 'nfs'
-    override.vm.network "private_network", ip: "192.168.33.124"
+    override.vm.network 'private_network', ip: '192.168.33.124'
   end
 
   # View the documentation for the provider you are using for more
@@ -91,10 +91,14 @@ Vagrant.configure(2) do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
 
-  #splitting shell provisioning for caching benefits.
-  config.vm.provision "shell", privileged: false, inline: %[
+  # splitting shell provisioning for caching benefits.
+  config.vm.provision :shell, privileged: false, inline: %(
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password password'
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password password'
+
+    # installing elastic search
+    wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+    echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main" |  sudo tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list
     sudo apt-get -qq update
     sudo apt-get -qq install -y \
       mysql-server-5.6 \
@@ -109,41 +113,34 @@ Vagrant.configure(2) do |config|
       graphviz \
       nginx-full \
       openjdk-7-jre \
-      phantomjs
+      phantomjs \
+      elasticsearch\
+      redis-server
+
 
     mysqladmin -u root -ppassword password '';
-
-    if id -u "elasticsearch" >/dev/null 2>&1; then
-        echo "elasticsearch installed"
-    else
-      wget --quiet https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.deb -O /tmp/elasticsearch.deb;
-      sudo dpkg -i /tmp/elasticsearch.deb;
-      sudo update-rc.d elasticsearch defaults;
-      rm /tmp/elasticsearch.deb;
-      update-rc.d elasticsearch defaults;
-      sudo service elasticsearch start;
-    fi
-
-
+    sudo update-rc.d elasticsearch defaults;
+    sudo service elasticsearch start;
     # automatically cd to /vagrant/
     echo 'if [ -d /vagrant/ ]; then cd /vagrant/; fi' >> /home/vagrant/.bashrc
-  ]
+  )
 
-  config.vm.provision :shell, privileged: false, inline: %[
+  config.vm.provision :shell, privileged: false, inline: %(
+    echo 'gem: --no-rdoc --no-ri' | sudo tee /etc/gemrc;
     # rvm install is idempotent
-    gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+    curl -sSL https://rvm.io/mpapis.asc | gpg --import -
     curl -sSL https://get.rvm.io | bash -s stable --auto-dotfiles
     source ~/.profile
-  ]
+  )
 
-  config.vm.provision :shell, privileged: false, inline: %[
+  config.vm.provision :shell, privileged: false, inline: %(
     # cleanup and install the appropriate ruby version
     source ~/.profile
     rvm reload
     rvm use --default install `cat /vagrant/.ruby-version`
     rvm cleanup all
-  ]
-  config.vm.provision :shell, privileged: false, inline: %[
+  )
+  config.vm.provision :shell, privileged: false, inline: %(
     # setup our particular rails app
     source ~/.profile
     cd /vagrant/
@@ -161,6 +158,5 @@ Vagrant.configure(2) do |config|
     sudo mkdir -p /var/run/nginx/tmp
     sudo chown -R www-data:www-data /var/run/nginx/
     sudo service nginx restart
-  ]
-
+  )
 end

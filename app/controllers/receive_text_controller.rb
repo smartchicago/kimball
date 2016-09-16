@@ -28,21 +28,21 @@ class ReceiveTextController < ApplicationController
 
     # from_number = params[:From].gsub('+1', '').delete('-').to_i # Removing +1 and converting to integer
     from_number = PhonyRails.normalize_number(params[:From])
-    message = "Sorry, please try again. Text 'Hello' or 12345 to complete your signup!"
+    message = "Sorry, please try again. Text 'Hello' or 12345 to complete your signup! Or type 'Remove Me' to be removed from this list."
     if params[:Body].include?('12345') || params[:Body].downcase.include?('hello')
       @twilio_message.signup_verify = 'Verified'
-      message = 'Thank you for verifying your account. We will mail you your $5 VISA gift card right away.'
+      message = ENV['VERIFICATION_SMS_MESSAGE']
       this_person = Person.find_by(phone_number: from_number)
       this_person.verified = 'Verified by Text Message'
       this_person.save
       # Trigger add to Mailchimp list
       # mailChimpSend = Person.sendToMailChimp(this_person)
-    elsif params['Body'] == 'Remove me'
+    elsif params['Body'].downcase.include?('remove me')
       @twilio_message.signup_verify = 'Cancelled'
       this_person = Person.find_by(phone_number: from_number)
       this_person.verified = 'Removal Request by Text Message'
       this_person.save
-      message = 'We are sorry for bothering you. You have been removed from the CUTGroup.'
+      message = "We are sorry for bothering you. You have been removed from the #{ENV['GROUP_NAME']}"
     end
     @twilio_message.save
     twiml = Twilio::TwiML::Response.new do |r|
@@ -58,6 +58,7 @@ class ReceiveTextController < ApplicationController
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/BlockNesting
   #
   def smssignup
+    # this is where surveys and new signups land.
     wufoo = WuParty.new(ENV['WUFOO_ACCOUNT'], ENV['WUFOO_API'])
     wufoo.forms
 
@@ -110,7 +111,7 @@ class ReceiveTextController < ApplicationController
       session['form_length'] = 0
       session['form_type'] ||= ''
       session['end_message'] ||= ''
-    elsif @twiliowufoo && session['counter'] == 0
+    elsif @twiliowufoo && session['counter'].zero?
       session['formid'] = @twiliowufoo.wufoo_formid
       @form = wufoo.form(@twiliowufoo.wufoo_formid)
       fields = @form.flattened_fields
@@ -119,7 +120,7 @@ class ReceiveTextController < ApplicationController
       message = to_gsm0338(message)
       session['form_type'] = @twiliowufoo.form_type
       session['end_message'] = @twiliowufoo.end_message
-    elsif !@twiliowufoo && session['counter'] == 0
+    elsif !@twiliowufoo && session['counter'].zero?
       message = 'I did not understand that. Please re-type your keyword.'
       session['counter'] -= 1
 
@@ -140,7 +141,7 @@ class ReceiveTextController < ApplicationController
       elsif fields[session['counter'] - 1]['Title'].include? 'A)'
         # if !( params["Body"].strip.upcase == "A")
         if !(params['Body'].strip.upcase =~ /A|B|C|D|E/)
-          if session['errorcount'] == 0
+          if session['errorcount'].zero?
             message = 'Please type only the letter of your answer. Thank you!'
             session['counter'] -= 1
             session['errorcount'] += 1
@@ -167,12 +168,10 @@ class ReceiveTextController < ApplicationController
       session['fieldanswers'][fields[sms_count + 1]['ID']] = session['form_type']
       @form.submit(session['fieldanswers'])
       if session['form_type'] == 'signup'
-        message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive a text from 773-747-6239 with more details."
-        if session['contact'] == 'EMAIL'
-          message = "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive an email from smarziano@cct.org with details."
-        end
+        message = ENV['SIGNUP_SMS_MESSAGE']
+        message = ENV['SIGNUP_EMAIL_MESSAGE'] if session['contact'] == 'EMAIL'
       else
-        message = if session['end_message'].length > 0
+        message = if !session['end_message'].empty?
                     to_gsm0338(session['end_message'])
                   else
                     'Thank you. You have completed the form.'
@@ -190,7 +189,7 @@ class ReceiveTextController < ApplicationController
       session['form_type'] ||= ''
       session['end_message'] ||= ''
     else
-      message = "If you are having trouble email smarziano@cct.org or text '98765' and you will be contacted later."
+      message = ENV['SIGNUP_ERROR_MESSAGE']
       # else
 
       #   #message = session["counter"]

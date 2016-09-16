@@ -1,5 +1,6 @@
 //= require seamless/build/seamless.child.min.js
-$(document).ready(function() {
+var people_ready;
+people_ready = function() {
   $("#new_person").validate({
     rules: {
       "person[first_name]": {
@@ -20,9 +21,12 @@ $(document).ready(function() {
         zipcodeUS: true,
         required: true
       }
-    },
+    }//,
     // errorPlacement: function(error, element) {
     //   error.appendTo( $("label:first") );
     // }
    });
- });
+ };
+
+// loading for turbolinks etc.
+$(document).on('page:load ready', people_ready);

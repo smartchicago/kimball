@@ -1,0 +1,50 @@
+<%= render :partial => 'layouts/v2_event_menu' %>
+<p>
+  <strong>Person:</strong>
+  <%= @reservation.person.full_name %>
+</p>
+
+<p>
+  <strong>Event:</strong>
+  <%= @reservation.event.title %>
+  </br>
+  <%= @reservation.event.description %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @reservation.aasm_state %>
+</p>
+
+<p>
+  <strong>Created by:</strong>
+  <%= @reservation.user.name %>
+</p>
+
+<p>
+  <strong>Time Slot:</strong>
+  <%= @reservation.time_slot.to_weekday_and_time %>
+</p>
+
+<%= render partial: 'actions', locals: {reservation: @reservation}  %>
+
+</div>
+<br>
+
+<div class="row">
+  <div class="span6">
+    <h3>Notes</h3>
+    <%= form_for([@reservation, @comment], remote: true) do |form| %>
+      <%= form.hidden_field :commentable_type, :value => 'V2::Reservation' %>
+      <%= form.hidden_field :commentable_id, :value => @reservation.id %>
+      <%= form.text_area :content, rows: 3, class: "span6 input-block-level" %>
+      <%= form.submit 'Add note', :class => "btn" %>
+    <% end %>
+
+    <div id="comments">
+      <%= render partial: 'comment', collection: @reservation.comments.order("created_at DESC") %>
+    </div>
+  </div>
+</div>
+
+<%= button_to 'Back', v2_reservations_path %>

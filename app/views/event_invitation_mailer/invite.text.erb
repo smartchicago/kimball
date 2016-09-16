@@ -1,10 +1,13 @@
-Hello, you've been invited to a phone interview
+Hello <%= @person.first_name %>,
 
 <%= @event.description %>
 
 <%= link_to 'Please click to setup a time for your interview',
-         new_v2_reservation_url(
-           email_address: @email_address,
-           event_id: @event.id,
-           token: @person.token
-         ) %>
+         calendar_url(token: @person.token, event_id: @event.id) %>
+
+Thanks!,
+<%= ENV['TEAM_NAME'] %>
+
+Do be removed from this list, just click this link:
+<%= public_person_deactivate_url(person_id: @person.id, token: @person.token) %>
+
