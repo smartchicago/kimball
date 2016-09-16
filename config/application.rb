@@ -5,12 +5,15 @@ require 'rails/all'
 # Assets should be precompiled for production (so we don't need the gems loaded then)
 Bundler.require(*Rails.groups(assets: %w(development test)))
 
-# this enables us to know who created a user or updated a user, I beleive.
-require './lib/with_user'
+
+
 
 module Logan
 
   class Application < Rails::Application
+
+    # this enables us to know who created a user or updated a user
+    require "#{config.root}/lib/extensions/with_user"
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -20,18 +23,26 @@ module Logan
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.autoload_paths += %W(#{config.root}/app/jobs #{config.root}/app/mailers)
+    config.autoload_paths += %W(#{config.root}/app/jobs #{config.root}/app/mailers #{config.root}/app/sms)
 
     # Analytics
     Logan::Application.config.google_analytics_enabled = false
 
     # compile the placeholder
     config.assets.precompile += %w( holder.js )
+
     config.before_configuration do
       env_file = File.join(Rails.root, 'config', 'local_env.yml')
+      defaults = File.join(Rails.root, 'config', 'sample.local_env.yml')
+
       YAML.load(File.open(env_file)).each do |key, value|
         ENV[key.to_s] = value
       end if File.exist?(env_file)
+
+      # load in defaults unless they are already set
+      YAML.load(File.open(defaults)).each do |key, value|
+        ENV[key.to_s] = value unless ENV[key]
+      end
     end
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.

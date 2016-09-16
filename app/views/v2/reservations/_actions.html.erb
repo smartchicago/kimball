@@ -1,0 +1,48 @@
+<% if @visitor.class.to_s == 'User' %>
+  <div class="btn-group" role="group" aria-label="Reservation Actions">
+    <% @reservation.state_action_array.each do |e| %>
+    <%= button_to e[1], v2_reservation_path, params: {aasm_state: e[0]}, method: :patch,  class: "btn btn-secondary" %>
+    <% end %>
+  </div>
+<% else %>
+  <div id='reservation-actions' class="row-fluid no-gutter">
+    <div class='span6'></div>
+    <div class="span2">
+      <% if @reservation.permitted_events.include?('confirm') %>
+      <%= button_to 'Confirm',
+        confirm_v2_reservations_path(id: @reservation.id,
+                                      token: @visitor.token),
+        method: :post,
+        remote: true,
+        class: "btn btn-success",
+        id: 'confirm' %>
+      <% end %>
+    </div>
+    <div class="span2">
+    <% if @reservation.permitted_events.include?('reschedule') %>
+      <%= button_to 'Change',
+        change_v2_reservations_path(id: @reservation.id,
+                                    token: @visitor.token),
+        method: :post,
+        remote: true,
+        class: "btn btn-warning",
+        id: 'change',
+        data: { confirm: 'Are you sure you need to change this reservation?',
+        disable_with: 'loading...' } %>
+    <% end %>
+    </div>
+    <div class='span2'>
+    <% if @reservation.permitted_events.include?('cancel') %>
+      <%= button_to 'Cancel',
+        cancel_v2_reservations_path(id: @reservation.id,
+                                    token: @visitor.token),
+        method: :post,
+        remote: true,
+        class: "btn btn-danger",
+        id: 'cancel',
+        data: { confirm: 'Are you sure you want to cancel?',
+        disable_with: 'loading...' } %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

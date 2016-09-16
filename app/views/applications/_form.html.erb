@@ -13,23 +13,23 @@
           <% end %>
 
             <%= f.label :name %>
-            <%= f.text_field :name, class: "span6" %>
+            <%= f.text_field :name, class: 'span6' %>
             <%= f.label :description %>
-            <%= f.text_area :description, class: "span6" %>
+            <%= f.text_area :description, class: 'span6' %>
             <%= f.label :program_id %>
-            <%= f.select :program_id, Program.all.order("name ASC").collect{|p| [p.name, p.id]}, {include_blank: true}, {class: "span6"} %>
-            <%= f.label :url, "URL" %>
-            <%= f.text_field :url, class: "span6" %>
-            <%= f.label :source_url, "URL of the application source code" %>
-            <%= f.text_field :source_url, class: "span6" %>
+            <%= f.select :program_id, Program.all.order('name ASC').collect { |p| [p.name, p.id] }, {include_blank: true}, {class: 'span6'} %>
+            <%= f.label :url, 'URL' %>
+            <%= f.text_field :url, class: 'span6' %>
+            <%= f.label :source_url, 'URL of the application source code' %>
+            <%= f.text_field :source_url, class: 'span6' %>
             <%= f.label :creator_name %>
-            <%= f.text_field :creator_name, class: "span6" %>
+            <%= f.text_field :creator_name, class: 'span6' %>
 
           <div class="form-actions">
-            <%= f.submit "Save", class: "btn btn-primary" %>
-            <%= link_to 'Back', applications_path, class: "btn" %>
+            <%= f.submit 'Save', class: 'btn btn-primary' %>
+            <%= link_to 'Back', applications_path, class: 'btn' %>
           </div>
-        <% end %>        
-      </fieldset>    
+        <% end %>
+      </fieldset>
   </div>
 </div>

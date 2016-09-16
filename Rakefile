@@ -5,4 +5,10 @@ require File.expand_path('../config/application', __FILE__)
 
 Logan::Application.load_tasks
 
-task default: [:rubocop, :test, :spec]
+if Rails.env != 'production' and Rails.env != 'staging'
+  require 'coveralls/rake/task'
+  Coveralls::RakeTask.new
+  task test_with_coveralls: [:spec, :features, 'coveralls:push']
+
+  task default: [:rubocop, :test, :spec, 'coveralls:push']
+end

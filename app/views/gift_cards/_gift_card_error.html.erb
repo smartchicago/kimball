@@ -1,0 +1,11 @@
+<% if gift_card && gift_card.errors.size > 0 %>
+   <div id="errorExplanation">
+   <h3><%= pluralize(gift_card.errors.size, "error") %> prohibited this record from being saved.</h3>
+   <p>There were problems with the following fields:</p>
+   <ul>
+     <% gift_card.errors.full_messages.each do |msg| %>
+       <li><%= msg %></li>
+     <% end %>
+   </ul>
+ </div>
+<% end %>

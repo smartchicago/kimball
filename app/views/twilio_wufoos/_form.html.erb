@@ -1,3 +1,8 @@
+<h3>If you are using a Wufoo form, please make sure it is set up correctly:</h3>
+    <ul>
+      <li>The second to last field should be the phone number field</li>
+      <li>The last field in the form should be the form type. The form type should be one of "Signup", "Screening", "Availability", or "Test"</li>
+    </ul>
 <%= form_for(@twilio_wufoo) do |f| %>
   <% if @twilio_wufoo.errors.any? %>
     <div id="error_explanation">

@@ -1,4 +1,4 @@
 <li id="tagging-<%= tagging.id %>" class="tagging">
-  <%= link_to tagging.tag.name, search_index_path(:adv => 1, :tags => tagging.tag.name.split(',')) %>
+  <%= link_to tagging.tag.name, search_index_path(:adv => 1, :tags => tagging.tag.name) %>
   <%= link_to '<i class="icon-remove-circle"></i>'.html_safe, tagging_path(tagging), method: :delete, remote: true, class: "delete-link", title: "delete this tag" %>
 </li>

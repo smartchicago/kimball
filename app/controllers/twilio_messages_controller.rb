@@ -1,3 +1,30 @@
+# == Schema Information
+#
+# Table name: twilio_messages
+#
+#  id                 :integer          not null, primary key
+#  message_sid        :string(255)
+#  date_created       :datetime
+#  date_updated       :datetime
+#  date_sent          :datetime
+#  account_sid        :string(255)
+#  from               :string(255)
+#  to                 :string(255)
+#  body               :string(255)
+#  status             :string(255)
+#  error_code         :string(255)
+#  error_message      :string(255)
+#  direction          :string(255)
+#  from_city          :string(255)
+#  from_state         :string(255)
+#  from_zip           :string(255)
+#  wufoo_formid       :string(255)
+#  conversation_count :integer
+#  signup_verify      :string(255)
+#  created_at         :datetime
+#  updated_at         :datetime
+#
+
 require 'twilio-ruby'
 require 'csv'
 
@@ -32,26 +59,35 @@ class TwilioMessagesController < ApplicationController
     messages = Array[message1, message2]
     smsCampaign = params.delete(:twiliowufoo_campaign)
     infile = params[:file].read
+    contentType = params[:file].content_type
 
-    CSV.parse(infile, headers: true, header_converters: :downcase) do |row|
-      # @person << row
-      Rails.logger.info("[TwilioMessagesController#sendmessages] #{row}")
-      phone_numbers.push(row['phone_number'])
-    end
-
-    Rails.logger.info("[TwilioMessagesController#sendmessages] messages #{messages}")
-    Rails.logger.info("[TwilioMessagesController#sendmessages] phone numbers #{phone_numbers}")
-    phone_numbers = phone_numbers.reject { |e| e.to_s.blank? }
-    @job_enqueue = Delayed::Job.enqueue SendTwilioMessagesJob.new(messages, phone_numbers, smsCampaign)
-    if @job_enqueue.save
-      Rails.logger.info("[TwilioMessagesController#sendmessages] Sent #{phone_numbers} to Twilio")
-      flash[:success] = "Sent Messages: #{messages} to Phone Numbers: #{phone_numbers}"
-      respond_to do |format|
-        format.html { redirect_to '/twilio_messages/sendmessages', notice: flash[:success] }
+    if contentType == 'text/csv'
+      CSV.parse(infile, headers: true, header_converters: :downcase) do |row|
+        if row['phone_number'].present?
+          # @person << row
+          Rails.logger.info("[TwilioMessagesController#sendmessages] #{row}")
+          phone_numbers.push(row['phone_number'])
+        else
+          flash[:error] = "Please make sure the phone numbers are stored in a column named 'phone_number' in your CSV."
+          break
+        end
+      end
+      Rails.logger.info("[TwilioMessagesController#sendmessages] messages #{messages}")
+      Rails.logger.info("[TwilioMessagesController#sendmessages] phone numbers #{phone_numbers}")
+      phone_numbers = phone_numbers.reject { |e| e.to_s.blank? }
+      @job_enqueue = Delayed::Job.enqueue SendTwilioMessagesJob.new(messages, phone_numbers, smsCampaign)
+      if @job_enqueue.save
+        Rails.logger.info("[TwilioMessagesController#sendmessages] Sent #{phone_numbers} to Twilio")
+        flash[:success] = "Sent Messages: #{messages} to Phone Numbers: #{phone_numbers}"
+      else
+        Rails.logger.error('[TwilioMessagesController#sendmessages] failed to send text messages')
+        flash[:error] = 'Failed to send messages.'
       end
     else
-      Rails.logger.error('[TwilioMessagesController#sendmessages] failed to send text messages')
-      format.all { render text: 'failed to send text messages', status: 400 }
+      flash[:error] = 'Please upload a CSV instead.'
+    end
+    respond_to do |format|
+      format.html { redirect_to '/twilio_messages/sendmessages' }
     end
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Style/VariableName
@@ -66,11 +102,13 @@ class TwilioMessagesController < ApplicationController
     @twilio_message = TwilioMessage.new
   end
 
+  # this is the callback from twilio about the message and it's delivery
   # POST /twilio_messages/updatestatus
   def updatestatus
     this_message = TwilioMessage.find_by message_sid: params['MessageSid']
     this_message.status = params['MessageStatus']
     this_message.error_code = params['ErrorCode']
+    this_message.error_message = params['ErrorMessage']
     this_message.save
   end
 

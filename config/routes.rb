@@ -1,13 +1,44 @@
 Logan::Application.routes.draw do
+  resources :gift_cards
   resources :mailchimp_updates
   namespace :public do
-    resources :people, only: [:new, :create]
+    resources :people, only: [:new, :create, :deactivate] do
+      get '/deactivate/:token', to:'people#deactivate', as: :deactivate
+    end
   end
 
   namespace :v2 do
-    resources :event_invitations, only: [:new, :create]
-    resources :reservations, only: [:new, :create]
+    resources :event_invitations
+    resources :reservations do
+      collection do
+        post ':id/confirm/(:token)',
+              to: 'reservations#confirm',
+              as: :confirm
+        post ':id/cancel/(:token)',
+              to: 'reservations#cancel',
+              as: :cancel
+        post ':id/change/(:token)',
+              to: 'reservations#change',
+              as: :change
+        get ':id/confirm/(:token)',
+              to: 'reservations#confirm',
+              as: :remote_confirm
+        get ':id/cancel/(:token)',
+              to: 'reservations#cancel',
+              as: :remote_cancel
+        get ':id/change/(:token)',
+              to: 'reservations#change',
+              as: :remote_change
+      end
+      resources :comments, controller: '/comments'
+    end
+    resources :sms_reservations, only: [:create]
   end
+
+  # simple session based cart for storing people ids.
+  get 'v2/cart', to: 'v2/cart#index', as: :show_cart
+  get 'v2/cart/add/:person_id', to: 'v2/cart#add', as: :add_cart
+  get 'v2/cart/delete(/:person_id(/:all))', to: 'v2/cart#delete', as: :delete_cart
 
   get 'registration', to: 'public/people#new'
 
@@ -31,6 +62,8 @@ Logan::Application.routes.draw do
 
   get 'taggings/create'
   get 'taggings/destroy'
+  get 'taggings/search'
+
   get 'mailchimp_export/index'
   get 'mailchimp_export/create'
   resources :reservations
@@ -43,6 +76,7 @@ Logan::Application.routes.draw do
 
   resources :applications
 
+
   resources :programs
 
   devise_for :users
@@ -52,7 +86,39 @@ Logan::Application.routes.draw do
   resources :comments
   resources :taggings, only: [:create, :destroy]
 
+  get 'calendar/event_slots.json(:token)', to: 'calendar#event_slots', defaults: { format: 'json' }
+
+  get 'calendar/reservations.json(:token)', to: 'calendar#reservations', defaults: { format: 'json' }
+  get 'calendar/events.json', to: 'calendar#events', defaults: { format: 'json' }
+
+  get '/calendar/(:id)', to: 'calendar#show', as: :calendar
+  get '/calendar/(:token)/feed/', to: 'calendar#feed', defaults: { format: 'ics' }
+  get '/calendar/show_actions/:id/(:token)',
+      to: 'calendar#show_actions',
+      defaults: { format: 'js' },
+      as: :calendar_show_actions
+
+  get '/calendar/show_reservation/:id/(:token)',
+      to: 'calendar#show_reservation',
+      defaults: { format: 'js' },
+      as: :calendar_show_reservation
+
+  get '/calendar/show_invitation/:id/(:token)',
+      to: 'calendar#show_invitation',
+      defaults: { format: 'js' },
+      as: :calendar_show_invitation
+
+  get '/calendar/show_event/:id/(:token)',
+      to: 'calendar#show_event',
+      defaults: { format: 'js' },
+      as: :calendar_show_event
+
+
+
   get  'search/index'
+  get  'search/index_ransack'
+  post 'search/index_ransack'
+  post 'search/export_ransack'
   post 'search/export' # send search results elsewhere, i.e. Mailchimp
   post 'search/exportTwilio'
 
@@ -61,10 +127,13 @@ Logan::Application.routes.draw do
   resources :people do
     collection do
       post 'create_sms'
+      post ':person_id/deactivate', action: :deactivate, as: :deactivate
     end
     resources :comments
+    resources :gift_cards
   end
   # post "people/create_sms"
+
 
   root to: 'dashboard#index'
 

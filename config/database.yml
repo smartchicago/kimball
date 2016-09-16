@@ -10,7 +10,7 @@ development:
   pool: 5
   timeout: 5000
   host: localhost
-  user: root
+  username: root
   password:
 
 # Warning: The database defined as "test" will be erased and
@@ -24,13 +24,19 @@ test:
 
 staging:
   adapter: mysql2
-  database: staging
+  database: <%= ENV['MYSQL_DATABASE'] || 'staging' %>
+  host: <%= ENV['MYSQL_HOST'] || 'localhost' %>
+  username: <%= ENV['MYSQL_USER'] || 'logan' %>
+  password: <%= ENV['MYSQL_PWD'] || '' %>
   pool: 5
   timeout: 5000
 
 
 production:
   adapter: mysql2
-  database: production
+  database: <%= ENV['RAILS_ENV'] || 'production' %>
+  host: <%= ENV['MYSQL_HOST'] || 'localhost' %>
+  username: <%= ENV['MYSQL_USER'] || 'logan' %>
+  password: <%= ENV['MYSQL_PWD'] || '' %>
   pool: 5
   timeout: 5000

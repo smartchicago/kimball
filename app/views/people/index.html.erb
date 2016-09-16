@@ -1,13 +1,30 @@
 <%- model_class = Person -%>
 <div class="row page-header">
-  <div class="span12">
+  <div class="span2">
     <h1><%=t '.title', :default => "People" %></h1>
+  </div>
+  <div class='span2'>
+   <label for="tags">Tags</label>
+      <%= form_tag '/people', method: :get %>
+      <%= text_field_tag :tags,
+                            params[:tags],
+                            class: 'tokenfield input-small span4',
+                            id:'tag-field',
+                            data: { search_url: '/taggings/search?q=%QUERY',
+                                    submit_id: 'tag-field',
+                                    submit_on_tag: true,
+                                    pre_populate: @tags
+                                  }
+                          %>
+  </div>
+  <div class="span3">
+    <%= submit_tag "Search", :name => nil, :class => "btn btn-primary pull-right" %>
   </div>
 </div>
 
 <div class="row">
   <div class="span12">
-    <p class="pull-right"><%= Person.count %> people are members of the CUT Group.</p>
+    <p class="pull-right"><%= Person.count %> people are members of the CUTGroup.</p>
   </div>
 </div>
 
@@ -21,33 +38,53 @@
           <th>Ward</th>
           <th>Email address</th>
           <th>Phone number</th>
-          <th>Verified?</th>
-          <th>Signup date</th>
+          <th><%= sortable 'verified','Verified?'%></th>
+          <th><%= sortable 'created_at', 'Signup date' %></th>
           <th>Preferred Contact Method</th>
+          <th><%= sortable 'tag_count_cache', 'Tag Count' %></th>
+          <th>Invites</th>
+          <th>Reservations</th>
           <th>&nbsp;</th>
         </tr>
       </thead>
       <tbody>
         <% @people.each do |person| %>
-          <tr>
+          <tr id='person-<%= person.id %>'>
             <td><%= link_to "#{person.first_name} #{person.last_name}", person_path(person) %></td>
             <td><%= address_fields_to_sentence(person) %></td>
             <td><%= best_in_place person, :geography_id %></td>
             <td><%= best_in_place person, :email_address %></td>
             <td><%= best_in_place person, :phone_number %></td>
-            <!-- <td><%= best_in_place person, :verified,as: :select, collection: ['YES','NO'] %></td> -->
-            <td><%= best_in_place person, :verified %></td>
-            <td><%= person.signup_at ? person.signup_at.to_s(:long) : '' %></td>
-            <!-- <td><%= best_in_place person, :preferred_contact_method, as: :select, collection: %w(SMS EMAIL) %></td> -->
-            <td><%= best_in_place person, :preferred_contact_method %></td>
+            <td><%= best_in_place person, :verified, as: :select, collection: @verified_types.map{|p| [p,p]} %></td>
+            <td><%= person.created_at.to_s(:short) %></td>
+            <td><%= best_in_place person, :preferred_contact_method,
+                                          as: :select,
+                                          collection: { 'SMS'=>'SMS',
+                                                        'EMAIL'=>'EMAIL'} %>
+            </td>
             <td>
-              <%= link_to t('.schedule', :default => "schedule"),
-                          new_v2_event_invitation_path(email_addresses: person.email_address), :class => 'btn btn-mini' %>
-              <%= link_to t('.edit', :default => t("helpers.links.edit")),
+            <%= person.tag_count %>
+            </td>
+            <td>
+              <%= V2::EventInvitation.joins(:invitees).where(invitation_invitees_join_table: {person_id: person.id}).size %>
+            </td>
+            <td>
+              <%= V2::Reservation.where(person_id: person.id).size %>
+            </td>
+
+            <td>
+              <%= render partial: 'add_remove_cart',locals: {person: person} %>
+              <%= link_to t('.edit', :default => t('helpers.links.edit')),
                           edit_person_path(person), :class => 'btn btn-mini' %>
-              <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              <%= link_to t('.destroy', :default => t('helpers.links.destroy')),
                           person_path(person),
                           :method => :delete,
+                          :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                          :class => 'btn btn-mini btn-danger' %>
+                <%= link_to 'deactivate',
+                          deactivate_people_path(person),
+                          remote: true,
+                          method: :post,
                           :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                           :class => 'btn btn-mini btn-danger' %>
             </td>
