@@ -28,3 +28,14 @@
 
 # vagrant instance folder
 .vagrant
+
+Procfile
+
+# weird mac files.
+.DS_STORE
+
+# simplecov
+/coverage
+
+# screenshots
+screenshot*

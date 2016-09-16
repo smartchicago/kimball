@@ -1,0 +1,7 @@
+Hi <% @reservation.person.first_name %>,
+An interview has been booked for <%= @reservation.time_slot.to_weekday_and_time %>
+
+You can always check your schedule here: <%= calendar_url(token: @reservation.person.token) %>
+
+Thanks!,
+<%= ENV['TEAM_NAME'] %>

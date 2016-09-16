@@ -1,0 +1,32 @@
+<div id="reservationModal" class="modal fade" tabindex='-1'>
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+              <h4 id="resTitle" class="modal-title"><%= @reservation.title %></h4>
+              <h5 id="resTime" class="modal-title"><%= @reservation.start_datetime_human %></h5>
+              <h5 id="resState" class="modal-title"><%= @reservation.human_state %></h5>
+          </div>
+          <div id="resBody" class="modal-body">
+            <p>A <%= @reservation.duration / 60 %> minute interview:</p>
+            <p><%= @reservation.description %></p>
+            <% if current_user %>
+            <div id='modalDetails'>
+              <dl class="dl-horizontal">
+                <dt>With:</dt>
+                <dd><%= @reservation.person.full_name %></dd>
+                <dt>Tel:</dt>
+                <dd><%= @reservation.person.phone_number %></dd>
+                <dt>Email:</dt>
+                <dd><%= @reservation.person.email_address %></dd>
+              </dl>
+            </div>
+            <% end %>
+          </div>
+          <%= render partial: 'v2/reservations/actions', locals: {reservation: @reservation, visitor: @visitor} %>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>

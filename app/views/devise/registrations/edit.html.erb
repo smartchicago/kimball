@@ -1,12 +1,17 @@
 <div class="row">
   <div class="span12">
     <h1>Edit profile</h1>
-    
+
     <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
       <%= devise_error_messages! %>
+      <%= f.label :name %>
+      <%= f.text_field :name %>
 
       <%= f.label :email %>
       <%= f.email_field :email, :autofocus => true %>
+
+      <%= f.label :phone_number %>
+      <%= f.text_field :phone_number %>
 
       <%= f.label :password %>
       <%= f.password_field :password, :autocomplete => "off" %>
@@ -21,9 +26,9 @@
         <%= f.submit "Update", class: "btn btn-primary" %>
         <%= link_to "Cancel", root_path , class: "btn" %>
       </div>
-      
-      
+
+
     <% end %>
-    
+
   </div>
 </div>

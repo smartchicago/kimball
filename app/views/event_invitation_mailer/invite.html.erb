@@ -1,0 +1,12 @@
+<p>Hello <%= @person.first_name %>,</p>
+
+<p><%= @event.description %></p>
+
+<p><%= link_to 'Please click to setup a time for your interview',
+           calendar_url(token: @person.token, event_id: @event.id) %></p>
+
+<p>Thanks!</p>
+<p><%= ENV['TEAM_NAME'] %></p>
+
+<p>If you'd like to be removed, just <%= link_to "click here to unsubscribe.", public_person_deactivate_url(person_id: @person.id, token: @person.token) %></p>
+

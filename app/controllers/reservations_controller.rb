@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: reservations
+#
+#  id           :integer          not null, primary key
+#  person_id    :integer
+#  event_id     :integer
+#  confirmed_at :datetime
+#  created_by   :integer
+#  attended_at  :datetime
+#  created_at   :datetime
+#  updated_at   :datetime
+#  updated_by   :integer
+#
+
 class ReservationsController < ApplicationController
 
   before_action :set_reservation, only: [:show, :edit, :update, :destroy]
@@ -44,14 +59,14 @@ class ReservationsController < ApplicationController
   # rubocop:enable Metrics/MethodLength
 
   # FIXME: Refactor and re-enable cop
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Rails/TimeZone
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   #
   # PATCH/PUT /reservations/1
   # PATCH/PUT /reservations/1.json
   def update
     respond_to do |format|
-      @reservation.confirmed_at = (params[:reservation].delete(:confirmed_at).to_i == 1) ? DateTime.now : nil
-      @reservation.attended_at  = (params[:reservation].delete(:attended_at).to_i == 1) ? DateTime.now : nil
+      @reservation.confirmed_at = params[:reservation].delete(:confirmed_at).to_i == 1 ? Time.current : nil
+      @reservation.attended_at  = params[:reservation].delete(:attended_at).to_i == 1 ? Time.current : nil
 
       if @reservation.with_user(current_user).save
         format.js   { head :ok }

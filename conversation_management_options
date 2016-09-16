@@ -1,0 +1,88 @@
+conversation management: how to
+
+reservation changes:
+created is changed to "attendable"
+We have a new state "scheduled". It's the default for people using the web UI to create a reservation at a "scheduled" state.
+
+the user can convert an "attendable" -> "scheduled" and it notifies the person.
+when the time slot pops up for the user, they see all of the people who are "available" during that time.
+
+
+logic for "attendable" state overlap checking:
+1) Doesn't prevent other people from booking that slot
+2) doesn't present as an option to user if person has booked a reservation for tim
+
+
+one of the ways to get a nice date from wit.ai:
+ curl \
+  -H 'Authorization: Bearer JJMZIZCG4ZIKI3WEWPJLZQ5VPDO3KXDC' \
+  'https://api.wit.ai/message?v=20160524&q=from%202pm%20to%204pm&context=%7B%22reference_time%22%3A%222016-05-28T14%3A00%3A41.573-04%3A00%22%7D'
+
+where:
+  context = Rack::Utils.escape({reference_time: DateTime}.to_json)
+  q = query string
+
+
+
+Conversation Management:
+
+Option 1
+  all sms goes out through delayed_job, every outbound sms is logged.
+
+  event_id and person_id in a redis hash. (could be mysql table, but seems like overkill)
+
+  all communication between person and app is about the last event.
+    * this enables us to do things like: when are you available?
+  no
+
+  events time out after a certan period of time.
+
+  this is using wit.ai for almost everything... I think this is the right path.
+
+Option 2
+  after the invitation goes out, we know it's the last invitation to be sent.
+  When a person responds with a yes or a no, we send another text asking when they are available. We use the context of the the last invitation sent for parsing the response.
+
+  This will totally break if two people get invitations in short order.
+
+
+  examples:
+  happy path:
+    bot: are you avaiable for a 15 minute call friday between 9am and 6pm? Click here to use the web
+    person: yes
+    bot: When are you available? please text back the date and time, like "friday between 2pm and 5pm"
+    person: friday between 1pm and 4pm
+    bot: Right. Friday, the 27th, from 1:00pm to 4:00pm. Did I get that right?
+    person: yes
+    bot: great, we'll be in touch soon with a specific time then.
+
+  reject offer:
+    bot: are you avaiable for a 15 minute call friday between 9am and 6pm? Click here to use the web
+    person: no
+    bot: sorry to hear that! We'll have more opportunities soon. If you don't want to receive messages from us, reply: 'remove me'
+
+  time parse fail:
+    bot: are you avaiable for a 15 minute call friday between 9am and 6pm? Click here to use the web
+    person: yes
+    bot: When are you available? please text back the date and time, like "friday between 2pm and 5pm"
+    person: whenever is good for you
+    bot: I'm sorry. I didn't understand 'whenver is good for you'. Please respond with the date and times you are free. Like: 'friday between 11am and 2pm.'
+    person: friday at 4pm
+    bot:  Right. Friday, the 27th, from 4:00pm to 6:00pm. Did I get that right?
+    person: no
+    bot: Sorry, please try texting a date with the time you start being available untill the time you are not available, like 'friday from 1pm to 4pm'
+    person: friday from 4pm to 5pm
+    bot:  Right. Friday, the 27th, from 4:00pm to 5:00pm. Did I get that right?
+    person: yes
+    bot: great, we'll be in touch soon with a specific time then.
+
+Flow:
+  text comes in:
+  0) save it.
+  1) is it 'remove me'? -> do remove
+  2) is it confirm/cancel/change/calendar? -> do those things & send response
+  4) do we have an outstanding invitation? ->  context from redis -> do wit.ai
+  5) error message
+
+save context in redis by person_id. set it to expire in 30 minutes? every time we get an update, the expiration is extended. (expire key)
+

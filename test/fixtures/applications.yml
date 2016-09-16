@@ -4,7 +4,7 @@
 #
 #  id           :integer          not null, primary key
 #  name         :string(255)
-#  description  :text
+#  description  :text(65535)
 #  url          :string(255)
 #  source_url   :string(255)
 #  creator_name :string(255)

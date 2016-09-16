@@ -1,0 +1,35 @@
+<script>
+defaultDate = '<%= @default_date %>';
+token = '<%= @person.nil? ? false : @person.token %>';
+</script>
+
+<% if current_user %>
+<%= render :partial => 'layouts/v2_event_menu' %>
+<% end %>
+<div class='well well-sm'>
+Calendar for <%= @visitor.full_name %>
+</div>
+<div id='calendar'></div>
+<div>
+<%= link_to "Add to this your calendar", controller: 'calendar', action: :feed, token: @visitor.token, protocol: 'webcal', format: :ics %>
+</div>
+
+<!-- this is where we drop our modals -->
+<div id='show-reservation'></div>
+<div id='show-invitation'></div>
+<div id='show-event'></div>
+
+
+<% if @show_modal %>
+<!-- this is how we display a modal if a person links to it. -->
+<script>
+<% case @show_modal%>
+<% when 'reservation' %>
+$.getScript('<%= calendar_show_reservation_path(id: @reservation.id, token: @visitor.token)%>');
+<% when 'time_slot' %>
+$.getScript('<%= calendar_show_invitation_path(id: @time_slot.id, token: @visitor.token)%>');
+<% when 'event' %>
+//$.getScript('<%= calendar_show_event_path(id: @event.id, token: @visitor.token)%>');
+<%end%>
+</script>
+<%end%>

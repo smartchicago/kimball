@@ -2,14 +2,14 @@
 <div class="row page-header">
   <div class="span12">
     <h1><%=t '.title', :default => "Text Message Log" %></h1>
-  </div>  
+  </div>
 </div>
 <div class="row">
   <div class="span12">
-   
+
     <table class="table table-striped span12">
       <thead>
-        <tr>   
+        <tr>
     <td>date_created</td>
     <td>date_updated</td>
     <td>date_sent</td>
@@ -29,7 +29,7 @@
 <!--     <td>account_sid</td>
  -->        </tr>
       </thead>
-      <tbody> 
+      <tbody>
         <% @twilio_messages.each do |twilio_message| %>
           <tr>
             <td><%= twilio_message.date_created %></td>
@@ -55,12 +55,12 @@
           </tr>
         <% end %>
       </tbody>
-    </table>    
+    </table>
   </div>
 </div>
 <div class="row">
   <div class="span12" style="text-align:center">
-    <%= will_paginate @posts, :renderer => BootstrapPagination::Rails %>
+    <%= will_paginate @twilio_messages, :renderer => BootstrapPagination::Rails %>
   </div>
 </div>
 

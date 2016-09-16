@@ -1,0 +1,47 @@
+<%= render :partial => 'layouts/v2_event_menu' %>
+<h1> List of Events</h1>
+<div class="row">
+  <div class="span12">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Starts at</th>
+          <th>Ends at</th>
+          <th>Created By</th>
+          <th>Number Invited:</th>
+          <th>Reservations</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @events.each do |event| %>
+          <tr>
+            <td><%= link_to event.title, event %></td>
+            <td><%= event.description %></td>
+            <td><%= event.start_datetime.to_s :long %></td>
+            <td><%= event.end_datetime.to_s :long %></td>
+            <td><%= event.user.name %></td>
+            <td><%= event.invitees.count %></td>
+            <td><%= event.event.reservations.size %></td>
+            <!-- probably link to the reservations for this event -->
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12" style="text-align:center">
+    <%= will_paginate @events, :renderer => BootstrapPagination::Rails %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <p><%= link_to 'New Event', new_v2_event_invitation_path %></p>
+  </div>
+</div>

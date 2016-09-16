@@ -1,0 +1,54 @@
+<script>
+$('#timeSlotSubmitButton').on('click', function(e){
+  // We don't want this to act as a link so cancel the link action
+  e.preventDefault();
+  $.post('/v2/reservations', $('#new_v2_reservation').serialize())
+  .done(function(){
+    $('#calendar').fullCalendar( 'refetchEvents' );
+    $('#invitationModal').modal('hide');
+  });
+});
+</script>
+<div id="invitationModal" class="modal fade" tabindex='-1'>
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+              <h4 id="modalTitle" class="modal-title"><%= @time_slot.event.title %></h4>
+              <h5 id="modalTime" class="modal-title"><%= @time_slot.event.start_datetime_human %></h5>
+          </div>
+          <div id="modalBody" class="modal-body">
+            <div id='modalDescription'>
+              <%= @time_slot.event.description %>
+            </div>
+            <div id='modalDetails'>
+              <dl class="dl-horizontal">
+                <dt>Duration:</dt>
+                <dd><%= @time_slot.duration / 60 %> minutes</dd>
+                <dt>With:</dt>
+                <dd><%= @time_slot.event.user.name %></dd>
+                <dt>Tel:</dt>
+                <dd><%= @time_slot.event.user.phone_number %></dd>
+              </dl>
+            </div>
+          </div>
+          <% unless current_user %>
+            <div>Choose this time slot</div>
+              <%= form_for @reservation, url: v2_reservations_path, html: { class: 'form-horizontal' } do |form| %>
+              <%= form.hidden_field :person_id, value: @person.id %>
+              <%= form.hidden_field :user_id, value: @time_slot.user.id %>
+              <%= form.hidden_field :event_id,value: @time_slot.event.id %>
+              <%= form.hidden_field :event_invitation_id, value: @time_slot.event_invitation.id %>
+              <%= form.hidden_field :time_slot_id, value: @time_slot.id %>
+              <% end %>
+            </div>
+          <% end %>
+          <div class="modal-footer">
+            <% unless current_user # only people can select %>
+              <button type="submit" class="btn btn-primary" data-dismiss="modal" id="timeSlotSubmitButton">Select</button>
+            <% end %>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>

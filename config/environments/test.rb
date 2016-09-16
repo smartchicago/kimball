@@ -38,4 +38,6 @@ Logan::Application.configure do
   config.active_support.deprecation = :stderr
 
   config.active_support.test_order = :random
+
+  PaperTrail.enabled = false # no audits needed in tests. yet.
 end

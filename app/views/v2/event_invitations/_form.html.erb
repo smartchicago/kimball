@@ -1,0 +1,69 @@
+<%= form_for @event_invitation,
+             url: v2_event_invitations_path,
+             method: :POST,
+             remote: true,
+             html: { class: 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :people_ids, "People", :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :people, class: 'tokenfield text_area',
+                      style: 'border: 1px solid #cccccc; border-radius:5px;',
+                      data: { search_url: '/search/index.json?q=%QUERY',
+                              submit_id: '#people_ids',
+                              pre_populate: @event_invitation.people_name_and_id.to_json} %>
+      <%= f.hidden_field :people_ids, id: 'people_ids', value: @people_ids.to_s %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :title, 'Event title', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :title, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :description, 'Event description', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :description, :class => 'text_area' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :slot_length, 'Call length', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :slot_length, options_for_select([15,30,45,60].map {|o| "#{o.to_s} mins"}), :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :buffer, 'Buffer', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :buffer, options_for_select([0,5,10,15,20,30,45,60].map {|o| ["#{o.to_s} mins",o]},selected: 5), :class => 'text_field' %>
+    </div>
+  </div>
+
+  <h2>Time window</h2>
+  <div class="control-group">
+    <%= f.label :date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :date, :class => 'text_field datepicker' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :start_time, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :start_time, simple_time_select_options, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :end_time, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :end_time, simple_time_select_options, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit 'Send invitation', :class => 'btn btn-primary', :id => 'submit' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                people_path, :class => 'btn' %>
+  </div>
+<% end %>

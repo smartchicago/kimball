@@ -1,0 +1,44 @@
+SECRET_KEY_BASE: "thisisasupersecret"
+DEVISE_PEPPER: 'f3998fdf09b95a8ca3e895d0dafaa78e410eed53cc02341d25f521071a43a9d9d3d9efda73488e9f8b9be7847638482c5d94a86dd1d549dbe1bd9a8e9d957a12'
+WUFOO_HANDSHAKE_KEY: ""
+TWILIO_API_SID: ""
+TWILIO_AUTH_TOKEN: ""
+TWILIO_SIGNUP_NUMBER: ""
+TWILIO_SIGNUP_VERIFICATION_NUMBER: ""
+TWILIO_SURVEY_NUMBER: ""
+TWILIO_SCHEDULING_NUMBER: ""
+WUFOO_ACCOUNT: ""
+WUFOO_API: ""
+WUFOO_SIGNUP_FORM: ""
+MAILCHIMP_API_KEY: ""
+MAILCHIMP_LIST_ID: ""
+MAILCHIMP_WEBHOOK_SECRET_KEY: ""
+NEW_RELIC_LICENSE_KEY: '09577a43a0ccb7a9ae0cfe80ce8e70f13949b9e1'
+PRODUCTION_SERVER: "example.com"
+PRODUCTION_BRANCH: "master"
+STAGING_SERVER: "staging.example.com"
+STAGING_BRANCH: "devlopment"
+GIT_REPOSITORY: "git@github.com:example/example.git"
+TIME_ZONE: "Central Time (US & Canada)"
+NEIGHBORHOOD: 'CHICAGO'
+MAILER_SENDER: "hello@example.com"
+MAIL_ADMIN: "admin@example.com"
+SMTP_HOST: "smtp.mandrillapp.com"
+SMTP_PORT: "587"
+SMTP_USERNAME: "Blue_Ridge"
+SMTP_PASSWORD: "241234"
+AWS_API_TOKEN: ""
+AWS_API_SECRET: ""
+AWS_S3_BUCKET: ''
+TEAM_NAME: 'Smart Chicago Collaborative'
+SITE_NAME: 'Patterns'
+GROUP_NAME: 'CUTGroup'
+GOOGLE_ANALYTICS_ID: 'UA-37739534-12'
+NEW_RELIC_LICENSE_KEY: '09577a43a0ccb7a9ae0cfe80ce8e70f13949b9e1'
+VERIFICATION_SMS_MESSAGE: 'Thank you for verifying your account. We will mail you your $5 VISA gift card right away.'
+SIGNUP_EMAIL_MESSAGE: "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive an email from smarziano@cct.org with details."
+SIGNUP_SMS_MESSAGE: "You are now signed up for CUTGroup! Your $5 gift card will be in the mail. When new tests come up, you'll receive a text from 773-747-6239 with more details."
+SIGNUP_ERROR_MESSAGE: "If you are having trouble email smarziano@cct.org or text '98765' and you will be contacted later."
+WIT_ACCESS_TOKEN: ''
+WIT_APP_ID: ''
+WEB_CONCURRENCY: '4'

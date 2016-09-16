@@ -1,18 +1,21 @@
 <% content_for :page_title, @person.full_name %>
 
 <div class="page-header">
-<h1><%= @person.full_name %></h1>      
+<h1><%= @person.full_name %></h1>
+<% if ENV['BLUE_RIDGE'].present? %>
+<%= render partial: 'add_remove_cart',locals: { person: @person } %>
+<% end %>
 </div>
 
 <div class="row">
   <div class="span6">
     <div class="row">
       <div class="span3">
-        <h3>About</h3>    
+        <h3>About</h3>
         <dl>
 
           <dt>Verified?</dt>
-          <dd><%= @person.verified %></dd>
+          <dd><%= best_in_place @person, :verified %></dd>
 
           <dt>Address</dt>
           <dd><%= address_fields_to_sentence(@person) %></dd>
@@ -20,43 +23,69 @@
           <dt>Ward</dt>
           <dd><% if @person.geography_id.present? %> <%= link_to @person.geography_id, search_index_path(adv: 1, geography_id: @person.geography_id ) %><% end %></dd>
 
+          <dt>Neighborhood</dt>
+          <dd><%= best_in_place @person, :neighborhood %></dd>
+
           <dt>Primary device</dt>
-          <dd><%= link_to @person.primary_device_description, search_index_path(adv: 1, device_description: @person.primary_device_description ) %> <span class="muted">(<%= human_device_type_name @person.primary_device_id %>)</span></dd>
+          <dd><%= best_in_place @person,:primary_device_description %> <span class='muted'>
+          (<%= best_in_place @person, :primary_device_id, as: :select, collection:  Logan::Application.config.device_mappings.collect{|i| [i.last, i.first]}  %>)</span> </dd>
 
           <dt>Secondary device</dt>
-          <dd><% if @person.secondary_device_description.present? %> <%= link_to @person.secondary_device_description, search_index_path(adv: 1, device_description: @person.secondary_device_description ) %> <% end %><span class="muted">(<%= human_device_type_name @person.secondary_device_id %>)</span></dd>
+          <dd><%= best_in_place @person,:secondary_device_description %> <span class='muted'>
+          (<%= best_in_place @person, :secondary_device_id, as: :select, collection:  Logan::Application.config.device_mappings.collect{|i| [i.last, i.first]}  %>)</span> </dd>
 
           <dt>Primary connection method</dt>
-          <dd><%= human_connection_type_name @person.primary_connection_id %> <% if @person.primary_connection_description.present? %><%= ": " + @person.primary_connection_description %><% end %></dd>
+          <dd>
+            <%= best_in_place @person,:primary_connection_description %>
+            <span class='muted'>(<%= best_in_place @person, :primary_connection_id , as: :select, collection: Logan::Application.config.connection_mappings.collect{|i| [i.last,i.first.to_s.humanize]} %>)
+            </span>
+          </dd>
 
-          <% if @person.secondary_connection_id %>
           <dt>Secondary connection method</dt>
-          <dd><%= human_connection_type_name @person.secondary_connection_id %> <% if @person.secondary_connection_description.present? %><%= ": " + @person.secondary_connection_description %><% end %></dd>
-          <% end %>
+          <dd>
+            <%= best_in_place @person,:secondary_connection_description %>
+            <span class='muted'>(<%= best_in_place @person, :secondary_connection_id , as: :select, collection: Logan::Application.config.connection_mappings.collect{|i| [i.last,i.first.to_s.humanize]} %>)
+            </span>
+          </dd>
+
 
           <dt>Preferred participation method</dt>
-          <dd><%= @person.participation_type %></dd>            
-        </dl>    
+          <!-- <dd><%= best_in_place @person, :participation_type, as: :select, collection: %w(in-person remote) %></dd> -->
+          <dd><%= best_in_place @person, :participation_type %></dd>
+          <% if ENV['BLUE_RIDGE'].present? %>
+            <dt>Interviews</dt>
+            <dd><%= link_to "Calendar", calendar_path(token: @person.token) %></dd>
+            <dt>Invitations</dt>
+            <dd><%= @person.event_invitations.size %></dd>
+
+            <dt>Reserved</dt>
+            <dd><%=@person.v2_reservations.size %></dd>
+            <dt>Attended</dt>
+            <dd><%= @person.v2_reservations.attended.size %></dd>
+            <dt>Cancel</dt>
+            <dd><%= @person.v2_reservations.cancelled.size %> </dd>
+          <% end %>
+        </dl>
       </div>
 
-      <div class="span3">    
+      <div class="span3">
         <h3>Contact</h3>
 
         <dl>
           <dt>Phone</dt>
-          <dd><%= number_to_phone @person.phone_number %></dd>
+          <dd><%= best_in_place @person, :phone_number, display_with: :number_to_phone %></dd>
 
           <dt>Email</dt>
-          <dd><%= mail_to @person.email_address %></dd>
+          <dd><%= best_in_place @person, :email_address %></dd>
 
           <dt>Preferred Contact Method</dt>
-          <dd><%= @person.preferred_contact_method %></dd>
 
+          <dd><%= best_in_place @person, :preferred_contact_method, as: :select, collection: [['SMS','SMS'], ['EMAIL','EMAIL']] %></dd>
           <dt>Voted in last election?</dt>
-          <dd><%= @person.voted %></dd>
+          <dd><%= best_in_place @person, :voted, as: :select, :collection => %w(YES NO) %></dd>
 
           <dt>Ever called 311?</dt>
-          <dd><%= @person.called_311 %></dd>
+          <dd><%= best_in_place @person, :called_311, as: :select, :collection => %w(YES NO) %></dd>
 
           <dt>Facebook</dt>
           <dd>link to facebook</dd>
@@ -66,30 +95,30 @@
 
           <dt>Signup at</dt>
           <dd><%= @person.signup_at ? @person.signup_at.to_s(:long) : 'unknown' %></dd>
-        </dl>    
-      </div>      
+        </dl>
+      </div>
     </div>
     <div class="row">
       <div class="span6">
         <h3>Tags</h3>
         <ul id="tag-list">
-          <%= render partial: 'taggings/tagging', collection: @person.taggings %>
+        <%= render partial: 'taggings/tagging', collection: @person.taggings %>
         </ul>
         <%= form_for(@tagging, remote: true, html: { class: "form-inline" }) do |form| %>
           <%= form.hidden_field :taggable_type, value: "Person" %>
           <%= form.hidden_field :taggable_id, value: @person.id %>
-          <%= form.text_field :name, class: "input span2", placeholder: "new tag", data: { provide: 'typeahead', source: Tag.most_popular(25).collect{|tag| tag.name } }, autocomplete: 'off' %>
+          <%= form.text_field :name, id: 'tag-typeahead', class: "input tokenfield span2 tag-typehead", placeholder: "new tag", autocomplete: 'off' %>
           <%= form.submit "Add", class: "btn span1" %>
         <% end %>
       </div>
-    </div>  
+    </div>
   </div>
-    
+
   <div class="span6">
     <h3>Location</h3>
     <a href="https://maps.google.com?q=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>" target="_blank" title="View in Google Maps"><img src="https://maps.googleapis.com/maps/api/staticmap?markers=|<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;zoom=14&amp;size=570x200&amp;sensor=false"></a>
-    <img src="https://maps.googleapis.com/maps/api/streetview?size=570x200&amp;location=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;sensor=false">
-  </div>  
+    <!-- <img src="https://maps.googleapis.com/maps/api/streetview?size=570x200&amp;location=<%= CGI.escape(address_fields_to_sentence(@person)).html_safe %>&amp;sensor=false"> -->
+  </div>
 </div>
 
 <div class="row">
@@ -104,36 +133,80 @@
 
     <div id="comments">
       <%= render partial: 'comment', collection: @person.comments.order("created_at DESC") %>
-    </div>  
+    </div>
   </div>
 
-  
-  
+
+
   <div class="span6" id="person-events">
   <h3>Communications</h3>
   <table class="table">
     <tr>
         <th>Campaign Name</th>
     </tr>
-    <% for message in @outgoingmessages %>
+    <% @twilio_wufoo_forms.each do |form| %>
       <tr>
-      <td><%= TwilioWufoo.where(id: message.wufoo_formid).last.name %></td>
+        <td>
+          <%= form.name %>
+        </td>
       </tr>
     <% end %>
     </table>
-    <h3>Events</h3>
-    <%= form_for(@reservation, remote: true, html: {class: "form-inline"}) do |form| %>
-      <%= form.select :event_id, Event.all.order("starts_at DESC").collect{|event| ["#{event.name} - #{event.application.name} - #{event.starts_at}", event.id]}, {include_blank: true}, {class: "span4"} %>
-      <%= form.hidden_field :person_id %>
-      <%= form.submit "Add to event", class: "btn span2" %>
-    <% end %>
-    
-    <div id="reservations">
-      <%= render partial: 'reservations/reservation', collection: @person.reservations.order(:created_at) %>
-    </div>
   </div>
 </div>
- 
+
+<div class="row">
+  <div class="span12">
+    <h3>Add New Gift Card</h3>
+    <div id="error-div"></div>
+    <%= form_for([@person, @gift_card], remote: true) do |form| %>
+      <% if @gift_card.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@gift_card.errors.count, "error") %> prohibited this gift_card from being saved:</h2>
+
+          <ul>
+          <% @gift_card.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <%= form.hidden_field :person_id, :value => @person.id %>
+      <%= form.select :reason, [['Signup', 'signup'], ['Test', 'test'], ['Referral', 'referral'], ['Other', 'other']], { :prompt => "Reason" }, class: 'input-small', id: "new-reason" %>
+      <%= form.text_field :notes, placeholder: 'Notes', class: 'input-medium', id: 'new-notes' %>
+      <%= form.text_field :proxy_id, placeholder: "ProxyID",class: 'input-mini', id: "new-proxyid" %>
+      <%= form.text_field :batch_id, placeholder: "BatchID",class: 'input-mini', id: "new-batchid" %>
+      <div class='input-prepend'>
+        <span class='add-on'>****-****-***</span>
+        <%= form.text_field :gift_card_number, placeholder: "#####", class: 'input-small', id: "new-cardnumber" %>
+      </div>
+      <%= form.text_field :amount, placeholder: "Amount",class: 'input-mini', id: "new-amount" %>
+      <%= form.text_field :expiration_date, placeholder: "MM/YY", class: 'input-mini', id: "new-expirationdate" %>
+      <%= form.submit 'Add Gift Card', :class => "btn" %>
+    <% end %>
+  </div>
+  <div class="span12">
+    <h3>Gift Cards - Total: <span id='gift_card_total'><%= humanized_money_with_symbol @person.gift_card_total %></span></h3>
+    <table class="table table-striped">
+      <tr>
+        <th>Reason</th>
+        <th>Giftable ID</th>
+        <th>Batch</th>
+        <th>Card Number</th>
+        <th>Expiration Date</th>
+        <th>Amount</th>
+        <th>Created On</th>
+        <th colspan="2"></th>
+      </tr>
+
+      <tbody id="people_gift_cards">
+        <%= render partial: 'people/gift_card', collection: @person.gift_cards.order("created_at DESC") %>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
 
 <div class="row">
   <div class="span12">
@@ -147,7 +220,7 @@
       <% for submission in @person.submissions %>
       <a id="submission-<%= submission.id %>"></a>
       <tr>
-        <td><strong><%= submission.form_name %></strong><br/><span title="<%= submission.created_at %>"><%= time_ago_in_words submission.created_at %> ago</span><br/><span class="" style="font-size:small; color:#ccc; font-style:italic"><%= submission.ip_addr %></span></td>
+        <td><strong><%= submission.form_name %></strong><br/>Form Type: <%= submission.form_type %><br/><span title="<%= submission.created_at %>"><%= time_ago_in_words submission.created_at %> ago</span><br/><span class="" style="font-size:small; color:#ccc; font-style:italic"><%= submission.ip_addr %></span></td>
         <td>
           <table class="table table-striped">
             <% for field_id,field_desc in submission.fields do %>
@@ -178,5 +251,10 @@
                 :method => 'delete',
                 :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                 :class => 'btn btn-danger' %>
+    <%= link_to 'deactivate',
+              deactivate_people_path(@person),
+              method: :post,
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
   </div>
 </div>

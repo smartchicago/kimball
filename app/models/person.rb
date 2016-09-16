@@ -30,20 +30,32 @@
 #  secondary_connection_description :string(255)
 #  verified                         :string(255)
 #  preferred_contact_method         :string(255)
+#  token                            :string(255)
+#  active                           :boolean          default(TRUE)
+#  deactivated_at                   :datetime
+#  deactivated_method               :string(255)
+#  neighborhood                     :string(255)
+#  tag_count_cache                  :integer          default(0)
 #
 
 # FIXME: Refactor and re-enable cop
 # rubocop:disable ClassLength
 class Person < ActiveRecord::Base
+  has_paper_trail
 
-  include Tire::Model::Search
-  include Tire::Model::Callbacks
+  # include Searchable
   include ExternalDataMappings
+  include Neighborhoods
 
   phony_normalize :phone_number, default_country_code: 'US'
+  phony_normalized_method :phone_number, default_country_code: 'US'
 
   has_many :comments, as: :commentable, dependent: :destroy
   has_many :submissions, dependent: :destroy
+
+  has_many :gift_cards
+  accepts_nested_attributes_for :gift_cards, reject_if: :all_blank
+  attr_accessor :gift_cards_attributes
 
   has_many :reservations, dependent: :destroy
   has_many :events, through: :reservations
@@ -51,10 +63,66 @@ class Person < ActiveRecord::Base
   has_many :tags, through: :taggings
   has_many :taggings, as: :taggable
 
+  # we don't really need a join model, exceptionally HABTM is more appropriate
+  # rubocop:disable Rails/HasAndBelongsToMany
+  has_and_belongs_to_many :event_invitations, class_name: '::V2::EventInvitation', join_table: :invitation_invitees_join_table
+  # rubocop:enable Rails/HasAndBelongsToMany
+
+  has_many :v2_reservations, class_name: '::V2::Reservation'
+  has_many :v2_events, through: :event_invitations, foreign_key: 'v2_event_id', source: :event
+
+  has_secure_token :token
+
   after_update  :sendToMailChimp
   after_create  :sendToMailChimp
+  after_create  :update_neighborhood
+
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+
+  # if ENV['BLUE_RIDGE'].nil?
+  #   validates :primary_device_id, presence: true
+  #   validates :primary_device_description, presence: true
+  #   validates :primary_connection_id, presence: true
+  #   validates :primary_connection_description, presence: true
+  # end
+
+  validates :postal_code, presence: true
+  validates :postal_code, zipcode: { country_code: :us }
+
+  # phony validations and normalization
+  phony_normalize :phone_number, default_country_code: 'US'
+
+  validates :phone_number, presence: true, length: { in: 9..15 },
+    unless: proc { |person| person.email_address.present? }
+  # validates :phone_number, allow_blank: true, uniqueness: true
+
+  validates :email_address, presence: true,
+    unless: proc { |person| person.phone_number.present? }
+  # validates :email_address, email: true, allow_blank: true, uniqueness: true
+
+  scope :no_signup_card, -> { where('id NOT IN (SELECT DISTINCT(person_id) FROM gift_cards where gift_cards.reason = 1)') }
+  scope :signup_card_needed, -> { joins(:gift_cards).where('gift_cards.reason !=1') }
 
   self.per_page = 15
+
+  ransacker :full_name, formatter: proc { |v| v.mb_chars.downcase.to_s } do |parent|
+    Arel::Nodes::NamedFunction.new('lower',
+      [Arel::Nodes::NamedFunction.new('concat_ws',
+        [Arel::Nodes.build_quoted(' '), parent.table[:first_name], parent.table[:last_name]])])
+  end
+  ransack_alias :nav_bar_search, :full_name_or_email_address_or_phone_number
+
+  def signup_gc_sent
+    signup_cards = gift_cards.where(reason: 1)
+    return true unless signup_cards.empty?
+    false
+  end
+
+  def gift_card_total
+    total = gift_cards.sum(:amount_cents)
+    Money.new(total, 'USD')
+  end
 
   WUFOO_FIELD_MAPPING = {
     'Field1'   => :first_name,
@@ -79,137 +147,17 @@ class Person < ActiveRecord::Base
 
   }.freeze
 
-  # update index if a comment is added
-  after_touch { tire.update_index }
-
-  # namespace indices
-  index_name "person-#{Rails.env}"
-
-  settings analysis: {
-    analyzer: {
-      email_analyzer: {
-        tokenizer: 'uax_url_email',
-        filter: ['lowercase'],
-        type: 'custom'
-      }
-    }
-  } do
-    mapping do
-      indexes :id, index: :not_analyzed
-      indexes :first_name
-      indexes :last_name
-      indexes :email_address, analyzer: 'email_analyzer'
-      indexes :phone_number, index: :not_analyzed
-      indexes :postal_code, index: :not_analyzed
-      indexes :geography_id, index: :not_analyzed
-      indexes :address_1 # FIXME: if we ever use address_2, this will not work
-      indexes :city
-      indexes :verified, analyzer: :snowball
-
-      # device types
-      indexes :primary_device_type_name, analyzer: :snowball
-      indexes :secondary_device_type_name, analyzer: :snowball
-
-      indexes :primary_device_id
-      indexes :secondary_device_id
-
-      # device descriptions
-      indexes :primary_device_description
-      indexes :secondary_device_description
-      indexes :primary_connection_description
-      indexes :secondary_connection_description
-
-      # comments
-      indexes :comments do
-        indexes :content, analyzer: 'snowball'
-      end
-
-      # events
-      indexes :reservations do
-        indexes :event_id, index: :not_analyzed
-      end
-
-      # submissions
-      # indexes the output of the Submission#indexable_values method
-      indexes :submissions, analyzer: :snowball
-
-      # tags
-      indexes :tag_values, analyzer: :keyword
-
-      indexes :preferred_contact_method
-
-      indexes :created_at, type: 'date'
-    end
-  end
-
-  # FIXME: Refactor and re-enable cop
-  # rubocop:disable Metrics/MethodLength
-  #
-  def to_indexed_json
-    # customize what data is sent to ES for indexing
-    to_json(
-      methods: [:tag_values],
-      include: {
-        submissions: {
-          only:  [:submission_values],
-          methods: [:submission_values]
-        },
-        comments: {
-          only: [:content]
-        },
-        reservations: {
-          only: [:event_id]
-        }
-      }
-    )
-  end
-  # rubocop:enable Metrics/MethodLength
-
   def tag_values
     tags.collect(&:name)
   end
 
-  # FIXME: Refactor and re-enable cop
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-  #
-  def self.complex_search(params, per_page)
-    options = {}
-    options[:per_page] = per_page
-    options[:page]     = params[:page] || 1
-
-    unless params[:device_id_type].blank?
-      device_id_string = params[:device_id_type].join(' ')
-    end
-
-    unless params[:connection_id_type].blank?
-      connection_id_string = params[:connection_id_type].join(' ')
-    end
-
-    tire.search options do
-      query do
-        boolean do
-          must { string "first_name:#{params[:first_name]}" } if params[:first_name].present?
-          must { string "last_name:#{params[:last_name]}" } if params[:last_name].present?
-          must { string "email_address:(#{params[:email_address]})" } if params[:email_address].present?
-          must { string "postal_code:(#{params[:postal_code]})" } if params[:postal_code].present?
-          must { string "verified:(#{params[:verified]})" } if params[:verified].present?
-          must { string "primary_device_description:#{params[:device_description]} OR secondary_device_description:#{params[:device_description]}" } if params[:device_description].present?
-          must { string "primary_connection_description:#{params[:connection_description]} OR secondary_connection_description:#{params[:connection_description]}" } if params[:connection_description].present?
-          must { string "primary_device_id:#{device_id_string} OR secondary_device_id:#{device_id_string}" } if params[:device_id_type].present?
-          must { string "primary_connection_id:#{connection_id_string} OR secondary_connection_id:#{connection_id_string}" } if params[:connection_id_type].present?
-          must { string "geography_id:(#{params[:geography_id]})" } if params[:geography_id].present?
-          must { string "event_id:#{params[:event_id]}" } if params[:event_id].present?
-          must { string "address_1:#{params[:address]}" } if params[:address].present?
-          must { string "city:#{params[:city]}" } if params[:city].present?
-          must { string "submission_values:#{params[:submissions]}" } if params[:submissions].present?
-          # must { string "tag_values:#{tags_string}"} if params[:tags].present?
-          must { string "preferred_contact_method:#{params[:preferred_contact_method]}" } unless params[:preferred_contact_method].blank?
-        end
-      end
-      filter :terms, tag_values: params[:tags] if params[:tags].present?
-    end
+  def tag_count
+    tags.size
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+
+  def submission_values
+    submissions.collect(&:submission_values)
+  end
 
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Rails/TimeZone
@@ -266,33 +214,34 @@ class Person < ActiveRecord::Base
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Rails/TimeZone
 
   # FIXME: Refactor and re-enable cop
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Style/MethodName, Metrics/BlockNesting, Style/VariableName
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Style/MethodName, Metrics/BlockNesting, Style/VariableName, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   #
   def sendToMailChimp
     if email_address.present?
       if verified.present?
         if verified.start_with?('Verified')
           begin
-            mailchimpSend = Gibbon.list_subscribe({
-              id: Logan::Application.config.cut_group_mailchimp_list_id,
-              email_address: email_address,
-              double_optin: 'false',
-              update_existing: 'true',
-              merge_vars: { FNAME: first_name,
-                            LNAME: last_name,
-                            MMERGE3: geography_id,
-                            MMERGE4: postal_code,
-                            MMERGE5: participation_type,
-                            MMERGE6: voted,
-                            MMERGE7: called_311,
-                            MMERGE8: primary_device_description,
-                            MMERGE9: secondary_device_type_name,
-                            MMERGE10: secondary_device_description,
-                            MMERGE11: primary_connection_type_name,
-                            MMERGE12: primary_connection_description,
-                            MMERGE13: primary_device_type_name,
-                            MMERGE14: preferred_contact_method }
-            })
+
+            gibbon = Gibbon::Request.new
+            mailchimpSend = gibbon.lists(Logan::Application.config.cut_group_mailchimp_list_id).members(Digest::MD5.hexdigest(email_address.downcase)).upsert(
+              body: { email_address: email_address.downcase,
+                      status: 'subscribed',
+                      merge_fields: { FNAME: first_name || '',
+                                      LNAME: last_name || '',
+                                      MMERGE3: geography_id || '',
+                                      MMERGE4: postal_code || '',
+                                      MMERGE5: participation_type || '',
+                                      MMERGE6: voted || '',
+                                      MMERGE7: called_311 || '',
+                                      MMERGE8: primary_device_description || '',
+                                      MMERGE9: secondary_device_id || '',
+                                      MMERGE10: secondary_device_description || '',
+                                      MMERGE11: primary_connection_id || '',
+                                      MMERGE12: primary_connection_description || '',
+                                      MMERGE13: primary_device_id || '',
+                                      MMERGE14: preferred_contact_method || '' } }
+            )
+
             Rails.logger.info("[People->sendToMailChimp] Sent #{id} to Mailchimp: #{mailchimpSend}")
           rescue Gibbon::MailChimpError => e
             Rails.logger.fatal("[People->sendToMailChimp] fatal error sending #{id} to Mailchimp: #{e.message}")
@@ -301,7 +250,7 @@ class Person < ActiveRecord::Base
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Style/MethodName, Metrics/BlockNesting, Style/VariableName
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Style/MethodName, Metrics/BlockNesting, Style/VariableName, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Rails/TimeZone, Metrics/PerceivedComplexity
@@ -342,7 +291,7 @@ class Person < ActiveRecord::Base
     # new_person.city  = "Chicago" With update we ask for city
     new_person.state = 'Illinois'
 
-    new_person.signup_at = Time.now
+    new_person.signup_at = params['DateCreated']
 
     new_person
   end
@@ -374,6 +323,106 @@ class Person < ActiveRecord::Base
 
   def full_name
     [first_name, last_name].join(' ')
+  end
+
+  def address_fields_to_sentence
+    [address_1, address_2, city, state, postal_code].reject(&:blank?).join(', ')
+  end
+
+  def self.send_all_reminders
+    # this is where reservation_reminders
+    # called by whenever in /config/schedule.rb
+    Person.all.find_each(&:send_reservation_reminder)
+  end
+
+  def send_reservation_reminder
+    return if v2_reservations.for_today_and_tomorrow.size.zero?
+    case preferred_contact_method.upcase
+    when 'SMS'
+      ::ReservationReminderSms.new(to: self, reservations: v2_reservations.for_today_and_tomorrow).send
+    when 'EMAIL'
+      ReservationNotifier.remind(
+        reservations:  v2_reservations.for_today_and_tomorrow.to_a,
+        email_address: email_address
+      ).deliver_later
+    end
+  end
+
+  def deactivate!(method = nil)
+    self.active = false
+    self.deactivated_at = Time.current
+    self.deactivated_method = method if method
+    save!
+  end
+
+  def update_neighborhood
+    n = zip_to_neighborhood(postal_code)
+    unless n.blank?
+      self.neighborhood = n
+      save
+    end
+  end
+
+  # Compare to other records in the database to find possible duplicates.
+  def possible_duplicates
+    @duplicates = {}
+    if last_name.present?
+      last_name_duplicates = Person.where(last_name: last_name).where.not(id: id)
+      last_name_duplicates.each do |duplicate|
+        duplicate_hash = {}
+        duplicate_hash['person'] = duplicate
+        duplicate_hash['match_count'] = 1
+        duplicate_hash['last_name_match'] = true
+        duplicate_hash['matches_on'] = ['Last Name']
+        @duplicates[duplicate.id] = duplicate_hash
+      end
+    end
+    if email_address.present?
+      email_address_duplicates = Person.where(email_address: email_address).where.not(id: id)
+      email_address_duplicates.each do |duplicate|
+        if @duplicates.key? duplicate.id
+          @duplicates[duplicate.id]['match_count'] += 1
+          @duplicates[duplicate.id]['matches_on'].push('Email Address')
+        else
+          @duplicates[duplicate.id] = {}
+          @duplicates[duplicate.id]['person'] = duplicate
+          @duplicates[duplicate.id]['match_count'] = 1
+          @duplicates[duplicate.id]['matches_on'] = ['Email Address']
+        end
+        @duplicates[duplicate.id]['email_address_match'] = true
+      end
+    end
+    if phone_number.present?
+      phone_number_duplicates = Person.where(phone_number: phone_number).where.not(id: id)
+      phone_number_duplicates.each do |duplicate|
+        if @duplicates.key? duplicate.id
+          @duplicates[duplicate.id]['match_count'] += 1
+          @duplicates[duplicate.id]['matches_on'].push('Phone Number')
+        else
+          @duplicates[duplicate.id] = {}
+          @duplicates[duplicate.id]['person'] = duplicate
+          @duplicates[duplicate.id]['match_count'] = 1
+          @duplicates[duplicate.id]['matches_on'] = ['Phone Number']
+        end
+        @duplicates[duplicate.id]['phone_number_match'] = true
+      end
+    end
+    if address_1.present?
+      address_1_duplicates = Person.where(address_1: address_1).where.not(id: id)
+      address_1_duplicates.each do |duplicate|
+        if @duplicates.key? duplicate.id
+          @duplicates[duplicate.id]['match_count'] += 1
+          @duplicates[duplicate.id]['matches_on'].push('Address_1')
+        else
+          @duplicates[duplicate.id] = {}
+          @duplicates[duplicate.id]['person'] = duplicate
+          @duplicates[duplicate.id]['match_count'] = 1
+          @duplicates[duplicate.id]['matches_on'] = ['Address_1']
+        end
+        @duplicates[duplicate.id]['address_1_match'] = true
+      end
+    end
+    @duplicates
   end
 
 end

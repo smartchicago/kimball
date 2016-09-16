@@ -1,2 +1,2 @@
-$("<%= escape_javascript(render partial: 'people/comment', locals: { comment: @comment } ) %>").prependTo("#comments");
+$("<%= j render partial: 'people/comment', locals: { comment: @comment } %>").prependTo("#comments");
 $("#comment_content").val("");

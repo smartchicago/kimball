@@ -3,20 +3,35 @@
 # Table name: submissions
 #
 #  id              :integer          not null, primary key
-#  raw_content     :text
+#  raw_content     :text(65535)
 #  person_id       :integer
 #  ip_addr         :string(255)
 #  entry_id        :string(255)
-#  form_structure  :text
-#  field_structure :text
+#  form_structure  :text(65535)
+#  field_structure :text(65535)
 #  created_at      :datetime
 #  updated_at      :datetime
+#  form_id         :string(255)
+#  form_type       :integer          default(0)
 #
 
 class Submission < ActiveRecord::Base
+  has_paper_trail
+  validates_presence_of :raw_content
 
-  validates_presence_of :person, :raw_content
   belongs_to :person
+  validates :person_id, numericality: { only_integer: true, allow_nil: true }
+
+  enum form_type: {
+    unknown: 0,
+    signup: 1,
+    screening: 2,
+    availability: 3,
+    test: 4
+
+  }
+
+  self.per_page = 15
 
   def fields
     # return the set of fields that make up a submission
@@ -52,6 +67,27 @@ class Submission < ActiveRecord::Base
     JSON.parse(field_structure)['Fields'].each do |field|
       return field_value(field['ID']) if field['Title'] == 'Email'
     end
+    nil
+  end
+
+  def form_email_or_phone_number
+    field_name_options = ['email', 'email or phone number', 'phone number']
+    JSON.parse(field_structure)['Fields'].each do |field|
+      if field_name_options.include? field['Title'].downcase
+        return field_value(field['ID'])
+      end
+    end
+    nil
+  end
+
+  def form_type_field
+    field_name_options = ['form type']
+    JSON.parse(field_structure)['Fields'].each do |field|
+      if field_name_options.include? field['Title'].downcase
+        return field_value(field['ID'])
+      end
+    end
+    nil
   end
 
   def submission_values

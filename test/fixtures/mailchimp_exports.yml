@@ -4,7 +4,7 @@
 #
 #  id         :integer          not null, primary key
 #  name       :string(255)
-#  body       :text
+#  body       :text(65535)
 #  created_by :integer
 #  created_at :datetime
 #  updated_at :datetime

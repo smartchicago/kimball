@@ -1,0 +1,12 @@
+<p>Hi <% @reservation.person.first_name %>,</p>
+
+<p>Your interview <%= @reservation.time_slot.to_weekday_and_time %> with <%= @reservation.user.name %>, phone number: <%=@reservation.user.phone_number %> has been cancelled.
+</p>
+
+<p>You can always check your schedule by clicking this link: </p>
+<p>
+  <%= link_to "Calendar", calendar_url(token: @reservation.person.token) %>
+</p>
+
+<p>Thanks!,</p>
+<p><%= ENV['TEAM_NAME'] %></p>
