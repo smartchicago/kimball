@@ -111,6 +111,11 @@ class Person < ActiveRecord::Base
       [Arel::Nodes::NamedFunction.new('concat_ws',
         [Arel::Nodes.build_quoted(' '), parent.table[:first_name], parent.table[:last_name]])])
   end
+
+  def self.ransackable_scopes(auth_object = nil)
+    %i(no_signup_card)
+  end
+
   ransack_alias :nav_bar_search, :full_name_or_email_address_or_phone_number
 
   def signup_gc_sent
