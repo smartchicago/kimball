@@ -78,7 +78,7 @@ class TwilioMessagesController < ApplicationController
       @job_enqueue = Delayed::Job.enqueue SendTwilioMessagesJob.new(messages, phone_numbers, smsCampaign)
       if @job_enqueue.save
         Rails.logger.info("[TwilioMessagesController#sendmessages] Sent #{phone_numbers} to Twilio")
-        flash[:success] = "Sent Messages: #{messages} to Phone Numbers: #{phone_numbers}"
+        flash[:notice] = "Sent Messages: #{messages} to Phone Numbers: #{phone_numbers}"
       else
         Rails.logger.error('[TwilioMessagesController#sendmessages] failed to send text messages')
         flash[:error] = 'Failed to send messages.'
