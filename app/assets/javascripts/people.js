@@ -3,7 +3,6 @@ $(document).on('ready page:load', function () {
   // initialize bloodhound engine
   var searchSelector = 'input#tag-typeahead';
 
-
   //filters out tags that are already in the list
   var filter = function(suggestions) {
     var current_tags = $('#tag-list li').map(function(index,el){
@@ -42,7 +41,7 @@ $(document).on('ready page:load', function () {
     $(searchSelector).typeahead('val',datum.name);
     $('#tag-typeahead').submit();
   });
-  $("#gift_card_expiration_date").mask("99/99",{placeholder:"MM/YY"});
+  $("#new-expirationdate").mask("99/99",{placeholder:"MM/YY"});
   $('#new-notes').hide();
     
   $('#new-reason').change(function () {
