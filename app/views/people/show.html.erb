@@ -176,8 +176,8 @@
         <span class='add-on'>****-****-***</span>
         <%= form.text_field :gift_card_number, placeholder: "#####", class: 'input-small', id: "new-cardnumber" %>
       </div>
-      <%= form.text_field :amount, placeholder: "Amount",class: 'input-mini', id: "new-amount" %>
       <%= form.text_field :expiration_date, placeholder: "MM/YY", class: 'input-mini', id: "new-expirationdate" %>
+      <%= form.text_field :amount, placeholder: "Amount",class: 'input-mini', id: "new-amount" %>
       <%= form.submit 'Add Gift Card', :class => "btn" %>
     <% end %>
   </div>
