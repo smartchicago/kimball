@@ -14,7 +14,7 @@ class GiftCardsController < ApplicationController
         @q_recent_signups = Person.no_signup_card.ransack(params[:q_signups], search_key: :q_signups)
         # @q_recent_signups.no_signup_card
         @q_recent_signups.created_at_date_gteq = 3.weeks.ago.strftime('%Y-%m-%d') unless params[:q_signups]
-        @recent_signups = @q_recent_signups.result.page(params[:page])
+        @recent_signups = @q_recent_signups.result.page(params[:page_signups])
         @new_gift_cards = []
         @recent_signups.length.times do
           @new_gift_cards << GiftCard.new
@@ -45,8 +45,9 @@ class GiftCardsController < ApplicationController
   # POST /gift_cards.json
   def create
     @gift_card = GiftCard.new(gift_card_params)
+    @create_result = @gift_card.with_user(current_user).save
     respond_to do |format|
-      if @create_result == @gift_card.with_user(current_user).save
+      if @create_result
         @total = @gift_card.person.blank? ? @gift_card.amount : @gift_card.person.gift_card_total
         format.js {}
         format.json {}
