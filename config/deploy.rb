@@ -61,15 +61,15 @@ namespace :deploy do
   end
 
   task :create_shared_directories do
-    run "mkdir -p #{deploy_to}/shared/pids"
-    run "mkdir -p #{deploy_to}/shared/system"
-    run "mkdir -p #{deploy_to}/shared/assets"
-    run "mkdir -p #{deploy_to}/releases"
-    run "mkdir -p #{shared_path}/log"
-    run "mkdir -p #{shared_path}/tmp"
-    run "mkdir -p #{shared_path}/assets"
-    run "mkdir -p #{shared_path}/bundle"
-    run "mkdir -p #{shared_path}/cached-copy"
+    # run "mkdir -p #{deploy_to}/shared/pids"
+    # run "mkdir -p #{deploy_to}/shared/system"
+    # run "mkdir -p #{deploy_to}/shared/assets"
+    # run "mkdir -p #{deploy_to}/releases"
+    # run "mkdir -p #{shared_path}/log"
+    # run "mkdir -p #{shared_path}/tmp"
+    # run "mkdir -p #{shared_path}/assets"
+    # run "mkdir -p #{shared_path}/bundle"
+    # run "mkdir -p #{shared_path}/cached-copy"
   end
 
   task :link_db_config do
