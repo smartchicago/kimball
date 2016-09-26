@@ -1,5 +1,11 @@
 <%= will_paginate @recent_signups, :renderer => BootstrapPagination::Rails %>
 <h1>Recent sign-ups who need gift cards</h1>
+<%= search_form_for @q_recent_signups, as: :q_signups, url: gift_cards_path, method: :get, class: 'form-inline' do |f_rs| %>
+<label for='created_at_date_gteq'>People created on or after</label>
+<%= f_rs.text_field :created_at_date_gteq, class: 'text_field input-small', id: 'datepicker_start', placeholder: 'yyyy-mm-dd' %>
+<%= f_rs.submit 'Search', class: "btn btn-primary" %>
+<%= link_to 'Clear Search', request.path, class:"btn" %>
+<% end %>
 <div id="error-div"></div>
 <table class="table table-striped">
   <thead>
