@@ -1,12 +1,13 @@
 <% Rails.logger.warn("In the create.js.erb file") %>
 <% if @create_result %>
+  console.log("In Create_result if statement");
   $('#error-div').val("");
   $("<%= escape_javascript(render partial: 'gift_cards/gift_card', locals: { gift_card: @gift_card } ) %>").prependTo("#gift_cards");
   $("<%= escape_javascript(render partial: 'people/gift_card', locals: { gift_card: @gift_card } ) %>").prependTo("#people_gift_cards");
 
   $('td#new-submit-<%= @gift_card.person_id %>').html("Yes");
   $('td#new-batchid-<%= @gift_card.person_id %>').html('<%= @gift_card.batch_id %>');
-  $('td#new-cardnumber-<%= @gift_card.person_id %>').html('<%= @gift_card.gift_card_number %>');
+  $('td#new-cardnumber-<%= @gift_card.person_id %>').html('<span class="add-on">****-****-***</span><input class="input-small" readonly="true" value="<%= @gift_card.gift_card_number %>">');
   $('td#new-expirationdate-<%= @gift_card.person_id %>').html('<%= @gift_card.expiration_date %>');
   $('#gift_card_total').html("<%= humanized_money_with_symbol @total %>");
   $("#gift_card_content").val("");
@@ -20,6 +21,8 @@
   $('#new-expirationdate').val('');
   
 <% else %>
+    console.log("In Create_result else statement");
+
   $('#error-div').html("");
   $("<%= escape_javascript(render partial: 'gift_cards/gift_card_error', locals: { gift_card: @gift_card } ) %>").prependTo("#error-div");
 <% end %>

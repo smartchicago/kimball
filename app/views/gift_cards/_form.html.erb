@@ -15,10 +15,12 @@
     <%= f.label :batch_id %><br>
     <%= f.text_field :batch_id, class: 'input-mini', placeholder: '4321' %>
   </div>
+  <% if ENV['BLUE_RIDGE'].present? %>
   <div class="field">
     <%= f.label :proxy_id %><br>
     <%= f.text_field :proxy_id, class: 'input-mini' %>
   </div>
+  <% end %>
   <div class='field input-prepend'>
     <%= f.label :gift_card_number %><br>
     <span class='add-on'>****-****-***</span>
