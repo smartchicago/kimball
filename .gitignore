@@ -39,3 +39,4 @@ Procfile
 
 # screenshots
 screenshot*
+.flynn_env
