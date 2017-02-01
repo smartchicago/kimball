@@ -16,7 +16,7 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  batch_id         :string(255)
-#  proxy_id         :integer
+#  proxy_id         :string(255)
 #
 
 require 'csv'

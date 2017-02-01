@@ -12,6 +12,16 @@
   <% end %>
 
   <div class="field">
+    <%= f.label :batch_id %><br>
+    <%= f.string_field :batch_id, class: 'input-mini' %>
+  </div>
+
+  <div class="field">
+    <%= f.label :proxy_id %><br>
+    <%= f.string_field :proxy_id, class: 'input-mini' %>
+  </div>
+
+  <div class="field">
     <%= f.label :gift_card_number %><br>
     <%= f.number_field :gift_card_number,class: 'input-mini' %>
   </div>
