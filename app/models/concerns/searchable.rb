@@ -9,7 +9,7 @@ module Searchable
     include Tire::Model::Callbacks
 
     # update index if a comment is added
-    after_touch { tire.update_index }
+    # after_touch { tire.update_index }
 
     # namespace indices
     index_name "person-#{Rails.env}"
@@ -105,7 +105,7 @@ module Searchable
             params.each do |k, v|
               # all of this is a bit bananas.
               # looking forard to new elastic search gem
-              next if v.blank? || v == '*' || k == :adv
+              next if v.blank? || k == :adv
 
               case k.to_sym
               when :connection_description

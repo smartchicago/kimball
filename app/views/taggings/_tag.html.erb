@@ -1,3 +1,4 @@
 <li id="tag-<%= tag.id %>">
-  <%= link_to tag.name, search_index_path(:adv => 1, :tags => tag.name) %>
+  <% params = [tag.id] %>
+  <%= link_to tag.name, search_index_ransack_path("q[tags_id_eq_all]" => params) %>
 </li>

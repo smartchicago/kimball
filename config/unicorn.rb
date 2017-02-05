@@ -5,7 +5,8 @@ rails_env = ENV['RAILS_ENV'] || 'production'
 
 # 16 workers and 1 master
 # worker_processes (rails_env == 'production' ? 16 : 4)
-worker_processes 4
+#worker_processes 4
+worker_processes Integer(ENV["WEB_CONCURRENCY"] || 4)
 
 # Load rails+github.git into the master before forking workers
 # for super-fast worker spawn times

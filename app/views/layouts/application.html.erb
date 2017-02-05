@@ -37,6 +37,7 @@
 
             <ul class="nav">
               <li class=""><%= link_to "People <span class='badge'>#{Person.where(active: true).count}</span>".html_safe, people_path %></li>
+              <li class=""><%= link_to "Gift Cards".html_safe, gift_cards_path %></li>
               <li class=""><%= link_to "Submissions <span class='badge'>#{Submission.where('person_id is ?', nil).count}</span>".html_safe, submissions_path %></li>
               <li><%= link_to "SMS Campaigns", twilio_wufoos_path %></li>
               <li class="dropdown">
@@ -49,7 +50,6 @@
                 </ul>
               </li>
               <li><%= link_to "Focus Group", events_path %></li>
-              <li class=""><%= link_to "Gift Cards".html_safe, gift_cards_path %></li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">More<b class="caret"></b></a>
                 <ul class="dropdown-menu">
@@ -73,12 +73,10 @@
                     </ul>
                 </li>
             </ul>
-
-            <p class="navbar-text pull-right"><%= link_to "search", search_index_path(adv: 1), class: "muted navbar-text", id: 'adv-search' %></p>
-            <%= form_tag search_index_path, :class => "navbar-search pull-right", :method => :get %>
-                <%= text_field_tag :q, params[:q], class: "span2 search-query", placeholder: "query" %>
-            </form>
-
+            <p class="navbar-text pull-right"><%= link_to "search", search_index_ransack_path, class: "muted navbar-text", id: 'adv-search' %></p>
+            <%= search_form_for @q, url: search_index_ransack_path, method: :get, class: "navbar-search pull-right" do |f| %>
+              <%= f.search_field :nav_bar_search_cont, :class => "span2 search-query", placeholder: "query" %>
+            <% end %>
             <% else %>
             <p class="navbar-text pull-right"><%= link_to 'Sign in', new_user_session_path %></p>
             <% end %>
@@ -90,12 +88,13 @@
 
     <div id="page-container" class="container">
         <div id="notifications">
-            <% if flash[:notice] || flash[:alert] || flash[:error] %>
+            <% if flash[:notice] || flash[:alert] || flash[:error] || flash[:success] %>
                 <div class="alert <%= flash[:notice].present? ? "alert-success" : "alert-error" %>">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
                     <%= flash[:alert] %>
                     <%= flash[:notice] %>
                     <%= flash[:error] %>
+                    <%= flash[:success] %>
                 </div>
             <% end %>
         </div> <!-- notifications -->

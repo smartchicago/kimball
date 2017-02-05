@@ -1,0 +1,17 @@
+<%= tag.fieldset class: condition_fields,
+  'data-object-name': f.object_name do %>
+
+  <%= tag.legend button_to_remove_fields %>
+
+  <%= f.attribute_fields do |a| %>
+    <%= render 'attribute_fields', f: a %>
+  <% end %>
+
+  <%= f.predicate_select %>
+
+  <%= f.value_fields do |v| %>
+    <%= render 'value_fields', f: v %>
+  <% end %>
+
+  <%= button_to_add_fields(f, :value) %>
+<% end %>

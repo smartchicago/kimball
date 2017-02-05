@@ -4,6 +4,7 @@ RSpec.describe 'gift_cards/new', type: :view do
   before(:each) do
     assign(:gift_card, GiftCard.new(
                          gift_card_number: 12345,
+                         batch_id: 1,
                          person_id: 1,
                          notes: 'MyString',
                          created_by: 1,
@@ -15,7 +16,9 @@ RSpec.describe 'gift_cards/new', type: :view do
     render
 
     assert_select 'form[action=?][method=?]', gift_cards_path, 'post' do
-      assert_select 'input#gift_card_last_four[name=?]', 'gift_card[last_four]'
+      assert_select 'input#gift_card_gift_card_number[name=?]', 'gift_card[gift_card_number]'
+
+      assert_select 'input#gift_card_batch_id[name=?]', 'gift_card[batch_id]'
 
       assert_select 'input#gift_card_person_id[name=?]', 'gift_card[person_id]'
 

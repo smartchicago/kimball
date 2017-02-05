@@ -84,7 +84,8 @@ namespace :deploy do
 
   task :reload_nginx do
     # i don't like this sudo here.
-    run "sudo service nginx restart"
+    # SChi- we don't want to restart nginx right now
+    # run "sudo service nginx restart"
   end
 
   # https://github.com/capistrano/capistrano/issues/362#issuecomment-14158487

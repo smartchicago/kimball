@@ -40,16 +40,25 @@ class GiftCard < ActiveRecord::Base
   validates_presence_of :amount
   validates_presence_of :reason
 
-  validates_format_of :expiration_date, with: /\A(0|1)([0-9])\/([0-9]{2})\z/i ,unless: proc { |c| c.expiration_date.blank? }
+  validates_format_of :expiration_date, with: /\A(0|1)([0-9])\/([0-9]{2})\z/i, unless: proc { |c| c.expiration_date.blank? }
 
   validates_length_of :proxy_id, is: 4, unless: proc { |c| c.proxy_id.blank? }
   #validates_numericality_of :proxy_id, unless: proc { |c| c.proxy_id.blank? }
 
+
   validates_uniqueness_of :proxy_id, scope: :batch_id
+  #validates_uniqueness_of :gift_card_number, scope: :batch_id
+
+  validates_presence_of :batch_id
   #validates_uniqueness_of :gift_card_number, scope: :batch_id
 
   #validates_format_of :gift_card_number, with: /\A([0-9]){4,5}\z/i
   validates_uniqueness_of :reason, scope: :person_id, if: "reason == 'signup'"
+
+  # ransacker :created_at, type: :date do
+  #   Arel.sql('date(created_at)')
+  # end
+
   # Need to add validation to limit 1 signup per person
 
   def self.batch_create(post_content)
@@ -68,13 +77,20 @@ class GiftCard < ActiveRecord::Base
     # exception handling
   end  # batch_create
 
-  def self.to_csv
+  def self.export_csv
     CSV.generate do |csv|
-      # csv << column_names
-      csv_column_names =  %w(id batch_id gift_card_number expiration_date reason)
+      csv_column_names =  ['Gift Card ID', 'Batch ID', 'Gift Card Number', 'Expiration Date', 'Reason', 'Person ID', 'Name', 'Address', 'Phone Number', 'Email']
       csv << csv_column_names
       all.find_each do |gift_card|
-        csv << gift_card.attributes.values_at(*csv_column_names)
+        this_person = gift_card.person
+        row_items = [gift_card.id, gift_card.batch_id, gift_card.gift_card_number,  gift_card.expiration_date, gift_card.reason.titleize, this_person.id || '', this_person.full_name || '', this_person.address_fields_to_sentence || '']
+        if this_person.phone_number.present?
+          row_items.push(this_person.phone_number.phony_formatted(format: :national, spaces: '-'))
+        else
+          row_items.push('')
+        end
+        row_items.push(this_person.email_address)
+        csv << row_items
       end
     end
   end

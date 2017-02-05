@@ -103,7 +103,7 @@
         <%= form_for(@tagging, remote: true, html: { class: "form-inline" }) do |form| %>
           <%= form.hidden_field :taggable_type, value: "Person" %>
           <%= form.hidden_field :taggable_id, value: @person.id %>
-          <%= form.text_field :name, id: 'tag-typeahead', class: "input span2 tag-typehead", placeholder: "new tag", autocomplete: 'off' %>
+          <%= form.text_field :name, id: 'tag-typeahead', class: "input tokenfield span2 tag-typehead", placeholder: "new tag", autocomplete: 'off' %>
           <%= form.submit "Add", class: "btn span1" %>
         <% end %>
       </div>
@@ -168,13 +168,16 @@
         </div>
       <% end %>
       <%= form.hidden_field :person_id, :value => @person.id %>
-      <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" }, class: 'input-small' %>
-      <%= form.text_field :proxy_id, placeholder: "ProxyID",class: 'input-mini'  %>
-      <%= form.text_field :batch_id, placeholder: "BatchID",class: 'input-mini'  %>
-      <%= form.text_field :gift_card_number, placeholder: "Card Number"  %>
-      <%= form.text_field :amount, placeholder: "Amount",class: 'input-mini' %>
-      <%= form.text_field :expiration_date, placeholder: "MM/YY", class: 'input-mini' %>
-
+      <%= form.select :reason, [['Signup', 'signup'], ['Test', 'test'], ['Referral', 'referral'], ['Other', 'other']], { :prompt => "Reason" }, class: 'input-small', id: "new-reason" %>
+      <%= form.text_field :notes, placeholder: 'Notes', class: 'input-medium', id: 'new-notes' %>
+      <%= form.text_field :proxy_id, placeholder: "ProxyID",class: 'input-mini', id: "new-proxyid" %>
+      <%= form.text_field :batch_id, placeholder: "BatchID",class: 'input-mini', id: "new-batchid" %>
+      <div class='input-prepend'>
+        <span class='add-on'>****-****-***</span>
+        <%= form.text_field :gift_card_number, placeholder: "#####", class: 'input-small', id: "new-cardnumber" %>
+      </div>
+      <%= form.text_field :expiration_date, placeholder: "MM/YY", class: 'input-mini', id: "new-expirationdate" %>
+      <%= form.text_field :amount, placeholder: "Amount",class: 'input-mini', id: "new-amount" %>
       <%= form.submit 'Add Gift Card', :class => "btn" %>
     <% end %>
   </div>
@@ -182,9 +185,6 @@
     <h3>Gift Cards - Total: <span id='gift_card_total'><%= humanized_money_with_symbol @person.gift_card_total %></span></h3>
     <table class="table table-striped">
       <tr>
-        <th>Gift Card ID</th>
-        <th>Person ID</th>
-        <th>Name</th>
         <th>Reason</th>
         <th>Giftable ID</th>
         <th>Proxy ID</th>
@@ -193,11 +193,11 @@
         <th>Expiration Date</th>
         <th>Amount</th>
         <th>Created On</th>
-        <th colspan="3"></th>
+        <th colspan="2"></th>
       </tr>
 
-      <tbody id="gift_cards">
-        <%= render partial: 'gift_cards/gift_card', collection: @person.gift_cards.order("created_at DESC") %>
+      <tbody id="people_gift_cards">
+        <%= render partial: 'people/gift_card', collection: @person.gift_cards.order("created_at DESC") %>
       </tbody>
     </table>
   </div>

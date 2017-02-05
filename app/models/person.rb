@@ -43,7 +43,7 @@
 class Person < ActiveRecord::Base
   has_paper_trail
 
-  include Searchable
+  # include Searchable
   include ExternalDataMappings
   include Neighborhoods
 
@@ -95,16 +95,28 @@ class Person < ActiveRecord::Base
 
   validates :phone_number, presence: true, length: { in: 9..15 },
     unless: proc { |person| person.email_address.present? }
-  validates :phone_number, allow_blank: true, uniqueness: true
+  # validates :phone_number, allow_blank: true, uniqueness: true
 
   validates :email_address, presence: true,
     unless: proc { |person| person.phone_number.present? }
-  validates :email_address, email: true, allow_blank: true, uniqueness: true
+  # validates :email_address, email: true, allow_blank: true, uniqueness: true
 
   scope :no_signup_card, -> { where('id NOT IN (SELECT DISTINCT(person_id) FROM gift_cards where gift_cards.reason = 1)') }
   scope :signup_card_needed, -> { joins(:gift_cards).where('gift_cards.reason !=1') }
 
   self.per_page = 15
+
+  ransacker :full_name, formatter: proc { |v| v.mb_chars.downcase.to_s } do |parent|
+    Arel::Nodes::NamedFunction.new('lower',
+      [Arel::Nodes::NamedFunction.new('concat_ws',
+        [Arel::Nodes.build_quoted(' '), parent.table[:first_name], parent.table[:last_name]])])
+  end
+
+  def self.ransackable_scopes(auth_object = nil)
+    %i(no_signup_card)
+  end
+
+  ransack_alias :nav_bar_search, :full_name_or_email_address_or_phone_number
 
   def signup_gc_sent
     signup_cards = gift_cards.where(reason: 1)
@@ -114,7 +126,7 @@ class Person < ActiveRecord::Base
 
   def gift_card_total
     total = gift_cards.sum(:amount_cents)
-    total = Money.new(total, 'USD')
+    Money.new(total, 'USD')
   end
 
   WUFOO_FIELD_MAPPING = {
@@ -284,7 +296,7 @@ class Person < ActiveRecord::Base
     # new_person.city  = "Chicago" With update we ask for city
     new_person.state = 'Illinois'
 
-    new_person.signup_at = Time.now
+    new_person.signup_at = params['DateCreated']
 
     new_person
   end
@@ -316,6 +328,10 @@ class Person < ActiveRecord::Base
 
   def full_name
     [first_name, last_name].join(' ')
+  end
+
+  def address_fields_to_sentence
+    [address_1, address_2, city, state, postal_code].reject(&:blank?).join(', ')
   end
 
   def self.send_all_reminders
@@ -350,6 +366,68 @@ class Person < ActiveRecord::Base
       self.neighborhood = n
       save
     end
+  end
+
+  # Compare to other records in the database to find possible duplicates.
+  def possible_duplicates
+    @duplicates = {}
+    if last_name.present?
+      last_name_duplicates = Person.where(last_name: last_name).where.not(id: id)
+      last_name_duplicates.each do |duplicate|
+        duplicate_hash = {}
+        duplicate_hash['person'] = duplicate
+        duplicate_hash['match_count'] = 1
+        duplicate_hash['last_name_match'] = true
+        duplicate_hash['matches_on'] = ['Last Name']
+        @duplicates[duplicate.id] = duplicate_hash
+      end
+    end
+    if email_address.present?
+      email_address_duplicates = Person.where(email_address: email_address).where.not(id: id)
+      email_address_duplicates.each do |duplicate|
+        if @duplicates.key? duplicate.id
+          @duplicates[duplicate.id]['match_count'] += 1
+          @duplicates[duplicate.id]['matches_on'].push('Email Address')
+        else
+          @duplicates[duplicate.id] = {}
+          @duplicates[duplicate.id]['person'] = duplicate
+          @duplicates[duplicate.id]['match_count'] = 1
+          @duplicates[duplicate.id]['matches_on'] = ['Email Address']
+        end
+        @duplicates[duplicate.id]['email_address_match'] = true
+      end
+    end
+    if phone_number.present?
+      phone_number_duplicates = Person.where(phone_number: phone_number).where.not(id: id)
+      phone_number_duplicates.each do |duplicate|
+        if @duplicates.key? duplicate.id
+          @duplicates[duplicate.id]['match_count'] += 1
+          @duplicates[duplicate.id]['matches_on'].push('Phone Number')
+        else
+          @duplicates[duplicate.id] = {}
+          @duplicates[duplicate.id]['person'] = duplicate
+          @duplicates[duplicate.id]['match_count'] = 1
+          @duplicates[duplicate.id]['matches_on'] = ['Phone Number']
+        end
+        @duplicates[duplicate.id]['phone_number_match'] = true
+      end
+    end
+    if address_1.present?
+      address_1_duplicates = Person.where(address_1: address_1).where.not(id: id)
+      address_1_duplicates.each do |duplicate|
+        if @duplicates.key? duplicate.id
+          @duplicates[duplicate.id]['match_count'] += 1
+          @duplicates[duplicate.id]['matches_on'].push('Address_1')
+        else
+          @duplicates[duplicate.id] = {}
+          @duplicates[duplicate.id]['person'] = duplicate
+          @duplicates[duplicate.id]['match_count'] = 1
+          @duplicates[duplicate.id]['matches_on'] = ['Address_1']
+        end
+        @duplicates[duplicate.id]['address_1_match'] = true
+      end
+    end
+    @duplicates
   end
 
 end

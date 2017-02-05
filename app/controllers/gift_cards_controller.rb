@@ -6,49 +6,24 @@ class GiftCardsController < ApplicationController
   # GET /gift_cards
   # GET /gift_cards.json
   def index
-    @gift_cards = GiftCard.paginate(page: params[:page]).includes(:person).all
-    @recent_signups = Person.paginate(page: params[:page]).no_signup_card.where('signup_at > :startdate', { startdate: 3.months.ago }).order('signup_at DESC')
-    @new_gift_cards = []
-    @recent_signups.length.times do
-      @new_gift_cards << GiftCard.new
-    end
-
+    @q_giftcards = GiftCard.ransack(params[:q])
     respond_to do |format|
-      format.html {}
-      format.csv { render text: @gift_cards.to_csv }
-      # format.csv do
-      #   fields = Person.column_names
-      #   fields.push("tags")
-      #   output = CSV.generate do |csv|
-      #     # Generate the headers
-      #     csv << fields.map(&:titleize)
-
-      #     # Some fields need a helper method
-      #     human_devices = %w( primary_device_id secondary_device_id )
-      #     human_connections = %w( primary_connection_id secondary_connection_id )
-
-      #     # Write the results
-      #     @results.each do |person|
-      #       csv << fields.map do |f|
-      #         field_value = person[f]
-      #         if human_devices.include? f
-      #           human_device_type_name(field_value)
-      #         elsif human_connections.include? f
-      #           human_connection_type_name(field_value)
-      #         elsif f == "tags"
-      #           if person.tag_values.blank?
-      #             ""
-      #           else
-      #             person.tag_values.join('|')
-      #           end
-      #         else
-      #           field_value
-      #         end
-      #       end
-      #     end
-      #   end
-      #   send_data output
-      # end
+      format.html do
+        @gift_cards = @q_giftcards.result.includes(:person).page(params[:page])
+        # @recent_signups = Person.no_signup_card.paginate(page: params[:page]).where('signup_at > :startdate', { startdate: 3.months.ago }).order('signup_at DESC')
+        @q_recent_signups = Person.no_signup_card.ransack(params[:q_signups], search_key: :q_signups)
+        # @q_recent_signups.no_signup_card
+        @q_recent_signups.created_at_date_gteq = 3.weeks.ago.strftime('%Y-%m-%d') unless params[:q_signups]
+        @recent_signups = @q_recent_signups.result.page(params[:page_signups])
+        @new_gift_cards = []
+        @recent_signups.length.times do
+          @new_gift_cards << GiftCard.new
+        end
+      end
+      format.csv do
+        @gift_cards = @q_giftcards.result.includes(:person)
+        send_data @gift_cards.export_csv,  filename: "GiftCards-#{Time.zone.today}.csv"
+      end
     end
   end
 
@@ -70,8 +45,9 @@ class GiftCardsController < ApplicationController
   # POST /gift_cards.json
   def create
     @gift_card = GiftCard.new(gift_card_params)
+    @create_result = @gift_card.with_user(current_user).save
     respond_to do |format|
-      if @create_result = @gift_card.with_user(current_user).save
+      if @create_result
         @total = @gift_card.person.blank? ? @gift_card.amount : @gift_card.person.gift_card_total
         format.js {}
         format.json {}
@@ -113,7 +89,7 @@ class GiftCardsController < ApplicationController
   def destroy
     @gift_card.destroy
     respond_to do |format|
-      format.html { redirect_to gift_cards_url }
+      format.html { redirect_to :back }
       format.json { head :no_content }
     end
   end

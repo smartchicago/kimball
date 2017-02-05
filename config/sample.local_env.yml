@@ -41,3 +41,4 @@ SIGNUP_SMS_MESSAGE: "You are now signed up for CUTGroup! Your $5 gift card will 
 SIGNUP_ERROR_MESSAGE: "If you are having trouble email smarziano@cct.org or text '98765' and you will be contacted later."
 WIT_ACCESS_TOKEN: ''
 WIT_APP_ID: ''
+WEB_CONCURRENCY: '4'
