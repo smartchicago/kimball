@@ -47,14 +47,15 @@ class PeopleController < ApplicationController
   # GET /people.json
   def index
     @verified_types = Person.uniq.pluck(:verified).select(&:present?)
-    @people = if params[:tags].blank? || params[:tags] == ''
+    # this could be cleaner...
+    @people = if params[:tags].blank?
                 Person.paginate(page: params[:page]).order(sort_column + ' ' + sort_direction).where(active: true)
               else
-                tag_names =  params[:tags].split(',').map(&:strip)
-                tags = Tag.where(name: tag_names)
-                Person.paginate(page: params[:page]).order(sort_column + ' ' + sort_direction).where(active: true).includes(:tags).where(tags: { id: tags.pluck(:id) })
+                tags =  params[:tags].split(',').map(&:strip)
+                @tags = ActsAsTaggableOn::Tags.find_by_name(tags)
+                Person.paginate(page: params[:page]).order(sort_column + ' ' + sort_direction).where(active: true).tagged_with(tags)
               end
-    @tags = params[:tags].blank? ? '[]' : Tag.where(name: params[:tags].split(',').map(&:strip)).to_json(methods: [:value, :label, :type])
+    @tags ||= []
   end
 
   # GET /people/1
@@ -63,7 +64,7 @@ class PeopleController < ApplicationController
     @comment = Comment.new commentable: @person
     @gift_card = GiftCard.new
     @reservation = Reservation.new person: @person
-    @tagging = Tagging.new taggable: @person
+    @tags = @person.tag_list
     @outgoingmessages = TwilioMessage.where(to: @person.normalized_phone_number).where.not(wufoo_formid: nil)
     @twilio_wufoo_formids = @outgoingmessages.pluck(:wufoo_formid).uniq
     @twilio_wufoo_forms = TwilioWufoo.where(id: @twilio_wufoo_formids)

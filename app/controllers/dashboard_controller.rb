@@ -8,6 +8,7 @@ class DashboardController < ApplicationController
     @top_five_wards     = Person.group(:geography_id).order('count_all DESC').limit(5).count
     @bottom_five_wards  = Person.group(:geography_id).order('count_all ASC').limit(5).count
     @deactivated        = Person.unscoped.where(active: false).where('deactivated_at > ?', 1.week.ago).size
+    @popular_tags       = ActsAsTaggableOn::Tag.most_used(10)
   end
 
 end

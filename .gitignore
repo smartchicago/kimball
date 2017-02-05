@@ -40,3 +40,6 @@ Procfile
 # screenshots
 screenshot*
 .flynn_env
+
+# ignore backups and DB dumps
+*.sql

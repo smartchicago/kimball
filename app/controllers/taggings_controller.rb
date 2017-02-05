@@ -17,15 +17,16 @@ class TaggingsController < ApplicationController
   # rubocop:disable Metrics/MethodLength
   #
   def create
-    @tag = Tag.find_or_initialize_by(name: params[:tagging].delete(:name))
+    klass = params[:tagging][:taggable_type].constantize
+    obj = klass.find(params[:tagging][:taggable_id])
+    res = false
+    if obj.respond_to?(:tag_list) && !params[:tagging][:name].blank?
+      # if we want owned tags. Not sure we do...
+      # res = current_user.tag(obj,with: params[:tagging][:name])
+      res = obj.tag_list.add(params[:tagging][:name])
+    end
 
-    @tag.created_by ||= current_user.id
-
-    @tagging = Tagging.new(taggable_type: params[:tagging][:taggable_type],
-                           taggable_id: params[:tagging][:taggable_id],
-                           tag: @tag) if @tag.name != ''
-
-    if @tagging.with_user(current_user).save
+    if res
       respond_to do |format|
         format.js {}
       end
@@ -38,7 +39,7 @@ class TaggingsController < ApplicationController
   # rubocop:enable Metrics/MethodLength
 
   def destroy
-    @tagging = Tagging.find(params[:id])
+    @tagging = ActsAsTaggableOn::Tagging.find(params[:id])
 
     if @tagging.destroy
       respond_to do |format|
@@ -52,7 +53,7 @@ class TaggingsController < ApplicationController
   end
 
   def search
-    @tags = Tag.where('name like ?', "%#{params[:q]}%").
+    @tags = ActsAsTaggableOn::Tag.where('name like ?', "%#{params[:q]}%").
             order(taggings_count: :desc)
 
     # the methods=> :value is needed for tokenfield.

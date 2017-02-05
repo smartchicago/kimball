@@ -43,6 +43,8 @@
 class Person < ActiveRecord::Base
   has_paper_trail
 
+  acts_as_taggable #new, better tagging system
+
   # include Searchable
   include ExternalDataMappings
   include Neighborhoods
@@ -60,8 +62,8 @@ class Person < ActiveRecord::Base
   has_many :reservations, dependent: :destroy
   has_many :events, through: :reservations
 
-  has_many :tags, through: :taggings
-  has_many :taggings, as: :taggable
+  # has_many :tags, through: :taggings
+  # has_many :taggings, as: :taggable
 
   # we don't really need a join model, exceptionally HABTM is more appropriate
   # rubocop:disable Rails/HasAndBelongsToMany

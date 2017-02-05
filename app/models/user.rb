@@ -25,6 +25,7 @@
 
 class User < ActiveRecord::Base
   has_paper_trail
+  # acts_as_tagger #if we want owned tags.
 
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable, stretches: 10
 

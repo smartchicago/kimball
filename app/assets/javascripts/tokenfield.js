@@ -8,9 +8,9 @@ $(document).on('ready page:load',function() {
   var tokenSelector = '.tokenfield';
   if ($(tokenSelector).length) {
     var bloodhound, filter, tokenSelector, cached_suggestions;
-    var hiddenInput, searchUrl, prePopulate;
+    var searchUrl, prePopulate;
 
-    hiddenInput  = $("[data-submit-id]").data().submitId.toString();
+
     searchUrl    = $("[data-search-url]").data().searchUrl.toString();
     prePopulate  = $("[data-pre-populate]").data().prePopulate;
 

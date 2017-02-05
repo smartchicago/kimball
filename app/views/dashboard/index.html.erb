@@ -5,7 +5,7 @@
   </div>
   <div class="span4">
     <h3>Recent unmatched submissions</h3>
-    <%= render partial: 'submission', collection: @submissions %>    
+    <%= render partial: 'submission', collection: @submissions %>
   </div>
 
   <div class="span4">
@@ -27,7 +27,7 @@
       <h3><%= @deactivated %></h3>
       <h4>Most popular tags</h4>
       <ul id="tag-list">
-        <%= render partial: 'taggings/tag', collection: Tag.most_popular(10) %>
+        <%= render partial: 'taggings/tag', collection: @popular_tags %>
 
       </ul>
     </div>
