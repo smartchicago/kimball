@@ -49,9 +49,14 @@
     <%= f.search_field :primary_connection_description_cont %>
   </div>
   <div class="span5">
-    <%= f.label :tags_id_eq_all %>
-    <%= f.collection_select :tags_id_eq_all, @tag_list, :id, :name, {include_blank: true}, { multiple: true, size: @tag_list.count + 1 } %>
-
+    <%= f.label :tags %>
+    <%= f.text_field :tags_id_eq_all,
+                            class: 'tokenfield input-large span5',
+                            data: { search_url: '/taggings/search?q=%QUERY',
+                                    submit_id: 'search-tag-hidden-input',
+                                    pre_populate: @tag_list
+                                  }
+                          %>
     <%= f.label :participation_type_in %>
     <%= f.select :participation_type_in, @participation_list, {include_blank: true}, { multiple: true, size: @participation_list.count + 1 } %>
 
@@ -74,10 +79,10 @@
 
 <div class="span12">
 Search Parameters:
-  <% if params[:q] %> 
+  <% if params[:q] %>
     <%- params[:q].each do |param_key, param_value| %>
       <% if param_value.present? and param_value != [""] %>
-        <%= param_key %>: "<%= param_value %>"  
+        <%= param_key %>: "<%= param_value %>"
       <% end %>
     <% end -%>
   <% else %>
@@ -116,7 +121,7 @@ Search Parameters:
           Primary Connection: <%= search_result_field human_connection_type_name(result.primary_connection_id), :connection_id %> <%= search_result_field result.primary_connection_description, :connection_description %><br>
           <% if result.secondary_connection_description.present? %>Secondary Connection: <%= search_result_field result.secondary_connection_description, :connection_description %><% end %><br>
           Preferred Contact Method: <%= search_result_field result.preferred_contact_method, :preferred_contact_method %>
-          
+
         </td>
       </tr>
       <% end %>
@@ -144,7 +149,7 @@ Search Parameters:
     <div id="export-to-mailchimp-form" style="display:none">
       <%= form_tag search_export_path, remote: true, class: "form-inline" %>
         <%= text_field_tag :segment_name, '', class: "input-xlarge", placeholder: "enter a name for this list (segment)" %>
-        <% if params[:q] %> 
+        <% if params[:q] %>
           <%- params[:q].each do |param_key, param_value| %>
             <%= hidden_field_tag "q[#{param_key}]", param_value %>
           <% end -%>
@@ -156,7 +161,7 @@ Search Parameters:
   <div class="span12">
     <div id="export-to-twilio-form" style="display:none">
       <%= form_tag search_exportTwilio_path, remote: true, class: "form-inline" %>
-        <% if params[:q] %> 
+        <% if params[:q] %>
           <%- params[:q].each do |param_key, param_value| %>
             <%= hidden_field_tag "q[#{param_key}]", param_value %>
           <% end -%>
