@@ -85,7 +85,7 @@ gem 'unicorn'
 gem 'twitter-bootstrap-rails', '~> 2.2.0'
 
 # use tire for ElasticSearch integration
-gem 'tire'
+gem 'tire' # no longer needed
 
 # pagniate with will_paginate: https://github.com/mislav/will_paginate
 gem 'will_paginate'
@@ -162,6 +162,9 @@ gem 'money-rails'
 
 # masked inputs
 gem 'maskedinput-rails'
+
+# the standard rails tagging library
+gem 'acts-as-taggable-on', '~> 4.0'
 
 group :test do
   # mock tests w/mocha
