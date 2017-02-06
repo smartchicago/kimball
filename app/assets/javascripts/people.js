@@ -42,7 +42,7 @@ $(document).on('ready page:load', function () {
     $('#tag-typeahead').submit();
   });
 
-  $("#new-expirationdate").mask("99/99",{placeholder:"MM/YY"});
+  $(".new-expirationdate").mask("99/99",{placeholder:"MM/YY"});
   $('#new-notes').hide();
 
   $('#new-reason').change(function () {

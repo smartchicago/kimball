@@ -6,6 +6,7 @@
   $("<%= escape_javascript(render partial: 'people/gift_card', locals: { gift_card: @gift_card } ) %>").prependTo("#people_gift_cards");
 
   $('td#new-submit-<%= @gift_card.person_id %>').html("Yes");
+  $('td#new-proxyid-<%= @gift_card.person_id %>').html('<%= @gift_card.proxy_id %>');
   $('td#new-batchid-<%= @gift_card.person_id %>').html('<%= @gift_card.batch_id %>');
   $('td#new-cardnumber-<%= @gift_card.person_id %>').html('<span class="add-on">****-****-***</span><input class="input-small" readonly="true" value="<%= @gift_card.gift_card_number %>">');
   $('td#new-expirationdate-<%= @gift_card.person_id %>').html('<%= @gift_card.expiration_date %>');
@@ -19,7 +20,7 @@
   $('#new-amount').val('');
   $('#new-reason').val('');
   $('#new-expirationdate').val('');
-  
+
 <% else %>
     console.log("In Create_result else statement");
 

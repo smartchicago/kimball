@@ -53,14 +53,14 @@
               <%= form.text_field :batch_id, class: 'input-small', :placeholder => "Batch ID"  %>
             </td>
             <td id="new-proxyid-<%= @recent_signups[index].id %>">
-              <%= form.text_field :proxy_id,class: 'input-mini', :placeholder => "Proxy ID"  %>
+              <%= form.text_field :proxy_id,class: 'input-mini proxy-id', :placeholder => "Proxy ID"  %>
             </td>
             <td id="new-cardnumber-<%= @recent_signups[index].id %>" class='input-prepend'>
               <span class='add-on'>****-****-***</span>
-              <%= form.text_field :gift_card_number,class: 'input-small', :placeholder => "#####"  %>
+              <%= form.text_field :gift_card_number,class: 'input-small batch-id', :placeholder => "#####"  %>
             </td>
             <td id="new-expirationdate-<%= @recent_signups[index].id %>">
-              <%= form.text_field :expiration_date, class: 'input-mini',:placeholder => "MM/YY" %>
+              <%= form.text_field :expiration_date, class: 'input-mini gift-card-expiration-date',:placeholder => "MM/YY" %>
             </td>
             <td>
               <%= form.text_field :amount, :value => "5.00", :readonly => true, :class => "span1" %>
@@ -119,7 +119,7 @@
 
   <tbody id="gift_cards">
     <% @gift_cards.each do |gift_card| %>
-      <tr>
+      <tr id="gift_card-<%= gift_card.id%>">
         <td><%= gift_card.id %></td>
         <td><%= gift_card.person_id %></td>
         <td><%= link_to "#{gift_card.person.full_name}", person_path(gift_card.person) %></td>
@@ -133,7 +133,7 @@
         <td><%= gift_card.created_at.strftime('%m/%d/%Y') %></td>
         <td><%= link_to 'Show', gift_card %></td>
         <td><%= link_to 'Edit', edit_gift_card_path(gift_card) %></td>
-        <td><%= link_to 'Destroy', gift_card, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', gift_card, remote: true, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

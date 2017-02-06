@@ -1,2 +1,4 @@
 $('#gift_card-<%= @gift_card.id%>').remove();
-$('#gift_card_total').html("<%= humanized_money_with_symbol @gift_card.person.gift_card_total %>");
+if ($('#gift_card_total').length) {
+  $('#gift_card_total').html("<%= humanized_money_with_symbol @gift_card.person.gift_card_total %>");
+}
