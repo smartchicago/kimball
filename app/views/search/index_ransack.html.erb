@@ -49,12 +49,12 @@
     <%= f.search_field :primary_connection_description_cont %>
   </div>
   <div class="span5">
-    <%= f.label :tags %>
-    <%= f.text_field :tags_id_eq_all,
+    <%= f.label "Tags" %>
+    <%= f.text_field :ransack_tagged_with,
                             class: 'tokenfield input-large span5',
                             data: { search_url: '/taggings/search?q=%QUERY',
                                     submit_id: 'search-tag-hidden-input',
-                                    pre_populate: @tag_list
+                                    pre_populate: @tags
                                   }
                           %>
     <%= f.label :participation_type_in %>
@@ -104,7 +104,7 @@ Search Parameters:
           <strong><%= link_to "#{result.first_name} #{result.last_name}", person_path(:id => result.id) %></strong>
           <%= render partial: 'people/add_remove_cart',locals: {person: Person.find_by(id: result.id)} %>
           <br/><br/>
-           Tags: <% if !(result.tag_values.blank?) %><%= search_result_field result.tag_values, :tags %><% end %>
+           Tags: <% if !(result.tag_list.blank?) %><%= search_result_field result.tag_list, :tags %><% end %>
         </td>
         <td class="span4">
           Address: <%= search_result_field result.address_1, :address  %><br/>

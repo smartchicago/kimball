@@ -17,13 +17,18 @@ class TaggingsController < ApplicationController
   # rubocop:disable Metrics/MethodLength
   #
   def create
-    klass = params[:tagging][:taggable_type].constantize
-    obj = klass.find(params[:tagging][:taggable_id])
+    klass = params[:taggable_type].constantize
+    obj = klass.find(params[:taggable_id])
     res = false
-    if obj.respond_to?(:tag_list) && !params[:tagging][:name].blank?
+    if obj.respond_to?(:tag_list) && !params[:tag].blank?
       # if we want owned tags. Not sure we do...
       # res = current_user.tag(obj,with: params[:tagging][:name])
-      res = obj.tag_list.add(params[:tagging][:name])
+      unless obj.tag_list.include?(params[:tag])
+        obj.tag_list.add(params[:tag])
+        res = obj.save
+        tag = ActsAsTaggableOn::Tag.find_by_name(params[:tag])
+        @tagging = obj.taggings.find_by_tag_id(tag.id)
+      end
     end
 
     if res
@@ -32,7 +37,10 @@ class TaggingsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.js { render text: "console.log('tag save error')" }
+
+        format.js { render text: "console.log('tag save error');
+          $('#tagging_name').val('');
+          $('input#tag-typeahead').typeahead('val','');" }
       end
     end
   end
@@ -40,7 +48,7 @@ class TaggingsController < ApplicationController
 
   def destroy
     @tagging = ActsAsTaggableOn::Tagging.find(params[:id])
-
+    @tagging_id = @tagging.id
     if @tagging.destroy
       respond_to do |format|
         format.js {}

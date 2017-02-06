@@ -52,7 +52,8 @@ class PeopleController < ApplicationController
                 Person.paginate(page: params[:page]).order(sort_column + ' ' + sort_direction).where(active: true)
               else
                 tags =  params[:tags].split(',').map(&:strip)
-                @tags = ActsAsTaggableOn::Tags.find_by_name(tags)
+                @tags = ActsAsTaggableOn::Tag.where(name: tags)
+
                 Person.paginate(page: params[:page]).order(sort_column + ' ' + sort_direction).where(active: true).tagged_with(tags)
               end
     @tags ||= []

@@ -8,9 +8,9 @@ $(document).on('ready page:load',function() {
   var tokenSelector = '.tokenfield';
   if ($(tokenSelector).length) {
     var bloodhound, filter, tokenSelector, cached_suggestions;
-    var searchUrl, prePopulate;
+    var hiddenInput, searchUrl, prePopulate;
 
-
+    hiddenInput  = $("[data-submit-id]").data().submitId.toString();
     searchUrl    = $("[data-search-url]").data().searchUrl.toString();
     prePopulate  = $("[data-pre-populate]").data().prePopulate;
 
@@ -29,6 +29,7 @@ $(document).on('ready page:load',function() {
         if (token.value.toString() === event_value) {
           should_prevent_default = true;
         }
+        token.value = token.name;
       });
 
       // can't add a token not in the sugestions
@@ -37,7 +38,7 @@ $(document).on('ready page:load',function() {
         cached_suggestions = cached_suggestions.concat();
       }
       suggestion_values = cached_suggestions.map(function(e,i) {
-        return e.value.toString();
+        return e.name.toString();
       });
 
       if ($.inArray(event_value,suggestion_values) === -1) {
@@ -162,10 +163,14 @@ $(document).on('ready page:load',function() {
 
     var prepopulate_tokens = function(tokens){
       cached_suggestions = tokens;
+      $.each(tokens, function(k, v) {
+          v["value"] = v["name"];
+      });
       $(tokenSelector).tokenfield('setTokens',tokens)
     }
 
     if (typeof prePopulate !== 'undefined' && prePopulate != '') {
+     console.log(prePopulate);
      prepopulate_tokens(prePopulate);
     }
   } // end of check for tokenfield selector

@@ -41,9 +41,10 @@ $(document).on('ready page:load', function () {
     $(searchSelector).typeahead('val',datum.name);
     $('#tag-typeahead').submit();
   });
+
   $("#new-expirationdate").mask("99/99",{placeholder:"MM/YY"});
   $('#new-notes').hide();
-    
+
   $('#new-reason').change(function () {
     console.log("new-reason change");
     if ($('#new-reason option:selected').text() == "Other"){
@@ -52,5 +53,5 @@ $(document).on('ready page:load', function () {
     } else {
       $('#new-notes').hide();
     }
-  }); 
+  });
 });

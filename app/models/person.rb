@@ -62,9 +62,6 @@ class Person < ActiveRecord::Base
   has_many :reservations, dependent: :destroy
   has_many :events, through: :reservations
 
-  # has_many :tags, through: :taggings
-  # has_many :taggings, as: :taggable
-
   # we don't really need a join model, exceptionally HABTM is more appropriate
   # rubocop:disable Rails/HasAndBelongsToMany
   has_and_belongs_to_many :event_invitations, class_name: '::V2::EventInvitation', join_table: :invitation_invitees_join_table
@@ -114,8 +111,10 @@ class Person < ActiveRecord::Base
         [Arel::Nodes.build_quoted(' '), parent.table[:first_name], parent.table[:last_name]])])
   end
 
+  scope :ransack_tagged_with, ->(*tags){ tagged_with(tags) }
+
   def self.ransackable_scopes(auth_object = nil)
-    %i(no_signup_card)
+    %i(no_signup_card ransack_tagged_with)
   end
 
   ransack_alias :nav_bar_search, :full_name_or_email_address_or_phone_number

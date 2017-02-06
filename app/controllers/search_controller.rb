@@ -62,8 +62,9 @@ class SearchController < ApplicationController
   def index_ransack
     @q = Person.ransack(params[:q])
     @results = @q.result.includes(:tags).page(params[:page])
-    @tags = params[:tags_id_eq_any].blank? ? '[]' : Tag.where(name: params[:tags_id_eq_any].split(',').map(&:strip)).to_json(methods: [:value, :label, :type])
-    @tag_list = Tag.all
+
+    @tags = params[:tags].blank? ? '[]' : params[:tags]
+
     @participation_list = Person.uniq.pluck(:participation_type) # Need to better define these
     @verified_list = Person.uniq.pluck(:verified)
     @mailchimp_result = 'Mailchimp export not attempted with this search'
