@@ -49,18 +49,20 @@ $(document).on('ready page:load',function() {
       if(should_prevent_default === true){
         event.preventDefault();
       }else{
+        // used in the old cart system
         // add person_id to our hidden field
         // also add it to our cart session!
 
-        if (typeof attrs.id !== 'undefined' && attrs.type !== 'tag'){
-          var eid = parseInt(attrs.id);
-          var old_values = hidden_input_to_array();
-          old_values.push(eid);
-          old_values = $.unique(old_values);
+        // do not use
+        // if (typeof attrs.id !== 'undefined' && attrs.type !== 'tag'){
+        //   var eid = parseInt(attrs.id);
+        //   var old_values = hidden_input_to_array();
+        //   old_values.push(eid);
+        //   old_values = $.unique(old_values);
 
-          $(hiddenInput).val(old_values);
-          $.ajax('/v2/cart/add/'+ attrs.id)
-        }
+        //   $(hiddenInput).val(old_values);
+        //   $.ajax('/v2/cart/add/'+ attrs.id)
+        // }
       }
     });
 
@@ -69,21 +71,23 @@ $(document).on('ready page:load',function() {
       $(tokenSelector).tokenfield('createTokensFromInput');
     });
 
+    // used for the old "cart system"
+
     // remove old valued from hidden form
-    $(tokenSelector).on('tokenfield:removetoken',function(e){
-      if (e.attrs.type !== 'tag') {
-        var old_values = hidden_input_to_array();
-        var index = old_values.indexOf(e.attrs.id);
-        old_values.splice(index, 1);
-        $.unique(old_values);
-        $.ajax('/v2/cart/delete/' + e.attrs.id)
-          .done(function(){
-            // we successfully removed the person from the cart
-            $(hiddenInput).val(old_values.toString());
-            return true;
-          }).error(function(){return false;})
-      }
-    });
+    // $(tokenSelector).on('tokenfield:removetoken',function(e){
+    //   if (e.attrs.type !== 'tag') {
+    //     var old_values = hidden_input_to_array();
+    //     var index = old_values.indexOf(e.attrs.id);
+    //     old_values.splice(index, 1);
+    //     $.unique(old_values);
+    //     $.ajax('/v2/cart/delete/' + e.attrs.id)
+    //       .done(function(){
+    //         // we successfully removed the person from the cart
+    //         $(hiddenInput).val(old_values.toString());
+    //         return true;
+    //       }).error(function(){return false;})
+    //   }
+    // });
 
     // sometimes we get null and undefined here.
     var hidden_input_to_array = function(){

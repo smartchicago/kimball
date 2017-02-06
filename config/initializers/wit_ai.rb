@@ -1,5 +1,7 @@
 require 'wit'
 
+# DO NOT USE. BROKEN. HORRIBLE. EVIL.
+
 # note, context: it's a hash with string keys. allways string keys
 # that's because we save it in json in redis for reuse
 actions = {

@@ -1,5 +1,0 @@
-<% Array(@deleted).each do |delete| %>
-$('#<%= delete %>-cart-delete').hide();
-$('#<%= delete %>-cart-add').show();
-<% end %>
-$('#cart-size').html('<%= (session[:cart] ||= []).size %>');

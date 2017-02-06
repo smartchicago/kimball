@@ -70,7 +70,7 @@ class SearchController < ApplicationController
     @mailchimp_result = 'Mailchimp export not attempted with this search'
 
     respond_to do |format|
-      format.json { @results.map { |r| r['type'] = 'person' }.to_json }
+      format.json { @results }
       format.html do
         if params[:segment_name].present?
           list_name = params.delete(:segment_name)
