@@ -39,25 +39,35 @@ class GiftCard < ActiveRecord::Base
   belongs_to :user
   validates_presence_of :amount
   validates_presence_of :reason
+  validates_presence_of :batch_id
+  validates_presence_of :proxy_id
 
-  validates_format_of :expiration_date, with: /\A(0|1)([0-9])\/([0-9]{2})\z/i, unless: proc { |c| c.expiration_date.blank? }
+  validates_format_of :expiration_date,
+                      with: /\A(0|1)([0-9])\/([0-9]{2})\z/i,
+                      unless: proc { |c| c.expiration_date.blank? }
 
   validates_length_of :proxy_id, is: 4, unless: proc { |c| c.proxy_id.blank? }
 
-  validates_uniqueness_of :proxy_id, scope: :batch_id
-  validates_uniqueness_of :gift_card_number, scope: :batch_id
+  validates_uniqueness_of :proxy_id,
+                          scope: :batch_id,
+                          unless: proc { |c| c.proxy_id.blank? }
 
-  validates_presence_of :batch_id
-  validates_uniqueness_of :gift_card_number, scope: :batch_id
+  validates_uniqueness_of :gift_card_number,
+                          scope: :batch_id,
+                          unless: proc { |c| c.gift_card_number.blank? }
 
-  validates_format_of :gift_card_number, with: /\A([0-9]){4,5}\z/i
+  validates_format_of :gift_card_number,
+                      with: /\A([0-9]){4,5}\z/i,
+                      unless: proc { |c| c.gift_card_number.blank? }
+
+  # Validation to limit 1 signup per person
   validates_uniqueness_of :reason, scope: :person_id, if: "reason == 'signup'"
 
   # ransacker :created_at, type: :date do
   #   Arel.sql('date(created_at)')
   # end
 
-  # Need to add validation to limit 1 signup per person
+
 
   def self.batch_create(post_content)
     # begin exception handling

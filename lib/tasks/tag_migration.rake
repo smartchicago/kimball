@@ -20,7 +20,9 @@ namespace :tag_migration do
 				# use below if we want owned tags.
 				#		user = user.find{|u| u.id == v.created_by}
 				#		user.tag(person, with: v, on: 'tags') # keeps the relationships
-				person.delay.tag_list.add(v)
+				next if person.nil? || v.blank?
+				person.tag_list.add(v)
+				person.save
 			rescue Exception => e
 				 errors << [k,e]
 			end
