@@ -37,10 +37,11 @@ class TaggingsController < ApplicationController
       end
     else
       respond_to do |format|
-
-        format.js { render text: "console.log('tag save error');
+        format.js do
+          render text: "console.log('tag save error');
           $('#tagging_name').val('');
-          $('input#tag-typeahead').typeahead('val','');" }
+          $('input#tag-typeahead').typeahead('val','');"
+        end
       end
     end
   end
