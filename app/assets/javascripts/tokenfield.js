@@ -8,9 +8,8 @@ $(document).on('ready page:load',function() {
   var tokenSelector = '.tokenfield';
   if ($(tokenSelector).length) {
     var bloodhound, filter, tokenSelector, cached_suggestions;
-    var hiddenInput, searchUrl, prePopulate;
+    var searchUrl, prePopulate;
 
-    hiddenInput  = $("[data-submit-id]").data().submitId.toString();
     searchUrl    = $("[data-search-url]").data().searchUrl.toString();
     prePopulate  = $("[data-pre-populate]").data().prePopulate;
 
@@ -48,21 +47,6 @@ $(document).on('ready page:load',function() {
       // failed the tests above
       if(should_prevent_default === true){
         event.preventDefault();
-      }else{
-        // used in the old cart system
-        // add person_id to our hidden field
-        // also add it to our cart session!
-
-        // do not use
-        // if (typeof attrs.id !== 'undefined' && attrs.type !== 'tag'){
-        //   var eid = parseInt(attrs.id);
-        //   var old_values = hidden_input_to_array();
-        //   old_values.push(eid);
-        //   old_values = $.unique(old_values);
-
-        //   $(hiddenInput).val(old_values);
-        //   $.ajax('/v2/cart/add/'+ attrs.id)
-        // }
       }
     });
 
@@ -71,41 +55,6 @@ $(document).on('ready page:load',function() {
       $(tokenSelector).tokenfield('createTokensFromInput');
     });
 
-    // used for the old "cart system"
-
-    // remove old valued from hidden form
-    // $(tokenSelector).on('tokenfield:removetoken',function(e){
-    //   if (e.attrs.type !== 'tag') {
-    //     var old_values = hidden_input_to_array();
-    //     var index = old_values.indexOf(e.attrs.id);
-    //     old_values.splice(index, 1);
-    //     $.unique(old_values);
-    //     $.ajax('/v2/cart/delete/' + e.attrs.id)
-    //       .done(function(){
-    //         // we successfully removed the person from the cart
-    //         $(hiddenInput).val(old_values.toString());
-    //         return true;
-    //       }).error(function(){return false;})
-    //   }
-    // });
-
-    // sometimes we get null and undefined here.
-    var hidden_input_to_array = function(){
-      var hidden_val = $(hiddenInput).val();
-      var arr = []
-      if (typeof hidden_val === 'undefined') {
-        return arr
-      }else{
-         arr = $.grep(hidden_val.split(','),function(n){
-          if (typeof n !== 'undefined') {
-            return(parseInt(n));
-          }
-        });
-         arr = $.map(arr,function(n){return parseInt(n)});
-         arr = $.unique(arr);
-        return arr;
-      }
-    }
 
     //filter pre-existing tags from the tagfield
     var filter = function(suggestions) {
