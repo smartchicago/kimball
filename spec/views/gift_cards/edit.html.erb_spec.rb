@@ -18,17 +18,17 @@ RSpec.describe 'gift_cards/edit', type: :view do
     render
 
     assert_select 'form[action=?][method=?]', gift_card_path(@gift_card), 'post' do
-      assert_select 'input#gift_card_gift_card_number[name=?]', 'gift_card[gift_card_number]'
 
-      assert_select 'input#gift_card_batch_id[name=?]', 'gift_card[batch_id]'
+      assert_select 'input[name=?]', 'gift_card[gift_card_number]'
 
-      assert_select 'input#gift_card_person_id[name=?]', 'gift_card[person_id]'
+      assert_select 'input[name=?]', 'gift_card[batch_id]'
 
-      assert_select 'input#gift_card_notes[name=?]', 'gift_card[notes]'
+      assert_select 'input[name=?]', 'gift_card[person_id]'
 
-      assert_select 'input#gift_card_created_by[name=?]', 'gift_card[created_by]'
+      assert_select 'input[name=?]', 'gift_card[notes]'
 
-      assert_select 'input#gift_card_reason[name=?]', 'gift_card[reason]'
+      assert_select 'input[name=?]', 'gift_card[created_by]'
+
     end
   end
 end
