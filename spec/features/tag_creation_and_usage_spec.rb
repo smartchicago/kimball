@@ -19,7 +19,7 @@ feature 'tag person'  do
     sleep 1 # wait for our page to save
     # gotta reload so that we don't cache tags
     person.reload
-    found_tag = person.taggings.first ? person.taggings.first.tag.name : false
+    found_tag = person.tag_list.first ? person.tag_list.first : false
     expect(found_tag).to eq(tag_name)
 
     visit "/people/#{person.id}"

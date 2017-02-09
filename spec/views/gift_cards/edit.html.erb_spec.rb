@@ -5,7 +5,8 @@ RSpec.describe 'gift_cards/edit', type: :view do
     @gift_card = assign(:gift_card, GiftCard.create!(
                                       gift_card_number: 99996,
                                       person_id: 1,
-                                      batch_id: 1,
+                                      batch_id: Faker::Number.number(10),
+                                      proxy_id: Faker::Number.number(4),
                                       notes: 'MyString',
                                       created_by: 1,
                                       reason: 1,

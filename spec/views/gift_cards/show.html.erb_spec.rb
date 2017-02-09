@@ -7,6 +7,8 @@ RSpec.describe 'gift_cards/show', type: :view do
                                       person_id: 2,
                                       notes: 'Notes',
                                       created_by: 3,
+                                      proxy_id: '4567',
+                                      batch_id: 1,
                                       reason: 'signup',
                                       expiration_date: '11/22'
     ))
@@ -19,5 +21,6 @@ RSpec.describe 'gift_cards/show', type: :view do
     expect(rendered).to match(/Notes/)
     expect(rendered).to match(/3/)
     expect(rendered).to match(/4/)
+    expect(rendered).to match(/4567/)
   end
 end

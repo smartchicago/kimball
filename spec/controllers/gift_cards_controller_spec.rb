@@ -33,7 +33,7 @@ RSpec.describe GiftCardsController, type: :controller do
       reason: 'signup',
       expiration_date: '05/20',
       proxy_id: '4321',
-      batch_id: '4321',
+      batch_id: 4321,
       gift_card_number: '99998'
     }
   }
