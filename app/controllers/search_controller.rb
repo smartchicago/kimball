@@ -5,60 +5,6 @@ class SearchController < ApplicationController
   include PeopleHelper
   include GsmHelper
 
-  # FIXME: Refactor and re-enable cop
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-  #
-  def index
-    # no pagination for CSV export
-    per_page = request.format.to_s.eql?('text/csv') ? 10000 : Person.per_page
-    @results = if index_params[:q]
-                 Person.search index_params[:q], per_page: per_page, page: (index_params[:page] || 1)
-               elsif index_params[:adv]
-                 Person.complex_search(index_params, per_page) # FIXME: more elegant solution for returning all records
-               else
-                 []
-               end
-    @tags = index_params[:tags].blank? ? '[]' : Tag.where(name: index_params[:tags].split(',').map(&:strip)).to_json(methods: [:value, :label, :type])
-
-    respond_to do |format|
-      format.json { @results.map { |r| r['type'] = 'person' }.to_json }
-      format.html {}
-      format.csv do
-        fields = Person.column_names
-        fields.push('tags')
-        output = CSV.generate do |csv|
-          # Generate the headers
-          csv << fields.map(&:titleize)
-
-          # Some fields need a helper method
-          human_devices = %w(primary_device_id secondary_device_id)
-          human_connections = %w(primary_connection_id secondary_connection_id)
-
-          # Write the results
-          @results.each do |person|
-            csv << fields.map do |f|
-              field_value = person[f]
-              if human_devices.include? f
-                human_device_type_name(field_value)
-              elsif human_connections.include? f
-                human_connection_type_name(field_value)
-              elsif f == 'tags'
-                if person.tag_values.blank?
-                  ''
-                else
-                  person.tag_values.join('|')
-                end
-              else
-                field_value
-              end
-            end
-          end
-        end
-        send_data output
-      end
-    end
-  end
-
   def index_ransack
     @q = Person.ransack(params[:q])
     @results = @q.result.includes(:tags).page(params[:page])
