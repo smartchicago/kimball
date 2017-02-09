@@ -26,14 +26,14 @@ class Public::PeopleController < ApplicationController
 
     success_msg = 'Thanks! We will be in touch soon!'
     error_msg   = "Oops! Looks like something went wrong. Please get in touch with us at <a href='mailto:#{ENV['MAILER_SENDER']}?subject=Patterns sign up problem'>#{ENV['MAILER_SENDER']}</a> to figure it out!"
-      @person.tag_list.add(params[:age_range]) unless params[:age_range].blank?
-      @person.tag_list.add(params[:referral]) unless params[:referral].blank?
-    if @person.save
-      msg =  success_msg
+    @person.tag_list.add(params[:age_range]) unless params[:age_range].blank?
+    @person.tag_list.add(params[:referral]) unless params[:referral].blank?
+    msg = if @person.save
+            success_msg
 
-    else
-      msg = error_msg
-    end
+          else
+            error_msg
+          end
 
     respond_to do |format|
       @msg = msg

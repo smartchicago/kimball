@@ -33,25 +33,27 @@ RSpec.describe MailchimpUpdatesController, type: :controller do
 
   let(:invalid_attributes) { { email: 'sdaf', update_type: 'none', fired_at: '2016-03-30 13:01:21' } }
 
-  let(:valid_params){ {
-    mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'],
-    type: 'unsubscribe',
-    fired_at: '2016-03-30 13:01:21',
-    data: {
-      email: Faker::Internet.email,
-      reason: Faker::Company.buzzword
-    }
-  } }
+  let(:valid_params) {
+    {
+      mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'],
+      type: 'unsubscribe',
+      fired_at: '2016-03-30 13:01:21',
+      data: {
+        email: Faker::Internet.email,
+        reason: Faker::Company.buzzword
+      }
+    } }
 
-  let(:invalid_params){ {
-    mailchimpkey: "hasdfasdfasd",
-    type: 'foobar',
-    fired_at: nil,
-    data: {
-      email: Faker::Company.buzzword,
-      reason: nil
-    }
-  } }
+  let(:invalid_params) {
+    {
+      mailchimpkey: 'hasdfasdfasd',
+      type: 'foobar',
+      fired_at: nil,
+      data: {
+        email: Faker::Company.buzzword,
+        reason: nil
+      }
+    } }
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # MailchimpUpdatesController. Be sure to keep this updated too.
@@ -93,20 +95,19 @@ RSpec.describe MailchimpUpdatesController, type: :controller do
   describe 'POST #create' do
     context 'with valid params' do
       it 'creates a new MailchimpUpdate' do
-
         expect {
-          post :create, valid_params, format: :json
+          post :create, params: valid_params, headers: { format: :json }
         }.to change(MailchimpUpdate, :count).by(1)
       end
 
       it 'assigns a newly created mailchimp_update as @mailchimp_update' do
-        post :create, valid_params
+        post :create, params: valid_params
         expect(assigns(:mailchimp_update)).to be_a(MailchimpUpdate)
         expect(assigns(:mailchimp_update)).to be_persisted
       end
 
       it 'redirects to the created mailchimp_update' do
-        post :create, valid_params
+        post :create, params: valid_params
         expect(response).to redirect_to(MailchimpUpdate.last)
       end
     end
@@ -114,15 +115,15 @@ RSpec.describe MailchimpUpdatesController, type: :controller do
     context 'with invalid params' do
       it 'assigns a newly created but unsaved mailchimp_update as @mailchimp_update' do
         skip("don't know what this does")
-        post :create, invalid_params
+        post :create, params: invalid_params
 
         expect(assigns(:mailchimp_update)).to be_a_new(MailchimpUpdate)
       end
 
-      it "returns 400 error" do
-        post :create, invalid_params
+      it 'returns 400 error' do
+        post :create, params: invalid_params
         expect(response.status).to eq(400)
-        #expect(response).to render_template('new')
+        # expect(response).to render_template('new')
       end
     end
   end
@@ -134,7 +135,7 @@ RSpec.describe MailchimpUpdatesController, type: :controller do
       it 'updates the requested mailchimp_update' do
         skip('unknown, routing issue')
         mailchimp_update = MailchimpUpdate.create! valid_attributes
-        put :update, { id: mailchimp_update.to_param, mailchimp_update: new_attributes }
+        put :update, params: { id: mailchimp_update.to_param, mailchimp_update: new_attributes }
         mailchimp_update.reload
         skip('Add assertions for updated state')
       end
@@ -142,14 +143,14 @@ RSpec.describe MailchimpUpdatesController, type: :controller do
       it 'assigns the requested mailchimp_update as @mailchimp_update' do
         skip('unknown, routing issue')
         mailchimp_update = MailchimpUpdate.create! valid_attributes
-        put :update, { id: mailchimp_update.to_param, mailchimp_update: valid_attributes }
+        put :update, params: { id: mailchimp_update.to_param, mailchimp_update: valid_attributes }
         expect(assigns(:mailchimp_update)).to eq(mailchimp_update)
       end
 
       it 'redirects to the mailchimp_update' do
         skip('unknown, routing issue')
         mailchimp_update = MailchimpUpdate.create! valid_attributes
-        put :update, { id: mailchimp_update.to_param, mailchimp_update: valid_attributes }
+        put :update, params: { id: mailchimp_update.to_param, mailchimp_update: valid_attributes }
         expect(response).to redirect_to(mailchimp_update)
       end
     end
@@ -158,14 +159,14 @@ RSpec.describe MailchimpUpdatesController, type: :controller do
       it 'assigns the mailchimp_update as @mailchimp_update' do
         skip('unknown, routing issue')
         mailchimp_update = MailchimpUpdate.create! valid_attributes
-        put :update, { id: mailchimp_update.to_param, mailchimp_update: invalid_attributes }
+        put :update, params: { id: mailchimp_update.to_param, mailchimp_update: invalid_attributes }
         expect(assigns(:mailchimp_update)).to eq(mailchimp_update)
       end
 
       it "re-renders the 'edit' template" do
         skip('Will fix invalid tests later')
         mailchimp_update = MailchimpUpdate.create! valid_attributes
-        put :update, { id: mailchimp_update.to_param, mailchimp_update: invalid_attributes }
+        put :update, params: { id: mailchimp_update.to_param, mailchimp_update: invalid_attributes }
         expect(response).to render_template('edit')
       end
     end
@@ -176,14 +177,14 @@ RSpec.describe MailchimpUpdatesController, type: :controller do
       skip('unknown, routing issue')
       mailchimp_update = MailchimpUpdate.create! valid_attributes
       expect {
-        delete :destroy, { id: mailchimp_update.to_param }
+        delete :destroy, params: { id: mailchimp_update.to_param }
       }.to change(MailchimpUpdate, :count).by(-1)
     end
 
     it 'redirects to the mailchimp_updates list' do
       skip('unknown, routing issue')
       mailchimp_update = MailchimpUpdate.create! valid_attributes
-      delete :destroy, { id: mailchimp_update.to_param }
+      delete :destroy, params: { id: mailchimp_update.to_param }
       expect(response).to redirect_to(mailchimp_updates_url)
     end
   end

@@ -4,29 +4,29 @@ RSpec.describe 'gift_cards/index', type: :view do
   before(:each) do
     person = FactoryGirl.create(:person)
     a = GiftCard.create!(
-               gift_card_number: 12345,
-               batch_id: 1,
-               proxy_id: '0432',
-               person_id: person.id,
-               notes: 'Notes',
-               created_by: 3,
-               reason: 'signup',
-               expiration_date: '11/22'
-             )
-     b = GiftCard.create!(
-       gift_card_number: 12346,
-       batch_id: 1,
-       proxy_id: '4321',
-       person_id: person.id,
-       notes: 'Notes',
-       created_by: 3,
-       reason: 'interview',
-       expiration_date: '11/22'
-     )
-    assign(:gift_cards, GiftCard.paginate(page: 1, per_page: 5).find([a.id,b.id]))
+      gift_card_number: 12345,
+      batch_id: 1,
+      proxy_id: '0432',
+      person_id: person.id,
+      notes: 'Notes',
+      created_by: 3,
+      reason: 'signup',
+      expiration_date: '11/22'
+    )
+    b = GiftCard.create!(
+      gift_card_number: 12346,
+      batch_id: 1,
+      proxy_id: '4321',
+      person_id: person.id,
+      notes: 'Notes',
+      created_by: 3,
+      reason: 'interview',
+      expiration_date: '11/22'
+    )
+    assign(:gift_cards, GiftCard.paginate(page: 1, per_page: 5).find([a.id, b.id]))
     ## this is an ugly hack to get this to
-    assign(:recent_signups,GiftCard.paginate(page: 1, per_page: 5))
-    assign(:q_recent_signups,Person.ransack)
+    assign(:recent_signups, GiftCard.paginate(page: 1, per_page: 5))
+    assign(:q_recent_signups, Person.ransack)
     assign(:new_gift_cards, [])
     assign(:q_giftcards, GiftCard.ransack)
   end
