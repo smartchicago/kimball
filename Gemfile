@@ -85,7 +85,7 @@ gem 'unicorn'
 gem 'twitter-bootstrap-rails', '~> 2.2.0'
 
 # use tire for ElasticSearch integration
-gem 'tire' # no longer needed
+# gem 'tire' # no longer needed
 
 # pagniate with will_paginate: https://github.com/mislav/will_paginate
 gem 'will_paginate'
