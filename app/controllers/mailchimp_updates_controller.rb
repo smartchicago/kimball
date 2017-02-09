@@ -26,7 +26,8 @@ class MailchimpUpdatesController < ApplicationController
 
   # GET /mailchimp_updates/1
   # GET /mailchimp_updates/1.json
-  def show; end
+  def show
+  end
 
   # GET /mailchimp_updates/new
   def new
@@ -34,7 +35,8 @@ class MailchimpUpdatesController < ApplicationController
   end
 
   # GET /mailchimp_updates/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /mailchimp_updates
   # POST /mailchimp_updates.json
@@ -51,14 +53,17 @@ class MailchimpUpdatesController < ApplicationController
 
       respond_to do |format|
         if @mailchimp_update.save
-          format.html { redirect_to mailchimp_updates_path, notice: 'Mailchimp update was successfully created.' }
+          format.html { redirect_to @mailchimp_update, notice: 'Mailchimp update was successfully created.' }
           format.json { render action: 'show', status: :created, location: @mailchimp_update }
 
         else
-          Rails.logger.warn('MailchimpUpdatesController#create: Received new update with bad secret key.')
-          head '400'
+          Rails.logger.warn('MailchimpUpdatesController#create: Received new update with invalid data')
+          render nothing: true, status: 400
         end
       end
+    else
+      Rails.logger.warn('MailchimpUpdatesController#create: Received new update with bad secret key.')
+      render nothing: true, status: 400
     end
   end
 

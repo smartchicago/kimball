@@ -144,9 +144,6 @@ gem 'aasm'
 # cron jobs for backups and sending reminders
 gem 'whenever', require: false
 
-# natural language processing API
-gem 'wit'
-
 # handling emoji!
 gem 'emoji', git: 'https://github.com/cromulus/emoji', branch: 'add_replace_unicode_moji_with_name'
 
