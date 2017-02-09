@@ -27,8 +27,7 @@ class ApplicationsController < ApplicationController
 
   # GET /applications/1
   # GET /applications/1.json
-  def show
-  end
+  def show; end
 
   # GET /applications/new
   def new
@@ -36,8 +35,7 @@ class ApplicationsController < ApplicationController
   end
 
   # GET /applications/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /applications
   # POST /applications.json

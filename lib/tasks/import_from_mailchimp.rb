@@ -57,7 +57,7 @@ class MailChimpImporter
     $stdout.puts 'starting wufoo import'
     count = 0
     CSV.foreach(@options.wufoo_infile, headers: :first_row) do |line|
-      person = Person.find_by_email_address(line['Email'])
+      person = Person.find_by(email_address: line['Email'])
 
       if person.blank?
         $stderr.puts("\n[load_wufoo_csv] skipping import of #{line['Email']}")

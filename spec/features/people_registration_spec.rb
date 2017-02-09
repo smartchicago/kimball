@@ -21,6 +21,7 @@ end
 def complete_form_with_invalid_data
   click_button 'Save'
 end
+
 def complete_form_with_valid_data
   person = FactoryGirl.build(:person)
   fill_in 'First name', with: person.first_name

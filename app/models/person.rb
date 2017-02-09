@@ -43,7 +43,7 @@
 class Person < ActiveRecord::Base
   has_paper_trail
 
-  acts_as_taggable #new, better tagging system
+  acts_as_taggable # new, better tagging system
 
   # include Searchable
   include ExternalDataMappings
@@ -111,9 +111,9 @@ class Person < ActiveRecord::Base
         [Arel::Nodes.build_quoted(' '), parent.table[:first_name], parent.table[:last_name]])])
   end
 
-  scope :ransack_tagged_with, ->(*tags){ tagged_with(tags) }
+  scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
 
-  def self.ransackable_scopes(auth_object = nil)
+  def self.ransackable_scopes(_auth_object = nil)
     %i(no_signup_card ransack_tagged_with)
   end
 
@@ -259,7 +259,7 @@ class Person < ActiveRecord::Base
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Style/MethodName, Metrics/BlockNesting, Style/VariableName, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # FIXME: Refactor and re-enable cop
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Rails/TimeZone, Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/PerceivedComplexity
   #
   def self.initialize_from_wufoo(params)
     new_person = Person.new

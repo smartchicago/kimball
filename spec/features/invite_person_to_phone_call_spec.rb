@@ -15,7 +15,7 @@ feature 'Invite person to a phone call' do
 
     admin_email = ENV['MAILER_SENDER']
 
-    research_subjects.each {|r|
+    research_subjects.each { |r|
       fill_in_autocomplete '#v2_event_invitation_people-tokenfield', r.full_name
       wait_for_ajax
       sleep 1

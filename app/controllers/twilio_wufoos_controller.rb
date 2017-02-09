@@ -29,8 +29,7 @@ class TwilioWufoosController < ApplicationController
 
   # GET /twilio_wufoos/1
   # GET /twilio_wufoos/1.json
-  def show
-  end
+  def show; end
 
   # GET /twilio_wufoos/new
   def new
@@ -39,8 +38,7 @@ class TwilioWufoosController < ApplicationController
   end
 
   # GET /twilio_wufoos/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /twilio_wufoos
   # POST /twilio_wufoos.json

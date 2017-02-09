@@ -44,8 +44,7 @@ class TwilioMessagesController < ApplicationController
     # @twilio_messages = TwilioMessage.all
   end
 
-  def sendmessages
-  end
+  def sendmessages; end
 
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Style/VariableName
@@ -94,8 +93,7 @@ class TwilioMessagesController < ApplicationController
 
   # GET /twilio_messages/1
   # GET /twilio_messages/1.json
-  def show
-  end
+  def show; end
 
   # GET /twilio_messages/new
   def new

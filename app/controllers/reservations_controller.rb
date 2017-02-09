@@ -25,8 +25,7 @@ class ReservationsController < ApplicationController
 
   # GET /reservations/1
   # GET /reservations/1.json
-  def show
-  end
+  def show; end
 
   # GET /reservations/new
   def new
@@ -34,8 +33,7 @@ class ReservationsController < ApplicationController
   end
 
   # GET /reservations/1/edit
-  def edit
-  end
+  def edit; end
 
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Metrics/MethodLength

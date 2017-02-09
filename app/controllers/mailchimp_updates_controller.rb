@@ -26,8 +26,7 @@ class MailchimpUpdatesController < ApplicationController
 
   # GET /mailchimp_updates/1
   # GET /mailchimp_updates/1.json
-  def show
-  end
+  def show; end
 
   # GET /mailchimp_updates/new
   def new
@@ -35,8 +34,7 @@ class MailchimpUpdatesController < ApplicationController
   end
 
   # GET /mailchimp_updates/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /mailchimp_updates
   # POST /mailchimp_updates.json

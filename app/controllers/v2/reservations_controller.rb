@@ -69,8 +69,7 @@ class V2::ReservationsController < ApplicationController
     @comment = Comment.new commentable: @reservation
   end
 
-  def edit
-  end
+  def edit; end
 
   # these are our methods to
   def confirm

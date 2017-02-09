@@ -1,5 +1,4 @@
 # FIXME: Refactor
-# rubocop:disable ClassLength
 class V2::SmsReservationsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create]
   skip_before_action :authenticate_user!
@@ -39,17 +38,6 @@ class V2::SmsReservationsController < ApplicationController
       end
     elsif calendar?
       ::ReservationReminderSms.new(to: person, reservations: person.v2_reservations.for_today_and_tomorrow).send
-    else
-
-      # this whole thing is broken.
-
-
-      # str_context = Redis.current.get("wit_context:#{person.id}")
-      # # we don't know what event_id we're talking about here
-      # send_error_notification && return if str_context.nil?
-      # context = JSON.parse(str_context)
-      # event_id = Redis.current.get("event_lock:#{person.id}") || Time.zone.today.to_s
-      # ::WitClient.run_actions "#{person.id}_#{event_id}_#{Rails.env}", message, context
     end
     # twilio wants an xml response.
     render text: '<?xml version="1.0" encoding="UTF-8" ?><Response></Response>'

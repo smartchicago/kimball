@@ -35,7 +35,7 @@ describe V2::SmsReservationsController do
     describe 'research subject replies' do
       let(:message) { twiml_message(research_subject.phone_number, body, to: twilio_phone_number) }
 
-      subject { post :create, message }
+      subject { post :create, params: message }
 
       context 'responds yes to invtiation' do
         let(:body) { 'yes' }
@@ -100,7 +100,7 @@ describe V2::SmsReservationsController do
         let(:selected_number) { 'a' }
         let(:body) { "#{event.id}#{selected_number}" }
         let(:time_slot) { event.time_slots.first }
-        let(:reservation){
+        let(:reservation) {
           V2::Reservation.create(user: event_invitation.user,
                              event: event,
                              event_invitation: event_invitation,
@@ -135,7 +135,7 @@ describe V2::SmsReservationsController do
 
       context 'confirming a reservation' do
         let(:body) { 'confirm' }
-        let(:reservation){
+        let(:reservation) {
           V2::Reservation.create(user: event_invitation.user,
                              event: event,
                              event_invitation: event_invitation,
@@ -157,7 +157,7 @@ describe V2::SmsReservationsController do
 
       context 'Cancelling a reservation' do
         let(:body) { 'cancel' }
-        let(:reservation){
+        let(:reservation) {
           V2::Reservation.create(user: event_invitation.user,
                              event: event,
                              event_invitation: event_invitation,
@@ -177,7 +177,7 @@ describe V2::SmsReservationsController do
 
       context 'Requesting the calendar' do
         let(:body) { 'Calendar' }
-        let(:reservation){
+        let(:reservation) {
           V2::Reservation.create(user: event_invitation.user,
                              event: event,
                              event_invitation: event_invitation,

@@ -77,12 +77,11 @@ class PeopleController < ApplicationController
   end
 
   # GET /people/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /people/:person_id/deactivate
   def deactivate
-    @person = Person.find_by_id params[:person_id]
+    @person = Person.find_by id: params[:person_id]
     @person.deactivate!('admin_interface')
     flash[:notice] = "#{@person.full_name} deactivated"
     respond_to do |format|

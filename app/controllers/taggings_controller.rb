@@ -26,8 +26,8 @@ class TaggingsController < ApplicationController
       unless obj.tag_list.include?(params[:tag])
         obj.tag_list.add(params[:tag])
         res = obj.save
-        tag = ActsAsTaggableOn::Tag.find_by_name(params[:tag])
-        @tagging = obj.taggings.find_by_tag_id(tag.id)
+        tag = ActsAsTaggableOn::Tag.find_by(name: params[:tag])
+        @tagging = obj.taggings.find_by(tag_id: tag.id)
       end
     end
 
