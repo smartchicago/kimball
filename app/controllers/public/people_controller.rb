@@ -26,10 +26,11 @@ class Public::PeopleController < ApplicationController
 
     success_msg = 'Thanks! We will be in touch soon!'
     error_msg   = "Oops! Looks like something went wrong. Please get in touch with us at <a href='mailto:#{ENV['MAILER_SENDER']}?subject=Patterns sign up problem'>#{ENV['MAILER_SENDER']}</a> to figure it out!"
+      @person.tag_list.add(params[:age_range]) unless params[:age_range].blank?
+      @person.tag_list.add(params[:referral]) unless params[:referral].blank?
     if @person.save
       msg =  success_msg
-      add_tag(params[:age_range]) unless params[:age_range].blank?
-      add_tag(params[:referral]) unless params[:referral].blank?
+
     else
       msg = error_msg
     end
@@ -84,15 +85,5 @@ class Public::PeopleController < ApplicationController
 
     def allow_iframe
       response.headers.except! 'X-Frame-Options'
-    end
-
-    def add_tag(tag)
-      tag = Tag.find_or_initialize_by(name: tag)
-      tag.created_by ||= 1 # first user.
-      tag.save!
-      Tagging.create(taggable_type: 'Person',
-                     taggable_id: @person.id,
-                     created_by: 1,
-                     tag: tag)
     end
 end

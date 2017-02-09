@@ -51,7 +51,7 @@ class MailchimpUpdatesController < ApplicationController
 
       respond_to do |format|
         if @mailchimp_update.save
-          format.html { redirect_to @mailchimp_update, notice: 'Mailchimp update was successfully created.' }
+          format.html { redirect_to mailchimp_updates_path, notice: 'Mailchimp update was successfully created.' }
           format.json { render action: 'show', status: :created, location: @mailchimp_update }
 
         else
