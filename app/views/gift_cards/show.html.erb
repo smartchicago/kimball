@@ -6,10 +6,14 @@
 </p>
 
 <p>
-  <strong>Tracking:</strong>
-  Batch: <%= @gift_card.batch_id %> Proxy: <%= @gift_card.proxy_id %>
+  <strong>Batch ID:</strong>
+  <%= @gift_card.batch_id %>
 </p>
 
+<p>
+  <strong>Proxy ID:</strong>
+  <%= @gift_card.proxy_id %>
+</p>
 
 <p>
   <strong>Expiration date:</strong>
@@ -18,7 +22,7 @@
 
 <p>
   <strong>Person:</strong>
-  <%= @gift_card.person_id %>
+  <%= link_to @gift_card.person.full_name, @gift_card.person %>
 </p>
 
 <p>
@@ -28,7 +32,7 @@
 
 <p>
   <strong>Created by:</strong>
-  <%= @gift_card.created_by %>
+  <%= @gift_card.user.email_address %>
 </p>
 
 <p>

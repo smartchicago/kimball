@@ -1,4 +1,4 @@
-# == Schema Information
+ # == Schema Information
 #
 # Table name: gift_cards
 #
@@ -36,7 +36,7 @@ class GiftCard < ActiveRecord::Base
 
   belongs_to :giftable, polymorphic: true, touch: true
   belongs_to :person
-  belongs_to :user
+  belongs_to :user, foreign_key: :created_by
   validates_presence_of :amount
   validates_presence_of :reason
   validates_presence_of :batch_id
