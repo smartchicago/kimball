@@ -80,27 +80,42 @@ RSpec.describe MailchimpUpdatesController, type: :controller do
       end
 
       it 'assigns a newly created mailchimp_update as @mailchimp_update' do
-        post :create, params: { mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'], data: { email: Faker::Internet.email }, mailchimp_update: valid_attributes }
+        post :create,
+          params: { mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'],
+                    data: { email: Faker::Internet.email },
+                    mailchimp_update: valid_attributes},
+          format: :json
         expect(assigns(:mailchimp_update)).to be_a(MailchimpUpdate)
         expect(assigns(:mailchimp_update)).to be_persisted
       end
 
       it 'redirects to the created mailchimp_update' do
-        post :create, params: { mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'], data: { email: Faker::Internet.email }, mailchimp_update: valid_attributes }
+        post :create,
+          params: { mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'],
+                    data: { email: Faker::Internet.email },
+                    mailchimp_update: valid_attributes },
+          format: :json
         expect(response).to redirect_to(MailchimpUpdate.last)
       end
     end
 
     context 'with invalid params' do
       it 'assigns a newly created but unsaved mailchimp_update as @mailchimp_update' do
-        skip('Will fix invalid tests later')
-        post :create, params: { mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'], data: { email: Faker::Internet.email }, mailchimp_update: invalid_attributes }
+        post :create,
+          params: { mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'],
+            data: { email: Faker::Internet.email },
+            mailchimp_update: invalid_attributes },
+          format: :json
+
         expect(assigns(:mailchimp_update)).to be_a_new(MailchimpUpdate)
       end
 
       it "re-renders the 'new' template" do
-        skip('Will fix invalid tests later')
-        post :create, params: { mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'], data: { email: Faker::Internet.email }, mailchimp_update: invalid_attributes }
+        post :create,
+          params: { mailchimpkey: ENV['MAILCHIMP_WEBHOOK_SECRET_KEY'],
+            data: { email: Faker::Internet.email },
+            mailchimp_update: invalid_attributes },
+          format: :json
         expect(response).to render_template('new')
       end
     end

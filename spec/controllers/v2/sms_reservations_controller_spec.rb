@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe V2::SmsReservationsController do
+xdescribe V2::SmsReservationsController do
   include SmsSpec::Helpers
 
   let(:twilio_phone_number) { ENV['TWILIO_SCHEDULING_NUMBER'] }
@@ -20,15 +20,6 @@ describe V2::SmsReservationsController do
 
   before do
     clear_messages
-    test_context = { person_id: research_subject.id,
-                event_id: event_invitation.id,
-                'reference_time' => event_invitation.start_datetime,
-                'reference_time_slot' =>  event_invitation.bot_duration }.to_json
-    Redis.current.set("wit_context:#{research_subject.id}", test_context)
-  end
-
-  after do
-    Redis.current.del("wit_context:#{research_subject.id}")
   end
 
   describe 'POST #create' do
