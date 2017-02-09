@@ -1,6 +1,6 @@
 namespace :tag_migration do
 	desc "Bulk add taggings by Id"
-	task :migrate  do
+	task :migrate => :environment  do
 		PaperTrail.enabled = false
 		tags_results = ActiveRecord::Base.connection.exec_query('SELECT * FROM old_tags')
 		taggings_results = ActiveRecord::Base.connection.exec_query('SELECT * FROM old_taggings')
@@ -20,7 +20,7 @@ namespace :tag_migration do
 				# use below if we want owned tags.
 				#		user = user.find{|u| u.id == v.created_by}
 				#		user.tag(person, with: v, on: 'tags') # keeps the relationships
-				person.tag_list.add(v)
+				person.delay.tag_list.add(v)
 			rescue Exception => e
 				 errors << [k,e]
 			end
