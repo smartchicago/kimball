@@ -14,6 +14,9 @@ SmsSpec.driver = :'twilio-ruby'
 
 Redis.current = MockRedis.new # mocking out redis for our tests
 
+# keeps out sql output hidden
+ActiveRecord::Base.logger = nil
+
 require 'devise'
 require 'support/controller_macros'
 

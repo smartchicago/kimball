@@ -39,7 +39,5 @@ Logan::Application.configure do
 
   config.active_support.test_order = :random
 
-  ActiveRecord::Base.logger = nil
-
   PaperTrail.enabled = false # no audits needed in tests. yet.
 end
