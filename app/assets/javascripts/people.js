@@ -44,7 +44,7 @@ $(document).on('ready page:load', function () {
 
   $("#new-expirationdate").mask("99/99",{placeholder:"MM/YY"});
 
-  $("#new-amount").mask("$9?9?.99",{placeholder:"$00.000"});
+  $("#new-amount").mask("9?9?.99",{placeholder:"00.00"});
   $("#new-cardnumber").mask("9999",{placeholder:"####"});
   $('#new-notes').hide();
 
