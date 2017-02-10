@@ -8,7 +8,7 @@ feature 'tag person'  do
     person = FactoryGirl.create(:person)
     login_with_admin_user
 
-    tag_name = Faker::Company.buzzword
+    tag_name = Faker::Company.buzzword.downcase
     visit "/people/#{person.id}"
     expect(page).to have_button('Add')
 
@@ -31,7 +31,7 @@ feature 'tag person'  do
     person = FactoryGirl.create(:person, preferred_contact_method: 'EMAIL')
     login_with_admin_user
 
-    tag_name = Faker::Company.buzzword
+    tag_name = Faker::Company.buzzword.downcase
     visit "/people/#{person.id}"
 
     expect(page).to have_button('Add')

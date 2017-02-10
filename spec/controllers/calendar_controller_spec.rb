@@ -58,7 +58,7 @@ RSpec.describe CalendarController, type: :controller do
     end
 
     it 'provides the feed to good person tokens' do
-      get :feed, params: { token: person.token }
+      get :feed, { token: person.token }
       expect(response.status).to eq(200)
       expect(response.body).to have_text(reservation.description)
     end
@@ -66,7 +66,7 @@ RSpec.describe CalendarController, type: :controller do
     it 'provides the ical feed to good user tokens' do
       # the user created above doesn't have a reservation.
       reservation.reload
-      get :feed, params: { token: reservation.user.token }
+      get :feed, { token: reservation.user.token }
       expect(response.status).to eq(200)
       expect(response.body).to have_text(reservation.description)
     end
@@ -78,7 +78,7 @@ RSpec.describe CalendarController, type: :controller do
     end
 
     it 'redirects for incorrect tokens' do
-      get :feed, params: { token: 'foobar' }
+      get :feed, { token: 'foobar' }
       expect(response.status).to eq(302)
       expect(response).to redirect_to(root_url)
     end
