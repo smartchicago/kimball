@@ -167,17 +167,40 @@
         </div>
       <% end %>
       <%= form.hidden_field :person_id, :value => @person.id %>
-      <%= form.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" }, class: 'input-small', id: "new-reason" %>
+      <%= form.select :reason,
+              GiftCard.reasons.keys.to_a,
+              { prompt: "Reason", selected: @last_gift_card.reason },
+                class: 'input-small',
+                id: "new-reason"
+               %>
 
-      <%= form.text_field :notes, placeholder: 'Notes', class: 'input-medium', id: 'new-notes' %>
-      <%= form.text_field :proxy_id, placeholder: "ProxyID",class: 'input-mini', id: "new-proxyid" %>
-      <%= form.text_field :batch_id, placeholder: "BatchID",class: 'input-mini', id: "new-batchid" %>
+      <%= form.text_field :notes,
+            placeholder: 'Notes',
+            class: 'input-medium',
+            id: 'new-notes' %>
+      <%= form.text_field :proxy_id,
+              placeholder: "ProxyID",
+              class: 'input-mini',
+              id: "new-proxyid" %>
+      <%= form.text_field :batch_id,
+              placeholder: "BatchID",
+              class: 'input-mini',
+              id: "new-batchid",
+              value: @last_gift_card.batch_id %>
       <div class='input-prepend'>
         <span class='add-on'>****-****-***</span>
         <%= form.text_field :gift_card_number, placeholder: "#####", class: 'input-small', id: "new-cardnumber" %>
       </div>
-      <%= form.text_field :expiration_date, placeholder: "MM/YY", class: 'input-mini', id: "new-expirationdate" %>
-      <%= form.text_field :amount, placeholder: "####",class: 'input-small', id: "new-amount" %>
+      <%= form.text_field :expiration_date,
+              placeholder: "MM/YY",
+              class: 'input-mini',
+              id: "new-expirationdate",
+              value: @last_gift_card.expiration_date %>
+      <%= form.text_field :amount,
+              value: @last_gift_card.amount,
+              placeholder: "####",
+              class: 'input-small',
+              id: "new-amount" %>
       <%= form.submit 'Add Gift Card', :class => "btn" %>
     <% end %>
   </div>

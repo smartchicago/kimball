@@ -33,6 +33,7 @@ class GiftCardsController < ApplicationController
 
   # GET /gift_cards/new
   def new
+    @last_gift_card = GiftCard.last || GiftCard.new
     @gift_card = GiftCard.new
   end
 

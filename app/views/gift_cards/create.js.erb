@@ -15,11 +15,12 @@
   $('#error-div').html("");
   // Updates for Person page
   $('#gift-card-total').html('Gift Cards - Total: <%= humanized_money_with_symbol @gift_card.person.gift_card_total %>');
-  $('#new-batchid').val('');
+  //$('#new-batchid').val('<%= @gift_card.batch_id %>');
   $('#new-cardnumber').val('');
-  $('#new-amount').val('');
-  $('#new-reason').val('');
-  $('#new-expirationdate').val('');
+  $('#new-proxyid').val('');
+  //$('#new-amount').val('<%= @gift_card.amount %>');
+  //$('#new-reason').val('<%= @gift_card.reason %>');
+  //$('#new-expirationdate').val('<%= @gift_card.expiration_date %>');
 
 <% else %>
     console.log("In Create_result else statement");

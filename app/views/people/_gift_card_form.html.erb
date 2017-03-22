@@ -13,7 +13,9 @@
 
   <div class="field">
     <%= f.label :batch_id %><br>
-    <%= f.string_field :batch_id, class: 'input-mini' %>
+    <%= f.string_field :batch_id,
+          class: 'input-mini',
+          value: @last_gift_card.batch_id %>
   </div>
 
   <div class="field">
@@ -28,7 +30,9 @@
   </div>
   <div class="field">
     <%= f.label :expiration_date %><br>
-    <%= f.text_field :expiration_date,class: 'input-mini' %>
+    <%= f.text_field :expiration_date,
+          class: 'input-mini',
+          value: @last_gift_card.expiration_date %>
   </div>
   <div class="field">
     <%= f.label :person_id %><br>
@@ -44,7 +48,10 @@
   </div>
   <div class="field">
     <%= f.label :reason %><br>
-    <%= f.select :reason, GiftCard.reasons.keys.to_a, { :prompt => "Reason" } %>
+    <%= f.select :reason,
+          GiftCard.reasons.keys.to_a,
+          { :prompt => "Reason" },
+          selected: @last_gift_card.reason %>
   </div>
   <div class="actions">
     <%= f.submit %>
