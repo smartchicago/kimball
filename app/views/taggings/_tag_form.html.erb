@@ -1,0 +1,7 @@
+<%= form_tag(taggings_path(), remote: true, html: { class: "form-inline" }) do |form| %>
+  <%= hidden_field_tag :taggable_type, taggable_obj.class %>
+  <%= hidden_field_tag :taggable_id, taggable_obj.id %>
+  <%= text_field_tag :tag, "", id: 'tag-typeahead', class: "input span2 tag-typehead", autocomplete: 'off' %>
+  <%= submit_tag "Add", class: "btn span1" %>
+<% end %>
+

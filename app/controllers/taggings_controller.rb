@@ -21,13 +21,14 @@ class TaggingsController < ApplicationController
     obj = klass.find(params[:taggable_id])
     res = false
     if obj.respond_to?(:tag_list) && !params[:tag].blank?
+      tag = params[:tag]
       # if we want owned tags. Not sure we do...
       # res = current_user.tag(obj,with: params[:tagging][:name])
-      unless obj.tag_list.include?(params[:tag])
-        obj.tag_list.add(params[:tag])
+      unless obj.tag_list.include?(tag)
+        obj.tag_list.add(tag)
         res = obj.save
-        tag = ActsAsTaggableOn::Tag.find_by(name: params[:tag])
-        @tagging = obj.taggings.find_by(tag_id: tag.id)
+        found_tag = klass.tag_counts.find_by(name: tag)
+        @tagging = obj.taggings.find_by(tag_id: found_tag.id)
       end
     end
 
@@ -62,7 +63,9 @@ class TaggingsController < ApplicationController
   end
 
   def search
-    @tags = ActsAsTaggableOn::Tag.where('name like ?', "%#{params[:q]}%").
+    type = params[:type].blank? ? "Person" : params[:type]
+    klass = type.constantize
+    @tags = klass.tag_counts.where('name like ?', "%#{params[:q]}%").
             order(taggings_count: :desc)
 
     # the methods=> :value is needed for tokenfield.

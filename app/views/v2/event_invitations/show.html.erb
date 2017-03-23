@@ -31,6 +31,15 @@
     <p>No attendees yet</p>
     <% end %>
   </div>
+  <div class="row">
+      <div class="span6">
+        <h3>Tags</h3>
+        <ul id="tag-list">
+        <%= render partial: 'taggings/tagging', collection: @event.taggings %>
+        </ul>
+        <%= render partial: 'taggings/tag_form', locals: { taggable_obj: @event } %>
+      </div>
+  </div>
   <div class="span3">
     <div class="well">
       <dl>

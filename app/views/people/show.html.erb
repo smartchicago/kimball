@@ -99,12 +99,7 @@
         <ul id="tag-list">
         <%= render partial: 'taggings/tagging', collection: @person.taggings %>
         </ul>
-        <%= form_tag(taggings_path(), remote: true, html: { class: "form-inline" }) do |form| %>
-          <%= hidden_field_tag :taggable_type, "Person" %>
-          <%= hidden_field_tag :taggable_id, @person.id %>
-          <%= text_field_tag :tag, "", id: 'tag-typeahead', class: "input span2 tag-typehead", autocomplete: 'off' %>
-          <%= submit_tag "Add", class: "btn span1" %>
-        <% end %>
+        <%= render partial: 'taggings/tag_form', locals: {taggable_obj: @person}%>
       </div>
     </div>
   </div>

@@ -44,7 +44,7 @@ class V2::EventInvitationsController < ApplicationController
   end
 
   def show
-    @event =  V2::EventInvitation.find_by(params[:id])
+    @event =  V2::EventInvitation.find(params[:id])
   end
 
   private

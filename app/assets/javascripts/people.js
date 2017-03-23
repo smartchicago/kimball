@@ -19,7 +19,14 @@ $(document).on('ready page:load', function () {
     },
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     remote: {
-      url:'/taggings/search?q=%QUERY',
+      url:'/taggings/search?',
+      replace: function(url, uriEncodedQuery) {
+            var val = $("#taggable_type").val();
+            var res = (url + "type=" + val + "&q="
+                      + encodeURIComponent(uriEncodedQuery));
+            console.log(res);
+            return res
+          },
       wildcard: '%QUERY',
       limit: 20,
       filter: filter,

@@ -14,6 +14,7 @@ class V2::Event < ActiveRecord::Base
   has_paper_trail
 
   include Calendarable
+
   has_one :event_invitation, class_name: '::V2::EventInvitation', foreign_key: 'v2_event_id'
   has_many :time_slots, class_name: '::V2::TimeSlot'
   has_many :invitees, through: :event_invitations
