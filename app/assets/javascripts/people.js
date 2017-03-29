@@ -21,12 +21,15 @@ $(document).on('ready page:load', function () {
     remote: {
       url:'/taggings/search?',
       replace: function(url, uriEncodedQuery) {
-            var val = $("#taggable_type").val();
-            var res = (url + "type=" + val + "&q="
-                      + encodeURIComponent(uriEncodedQuery));
-            console.log(res);
-            return res
-          },
+        // adds the type of the particular tag to the search
+        // allows us to have "people" and "v2::EventInvitation" tag
+        // search act independatnly
+        var val = $("#taggable_type").val();
+        var res = (url + "type=" + val + "&q="
+                  + encodeURIComponent(uriEncodedQuery));
+        console.log(res);
+        return res
+      },
       wildcard: '%QUERY',
       limit: 20,
       filter: filter,
