@@ -111,6 +111,7 @@ module Neighborhoods
     'Lower East Side'               => [10002, 10003, 10009],
     'Upper East Side'               => [10021, 10028, 10044, 10065, 10075, 10128],
     'Upper West Side'               => [10023, 10024, 10025],
+    'Morningside Heights'           => [10046],
     'Inwood and Washington Heights' => [10031, 10032, 10033, 10034, 10040],
     'Northeast Queens'              => [11361, 11362, 11363, 11364],
     'North Queens'                  => [11354, 11355, 11356, 11357, 11358, 11359, 11360],
