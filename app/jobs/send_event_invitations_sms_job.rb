@@ -7,7 +7,9 @@
 # rubocop:disable Style/StructInheritance
 #
 class SendEventInvitationsSmsJob < Struct.new(:to, :event)
+  include Skylight::Helpers
 
+  instrument_method
   def enqueue(job)
     Rails.logger.info '[SendEventInvitationsSms] job enqueued'
     job.save!
@@ -19,6 +21,7 @@ class SendEventInvitationsSmsJob < Struct.new(:to, :event)
 
   # FIXME: Refactor and Enable Cops!
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  instrument_method
   def perform
     # step 1: check to see if we already have a context for the person
     #   yes: get ttl and re-enque for after ttl

@@ -1,5 +1,7 @@
 class TagPersonJob < Struct.new(:id, :tags)
+  include Skylight::Helpers
 
+  instrument_method
   def enqueue(job)
     Rails.logger.info '[TagPerson] job enqueued'
     job.save!
