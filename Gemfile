@@ -53,6 +53,7 @@ end
 
 group :production do
   gem 'newrelic_rpm'
+  gem 'skylight'
 end
 
 # Gems used only for assets and not required

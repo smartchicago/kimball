@@ -43,3 +43,5 @@ screenshot*
 
 # ignore backups and DB dumps
 *.sql
+
+/config/skylight.yml
