@@ -7,9 +7,7 @@
 # rubocop:disable Style/StructInheritance
 #
 class SendTwilioMessagesJob < Struct.new(:messages, :phone_numbers, :smsCampaign)
-  include Skylight::Helpers
 
-  instrument_method
   def enqueue(job)
     # job.delayed_reference_id   =
     # job.delayed_reference_type = ''
@@ -24,7 +22,6 @@ class SendTwilioMessagesJob < Struct.new(:messages, :phone_numbers, :smsCampaign
   # FIXME: Refactor and re-enable cop
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   #
-  instrument_method
   def perform
     # Instantiate a Twilio client
     client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
