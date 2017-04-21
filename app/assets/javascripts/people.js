@@ -27,7 +27,6 @@ $(document).on('ready page:load', function () {
         var val = $("#taggable_type").val();
         var res = (url + "type=" + val + "&q="
                   + encodeURIComponent(uriEncodedQuery));
-        console.log(res);
         return res
       },
       wildcard: '%QUERY',

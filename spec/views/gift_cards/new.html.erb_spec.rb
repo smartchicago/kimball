@@ -2,14 +2,11 @@ require 'rails_helper'
 
 RSpec.describe 'gift_cards/new', type: :view do
   before(:each) do
-    assign(:gift_card, GiftCard.new(
-                         gift_card_number: 12345,
-                         batch_id: 1,
-                         person_id: 1,
-                         notes: 'MyString',
-                         created_by: 1,
-                         reason: 1
-    ))
+    @gift_card = assign(:gift_card, GiftCard.new)
+    @last_gift_card = assign(:last_gift_card,FactoryGirl.create(:gift_card,
+      gift_card_number: Faker::Number.number(4),
+      proxy_id: Faker::Number.number(4),
+      reason: 2))
   end
 
   it 'renders new gift_card form' do
