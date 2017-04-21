@@ -26,17 +26,15 @@ class Public::PeopleController < ApplicationController
 
     success_msg = 'Thanks! We will be in touch soon!'
     error_msg   = "Oops! Looks like something went wrong. Please get in touch with us at <a href='mailto:#{ENV['MAILER_SENDER']}?subject=Patterns sign up problem'>#{ENV['MAILER_SENDER']}</a> to figure it out!"
-    @person.tag_list.add(params[:age_range]) unless params[:age_range].blank?
-    @person.tag_list.add(params[:referral]) unless params[:referral].blank?
-    msg = if @person.save
-            success_msg
+    @person.tag_list.add(params[:age_range]) if params[:age_range].present?
 
-          else
-            error_msg
-          end
+    if params[:referral].present?
 
+      @person.referred_by = params[:referral][0, 100] # only 100 characters
+    end
+
+    @msg = @person.save ? success_msg : error_msg
     respond_to do |format|
-      @msg = msg
       format.html { render action: 'create' }
     end
   end
@@ -79,7 +77,8 @@ class Public::PeopleController < ApplicationController
         :primary_connection_description,
         :secondary_connection_id,
         :secondary_connection_description,
-        :participation_type)
+        :participation_type,
+        :referred_by)
     end
     # rubocop:enable Metrics/MethodLength
 
