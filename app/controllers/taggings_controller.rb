@@ -63,7 +63,7 @@ class TaggingsController < ApplicationController
   end
 
   def search
-    type = params[:type].blank? ? "Person" : params[:type]
+    type = params[:type].blank? ? 'Person' : params[:type]
     klass = type.constantize
     @tags = klass.tag_counts.where('name like ?', "%#{params[:q]}%").
             order(taggings_count: :desc)
