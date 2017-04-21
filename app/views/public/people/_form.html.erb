@@ -130,15 +130,9 @@
     </div>
   </div>
   <div class="control-group">
-    <%= f.label :postal_code, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :postal_code, :class => 'text_field', :validate => true %>
-    </div>
-  </div>
-  <div class="control-group">
     <label class="control-label" for="low_income">Do you consider yourself low-income?</label>
     <div class="controls">
-      <%= f.check_box :low_income, :low_income, {},false, true %>
+      <%= f.check_box :low_income, {},false, true %>
     </div>
   </div>
   <% end %>

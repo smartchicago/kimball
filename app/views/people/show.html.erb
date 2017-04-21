@@ -14,6 +14,9 @@
           <dt>Verified?</dt>
           <dd><%= best_in_place @person, :verified %></dd>
 
+          <dt>Low Income?</dt>
+          <dd><%= best_in_place @person, :low_income, as: :checkbox, collection: {false: "No", true: "Yes"} %></dd>
+
           <dt>Address</dt>
           <dd><%= address_fields_to_sentence(@person) %></dd>
 
@@ -22,6 +25,9 @@
 
           <dt>Neighborhood</dt>
           <dd><%= best_in_place @person, :neighborhood %></dd>
+
+          <dt>Referred by?</dt>
+          <dd><%= best_in_place @person, :referred_by %></dd>
 
           <dt>Primary device</dt>
           <dd><%= best_in_place @person,:primary_device_description %> <span class='muted'>
@@ -45,14 +51,13 @@
             </span>
           </dd>
 
-
           <dt>Preferred participation method</dt>
           <dd><%= best_in_place @person, :participation_type, as: :select, collection: %w(in-person remote) %></dd>
+
           <dt>Interviews</dt>
           <dd><%= link_to "Calendar", calendar_path(token: @person.token) %></dd>
           <dt>Invitations</dt>
           <dd><%= @person.event_invitations.size %></dd>
-
           <dt>Reserved</dt>
           <dd><%=@person.v2_reservations.size %></dd>
           <dt>Attended</dt>
