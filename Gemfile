@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
-ruby '2.2.5'
+ruby '2.2.9'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.0'
+gem 'rails', '~> 4.2.10'
 
 # gem 'pg' # soooooon!
 # must use this version of mysql2 for rails 4.0.0
