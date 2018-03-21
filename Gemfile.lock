@@ -214,7 +214,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-validation-rails (1.16.0)
     json (2.1.0)
-    jwt (2.1.0)
+    jwt (1.5.6)
     kgio (2.11.2)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -451,10 +451,10 @@ GEM
     turbolinks (5.1.0)
       turbolinks-source (~> 5.1)
     turbolinks-source (5.1.0)
-    twilio-ruby (5.7.1)
-      faraday (~> 0.9)
-      jwt (>= 1.5, <= 2.5)
-      nokogiri (>= 1.6, < 2.0)
+    twilio-ruby (4.13.0)
+      builder (>= 2.1.2)
+      jwt (~> 1.0)
+      multi_json (>= 1.3.0)
     twitter-bootstrap-rails (2.2.8)
       actionpack (>= 3.1)
       execjs
@@ -581,7 +581,7 @@ DEPENDENCIES
   tire
   travis
   turbolinks
-  twilio-ruby
+  twilio-ruby (~> 4.13.0)
   twitter-bootstrap-rails (~> 2.2.0)
   twitter-typeahead-rails
   uglifier (>= 1.0.3)
